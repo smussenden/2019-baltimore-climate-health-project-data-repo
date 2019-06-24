@@ -1,0 +1,180 @@
+#################################################################
+######## Install necessary packages and load libraries ##########
+#################################################################
+## install.packages('tidyverse')
+## install.packages("corrr")
+## install.packages("janitor")
+
+library(tidyverse)
+library(readxl)
+library(janitor)
+library(magrittr)
+
+# Turn off scientific notation
+options(scipen = 999)
+
+# For cleanup
+rm(list=ls())
+
+# Set working directory
+# setwd("/Users/rready/Desktop/2019-data-climate-health-baltimore")
+
+#################################################################
+######## Load and Clean LIDAR Tree Data #########################
+#################################################################
+
+#### Block ####
+# 2007
+tree_block_lidar_2007 <- read_csv("treecover/by_block/btree_statistics_by_block_2007_lidar.csv") %>%
+  rename_all(tolower)
+
+# 2015
+tree_block_lidar_2015 <- read_csv("treecover/by_block/btree_statistics_by_block_2015_lidar.csv") %>%
+  rename_all(tolower)
+
+# Join 2009 to 2015
+tree_block_lidar_2007_2015 <- tree_block_lidar_2007 %>%
+  left_join(tree_block_lidar_2015) %>%
+  mutate(
+    lid_change_percent = (`15_mean`-`07_mean`)/`07_mean`,
+    lid_change_percent_point = (`15_mean`-`07_mean`)
+  ) %>%
+  rename("07_lid_mean" = "07_mean",
+         "15_lid_mean" = "15_mean") %>%
+  # Recast non-calculable variables as characters
+  mutate_at(vars(matches("geoid10"), matches("statefp10"), 
+                 matches("countyfp10"), matches("blockce10")
+  ),
+  as.character)
+
+
+
+# How many times do blocks divide by zero to find the percent change? 793 compared to 12805 (12%)
+#tree_block_lidar_2007_2015 %>% group_by(lid_change_percent) %>% filter(is.nan(lid_change_percent)) %>% summarize(n=n())
+#tree_block_lidar_2007_2015 %>% filter(!is.nan(lid_change_percent)) %>% summarize(n=n())
+
+#### CSA ####
+
+# 2007
+tree_csa_lidar_2007 <- read_csv("treecover/by_community_statistical_area/btree_statistics_by_csa_2007_lidar.csv")
+
+# 2015
+tree_csa_lidar_2015 <- read_csv("treecover/by_community_statistical_area/btree_statistics_by_csa_2015_lidar.csv")
+
+# Join 2007 to 2015
+tree_csa_lidar_2007_2015 <- tree_csa_lidar_2007 %>%
+  left_join(tree_csa_lidar_2015) %>%
+  mutate(
+    lid_change_percent = (`15_mean`-`07_mean`)/`07_mean`,
+    lid_change_percent_point = (`15_mean`-`07_mean`)
+  ) %>%
+  rename_all(tolower) %>%
+  select(-matches("17\\-*")) %>%
+  rename("07_lid_mean" = "07_mean",
+         "15_lid_mean" = "15_mean") %>%
+  # Recast non-calculable variables as characters
+  mutate("objectid" = as.character(objectid)) 
+
+
+#### NSA ####
+
+# 2007
+tree_nsa_lidar_2007 <- read_csv("treecover/by_neighborhood_statistical_area/btree_statistics_by_nsa_2007_lidar.csv")
+
+# 2015
+tree_nsa_lidar_2015 <- read_csv("treecover/by_neighborhood_statistical_area/btree_statistics_by_nsa_2015_lidar.csv")
+
+# Join 2009 to 2015
+tree_nsa_lidar_2007_2015 <- tree_nsa_lidar_2007 %>%
+  left_join(tree_nsa_lidar_2015) %>%
+  mutate(
+    lid_change_percent = (`15_mean`-`07_mean`)/`07_mean`,
+    lid_change_percent_point = (`15_mean`-`07_mean`)
+  ) %>%
+  rename_all(tolower) %>%
+  rename("07_lid_mean" = "07_mean",
+         "15_lid_mean" = "15_mean") %>%
+  select(-matches("nbrdesc"), -matches("color_2")) %>%
+  # Recast non-calculable variables as characters
+  mutate("objectid" = as.character(objectid)) 
+
+
+#### ZCTA ####
+
+# 2007
+# tree_zcta_lidar_2007 <- read_csv("treecover/by_ZCTA/btree_statistics_by_zcta_2007_lidar.csv")
+
+# 2015
+# tree_zcta_2015 <- read_csv("treecover/by_ZCTA/btree_statistics_by_zcta_2015_lidar.csv")
+# 
+# # Join 2007 to 2015
+# tree_zcta_lidar_2009_2015 <- tree_zcta_lidar_2007 %>%
+#   left_join(tree_zcta_lidar_2015) %>%
+#   mutate(
+#     lid_change_percent = (`15_mean`-`07_mean`)/`07_mean`,
+#     change_percent_point = (`15_mean`-`07_mean`)
+#   ) %>%
+#   rename_all(tolower) %>%
+#   rename("07_lid_mean" = "07_mean",
+#          "15_lid_mean" = "15_mean") %>%
+#   select(-matches("nbrdesc"), -matches("color_2")) %>%
+#   # Recast non-calculable variables as characters
+#   mutate("zcta5ce10" = as.character(zcta5ce10),
+#          "geoid10" = as.character(geoid10))
+
+# Remove unneeded files
+rm(list=setdiff(ls(), c("tree_block_lidar_2007_2015", "tree_zcta_lidar_2007_2015", "tree_nsa_lidar_2007_2015", "tree_csa_lidar_2007_2015", "all_temp_block", "all_temp_zcta", "all_temp_nsa", "all_temp_csa")))
+
+
+###############################################################################################
+### Load precleaned NAIP, Landsat, AirbusTree Tree Data and demographic + temperature data ####
+###############################################################################################
+
+pre_cleaned_block_data <- read_csv("output/data/cleaned/without-lidar/blocks_tree_temp_demographics.csv") %>%
+  # Recast non-calculable variables as characters
+  mutate_at(vars(matches("geoid10"), matches("statefp10"), 
+                 matches("countyfp10"), matches("blockce10")
+  ),
+  as.character)
+
+pre_cleaned_csa_data<- read_csv("output/data/cleaned/without-lidar/csa_tree_temp_demographics.csv") %>%
+  # Recast non-calculable variables as characters
+  mutate("objectid" = as.character(objectid)) 
+
+pre_cleaned_nsa_data <- read_csv("output/data/cleaned/without-lidar/nsa_tree_temp.csv") %>%
+  # Recast non-calculable variables as characters
+  mutate("objectid" = as.character(objectid))
+
+# Need to think this one through because of multiple ZCTA geography calculations
+# pre_cleaned_zcta_data <- read_csv("output/data/cleaned/without-lidar/zcta_tree_temp_demographics.csv")
+
+
+################################################################
+### Join LIDAR Tree Data with NAIP/Landsat/Airbus Tree Data ####
+### and Demographic + Temperature data #########################
+################################################################
+
+all_cleaned_block_data <- pre_cleaned_block_data %>%
+  left_join(tree_block_lidar_2007_2015)
+
+all_cleaned_csa_data <- pre_cleaned_csa_data %>%
+  left_join(tree_csa_lidar_2007_2015)
+
+all_cleaned_nsa_data <- pre_cleaned_nsa_data %>%
+  left_join(tree_nsa_lidar_2007_2015)
+
+# all_cleaned_zcta_data <- pre_cleaned_zcta_data %>%
+#   left_join(tree_zcta_lidar_2007_2015)
+
+# Remove unneeded files
+rm(list=setdiff(ls(), c("all_cleaned_block_data", "all_cleaned_csa_data", "all_cleaned_nsa_data", "all_cleaned_zcta_data")))
+
+
+#################################################################
+######## Write merged files out for later use ###################
+#################################################################
+
+write_csv(all_cleaned_block_data,"output/data/cleaned/with-lidar/blocks_lidartree_temp_demographics.csv")
+write_csv(all_cleaned_csa_data,"output/data/cleaned/with-lidar/csa_tree_lidartemp_demographics.csv")
+write_csv(all_cleaned_nsa_data,"output/data/cleaned/with-lidar/nsa_lidartree_temp.csv")
+# write_csv(zcta_tree_temp_demographics,"output/data/cleaned/zcta_lidartree_temp_demographics.csv")
