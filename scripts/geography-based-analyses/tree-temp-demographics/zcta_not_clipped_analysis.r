@@ -58,10 +58,10 @@ cleanup <- function() {
 # Build correlation matrix
 heat_vs_demographics_unclipped_zcta_correlation_matrix <- zcta_tree_temp_demographics %>%
   select_x() %>%
-  select(-matches("17-"), -matches("09-")) %>%
+  select(-matches("17-"), -matches("09-"), -matches("change")) %>%
   as.matrix() %>%
   correlate() %>%
-  focus(matches("temp_"), matches("change")) %>%
+  focus(matches("temp_")) %>%
   mutate(variable=rowname) %>%
   select(variable, everything(), -rowname) %>%
   filter(variable != "percent_of_area_covered_by_trees")
@@ -71,7 +71,7 @@ write_matrix_csv(heat_vs_demographics_unclipped_zcta_correlation_matrix)
 
 # Make correlation long instead of wide so it can be passed to ggplot correctly. 
 heat_vs_demographics_unclipped_zcta_correlation_matrix_long <- heat_vs_demographics_unclipped_zcta_correlation_matrix %>%
-  gather("variable_2", "value", 2:15) %>%
+  gather("variable_2", "value", 2:13) %>%
   arrange(desc(value))
 
 # Build graphic
@@ -130,7 +130,7 @@ write_matrix_csv(tree_vs_demographics_unclipped_zcta_correlation_matrix)
 
 # Make correlation long instead of wide so it can be passed to ggplot correctly. 
 tree_vs_demographics_unclipped_zcta_correlation_matrix_long <- tree_vs_demographics_unclipped_zcta_correlation_matrix %>%
-  gather("variable_2", "value", 2:7) %>%
+  gather("variable_2", "value", 2:9) %>%
   arrange(desc(value))
 
 # Build graphic
@@ -159,7 +159,7 @@ write_matrix_csv(tree_vs_heat_unclipped_zcta_correlation_matrix)
 
 # Make correlation long instead of wide so it can be passed to ggplot correctly. 
 tree_vs_heat_unclipped_zcta_correlation_matrix_long <- tree_vs_heat_unclipped_zcta_correlation_matrix %>%
-  gather("variable_2", "value", 2:8) %>%
+  gather("variable_2", "value", 2:10) %>%
   arrange(desc(value))
 
 # Build graphic
@@ -177,9 +177,9 @@ treecover_vs_coverchange_unclipped_zcta_correlation_matrix <- zcta_tree_temp_dem
   select_x() %>%
   as.matrix() %>%
   correlate() %>%
-  focus(matches("17"), matches ("09"), matches("change")) %>%
+  focus(matches("17"), matches ("09")) %>%
   mutate(variable=rowname) %>%
-  filter(str_detect(variable, "change_percent")) %>%
+  filter(str_detect(variable, "change")) %>%
   select(variable, everything(), -rowname) 
 
 # Write it out to a csv for later use
@@ -187,7 +187,7 @@ write_matrix_csv(treecover_vs_coverchange_unclipped_zcta_correlation_matrix)
 
 # Make correlation long instead of wide so it can be passed to ggplot correctly. 
 treecover_vs_coverchange_unclipped_zcta_correlation_matrix_long <- treecover_vs_coverchange_unclipped_zcta_correlation_matrix %>%
-  gather("variable_2", "value", 2:8) %>%
+  gather("variable_2", "value", 2:6) %>%
   arrange(desc(value))
 
 # Build graphic
