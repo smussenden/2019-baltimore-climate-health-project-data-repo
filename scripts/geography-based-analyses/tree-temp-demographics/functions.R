@@ -19,7 +19,7 @@ write_matrix_csv <- function(dataframe) {
   dataframe_name <- deparse(substitute(dataframe))
   
   # Create filename for csv
-  filename <- paste0("output/data/correlation_matrices/", dataframe_name,".csv")
+  filename <- paste0("data/output-data/correlation_matrices/", dataframe_name,".csv")
   
   # Write out csv  
   write_csv(dataframe, path = filename)
@@ -49,6 +49,6 @@ make_correlation_matrix_graphic <- function(dataframe, grouping = "GROUPING") {
     )
   # Create filename and filepath to save image. 
   filename <- paste0(dataframe_name,".png")
-  ggsave(filename, plot = last_plot(), device = "png", path = "output/plots/correlation_matrix_images", scale = 1, width = 20, height = 20, units = "in", dpi = 300)
+  ggsave(filename, plot = last_plot(), device = "png", path = "data/output-data/plots/correlation_matrix_images", scale = 1, width = 20, height = 20, units = "in", dpi = 300)
   
 }  
