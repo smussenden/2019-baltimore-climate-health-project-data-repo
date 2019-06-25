@@ -17,7 +17,8 @@ library(magrittr)
 
 zcta_tree_temp_demographics <- read_csv("data/output-data/cleaned/tree-temp-demographic-w-naip-only-use-with-caution/zcta_not_clipped_balt_city_border_tree_temp_demographics.csv")  
 zcta_tree_temp_demographics <- zcta_tree_temp_demographics %<>% 
-  mutate(zcta = as.character(zcta)) 
+  mutate(zcta = as.character(zcta)) %>%
+  select(-matches("t_a"), -matches("t_p"))
   
 
 #################################################################
@@ -30,8 +31,8 @@ source("scripts/geography-based-analyses/tree-temp-demographics/functions.R")
 # Select computable values within *this particular* df
 select_x <- function(df){
   return(df %>%
-           select_if(is.numeric) %>%
-           select(-matches("t_")))
+           select_if(is.numeric)
+         )
 }
 
 # Cleanup
@@ -55,25 +56,26 @@ cleanup <- function() {
 ### Heat vs demographics #########
 ##################################
 # Build correlation matrix
-heat_vs_demographics_zcta_correlation_matrix <- zcta_tree_temp_demographics %>%
+heat_vs_demographics_unclipped_zcta_correlation_matrix <- zcta_tree_temp_demographics %>%
   select_x() %>%
+  select(-matches("17-"), -matches("09-")) %>%
   as.matrix() %>%
   correlate() %>%
-  focus(matches("temp_")) %>%
+  focus(matches("temp_"), matches("change")) %>%
   mutate(variable=rowname) %>%
   select(variable, everything(), -rowname) %>%
   filter(variable != "percent_of_area_covered_by_trees")
 
 # Write it out to a csv for later use
-write_matrix_csv(heat_vs_demographics_zcta_correlation_matrix)
+write_matrix_csv(heat_vs_demographics_unclipped_zcta_correlation_matrix)
 
 # Make correlation long instead of wide so it can be passed to ggplot correctly. 
-heat_vs_demographics_zcta_correlation_matrix_long <- heat_vs_demographics_zcta_correlation_matrix %>%
-  gather("variable_2", "value", 2:13) %>%
+heat_vs_demographics_unclipped_zcta_correlation_matrix_long <- heat_vs_demographics_unclipped_zcta_correlation_matrix %>%
+  gather("variable_2", "value", 2:15) %>%
   arrange(desc(value))
 
 # Build graphic
-make_correlation_matrix_graphic(heat_vs_demographics_zcta_correlation_matrix_long)
+make_correlation_matrix_graphic(heat_vs_demographics_unclipped_zcta_correlation_matrix_long)
 
 # Remove all but master file and functions
 cleanup()
@@ -114,24 +116,25 @@ cleanup()
 ### Trees vs demographics ########
 ##################################
 # Build correlation matrix
-tree_vs_demographics_zcta_correlation_matrix <- zcta_tree_temp_demographics %>%
+tree_vs_demographics_unclipped_zcta_correlation_matrix <- zcta_tree_temp_demographics %>%
   select_x() %>%
+  select(-matches("temp_")) %>%
   as.matrix() %>%
   correlate() %>%
-  focus(matches("1718"), matches("09"), matches("change_percent")) %>%
+  focus(matches("17-"), matches("09-"), matches("change")) %>%
   mutate(variable=rowname) %>%
   select(variable, everything(), -rowname)
 
 # Write it out to a csv for later use
-write_matrix_csv(tree_vs_demographics_zcta_correlation_matrix)
+write_matrix_csv(tree_vs_demographics_unclipped_zcta_correlation_matrix)
 
 # Make correlation long instead of wide so it can be passed to ggplot correctly. 
-tree_vs_demographics_zcta_correlation_matrix_long <- tree_vs_demographics_zcta_correlation_matrix %>%
-  gather("variable_2", "value", 2:9) %>%
+tree_vs_demographics_unclipped_zcta_correlation_matrix_long <- tree_vs_demographics_unclipped_zcta_correlation_matrix %>%
+  gather("variable_2", "value", 2:7) %>%
   arrange(desc(value))
 
 # Build graphic
-make_correlation_matrix_graphic(tree_vs_demographics_zcta_correlation_matrix_long)
+make_correlation_matrix_graphic(tree_vs_demographics_unclipped_zcta_correlation_matrix_long)
 
 # Remove all but master file and functions
 cleanup()
@@ -142,25 +145,25 @@ cleanup()
 ##################################
         
 # Build correlation matrix
-tree_vs_heat_zcta_correlation_matrix <- zcta_tree_temp_demographics %>%
+tree_vs_heat_unclipped_zcta_correlation_matrix <- zcta_tree_temp_demographics %>%
   select_x() %>%
   as.matrix() %>%
   correlate() %>%
-  focus(matches("1718"), matches("17"), matches("09"), matches("change_percent")) %>%
+  focus(matches("17"), matches("09"), matches("change")) %>%
   mutate(variable=rowname) %>%
   filter(str_detect(variable, "^temp_")) %>%
   select(variable, everything(), -rowname) 
 
 # Write it out to a csv for later use
-write_matrix_csv(tree_vs_heat_zcta_correlation_matrix)
+write_matrix_csv(tree_vs_heat_unclipped_zcta_correlation_matrix)
 
 # Make correlation long instead of wide so it can be passed to ggplot correctly. 
-tree_vs_heat_zcta_correlation_matrix_long <- tree_vs_heat_zcta_correlation_matrix %>%
-  gather("variable_2", "value", 2:10) %>%
+tree_vs_heat_unclipped_zcta_correlation_matrix_long <- tree_vs_heat_unclipped_zcta_correlation_matrix %>%
+  gather("variable_2", "value", 2:8) %>%
   arrange(desc(value))
 
 # Build graphic
-make_correlation_matrix_graphic(tree_vs_heat_zcta_correlation_matrix_long)
+make_correlation_matrix_graphic(tree_vs_heat_unclipped_zcta_correlation_matrix_long)
 
 # Remove all but master file and functions
 cleanup()
@@ -170,25 +173,25 @@ cleanup()
 ##################################
 
 # Build correlation matrix
-treecover_vs_coverchange_zcta_correlation_matrix <- zcta_tree_temp_demographics %>%
+treecover_vs_coverchange_unclipped_zcta_correlation_matrix <- zcta_tree_temp_demographics %>%
   select_x() %>%
   as.matrix() %>%
   correlate() %>%
-  focus(matches("1718"), matches("17"), matches ("09")) %>%
+  focus(matches("17"), matches ("09"), matches("change")) %>%
   mutate(variable=rowname) %>%
   filter(str_detect(variable, "change_percent")) %>%
   select(variable, everything(), -rowname) 
 
 # Write it out to a csv for later use
-write_matrix_csv(treecover_vs_coverchange_zcta_correlation_matrix)
+write_matrix_csv(treecover_vs_coverchange_unclipped_zcta_correlation_matrix)
 
 # Make correlation long instead of wide so it can be passed to ggplot correctly. 
-treecover_vs_coverchange_zcta_correlation_matrix_long <- treecover_vs_coverchange_zcta_correlation_matrix %>%
-  gather("variable_2", "value", 2:6) %>%
+treecover_vs_coverchange_unclipped_zcta_correlation_matrix_long <- treecover_vs_coverchange_unclipped_zcta_correlation_matrix %>%
+  gather("variable_2", "value", 2:8) %>%
   arrange(desc(value))
 
 # Build graphic
-make_correlation_matrix_graphic(treecover_vs_coverchange_zcta_correlation_matrix_long)
+make_correlation_matrix_graphic(treecover_vs_coverchange_unclipped_zcta_correlation_matrix_long)
 
 # Remove all but master file and functions
 cleanup()
