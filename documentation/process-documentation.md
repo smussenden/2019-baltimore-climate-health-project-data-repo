@@ -29,9 +29,9 @@
     * Community Statistical Areas are used by The Baltimore Neighborhood Indicators Alliance Vital Signs program.
     * The areas do not include the Johns Hopkins region in roughly the center of the map.
     
-  ![Removed ZCTAs](https://github.com/Capital-News-Service/2019-data-climate-health-baltimore/blob/master/documentation/by_zcta/tree-zcta-baltcity_rm.png?raw=true "Removed ZCTAs")
+  ![Removed ZCTAs](https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/documentation/tree-zcta-baltcity.png?raw=true "Removed ZCTAs")
   
-  ![ZCTA Shapefile Overview](https://github.com/Capital-News-Service/2019-data-climate-health-baltimore/blob/master/documentation/shapefile-overview.png?raw=true "ZCTA Shapefile Overview")
+  ![ZCTA Shapefile Overview](https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/documentation/shapefile-overview.png?raw=true "ZCTA Shapefile Overview")
   
   
 **D. Maps**
