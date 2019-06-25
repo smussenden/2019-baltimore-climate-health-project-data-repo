@@ -18,94 +18,45 @@ rm(list=ls())
 ######## Load Data Produced in Cleaning.r Script File ###########
 #################################################################
 
-csa_tree_temp_demographics <- read_csv("output/data/cleaned/csa_tree_temp_demographics.csv")
+csa_tree_temp_demographics <- read_csv("data/output-data/cleaned/tree-temp-demographic-w-naip-lidar-use/csa_lidartree_temp_demographics.csv")
 
 #################################################################
 ########## Define Functions #####################################
 #################################################################
 
-# Function to save each matrix as CSV
-write_matrix_csv <- function(dataframe) {
-   # Store dataframe name for later use
-   dataframe_name <- deparse(substitute(dataframe))
-   
-   # Create filename for csv
-    filename <- paste0("output/data/correlation_matrices/", dataframe_name,".csv")
-   
-   # Write out csv  
-    write_csv(dataframe, path = filename)
-  
-} 
+# Run functions.R
+source("scripts/geography-based-analyses/tree-temp-demographics/functions.R")
 
-# Function to make a nice little correlation matrix heatmap for each graphic
+# Select computable values within *this particular* df
+select_x <- function(df){
+  return(df %>%
+           select_if(is.numeric) %>%
+           select(-matches("objectid"), 
+                  -matches("csa2010"), 
+                  -matches("id"), 
+                  -matches("09"), 
+                  -matches("1718"), 
+                  -matches("change_percent"))
+         )
+}
 
-make_correlation_matrix_graphic <- function(dataframe) {
-  
-  # Store name of dataframe for use in title
-  dataframe_name <- deparse(substitute(dataframe))
-  
-  # Build chart title
-  chart_title <- paste0("Correlations by CSA (Neighborhood Group) in Baltimore City | ", dataframe_name )
-  
-  # Create graph
-  ggplot(data = dataframe, aes(x = variable_2, y = variable)) +
-    geom_tile(aes(fill = value)) +
-    scale_fill_gradient2(low = "blue", high = "red", mid="white", midpoint=0) +
-    geom_text(aes(label = round(value, 2)*100), size = 2) +
-    ggtitle(chart_title) +
-    theme(axis.text.x = element_text(angle=50,hjust=1),
-          plot.title = element_text(),
-          axis.title.x = element_text(),
-          axis.title.y = element_text()
-    )
-  # Create filename and filepath to save image. 
-  filename <- paste0(dataframe_name,".png")
-  ggsave(filename, plot = last_plot(), device = "png", path = "output/plots/correlation_matrix_images", scale = 1, width = 20, height = 20, units = "in", dpi = 300)
-  
-}  
-
-# Function to flatten correlation matrix that shows p values
-
-flattenCorrMatrix <- function(cormat, pmat) {
-  ut <- upper.tri(cormat)
-  data.frame(
-    row = rownames(cormat)[row(cormat)[ut]],
-    column = rownames(cormat)[col(cormat)[ut]],
-    cor  =(cormat)[ut],
-    p = pmat[ut]
+# Cleanup
+cleanup <- function() {
+  rm(list=setdiff(ls(pos = 1), 
+                  c("make_correlation_matrix_graphic", 
+                    "write_matrix_csv", 
+                    "csa_tree_temp_demographics",
+                    "cleanup",
+                    "select_x")
+  ),
+  pos = 1
   )
 }
+
 
 #################################################################
 ########## Build Correlation Matrices, Graphics #################
 #################################################################
-
-#########################################################################
-### Build a table to check for statistical significance (p <.05) ########
-#########################################################################
-
-# Create a list that shows all correlations, including r and p
-csa_tree_temp_demographics_p_r_all <- rcorr(as.matrix(csa_tree_temp_demographics[,3:136]))
-
-test <- as.matrix(csa_tree_temp_demographics[,3:136])
-
-# Flatten it, using function
-csa_tree_temp_demographics_p_r_all_flat <- flattenCorrMatrix(csa_tree_temp_demographics_p_r_all$r, csa_tree_temp_demographics_p_r_all$P)
-
-# Calculate R2 and rename varialbes
-csa_tree_temp_demographics_p_r_all_flat <- csa_tree_temp_demographics_p_r_all_flat %>%
-  mutate(r2=cor*cor,
-         r=cor,
-         variable_1=row,
-         variable_2=column) %>%
-  select(variable_1, variable_2, p, r, r2)
-
-# Filter out insignificant results
-csa_tree_temp_demographics_p_r_all_flat <- csa_tree_temp_demographics_p_r_all_flat %>%
-  filter(p < .05) %>%
-  filter(variable_1 == "temp_median_aft")
-http://www.sthda.com/english/wiki/correlation-test-between-two-variables-in-r
-
 
 ############################
 ### Heat vs demographics ###
@@ -113,7 +64,7 @@ http://www.sthda.com/english/wiki/correlation-test-between-two-variables-in-r
 
 # Build correlation matrix
 heat_vs_demographics_csa_correlation_matrix <- csa_tree_temp_demographics %>%
-  select(-OBJECTID, -CSA2010, -id, -matches("09"), -matches("1718"), -matches("change_percent")) %>%
+  select_x() %>%
   as.matrix() %>%
   correlate() %>%
   focus(matches("temp_")) %>%
