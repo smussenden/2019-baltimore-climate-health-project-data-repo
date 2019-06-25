@@ -16,8 +16,6 @@ options(scipen = 999)
 # For cleanup
 rm(list=ls())
 
-# Set working directory
-# setwd("/Users/rready/Desktop/2019-data-climate-health-baltimore")
 
 #################################################################
 ######## Load and Clean LIDAR Tree Data #########################
@@ -174,7 +172,7 @@ rm(list=setdiff(ls(), c("all_cleaned_block_data", "all_cleaned_csa_data", "all_c
 ######## Write merged files out for later use ###################
 #################################################################
 
-write_csv(all_cleaned_block_data,"output/data/cleaned/with-lidar/blocks_lidartree_temp_demographics.csv")
-write_csv(all_cleaned_csa_data,"output/data/cleaned/with-lidar/csa_tree_lidartemp_demographics.csv")
-write_csv(all_cleaned_nsa_data,"output/data/cleaned/with-lidar/nsa_lidartree_temp.csv")
+write_csv(all_cleaned_block_data,"data/output-data/cleaned/with-lidar/blocks_lidartree_temp_demographics.csv")
+write_csv(all_cleaned_csa_data,"data/output-data/cleaned/with-lidar/csa_tree_lidartemp_demographics.csv")
+write_csv(all_cleaned_nsa_data,"data/output-data/cleaned/with-lidar/nsa_lidartree_temp.csv")
 # write_csv(zcta_tree_temp_demographics,"output/data/cleaned/zcta_lidartree_temp_demographics.csv")
