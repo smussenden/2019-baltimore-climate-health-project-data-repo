@@ -117,7 +117,7 @@ write_matrix_csv(treecover_vs_coverchange_block_correlation_matrix)
 
 # Make correlation long instead of wide so it can be passed to ggplot correctly. 
 treecover_vs_coverchange_block_correlation_matrix_long <- treecover_vs_coverchange_block_correlation_matrix %>%
-  gather("variable_2", "value", 2:7) %>%
+  gather("variable_2", "value", 2:5) %>%
   arrange(desc(value))
 
 # Build graphic
