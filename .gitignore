@@ -39,4 +39,4 @@ rsconnect/
 /data/input-data
 
 # Mac trash
-/data/.DS_Store
+*/.DS_Store
