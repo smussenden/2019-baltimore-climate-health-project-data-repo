@@ -11,7 +11,7 @@ library(magrittr)
 
 ## SHORTCUTS ## --------------------------------------------------------------------------------------------
 
-# cmd-shft-m:     %>% 
+# cmd-shft-m:     %>%
 # cmd-shft-c:     comment line/block
 # cmd-opt-up/dn:  duplicate line
 # cmd-rtrn:       run code line/block
@@ -34,7 +34,7 @@ btemp <- read_csv("data/temperature/temp-by-block.csv", # Load in data
                          INTPTLAT10 = col_character(),
                          INTPTLON10 = col_character()
                          ) # Define uncertain data type
-) %>% 
+) %>%
   filter(COUNTYFP10 == 510) %>% # Filter for just Balt. City
   rename_all(tolower) # Lowercase the col/var names
 
@@ -42,7 +42,7 @@ btemp <- read_csv("data/temperature/temp-by-block.csv", # Load in data
 nsa_names <- read_csv("data/NSA-block-crosswalk-2010-frombaltcity.csv", # Load in data
                       col_types = cols(.default = "c") # Import all cols as characters
 ) %>%
-  rename_all(tolower)  
+  rename_all(tolower)
 
 # Join to names table
 btemp_joined <- btemp %>%
@@ -50,7 +50,7 @@ btemp_joined <- btemp %>%
             by = c("geoid10" = "blk2010")) %>%
   mutate(nsa_name=replace(nsa_name, is.na(nsa_name), "Unnamed"))
 
-# Consolidate statistics BY NEIGHBORHOOD 
+# Consolidate statistics BY NEIGHBORHOOD
 btree_nsa_statistics <- btemp_joined %>%
   group_by(nsa_name) %>% # Group the blocks by neighborhood
   summarize(temp_mean = mean(temp_mean),
