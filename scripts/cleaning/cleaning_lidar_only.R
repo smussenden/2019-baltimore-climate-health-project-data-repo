@@ -238,7 +238,7 @@ rm(list=setdiff(ls(), c("all_cleaned_block_data", "all_cleaned_csa_data", "all_c
 #################################################################
 
 write_csv(all_cleaned_block_data,"data/output-data/cleaned/with-lidar/blocks_lidartree_temp_demographics.csv")
-write_csv(all_cleaned_csa_data,"data/output-data/cleaned/with-lidar/csa_tree_lidartemp_demographics.csv")
+write_csv(all_cleaned_csa_data,"data/output-data/cleaned/with-lidar/csa_lidartree_temp_demographics.csv")
 write_csv(all_cleaned_nsa_data,"data/output-data/cleaned/with-lidar/nsa_lidartree_temp.csv")
 write_csv(all_cleaned_zcta_clipped_data,"data/output-data/cleaned/tree-temp-demographic-w-naip-lidar-use/zcta_clipped_lidartree_temp_demographics.csv")
 # write_csv(zcta_tree_temp_demographics,"output/data/cleaned/zcta_lidartree_temp_demographics.csv")
