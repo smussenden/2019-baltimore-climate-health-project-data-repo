@@ -15,7 +15,7 @@ library(magrittr)
 ######## Load Data Produced in Cleaning.r Script File ###########
 #################################################################
 
-zcta_tree_temp_demographics <- read_csv("output/data/cleaned/zcta_tree_temp_demographics.csv")  
+zcta_tree_temp_demographics <- read_csv("data/output-data/cleaned/tree-temp-demographic-w-naip-only-use-with-caution/zcta_not_clipped_balt_city_border_tree_temp_demographics.csv")  
 zcta_tree_temp_demographics <- zcta_tree_temp_demographics %<>% 
   mutate(zcta = as.character(zcta)) 
   
@@ -25,12 +25,13 @@ zcta_tree_temp_demographics <- zcta_tree_temp_demographics %<>%
 #################################################################
 
 # Run functions.R
-source("scripts/analysis/functions.R")
+source("scripts/geography-based-analyses/tree-temp-demographics/functions.R")
 
 # Select computable values within *this particular* df
 select_x <- function(df){
   return(df %>%
-    select_if(is.numeric))
+           select_if(is.numeric) %>%
+           select(-matches("t_")))
 }
 
 # Cleanup
