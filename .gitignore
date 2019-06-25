@@ -37,3 +37,6 @@ rsconnect/
 
 # Ignore MASSIVE files
 /data/input-data
+
+# Mac trash
+.DS_Store
