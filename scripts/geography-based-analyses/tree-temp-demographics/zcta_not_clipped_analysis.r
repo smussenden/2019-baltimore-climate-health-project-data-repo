@@ -18,7 +18,7 @@ library(magrittr)
 zcta_tree_temp_demographics <- read_csv("data/output-data/cleaned/tree-temp-demographic-w-naip-only-use-with-caution/zcta_not_clipped_balt_city_border_tree_temp_demographics.csv")  
 zcta_tree_temp_demographics <- zcta_tree_temp_demographics %<>% 
   mutate(zcta = as.character(zcta)) %>%
-  select(-matches("t_a"), -matches("t_p"))
+  select(-matches("t_a"), -matches("t_pm"))
   
 
 #################################################################
@@ -195,3 +195,4 @@ make_correlation_matrix_graphic(treecover_vs_coverchange_unclipped_zcta_correlat
 
 # Remove all but master file and functions
 cleanup()
+ 
