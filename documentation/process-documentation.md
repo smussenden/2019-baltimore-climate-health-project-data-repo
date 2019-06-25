@@ -49,3 +49,14 @@
 * ZCTA: https://smussenden.carto.com/viz/8f4d2944-0b54-455e-bdeb-007001470bdb/public_map 
 * BLOCK: https://smussenden.carto.com/viz/b00d138f-744b-4767-a748-3b8d627e8786/public_map 
 
+ZCTA clipped cleaned outputs must include:
+* LIDAR Treecover
+* Temp
+* EMS
+
+ZCTA extended cleaned outputs must include:
+* NAIP Treecover
+* Temp
+* Hosp
+
+
