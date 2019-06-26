@@ -22,6 +22,7 @@ zcta_clipped_tree_temp <- zcta_clipped_tree_temp %>%
   mutate(lid_change_percent_point = change_percent_point) %>%
   select(-matches("t_a"), -matches("t_pm"))
 glimpse(zcta_clipped_tree_temp)
+
 #################################################################
 ########## Define Functions #####################################
 #################################################################
