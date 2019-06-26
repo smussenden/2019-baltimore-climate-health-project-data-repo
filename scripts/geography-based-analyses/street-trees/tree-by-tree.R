@@ -67,7 +67,7 @@ tree_by_tree %>%
 
 ## Summary analyses 
 
-# Condition by neighborhood including "potential" tree sites
+# Tree condition by neighborhood including "potential" tree sites
 tree_condition_by_nbr_all <- tree_by_tree %>% 
   group_by(nbrdesc, condition) %>%
   summarize(num = n()) %>%
@@ -75,7 +75,7 @@ tree_condition_by_nbr_all <- tree_by_tree %>%
   select(-num) %>%
   spread(condition, perc)
 
-# Condition by neighborhood not including "potential" tree sites
+# Tree condition by neighborhood not including "potential" tree sites
 tree_condition_by_nbr_filled <- tree_by_tree %>% 
   #filter(!space_type %in% "potential") %>%
   filter(!str_detect(space_type, "potential")) %>%
@@ -85,15 +85,36 @@ tree_condition_by_nbr_filled <- tree_by_tree %>%
   select(-num) %>%
   spread(condition, perc)
 
-summary_tbl_1 <- tree_by_tree %>%
+# Join the two tables...
+tree_condition_by_nbr <- tree_condition_by_nbr_all %>%
+  left_join(tree_condition_by_nbr_filled, by = "nbrdesc", suffix = c("_all", "_filled"))
+# ...and write them to csv
+write_csv(tree_condition_by_nbr, "scripts/geography-based-analyses/street-trees/tree_condition_by_nbr.csv")
+
+# Tree height/diameter including "potential" tree sites
+summary_tbl_1_all <- tree_by_tree %>%
   group_by(nbrdesc) %>%
   summarize(combined_ht = sum(tree_ht),
             avg_ht = round(mean(tree_ht), 2),
             combined_diam = sum(dbh),
             avg_diam = round(mean(dbh), 2)
   ) %>%
-  left_join(tree_condition_by_nbr)
+  left_join(tree_condition_by_nbr_all)
 
-write_csv(summary_tbl_1, "output/data/tree_by_tree_neighborhood_summary.csv")
+# Tree height/diameter not including "potential" tree sites
+summary_tbl_1_filled <- tree_by_tree %>%
+  group_by(nbrdesc) %>%
+  summarize(combined_ht = sum(tree_ht),
+            avg_ht = round(mean(tree_ht), 2),
+            combined_diam = sum(dbh),
+            avg_diam = round(mean(dbh), 2)
+  ) %>%
+  left_join(tree_condition_by_nbr_filled)
+
+# Join the two tables...
+summary_tbl_1 <- summary_tbl_1_all %>%
+  left_join(summary_tbl_1_filled, by = "nbrdesc", suffix = c("_all", "_filled"))
+# ...and write them to csv
+write_csv(summary_tbl_1, "scripts/geography-based-analyses/street-trees/tree_height_diameter_by_nbr.csv")
 
 
