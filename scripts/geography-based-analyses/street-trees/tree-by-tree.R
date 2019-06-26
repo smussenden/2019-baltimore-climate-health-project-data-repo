@@ -28,9 +28,10 @@ rm(list=ls())
 cleanup <- function() {
   rm(list=setdiff(ls(pos = 1), 
                   c("cleanup", 
-                    "tree_by_tree", 
-                    "summary_tbl_1",
-                    "tree_condition_by_nbr")
+                    "tree_by_tree",
+                    "tree_condition_by_nbr",
+                    "tree_height_diam_by_nbr", 
+                    "summary_tbl_1")
   ),
   pos = 1
   )
@@ -79,6 +80,7 @@ tree_by_tree %>%
   dplyr::summarize(num = n()) %>%
   arrange(desc(num))
 
+
 ## Summary analyses 
 
 # Tree condition by neighborhood including "potential" tree sites
@@ -102,34 +104,40 @@ tree_condition_by_nbr_filled <- tree_by_tree %>%
 # Join the two tables...
 tree_condition_by_nbr <- tree_condition_by_nbr_all %>%
   left_join(tree_condition_by_nbr_filled, by = "nbrdesc", suffix = c("_all", "_filled"))
-# ...and write them to csv
+# ...and write to csv
 write_csv(tree_condition_by_nbr, "scripts/geography-based-analyses/street-trees/tree_condition_by_nbr.csv")
 
+
 # Tree height/diameter including "potential" tree sites
-summary_tbl_1_all <- tree_by_tree %>%
+tree_height_diam_by_nbr_all <- tree_by_tree %>%
   group_by(nbrdesc) %>%
   summarize(combined_ht = sum(tree_ht),
             avg_ht = round(mean(tree_ht), 2),
             combined_diam = sum(dbh),
             avg_diam = round(mean(dbh), 2)
-  ) %>%
-  left_join(tree_condition_by_nbr_all)
+  )
 
 # Tree height/diameter not including "potential" tree sites
-summary_tbl_1_filled <- tree_by_tree %>%
+tree_height_diam_by_nbr_filled <- tree_by_tree %>%
   group_by(nbrdesc) %>%
   summarize(combined_ht = sum(tree_ht),
             avg_ht = round(mean(tree_ht), 2),
             combined_diam = sum(dbh),
             avg_diam = round(mean(dbh), 2)
-  ) %>%
-  left_join(tree_condition_by_nbr_filled)
+  )
 
 # Join the two tables...
-summary_tbl_1 <- summary_tbl_1_all %>%
-  left_join(summary_tbl_1_filled, by = "nbrdesc", suffix = c("_all", "_filled"))
-# ...and write them to csv
-write_csv(summary_tbl_1, "scripts/geography-based-analyses/street-trees/tree_height_diameter_by_nbr.csv")
+tree_height_diam_by_nbr <- tree_height_diam_by_nbr_all %>%
+  left_join(tree_height_diam_by_nbr_filled, by = "nbrdesc", suffix = c("_all", "_filled"))
+# ...and write to csv
+write_csv(height_diam, "scripts/geography-based-analyses/street-trees/tree_height_diameter_by_nbr.csv")
+
+
+# Join all summaries into master table...
+summary_tbl_1 <- tree_height_diam_by_nbr %>%
+  left_join(tree_condition_by_nbr, by = "nbrdesc")
+# ...and write to csv
+write_csv(summary_tbl_1, "scripts/geography-based-analyses/street-trees/tree_height_diameter_condition_by_nbr.csv")
 
 # Clean up workspace
 cleanup()
