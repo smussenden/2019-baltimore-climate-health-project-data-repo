@@ -129,18 +129,6 @@ tree_spaces_count_by_nbr_all <- tree_spaces_count_by_nbr %>%
 # Write to CSV for later use
 write_csv(tree_spaces_count_by_nbr_all, "data/output-data/street-tree-analyses/trees_actual_v_tree_spaces.csv")
 
-################################
-### Look at potential sites ####
-################################
-
-tree_potential_sites <- tree_by_tree %>% 
-  # How many tree-able are considered "potential" pits?
-  filter(str_detect(space_type, "potential")) %>%
-  group_by(nbrdesc) %>%
-  dplyr::summarize(potential_wellpit = n()) %>%
-  left_join(tree_spaces_count_by_nbr) %>%
-  left_join(tree_empty_spaces_count_by_nbr)
-
 # Clean up workspace
 cleanup()
 
@@ -156,7 +144,7 @@ tree_condition_by_nbr <- tree_by_tree %>%
   dplyr::summarize(num = n()) %>%
   # Join the tree count by neighborhood for percentage calculations
   left_join(tree_spaces_count_by_nbr_all) %>%
-  select(-total_absent, -total_possible) %>%
+  select(-total_absent, -total_possible, -potential_wellpit) %>%
   mutate(perc = round(100*(num / total_trees), 2)) %>%
   # Drop num to spread
   select(-num) %>%
