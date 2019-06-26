@@ -20,7 +20,7 @@ options(scipen = 999)
 rm(list=ls())
 
 # Set working directory
-# setwd("/Users/rready/Desktop/baltimore-climate-project")
+# setwd("/Users/rready/Desktop/2019-baltimore-climate-health-project-data-repo")
 
 #########################
 ### Define functions ###
@@ -41,7 +41,7 @@ cleanup <- function() {
 ##### Load data #####
 #####################
 
-tree_by_tree <- read_csv("data/treecover/street_trees_nsa_join_table.csv") %>%
+tree_by_tree <- read_csv("data/input-data/street-trees/csv/by_nsa/street_trees_nsa_join_table.csv") %>%
   select(-COLOR_2, -LABEL) %>%
   rename_all(tolower) %>%
   mutate_all(tolower) %>%
@@ -63,7 +63,7 @@ tree_by_tree <- read_csv("data/treecover/street_trees_nsa_join_table.csv") %>%
   mutate_at(vars(matches("tree_ht"), matches("dbh")), as.numeric)
 #mutate_at(vars(matches("nbrdesc")), tolower)
 
-
+# dbh is diameter at breast height 
 ######################
 ### Begin analysis ###
 ######################
@@ -80,6 +80,10 @@ tree_by_tree %>%
   dplyr::summarize(num = n()) %>%
   arrange(desc(num))
 
+tree_by_tree %>% 
+  group_by(utilities) %>%
+  dplyr::summarize(num = n()) %>%
+  arrange(desc(num))
 
 ## Summary analyses 
 
@@ -105,7 +109,7 @@ tree_condition_by_nbr_filled <- tree_by_tree %>%
 tree_condition_by_nbr <- tree_condition_by_nbr_all %>%
   left_join(tree_condition_by_nbr_filled, by = "nbrdesc", suffix = c("_all", "_filled"))
 # ...and write to csv
-write_csv(tree_condition_by_nbr, "scripts/geography-based-analyses/street-trees/tree_condition_by_nbr.csv")
+write_csv(tree_condition_by_nbr, "data/output-data/street-tree-analyses/tree_condition_by_nbr.csv")
 
 
 # Tree height/diameter including "potential" tree sites
@@ -130,14 +134,14 @@ tree_height_diam_by_nbr_filled <- tree_by_tree %>%
 tree_height_diam_by_nbr <- tree_height_diam_by_nbr_all %>%
   left_join(tree_height_diam_by_nbr_filled, by = "nbrdesc", suffix = c("_all", "_filled"))
 # ...and write to csv
-write_csv(height_diam, "scripts/geography-based-analyses/street-trees/tree_height_diameter_by_nbr.csv")
+write_csv(height_diam, "data/output-data/street-tree-analyses/tree_height_diameter_by_nbr.csv")
 
 
 # Join all summaries into master table...
 summary_tbl_1 <- tree_height_diam_by_nbr %>%
   left_join(tree_condition_by_nbr, by = "nbrdesc")
 # ...and write to csv
-write_csv(summary_tbl_1, "scripts/geography-based-analyses/street-trees/tree_height_diameter_condition_by_nbr.csv")
+write_csv(summary_tbl_1, "data/output-data/street-tree-analyses/tree_height_diameter_condition_by_nbr.csv")
 
 # Clean up workspace
 cleanup()
