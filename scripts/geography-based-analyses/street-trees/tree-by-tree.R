@@ -23,7 +23,7 @@ rm(list=ls())
 # setwd("/Users/rready/Desktop/2019-baltimore-climate-health-project-data-repo")
 
 #########################
-### Define functions ###
+### Define functions ###############################################
 ########################
 cleanup <- function() {
   rm(list=setdiff(ls(pos = 1), 
@@ -31,14 +31,15 @@ cleanup <- function() {
                     "tree_by_tree",
                     "tree_condition_by_nbr",
                     "tree_height_diam_by_nbr", 
-                    "summary_tbl_1")
-  ),
-  pos = 1
-  )
+                    "summary_tbl_1",
+                    "tree_spaces_count_by_nbr_all")
+                  ),
+     pos = 1
+     )
 }
 
 #####################
-##### Load data #####
+##### Load data #################################################
 #####################
 
 tree_by_tree <- read_csv("data/input-data/street-trees/csv/by_nsa/street_trees_nsa_join_table.csv") %>%
@@ -46,6 +47,9 @@ tree_by_tree <- read_csv("data/input-data/street-trees/csv/by_nsa/street_trees_n
   rename_all(tolower) %>%
   mutate_all(tolower) %>%
   mutate(condition = ifelse(condition == "stump w", "stump", condition)) %>%
+  # Group "sprout" with "stump"
+  mutate(condition = ifelse(condition == "sprouts", "stump", condition)) %>%
+  filter(condition != "n/a") %>%
   # Make "condition" a factor so it can be ordered
   mutate_at(vars(matches("condition")), 
             as.factor) %>%
@@ -55,18 +59,16 @@ tree_by_tree <- read_csv("data/input-data/street-trees/csv/by_nsa/street_trees_n
                                    "dead",
                                    "poor",
                                    "fair",
-                                   "good",
-                                   "sprouts",
-                                   "n/a")
+                                   "good")
   )
   ) %>%
   mutate_at(vars(matches("tree_ht"), matches("dbh")), as.numeric)
 #mutate_at(vars(matches("nbrdesc")), tolower)
 
-# dbh is diameter at breast height 
-######################
-### Begin analysis ###
-######################
+
+###########################
+### Counts of variables ###############################################
+###########################
 
 ## Examine cagegories of information
 
@@ -85,63 +87,126 @@ tree_by_tree %>%
   dplyr::summarize(num = n()) %>%
   arrange(desc(num))
 
-## Summary analyses 
 
-# Tree condition by neighborhood including "potential" tree sites
-tree_condition_by_nbr_all <- tree_by_tree %>% 
-  group_by(nbrdesc, condition) %>%
-  summarize(num = n()) %>%
-  mutate(perc = round(100*(num / sum(num)), 2)) %>%
-  select(-num) %>%
-  spread(condition, perc)
+######################
+### Begin analysis ###############################################
+###################### 
 
-# Tree condition by neighborhood not including "potential" tree sites
-tree_condition_by_nbr_filled <- tree_by_tree %>% 
-  #filter(!space_type %in% "potential") %>%
-  filter(!str_detect(space_type, "potential")) %>%
-  group_by(nbrdesc, condition) %>%
-  summarize(num = n()) %>%
-  mutate(perc = round(100*(num / sum(num)), 2)) %>%
-  select(-num) %>%
-  spread(condition, perc)
+#########################
+### Actual vs Absent ###
+########################
 
-# Join the two tables...
-tree_condition_by_nbr <- tree_condition_by_nbr_all %>%
-  left_join(tree_condition_by_nbr_filled, by = "nbrdesc", suffix = c("_all", "_filled"))
-# ...and write to csv
-write_csv(tree_condition_by_nbr, "data/output-data/street-tree-analyses/tree_condition_by_nbr.csv")
-
-
-# Tree height/diameter including "potential" tree sites
-tree_height_diam_by_nbr_all <- tree_by_tree %>%
+tree_spaces_count_by_nbr <- tree_by_tree %>%
+  # How many tree-able spaces are there, both with and without trees?
   group_by(nbrdesc) %>%
-  summarize(combined_ht = sum(tree_ht),
+  dplyr::summarize(total_possible = n())
+
+tree_count_by_nbr <- tree_by_tree %>% 
+  # Filter out tree-able spaces without trees, because we want to know the percent *of existing trees* at each condition
+  filter(condition != "absent") %>%
+  group_by(nbrdesc) %>%
+  dplyr::summarize(total_trees = n())
+
+tree_empty_spaces_count_by_nbr <- tree_by_tree %>% 
+  # How many tree-able spaces don't have trees?
+  filter(condition == "absent") %>%
+  group_by(nbrdesc) %>%
+  dplyr::summarize(total_absent = n())
+
+tree_potential_sites <- tree_by_tree %>% 
+  # How many tree-able are considered "potential" pits?
+  filter(str_detect(space_type, "potential")) %>%
+  group_by(nbrdesc) %>%
+  dplyr::summarize(potential_wellpit = n())
+
+# Join to see how many actual trees vs "absent" trees vs "potential" aka labor intensive for city
+tree_spaces_count_by_nbr_all <- tree_spaces_count_by_nbr %>%
+  left_join(tree_count_by_nbr) %>%
+  left_join(tree_empty_spaces_count_by_nbr) %>%
+  left_join(tree_potential_sites) 
+  
+
+# Write to CSV for later use
+write_csv(tree_spaces_count_by_nbr_all, "data/output-data/street-tree-analyses/trees_actual_v_tree_spaces.csv")
+
+################################
+### Look at potential sites ####
+################################
+
+tree_potential_sites <- tree_by_tree %>% 
+  # How many tree-able are considered "potential" pits?
+  filter(str_detect(space_type, "potential")) %>%
+  group_by(nbrdesc) %>%
+  dplyr::summarize(potential_wellpit = n()) %>%
+  left_join(tree_spaces_count_by_nbr) %>%
+  left_join(tree_empty_spaces_count_by_nbr)
+
+# Clean up workspace
+cleanup()
+
+######################################
+### Tree condition by neighborhood ###
+######################################
+
+# Tree condition by neighborhood
+tree_condition_by_nbr <- tree_by_tree %>% 
+  # Filter out tree-able spaces without trees, because we want to know the percent *of existing trees* at each condition
+  filter(condition != "absent") %>%
+  group_by(nbrdesc, condition) %>%
+  dplyr::summarize(num = n()) %>%
+  # Join the tree count by neighborhood for percentage calculations
+  left_join(tree_spaces_count_by_nbr_all) %>%
+  select(-total_absent, -total_possible) %>%
+  mutate(perc = round(100*(num / total_trees), 2)) %>%
+  # Drop num to spread
+  select(-num) %>%
+  spread(condition, perc) %>%
+  # Debug: Check that percentages add up (drop in next step)
+  mutate(perc_check = rowSums(.[3:7], na.rm = T)) %>%
+  select(-total_trees, everything(), -perc_check)
+
+# Write to csv
+write_csv(tree_condition_by_nbr_all, "data/output-data/street-tree-analyses/tree_condition_by_nbr.csv")
+
+
+############################################
+### Tree height/diameter by neighborhood ###
+############################################
+
+# Tree height/diameter
+tree_height_diam_by_nbr <- tree_by_tree %>%
+  group_by(nbrdesc) %>%
+  dplyr::summarize(combined_ht = sum(tree_ht),
             avg_ht = round(mean(tree_ht), 2),
             combined_diam = sum(dbh),
             avg_diam = round(mean(dbh), 2)
   )
 
-# Tree height/diameter not including "potential" tree sites
-tree_height_diam_by_nbr_filled <- tree_by_tree %>%
-  group_by(nbrdesc) %>%
-  summarize(combined_ht = sum(tree_ht),
-            avg_ht = round(mean(tree_ht), 2),
-            combined_diam = sum(dbh),
-            avg_diam = round(mean(dbh), 2)
-  )
 
-# Join the two tables...
-tree_height_diam_by_nbr <- tree_height_diam_by_nbr_all %>%
-  left_join(tree_height_diam_by_nbr_filled, by = "nbrdesc", suffix = c("_all", "_filled"))
-# ...and write to csv
+# Wite it to csv
 write_csv(height_diam, "data/output-data/street-tree-analyses/tree_height_diameter_by_nbr.csv")
 
 
+####################
+### Master table ###
+####################
+
 # Join all summaries into master table...
 summary_tbl_1 <- tree_height_diam_by_nbr %>%
-  left_join(tree_condition_by_nbr, by = "nbrdesc")
+  left_join(tree_condition_by_nbr, by = "nbrdesc") %>%
+  select(-total_trees) %>%
+  left_join(tree_spaces_count_by_nbr_all, by = "nbrdesc")
+  
 # ...and write to csv
 write_csv(summary_tbl_1, "data/output-data/street-tree-analyses/tree_height_diameter_condition_by_nbr.csv")
 
 # Clean up workspace
 cleanup()
+
+######################
+### Generate plots ###
+######################
+
+ggplot(tree_condition_by_nbr) +
+  geom_bar(aes(x = ))
+

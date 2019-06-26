@@ -1,0 +1,278 @@
+nbrdesc,total_possible,total_trees,total_absent,potential_wellpit
+NA,13,5,8,NA
+abell,519,455,64,27
+allendale,589,270,319,23
+arcadia,498,409,89,14
+arlington,500,165,335,96
+armistead gardens,174,77,97,9
+ashburton,1625,956,669,20
+baltimore highlands,597,431,166,140
+barclay,880,737,143,101
+barre circle,256,252,4,2
+bayview,434,235,199,110
+beechfield,284,144,140,NA
+belair-edison,3152,1446,1706,283
+belair-parkside,17,10,7,6
+bellona-gittings,234,181,53,NA
+belvedere,229,149,80,6
+berea,937,662,275,43
+better waverly,964,584,380,195
+beverly hills,489,430,59,3
+biddle street,368,282,86,66
+blythewood,22,22,NA,NA
+bolton hill,1548,1508,40,27
+boyd-booth,225,116,109,83
+brewers hill,572,409,163,137
+bridgeview/greenlawn,422,192,230,68
+broadway east,1526,421,1105,984
+broening manor,240,107,133,48
+brooklyn,3106,2147,959,140
+burleith-leighton,202,101,101,3
+butcher's hill,628,604,24,19
+callaway-garrison,752,271,481,22
+cameron village,335,106,229,7
+canton,4132,2985,1147,941
+canton industrial area,446,228,218,70
+care,544,417,127,84
+carroll - camden industrial area,963,731,232,137
+carroll park,981,905,76,22
+carroll-south hilton,652,405,247,85
+carrollton ridge,1088,526,562,423
+cedarcroft,398,347,51,1
+cedmont,509,249,260,30
+cedonia,419,341,78,NA
+central forest park,554,100,454,8
+central park heights,1823,709,1114,379
+charles north,491,379,112,93
+charles village,1605,1464,141,78
+cherry hill,849,445,404,14
+cheswolde,997,735,262,NA
+chinquapin park,364,182,182,2
+clifton park,1804,1775,29,NA
+coldspring,1120,1042,78,NA
+coldstream homestead montebello,2090,899,1191,446
+concerned citizens of forest park,333,84,249,31
+coppin heights/ash-co-east,720,446,274,122
+cross country,1061,635,426,5
+cross keys,129,127,2,NA
+curtis bay,800,406,394,188
+curtis bay industrial area,57,2,55,55
+cylburn,688,210,478,14
+darley park,221,139,82,47
+dickeyville,40,40,NA,NA
+dolfield,593,199,394,46
+dorchester,566,160,406,3
+downtown,1911,1032,879,789
+downtown west,338,132,206,197
+druid heights,628,459,169,125
+druid hill park,3655,3639,16,NA
+dunbar-broadway,714,564,150,101
+east arlington,332,176,156,NA
+east baltimore midway,1214,610,604,339
+easterwood,435,194,241,140
+eastwood,116,23,93,NA
+edgewood,348,220,128,29
+edmondson village,428,299,129,5
+ednor gardens-lakeside,1656,1136,520,7
+ellwood park/monument,1067,910,157,106
+evergreen,319,310,9,1
+evergreen lawn,265,130,135,65
+evesham park,296,288,8,NA
+fairfield area,336,241,95,17
+fairmont,354,193,161,31
+fallstaff,559,270,289,46
+federal hill,1031,821,210,191
+fells point,1397,1008,389,316
+forest park,661,196,465,26
+forest park golf course,405,234,171,1
+four by four,90,23,67,28
+frankford,2643,1545,1098,117
+franklin square,1094,682,412,318
+franklintown,1016,1016,NA,NA
+franklintown road,318,169,149,28
+garwyn oaks,419,215,204,12
+gay street,608,363,245,150
+glen,1394,701,693,37
+glen oaks,1078,797,281,4
+glenham-belhar,1049,425,624,71
+graceland park,731,396,335,40
+greektown,839,598,241,162
+greenmount cemetery,59,53,6,3
+greenmount west,522,367,155,139
+greenspring,611,223,388,44
+grove park,634,231,403,3
+guilford,2559,2274,285,10
+gwynns falls,385,235,150,53
+gwynns falls/leakin park,396,396,NA,NA
+hamilton hills,2622,1355,1267,67
+hampden,1893,1367,526,336
+hanlon-longwood,1151,664,487,25
+harlem park,2001,1318,683,422
+harwood,427,371,56,49
+hawkins point,242,169,73,NA
+heritage crossing,671,629,42,22
+herring run park,572,571,1,NA
+highlandtown,955,696,259,185
+hillen,348,150,198,NA
+hoes heights,183,139,44,8
+holabird industrial park,656,654,2,2
+hollins market,720,590,130,107
+homeland,1574,1489,85,12
+hopkins bayview,491,427,64,35
+howard park,3619,1469,2150,40
+hunting ridge,691,501,190,1
+idlewood,677,296,381,2
+inner harbor,732,523,209,184
+irvington,1056,680,376,120
+johns hopkins homewood,409,345,64,15
+johnston square,819,300,519,427
+jones falls area,24,24,NA,NA
+jonestown,774,451,323,274
+kenilworth park,269,89,180,NA
+kernewood,284,183,101,2
+keswick,237,225,12,NA
+kresson,180,62,118,62
+lake evesham,179,161,18,NA
+lake walker,460,319,141,NA
+lakeland,333,255,78,NA
+langston hughes,313,69,244,65
+lauraville,1257,740,517,27
+levindale,312,211,101,NA
+liberty square,244,128,116,19
+little italy,311,136,175,166
+loch raven,965,454,511,6
+locust point,741,528,213,196
+locust point industrial area,391,318,73,53
+lower edmondson village,62,28,34,12
+lower herring run park,480,478,2,NA
+loyola/notre dame,39,39,NA,NA
+lucille park,273,157,116,41
+madison park,941,699,242,186
+madison-eastend,559,468,91,56
+mayfield,603,444,159,10
+mcelderry park,942,791,151,118
+medfield,384,252,132,17
+medford,266,136,130,13
+mid-govans,517,366,151,17
+mid-town belvedere,1218,1114,104,76
+middle branch/reedbird parks,1496,1471,25,NA
+middle east,990,652,338,254
+midtown-edmondson,606,284,322,192
+millhill,294,160,134,78
+milton-montford,391,295,96,89
+mondawmin,1030,580,450,195
+montebello,476,274,202,4
+moravia-walther,310,231,79,NA
+morgan park,166,115,51,NA
+morgan state university,311,213,98,6
+morrell park,1244,602,642,116
+mosher,446,197,249,128
+mount holly,403,109,294,12
+mount vernon,1378,1116,262,225
+mount washington,2238,1748,490,3
+mount winans,142,126,16,1
+mt pleasant park,233,226,7,NA
+new northwood,685,536,149,6
+new southwest/mount clare,649,422,227,166
+north harford road,1400,556,844,25
+north roland park/poplar hill,355,347,8,NA
+northwest community action,444,183,261,113
+o'donnell heights,82,53,29,NA
+oakenshawe,518,475,43,13
+oaklee,61,20,41,6
+old goucher,369,358,11,5
+oldtown,699,373,326,245
+oliver,1526,1038,488,325
+orangeville,278,179,99,35
+orangeville industrial area,212,181,31,19
+orchard ridge,429,290,139,5
+original northwood,393,354,39,NA
+otterbein,520,401,119,92
+overlea,289,219,70,1
+panway/braddish avenue,299,146,153,3
+park circle,827,404,423,71
+parklane,276,210,66,5
+parkside,217,43,174,3
+parkview/woodbrook,673,495,178,100
+patterson park,2021,1927,94,25
+patterson park neighborhood,1319,1126,193,144
+patterson place,274,245,29,17
+pen lucy,277,123,154,35
+penn north,498,284,214,172
+penn-fallsway,417,128,289,260
+penrose/fayette street outreach,781,333,448,308
+perkins homes,192,153,39,11
+perring loch,875,338,537,NA
+pimlico good neighbors,269,195,74,12
+pleasant view gardens,154,74,80,54
+poppleton,1064,639,425,359
+port covington,190,182,8,4
+pulaski industrial area,1062,564,498,120
+purnell,8,7,1,NA
+radnor-winston,250,208,42,NA
+ramblewood,666,351,315,3
+reisterstown station,316,168,148,15
+remington,1070,701,369,255
+reservoir hill,1701,1531,170,99
+richnor springs,17,8,9,NA
+ridgely's delight,476,431,45,33
+riverside,2128,1584,544,454
+rognel heights,558,325,233,7
+roland park,3380,3131,249,13
+rosebank,146,114,32,27
+rosemont,717,293,424,45
+rosemont east,430,269,161,4
+rosemont homeowners/tenants,280,69,211,140
+sabina-mattfeldt,193,181,12,NA
+saint agnes,65,58,7,4
+saint helena,71,25,46,NA
+saint josephs,447,126,321,56
+saint paul,75,70,5,1
+sandtown-winchester,2264,1333,931,730
+seton business park,132,114,18,NA
+seton hill,623,509,114,58
+sharp-leadenhall,510,432,78,55
+shipley hill,552,309,243,198
+south baltimore,812,495,317,275
+south clifton park,264,120,144,93
+spring garden industrial area,52,32,20,15
+stadium area,134,107,27,5
+stonewood-pentwood-winston,143,78,65,4
+taylor heights,16,16,NA,NA
+ten hills,626,358,268,NA
+the orchards,456,367,89,NA
+towanda-grantley,267,102,165,45
+tremont,123,58,65,8
+tuscany-canterbury,459,364,95,33
+union square,565,497,68,24
+university of maryland,664,525,139,120
+uplands,444,397,47,7
+upper fells point,908,742,166,133
+upton,1572,827,745,548
+violetville,703,410,293,NA
+wakefield,32,31,1,NA
+walbrook,872,424,448,40
+waltherson,1335,615,720,68
+washington hill,1020,681,339,295
+washington village/pigtown,1579,1165,414,284
+waverly,566,352,214,25
+west arlington,1047,275,772,12
+west forest park,608,319,289,12
+west hills,464,281,183,7
+westfield,954,362,592,48
+westgate,620,395,225,15
+westport,655,488,167,56
+wilhelm park,100,76,24,2
+wilson park,102,77,25,16
+winchester,251,86,165,55
+windsor hills,547,253,294,2
+winston-govans,162,51,111,1
+woodberry,343,287,56,27
+woodbourne heights,565,319,246,3
+woodbourne-mccabe,91,49,42,9
+woodmere,516,168,348,60
+wrenlane,26,15,11,3
+wyman park,607,522,85,31
+wyndhurst,696,612,84,31
+yale heights,507,187,320,NA
+york-homeland,14,13,1,1
