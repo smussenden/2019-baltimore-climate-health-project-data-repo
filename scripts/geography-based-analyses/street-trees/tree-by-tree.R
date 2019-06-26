@@ -22,6 +22,20 @@ rm(list=ls())
 # Set working directory
 # setwd("/Users/rready/Desktop/baltimore-climate-project")
 
+#########################
+### Define functions ###
+########################
+cleanup <- function() {
+  rm(list=setdiff(ls(pos = 1), 
+                  c("cleanup", 
+                    "tree_by_tree", 
+                    "summary_tbl_1",
+                    "tree_condition_by_nbr")
+  ),
+  pos = 1
+  )
+}
+
 #####################
 ##### Load data #####
 #####################
@@ -117,4 +131,5 @@ summary_tbl_1 <- summary_tbl_1_all %>%
 # ...and write them to csv
 write_csv(summary_tbl_1, "scripts/geography-based-analyses/street-trees/tree_height_diameter_by_nbr.csv")
 
-
+# Clean up workspace
+cleanup()
