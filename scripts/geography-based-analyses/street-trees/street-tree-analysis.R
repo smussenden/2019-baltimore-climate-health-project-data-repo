@@ -30,6 +30,7 @@ cleanup <- function() {
                   c("cleanup",
                     "tree_by_tree_categorized",
                     "spaces_count_by_nsa_all",
+                    "count_at_condition",
                     "tree_percent_by_nsa",
                     "empty_spaces_by_diff_by_nsa",
                     "tree_condition_by_nsa",
@@ -114,17 +115,17 @@ write_csv(tree_by_tree_categorized, "data/output-data/street-tree-analyses/stree
 ### Counts of variables ###############################################
 ###########################
 
-tree_by_tree %>% 
+tree_by_tree_categorized %>% 
   group_by(condition) %>%
   dplyr::summarize(num = n()) %>%
   arrange(-desc(condition))
 
-tree_by_tree %>% 
+tree_by_tree_categorized %>% 
   group_by(space_type) %>%
   dplyr::summarize(num = n()) %>%
   arrange(desc(num))
 
-tree_by_tree %>% 
+tree_by_tree_categorized %>% 
   group_by(utilities) %>%
   dplyr::summarize(num = n()) %>%
   arrange(desc(num))
@@ -176,6 +177,12 @@ tree_percent_of_all_by_nsa <- spaces_count_by_nsa_all %>%
 # Write to csv
 write_csv(tree_percent_of_all_by_nsa, "data/output-data/street-tree-analyses/tree_percent_of_all_by_nsa.csv")
 
+
+count_at_condition <- tree_by_tree_categorized %>% 
+  group_by(nbrdesc, condition) %>%
+  dplyr::summarize(num = n()) %>%
+  spread(condition, num)
+
 ###################################
 ### Difficulty of planting ########
 ###################################
@@ -207,7 +214,7 @@ perc_stump_dead_in_moderate <- tree_by_tree_categorized %>%
   group_by(nbrdesc, condition) %>%
   # Count how many in each condition
   dplyr::summarize(num_in_condition = n()) %>%
-  # Join a temp table to find total for perc calc
+  # Join a temp table to find total of difficulty==2 for perc calc
   left_join(
     (tree_by_tree_categorized %>%
        # Only dead trees or empty spaces at diff 2
@@ -348,8 +355,17 @@ cleanup()
 
 
 #################################################
-
+### Put all in master table ###
 #################################################
 
+master_by_nsa <- empty_spaces_by_diff_by_nsa %>%
+  left_join(perc_stump_dead_in_moderate) %>%
+  left_join(spaces_count_by_nsa_all) %>%
+  left_join(tree_condition_by_nsa) %>%
+  left_join(tree_height_diam_by_nsa) %>%
+  left_join(tree_percent_by_nsa) %>%
+  left_join(count_at_condition %>% select(absent_count = absent, unknown_count = unknown))
 
+# Write to csv
+write_csv(master_by_nsa, "data/output-data/street-tree-analyses/master_street_tree_by_nsa.csv")
 
