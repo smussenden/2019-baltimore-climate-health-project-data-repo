@@ -29,9 +29,10 @@ cleanup <- function() {
   rm(list=setdiff(ls(pos = 1), 
                   c("cleanup",
                     "tree_by_tree_categorized",
-                    "tree_spaces_count_by_nsa_all",
-                    "tree_condition_by_nsa",
+                    "spaces_count_by_nsa_all",
+                    "tree_percent_by_nsa",
                     "empty_spaces_by_diff_by_nsa",
+                    "tree_condition_by_nsa",
                     "tree_height_diam_by_nsa")
   ),
   pos = 1
@@ -65,7 +66,6 @@ tree_by_tree <- read_csv("data/input-data/street-trees/csv/by_nsa/street_trees_n
   ) %>%
   mutate_at(vars(matches("tree_ht"), matches("dbh")), as.numeric)
 
-cleanup()
 ###################################
 ### Add meaningful categories ###############################################
 ###################################
@@ -138,29 +138,51 @@ tree_by_tree_categorized %>%
   dplyr::summarize(num = n()) %>%
   arrange(desc(num))
 
-
-###################################
-### Counts and percent analysis ###############################################
-###################################
+######################################################
+### Basic count tables, required for later queries ###
+######################################################
 
 # Count total spaces that are tracked, both with and without trees
 spaces_count_by_nsa <- tree_by_tree_categorized %>%
   group_by(nbrdesc) %>%
   dplyr::summarize(tracked_spaces = n())
 
-# Count of spaces with live trees, because later we want to know the percent *of existing trees* at each condition
+# Count total spaces with live trees (later we want to know the percent *of existing trees* at each condition)
 live_count_by_nsa <- tree_by_tree_categorized %>% 
   filter(has_live_tree == T) %>%
   group_by(nbrdesc) %>%
   dplyr::summarize(live_trees = n())
 
-# How many spaces don't have trees?
+# Count total spaces without live trees (includes dead trees and stumps)
 empty_spaces_count_by_nsa <- tree_by_tree_categorized %>% 
   filter(has_live_tree == F) %>%
   group_by(nbrdesc) %>%
   dplyr::summarize(empty_spaces = n())
 
-# HOW MANY spaces are AT EACH DIFFICULTY in each neighborhood?
+# Combine all counts into single table of COUNT of LIVE/EMPTY/ALL
+spaces_count_by_nsa_all <- spaces_count_by_nsa %>%
+    left_join(live_count_by_nsa) %>%
+    left_join(empty_spaces_count_by_nsa)
+
+# Remove building blocks from workspace
+cleanup()
+
+# Find PERCENT of trees to total spaces in each neighborhood
+tree_percent_by_nsa <- tree_by_tree_categorized %>% 
+  # Filter for tree-able spaces with live trees, because we want to know the percent *of existing trees* at each condition
+  filter(has_live_tree == T) %>%
+  group_by(nbrdesc) %>%
+  dplyr::summarize(live_trees = n()) %>%
+  # Join the tree count by neighborhood for percentage calculations
+  left_join(spaces_count_by_nsa_all %>% select(live_trees, tracked_spaces)) %>%
+  # What percent of trees are there compared to tree spaces?
+  mutate(perc_trees_to_spaces = round(100*(live_trees / tracked_spaces), 2))
+
+###################################
+### Difficulty of planting ########
+###################################
+
+# COUNT spaces AT EACH DIFFICULTY in each nsa
 empty_spaces_by_diff_by_nsa_count <- tree_by_tree_categorized %>% 
   group_by(nbrdesc, difficulty_level) %>%
   dplyr::summarize(num = n()) %>%
@@ -175,12 +197,12 @@ empty_spaces_by_diff_by_nsa_count <- tree_by_tree_categorized %>%
   ) %>%
   select(-num_unknown)
 
-# What PERCENT of total empty spots are AT EACH DIFFICULTY in each nsa?
+# PERCENT of total empty spots AT EACH DIFFICULTY in each nsa
 empty_spaces_by_diff_by_nsa_perc <- tree_by_tree_categorized %>% 
   group_by(nbrdesc, difficulty_level) %>%
   dplyr::summarize(num = n()) %>%
   # Join totals for perc calc
-  left_join(empty_spaces_count_by_nsa) %>%
+  left_join(spaces_count_by_nsa_all %>% select(nbrdesc , empty_spaces)) %>%
   mutate(perc_difflvl_to_empty_spaces = round(100*(num/empty_spaces), 2)) %>%
   select(-num) %>%
   spread(difficulty_level, perc_difflvl_to_empty_spaces) %>%
@@ -195,34 +217,17 @@ empty_spaces_by_diff_by_nsa_perc <- tree_by_tree_categorized %>%
   ) %>%
   select(-perc_unknown)
 
+# Join into master DIFFICULTY table
 empty_spaces_by_diff_by_nsa <- empty_spaces_by_diff_by_nsa_count %>%
   left_join(empty_spaces_by_diff_by_nsa_perc)
+# Remove building blocks from workspace
+cleanup()
 
 # Write to csv
 write_csv(empty_spaces_by_diff_by_nsa, "data/output-data/street-tree-analyses/empty_spaces_by_diff_by_nsa.csv")
 
-########################
-
-# Pecent of live trees compared to tracked spaces
-tree_percent_by_nsa <- tree_by_tree_categorized %>% 
-  # Filter for tree-able spaces with live trees, because we want to know the percent *of existing trees* at each condition
-  filter(has_live_tree == T) %>%
-  group_by(nbrdesc) %>%
-  dplyr::summarize(live_trees = n()) %>%
-  # Join the tree count by neighborhood for percentage calculations
-  left_join(spaces_count_by_nsa) %>%
-  # What percent of trees are there compared to tree spaces?
-  mutate(perc_trees_to_spaces = round(100*(live_trees / tracked_spaces), 2))
-
-# Join to see how many actual trees vs "absent" trees vs "potential" aka labor intensive for city
-(tree_spaces_count_by_nsa_all <- spaces_count_by_nsa %>%
-    left_join(live_count_by_nsa) %>%
-    left_join(empty_spaces_count_by_nsa) %>%
-    left_join(tree_percent_by_nsa))
-
-
 ######################################
-### Tree condition by neighborhood ###
+### Tree condition by nsa ############
 ######################################
 
 # Tree condition by neighborhood starting table
@@ -233,7 +238,7 @@ tree_condition_by_nsa_long <- tree_by_tree_categorized %>%
   dplyr::summarize(num_trees = n()) %>%
   # Find percent of live trees are in each condition?
   # Join table to get total number of live trees
-  left_join(tree_spaces_count_by_nsa_all) %>%
+  left_join(spaces_count_by_nsa_all) %>%
   mutate(perc_condition_to_live_trees = round(100*(num_trees/live_trees), 2))
 
 # Tree condition percent by nsa
@@ -261,8 +266,10 @@ tree_condition_count_by_nsa_wide <- tree_condition_by_nsa_long %>%
 # Join condition info tables into final
 tree_condition_by_nsa <- tree_condition_perc_by_nsa_wide %>%
   left_join(tree_condition_count_by_nsa_wide) %>%
-  left_join(live_count_by_nsa) 
+  left_join(spaces_count_by_nsa_all %>% select(nbrdesc, live_trees))
 
+# Remove building blocks from workspace
+cleanup()
 
 # Write to csv
 write_csv(tree_condition_by_nsa, "data/output-data/street-tree-analyses/tree_condition_by_nsa.csv")
