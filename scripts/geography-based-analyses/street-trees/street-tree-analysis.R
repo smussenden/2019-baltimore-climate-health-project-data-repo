@@ -33,7 +33,8 @@ cleanup <- function() {
                     "tree_percent_by_nsa",
                     "empty_spaces_by_diff_by_nsa",
                     "tree_condition_by_nsa",
-                    "tree_height_diam_by_nsa")
+                    "tree_height_diam_by_nsa",
+                    "perc_stump_dead_in_moderate")
   ),
   pos = 1
   )
@@ -168,15 +169,12 @@ spaces_count_by_nsa_all <- spaces_count_by_nsa %>%
 cleanup()
 
 # Find PERCENT of trees to total spaces in each neighborhood
-tree_percent_by_nsa <- tree_by_tree_categorized %>% 
-  # Filter for tree-able spaces with live trees, because we want to know the percent *of existing trees* at each condition
-  filter(has_live_tree == T) %>%
-  group_by(nbrdesc) %>%
-  dplyr::summarize(live_trees = n()) %>%
-  # Join the tree count by neighborhood for percentage calculations
-  left_join(spaces_count_by_nsa_all %>% select(live_trees, tracked_spaces)) %>%
+tree_percent_of_all_by_nsa <- spaces_count_by_nsa_all %>%
   # What percent of trees are there compared to tree spaces?
   mutate(perc_trees_to_spaces = round(100*(live_trees / tracked_spaces), 2))
+
+# Write to csv
+write_csv(tree_percent_of_all_by_nsa, "data/output-data/street-tree-analyses/tree_percent_of_all_by_nsa.csv")
 
 ###################################
 ### Difficulty of planting ########
@@ -196,6 +194,59 @@ empty_spaces_by_diff_by_nsa_count <- tree_by_tree_categorized %>%
     num_has_tree = "<NA>"
   ) %>%
   select(-num_unknown)
+
+##################################################
+### Perc of Stump or dead in cat 2 / moderate ###
+##################################################
+
+perc_stump_dead_in_moderate <- tree_by_tree_categorized %>%
+  # Only dead trees or empty spaces at diff 2
+  filter(has_live_tree == FALSE,
+         difficulty_level == 2) %>%
+  select(nbrdesc, condition, has_live_tree, difficulty_level) %>%
+  group_by(nbrdesc, condition) %>%
+  # Count how many in each condition
+  dplyr::summarize(num_in_condition = n()) %>%
+  # Join a temp table to find total for perc calc
+  left_join(
+    (tree_by_tree_categorized %>%
+       # Only dead trees or empty spaces at diff 2
+      filter(has_live_tree == FALSE,
+             difficulty_level == 2) %>%
+      group_by(nbrdesc) %>%
+      # Count how many at moderate difficulty
+      dplyr::summarize(total = n()))
+  ) %>%
+  mutate(perc_in_condition = round(100*(num_in_condition/total), 2))
+
+count_spread <- perc_stump_dead_in_moderate %>%
+  select(nbrdesc, condition, num_in_condition) %>%
+  spread(condition, num_in_condition) %>%
+  rename(stump_count = stump,
+         dead_count = dead)
+
+perc_spread <- perc_stump_dead_in_moderate %>%
+  select(nbrdesc, condition, perc_in_condition) %>%
+  spread(condition, perc_in_condition) %>%
+  rename(stump_perc_of_moderate_diff = stump,
+         dead_perc_of_moderate_diff = dead)
+
+perc_stump_dead_in_moderate <- count_spread %>%
+  left_join(
+    (tree_by_tree_categorized %>%
+       # Only dead trees or empty spaces at diff 2
+       filter(has_live_tree == FALSE,
+              difficulty_level == 2) %>%
+       group_by(nbrdesc) %>%
+       # Count how many at moderate difficulty
+       dplyr::summarize(total_at_moderate_diff = n()))
+  ) %>%
+  left_join(perc_spread)
+  
+cleanup()
+
+# Write to csv
+write_csv(perc_stump_dead_in_moderate, "data/output-data/street-tree-analyses/perc_stump_dead_in_moderate.csv")
 
 # PERCENT of total empty spots AT EACH DIFFICULTY in each nsa
 empty_spaces_by_diff_by_nsa_perc <- tree_by_tree_categorized %>% 
@@ -294,3 +345,11 @@ write_csv(tree_height_diam_by_nsa, "data/output-data/street-tree-analyses/tree_h
 
 ### Clean up workspace
 cleanup()
+
+
+#################################################
+
+#################################################
+
+
+
