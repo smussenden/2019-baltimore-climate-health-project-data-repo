@@ -35,3 +35,5 @@ redlining_tree_summary_table <- redlining_tree %>%
 #################################################################
 
 write_csv(redlining_tree_summary_table, "data/output-data/HOLC_redlining_canopy_analysis/HOLC_redlining_canopy_analysis.csv")
+
+### NOTE: Need to add heat to this as well

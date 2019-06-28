@@ -115,3 +115,22 @@ make_correlation_matrix_graphic(treecover_vs_coverchange_nsa_correlation_matrix_
 
 # Remove all but master file and functions
 cleanup()
+
+##############################
+##### SM ANALYSIS ############
+##############################
+
+# Add "target neighborhood columns"
+nsa_tree_temp_demographics <- nsa_tree_temp_demographics %>%
+  mutate(target_neighborhood = case_when(
+    nsa_name %in% c("Berea", "Broadway East", "Oliver", "Middle East", "Biddle Street","Milton-Montford", "Madison-Eastend", "CARE", "McElderry Park", "Ellwood Park/Monument", "Patterson Place", "Patterson Park Neighborhood", "Baltimore Highlands", "Highlandtown", "Upper Fells Point") ~ "target",
+    nsa_name %in% c("Butcher's Hill", "Canton", "Washington Hill") ~ "counterpoint",
+    TRUE                      ~ "other"
+  )) %>%
+  filter(target_neighborhood != "other")
+
+# Basic scatter plot
+ggplot(nsa_tree_temp_demographics, aes(x=`07_lid_mean`, y=lid_change_percent_point, colour=target_neighborhood)) + geom_point() + geom_text(aes(label=nsa_name),hjust=0, vjust=0)
+# Change the point size, and shape
+
+plot(nsa_tree_temp_demographics$temp_mean_aft, nsa_tree_temp_demographics$lid_change_percent_point)
