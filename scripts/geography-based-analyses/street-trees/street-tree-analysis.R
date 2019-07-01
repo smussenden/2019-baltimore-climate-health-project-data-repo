@@ -433,10 +433,11 @@ ggplot(master_by_nsa_filtered,
   geom_col() +
   coord_flip() +
   labs(title = "Average Tree Height by NSA",
-       x = "Neighborhood Statistical Area",
-       y = "Average Tree Height",
+       x = "",
+       y = "",
        fill = "") +
-  scale_fill_manual(values=cbPalette)
+  scale_fill_manual(values=cbPalette) +
+  theme(legend.position = "bottom")
 ggsave(filename = "avg_tree_height_by_nsa.png", device = "png", path = "data/output-data/street-tree-analyses/plots")
 
 
@@ -451,10 +452,11 @@ ggplot(master_by_nsa_filtered,
   geom_col() +
   coord_flip() +
   labs(title = "Average Tree Diameter by NSA",
-       x = "Neighborhood Statistical Area",
-       y = "Average Tree Diameter",
+       x = "",
+       y = "",
        fill = "") +
-  scale_fill_manual(values=cbPalette)
+  scale_fill_manual(values=cbPalette) +
+  theme(legend.position = "bottom")
 ggsave(filename = "avg_tree_diameter_by_nsa.png", device = "png", path = "data/output-data/street-tree-analyses/plots")
 
 
