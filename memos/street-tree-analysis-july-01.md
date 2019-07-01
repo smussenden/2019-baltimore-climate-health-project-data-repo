@@ -26,5 +26,5 @@ Three of the top 5 areas for both tallest trees and largest tree diameter are co
 | 5. Canton | 5. Butcher's Hill |
 | <img src="https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/data/output-data/street-tree-analyses/plots/avg_tree_height_by_nsa.png?raw=true" alt="Tree Height" width="500"/> | <img src="https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/data/output-data/street-tree-analyses/plots/avg_tree_diameter_by_nsa.png?raw=true" alt="Tree Height" width="500"/> |
 
-### Ease of Planting
+### Ease of Planting 
  _To be continued..._
