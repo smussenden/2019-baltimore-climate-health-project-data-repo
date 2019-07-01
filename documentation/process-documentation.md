@@ -14,7 +14,7 @@
   2. CSVs calculated by Qgis of zonal B.1 statistics, using A.1 zones
 
 **C. Methodology**
-  * ZCTA Notes
+  * **ZCTA Notes**
     * There are some differences in the exact boundaries between ZCTA shapes pulled county-by-county and for MD as a whole. All ZCTA groups are from the state-level ZCTA files. ~~except for ZCTA 21222, for which a significant chunk of land area was missing from the file pulled at the state level.~~
     * The Mid-Atlantic Terminal at Dundalk (sometimes included as part of the 21222 ZCTA) is not included.
     * All calculations for included ZCTAs are done over the entire ZCTA, even when the ZCTA expands past the city boundary, with one exception. 21226 is cut off at the city boundary due to limitations the in treecover and heat maps. In addition, a small peninsula in that same ZCTA was removed for ease in computing.
@@ -25,9 +25,12 @@
       * Complete list of Baltimore ZCTAs: '21201', '21202', '21205', '21206', '21207', '21208', '21209', '21210', '21211', '21212', '21213', '21214', '21215', '21216', '21217', '21218', '21222', '21223', '21224', '21225', '21226', '21227', '21228', '21229', '21230', '21231', '21234', '21236', '21237', '21239', '21251'
       * ZCTAs removed from list (for untrimmed): '21208', '21228', '21234', '21236'
       * Complete list of ZCTAs used (for untrimmed): '21201', '21202', '21205', '21206', '21207', '21209', '21210', '21211', '21212', '21213', '21214', '21215', '21216', '21217', '21218', '21222', '21223', '21224', '21225', '21226', '21227', '21229', '21230', '21231', '21237', '21239', '21251'
-  * CSA Notes
+  * **CSA Notes**
     * Community Statistical Areas are used by The Baltimore Neighborhood Indicators Alliance Vital Signs program.
     * The areas do not include the Johns Hopkins region in roughly the center of the map.
+  * **NSA Notes**
+    * Target neighborhoods: "Berea", "Broadway East", "Oliver", "Middle East", "Biddle Street","Milton-Montford", "Madison-Eastend", "CARE", "McElderry Park", "Ellwood Park/Monument", "Patterson Place", "Patterson Park Neighborhood", "Baltimore Highlands", "Highlandtown", "Upper Fells Point"
+    * Counterpoint neighborhoods: "Butcher's Hill", "Canton", "Washington Hill"
     
   ![Removed ZCTAs](https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/documentation/tree-zcta-baltcity.png?raw=true "Removed ZCTAs")
   
