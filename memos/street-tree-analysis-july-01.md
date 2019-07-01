@@ -17,14 +17,15 @@ _INCOMPLETE_
 
 Three of the top 5 areas for both tallest trees and largest tree diameter are counterpoint neighborhoods. The same NSAs populate both groups; only the order is changed.
 
-The 5 NSAs with the tallest trees are:
+| The 5 NSAs with the tallest trees are:
 1. Upper Fells Point
 2. Butcher's Hill
 3. Washington Hill
 4. Broadway East 
 5. Canton
+|
 
-<img src="https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/data/output-data/street-tree-analyses/plots/avg_tree_height_by_nsa.png?raw=true" alt="Tree Height" width="500"/>
+| <img src="https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/data/output-data/street-tree-analyses/plots/avg_tree_height_by_nsa.png?raw=true" alt="Tree Height" width="500"/> |
 
 The 5 NSAs with the largest tree diameter are:
 1. Washington Hill
