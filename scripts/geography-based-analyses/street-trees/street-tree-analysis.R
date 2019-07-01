@@ -31,7 +31,9 @@ cleanup <- function() {
                     "tree_by_tree_categorized",
                     "tree_as_percent_of_spaces_by_nsa",
                     "empty_spaces_by_diff_by_nsa",
-                    "tree_condition_by_nsa")
+                    "tree_condition_by_nsa",
+                    "master_by_nsa",
+                    "master_by_nsa_filtered")
   ),
   pos = 1
   )
@@ -105,7 +107,7 @@ tree_by_tree_categorized <- tree_by_tree %>%
   ) )
 
 # Write to CSV for later use
-write_csv(tree_by_tree_categorized, "data/output-data/street-tree-analyses/street_trees_nsa_categorized.csv")
+write_csv(tree_by_tree_categorized, "data/input-data/street-trees/csv/by_nsa/street_trees_nsa_categorized.csv")
 
 ############################################################
 ### Counts of variables (printed to console not stored) ###############################################
@@ -224,7 +226,7 @@ empty_spaces_by_diff_by_nsa_perc <- tree_by_tree_categorized %>%
   group_by(nbrdesc, difficulty_level) %>%
   dplyr::summarize(num = n()) %>%
   # Join totals for perc calc
-  left_join(spaces_count_by_nsa_all %>% select(nbrdesc , spaces_without_live_trees)) %>%
+  left_join(tree_as_percent_of_spaces_by_nsa %>% select(nbrdesc , spaces_without_live_trees)) %>%
   mutate(perc_difflvl_to_empty_spaces = round(100*(num/spaces_without_live_trees), 2)) %>%
   select(-num) %>%
   spread(difficulty_level, perc_difflvl_to_empty_spaces) %>%
@@ -262,7 +264,7 @@ tree_condition_by_nsa_long <- tree_by_tree_categorized %>%
   dplyr::summarize(num_trees = n()) %>%
   # Find percent of live trees are in each condition?
   # Join table to get total number of live trees
-  left_join(spaces_count_by_nsa_all) %>%
+  left_join(tree_as_percent_of_spaces_by_nsa) %>%
   mutate(perc_condition_to_live_trees = round(100*(num_trees/spaces_with_live_trees), 2))
 
 # Tree condition percent by nsa
@@ -290,7 +292,7 @@ tree_condition_count_by_nsa_wide <- tree_condition_by_nsa_long %>%
 # Join condition info tables into final
 tree_condition_by_nsa <- tree_condition_perc_by_nsa_wide %>%
   left_join(tree_condition_count_by_nsa_wide) %>%
-  left_join(spaces_count_by_nsa_all %>% select(nbrdesc, spaces_with_live_trees)) %>%
+  left_join(tree_as_percent_of_spaces_by_nsa %>% select(nbrdesc, spaces_with_live_trees)) %>%
   # Rearange for readability
   select(
     1, 8, 5:7, 2:4
@@ -333,14 +335,38 @@ cleanup()
 ### Put all in master table ###
 #################################################
 
-master_by_nsa <- empty_spaces_by_diff_by_nsa %>%
-  left_join(perc_stump_dead_in_moderate) %>%
-  left_join(spaces_count_by_nsa_all) %>%
-  left_join(tree_condition_by_nsa) %>%
-  left_join(tree_height_diam_by_nsa) %>%
-  left_join(tree_as_percent_of_spaces_by_nsa) %>%
-  left_join(count_at_condition %>% select(absent_count = absent, unknown_count = unknown))
+master_by_nsa <- tree_as_percent_of_spaces_by_nsa %>%
+  left_join(empty_spaces_by_diff_by_nsa) %>%
+  left_join(tree_condition_by_nsa)
 
 # Write to csv
 write_csv(master_by_nsa, "data/output-data/street-tree-analyses/master_street_tree_by_nsa.csv")
+
+
+######################################
+### Analyses based on above tables ###
+######################################
+
+# List of target NSAs
+target_nsas <- c("Berea", "Broadway East", "Oliver", "Middle East", "Biddle Street","Milton-Montford", "Madison-Eastend", "CARE", "McElderry Park", "Ellwood Park/Monument", "Patterson Place", "Patterson Park Neighborhood", "Baltimore Highlands", "Highlandtown", "Upper Fells Point") %>%
+  lapply(tolower)
+
+# List of nearby NSAs that are richer to use as counterpoints
+counterpoint_nsas <- c("Butcher's Hill", "Canton", "Washington Hill") %>%
+  lapply(tolower)
+
+# Filtered master list of all above data for target and counterpoint NSAs only
+master_by_nsa_filtered <- master_by_nsa %>%
+  subset(nbrdesc %in% target_nsas) %>%
+  mutate(is_target_nsa = T) %>%
+  full_join(master_by_nsa %>%
+               subset(nbrdesc %in% counterpoint_nsas) %>%
+               mutate(is_target_nsa = F)) %>%
+  select(1, 28, 2:27)
+
+# Write to csv
+write_csv(master_by_nsa_filtered, "data/output-data/street-tree-analyses/master_street_tree_by_nsa_targetonly.csv")
+
+
+
 
