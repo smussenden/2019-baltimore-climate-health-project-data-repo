@@ -12,6 +12,7 @@ library(tidyverse)
 library(readxl)
 library(janitor)
 library(magrittr)
+library(plyr)
 
 # Turn off scientific notation
 options(scipen = 999)
@@ -33,7 +34,8 @@ cleanup <- function() {
                     "empty_spaces_by_diff_by_nsa",
                     "tree_condition_by_nsa",
                     "master_by_nsa",
-                    "master_by_nsa_filtered")
+                    "master_by_nsa_filtered",
+                    "cbPalette")
   ),
   pos = 1
   )
@@ -70,6 +72,9 @@ tree_by_tree <- read_csv("data/input-data/street-trees/csv/by_nsa/street_trees_n
 ### Add meaningful categories ###############################################
 ###################################
 
+# Not suitable : "a space exists to plant but it may be too small or near a hazard or obstruction," per Nathan Randolph, GIS Analyst at Department of Recreation and Parks
+
+
 #### Levels of difficulty to plant ####
 # Live tree exists = NA
 # Absent and not potential = 1
@@ -88,7 +93,7 @@ tree_by_tree_categorized <- tree_by_tree %>%
   # Add col for second-level cat
   mutate(difficulty_level = case_when(
     # Difficulty of planting NA if tree already there.
-    has_live_tree == T ~ NA_real_,
+    has_live_tree == T ~ c,
     # Difficulty level 1 if...
     condition == "absent" & # No tree,
       !str_detect(space_type, "potential") & # Not marked "potential" aka doesn't require breaking concrete,
@@ -165,7 +170,7 @@ empty_spaces_count_by_nsa <- tree_by_tree_categorized %>%
   group_by(nbrdesc, is_suitable) %>%
   dplyr::summarize(count_spaces = n()) %>%
   spread(is_suitable, count_spaces) %>%
-  rename(
+  dplyr::rename(
     suitable_without_tree = "TRUE",
     unsuitable_without_tree = "FALSE"
   ) %>%
@@ -211,7 +216,7 @@ empty_spaces_by_diff_by_nsa_count <- tree_by_tree_categorized %>%
   group_by(nbrdesc, difficulty_level) %>%
   dplyr::summarize(num = n()) %>%
   spread(difficulty_level, num) %>%
-  rename(
+  dplyr::rename(
     num_unknown = "0",
     num_easy = "1",
     num_moderate = "2",
@@ -231,7 +236,7 @@ empty_spaces_by_diff_by_nsa_perc <- tree_by_tree_categorized %>%
   select(-num) %>%
   spread(difficulty_level, perc_difflvl_to_empty_spaces) %>%
   select(-"<NA>") %>%
-  rename(
+  dplyr::rename(
     perc_of_nontreed_unknown = "0",
     perc_of_nontreed_easy = "1",
     perc_of_nontreed_moderate = "2",
@@ -250,6 +255,37 @@ empty_spaces_by_diff_by_nsa <- empty_spaces_by_diff_by_nsa_count %>%
 cleanup()
 
 # Write to csv
+write_csv(empty_spaces_by_diff_by_nsa, "data/output-data/street-tree-analyses/nontreed_spaces_by_diff_by_nsa.csv")
+
+##########################################################
+### Group trees into easy-moderate and hard-unsuitable ###
+##########################################################
+
+empty_spaces_by_broad_diff_by_nsa <- tree_by_tree_categorized %>% 
+  mutate(diff_grouping = case_when(
+    difficulty_level == 1 | difficulty_level == 2 ~ "easy_or_moderate",
+    difficulty_level == 3 | difficulty_level == 4 ~ "hard_or_unsuitable",
+    TRUE ~ "NA"
+  )) %>%
+  select(-difficulty_level) %>%
+  filter(diff_grouping != "NA") %>%
+  group_by(nbrdesc, diff_grouping) %>%
+  dplyr::summarize(num = n()) %>%
+  spread(diff_grouping, num) %>%
+  dplyr::rename(
+    num_easy_or_moderate = easy_or_moderate,
+    num_hard_or_unsuitable = hard_or_unsuitable
+  ) %>%
+  # Join totals for perc calc
+  left_join(tree_as_percent_of_spaces_by_nsa %>% select(nbrdesc , spaces_without_live_trees)) %>%
+  mutate(perc_easy_or_moderate_of_nontreed = round(100*(num_easy_or_moderate/spaces_without_live_trees), 2))
+
+## Add to master diff table
+empty_spaces_by_diff_by_nsa <- empty_spaces_by_diff_by_nsa %>%
+  left_join(empty_spaces_by_broad_diff_by_nsa) %>%
+  select(-spaces_without_live_trees)
+
+# (Re)write to csv
 write_csv(empty_spaces_by_diff_by_nsa, "data/output-data/street-tree-analyses/nontreed_spaces_by_diff_by_nsa.csv")
 
 ######################################
@@ -331,9 +367,9 @@ write_csv(tree_condition_by_nsa, "data/output-data/street-tree-analyses/tree_con
 cleanup()
 
 
-#################################################
+###############################
 ### Put all in master table ###
-#################################################
+###############################
 
 master_by_nsa <- tree_as_percent_of_spaces_by_nsa %>%
   left_join(empty_spaces_by_diff_by_nsa) %>%
@@ -344,7 +380,7 @@ write_csv(master_by_nsa, "data/output-data/street-tree-analyses/master_street_tr
 
 
 ######################################
-### Analyses based on above tables ###
+### Analyses based on above tables ##################################################################
 ######################################
 
 # List of target NSAs
@@ -362,11 +398,188 @@ master_by_nsa_filtered <- master_by_nsa %>%
   full_join(master_by_nsa %>%
                subset(nbrdesc %in% counterpoint_nsas) %>%
                mutate(is_target_nsa = F)) %>%
-  select(1, 28, 2:27)
+  select(1, 31, 2:30)
 
 # Write to csv
 write_csv(master_by_nsa_filtered, "data/output-data/street-tree-analyses/master_street_tree_by_nsa_targetonly.csv")
 
+cleanup()
+#######################
+### Visualize ###
+#######################
 
+# Colorblind-friendly palette
+cbPalette <- c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
+# To use for fills, add
+# scale_fill_manual(values=cbPalette)
+# To use for line and point colors, add
+# scale_colour_manual(values=cbPalette)
+
+
+# TO DO
+# Plot height / nsa [DONE]
+# Plot diam / nsa [DONE]
+# Redo height/diam filtered for young trees (diam > x)
+# 
+
+# Plot HEIGHT by nsa
+ggplot(master_by_nsa_filtered, 
+       aes(x = reorder(nbrdesc, avg_ht), 
+           y = avg_ht, 
+           fill = factor(is_target_nsa, 
+                         # Rename fill levels in legend
+                         labels=c("Counterpoint NSA"," Target NSA"))
+           )) +
+  geom_col() +
+  coord_flip() +
+  labs(title = "Average Tree Height by NSA",
+       x = "Neighborhood Statistical Area",
+       y = "Average Tree Height",
+       fill = "") +
+  scale_fill_manual(values=cbPalette)
+ggsave(filename = "avg_tree_height_by_nsa.png", device = "png", path = "data/output-data/street-tree-analyses/plots")
+
+
+# Plot DIAMETER by nsa
+ggplot(master_by_nsa_filtered, 
+       aes(x = reorder(nbrdesc, avg_diam), 
+           y = avg_diam, 
+           fill = factor(is_target_nsa, 
+                         # Rename fill levels in legend
+                         labels=c("Counterpoint NSA"," Target NSA"))
+       )) +
+  geom_col() +
+  coord_flip() +
+  labs(title = "Average Tree Diameter by NSA",
+       x = "Neighborhood Statistical Area",
+       y = "Average Tree Diameter",
+       fill = "") +
+  scale_fill_manual(values=cbPalette)
+ggsave(filename = "avg_tree_diameter_by_nsa.png", device = "png", path = "data/output-data/street-tree-analyses/plots")
+
+
+# Plot EMPTY SPACES by nsa
+ggplot(master_by_nsa_filtered) +
+  geom_col(aes(x = reorder(nbrdesc, perc_spaces_nontreed), 
+               y = perc_spaces_nontreed, 
+               fill = factor(is_target_nsa, 
+                             # Rename fill levels in legend
+                             labels=c("Counterpoint NSA"," Target NSA"))
+               )
+           ) +
+  coord_flip() +
+  labs(title = "Number of Spaces Without Trees",
+       x = "Neighborhood Statistical Area",
+       y = "",
+       fill = "") +
+  scale_fill_manual(values=cbPalette)
+
+
+# Plot PERCENT NONVIABLE EMPTY SPACES by nsa
+ggplot(master_by_nsa_filtered) +
+  geom_col(aes(x = reorder(nbrdesc, -perc_of_nontreed_are_suitable), 
+               y = (100 - perc_of_nontreed_are_suitable ), 
+               fill = factor(is_target_nsa, 
+                             # Rename fill levels in legend
+                             labels=c("Counterpoint NSA"," Target NSA"))
+               )
+           ) +
+  coord_flip() +
+  labs(title = "Percent of Untreed Areas That Are Unsuitable for Planting",
+       x = "Neighborhood Statistical Area",
+       y = "",
+       fill = "") +
+  scale_fill_manual(values=cbPalette)
+# Save to file
+ggsave(filename = "perc_nonviable_empty.png", device = "png", path = "data/output-data/street-tree-analyses/plots")
+
+# Plot PERCENT of UNTREED areas are EASY TO PLANT by nsa
+ggplot(master_by_nsa_filtered) +
+  geom_col(aes(x = reorder(nbrdesc, perc_of_nontreed_easy), 
+               y = perc_of_nontreed_easy, 
+               fill = factor(is_target_nsa, 
+                             # Rename fill levels in legend
+                             labels=c("Counterpoint NSA"," Target NSA"))
+  )
+  ) +
+  coord_flip() +
+  labs(title = "Percent of Untreed Areas That Are Easy to Plant",
+       x = "Neighborhood Statistical Area",
+       y = "",
+       fill = "") +
+  scale_fill_manual(values=cbPalette)
+# Save to file
+ggsave(filename = "perc_easy_to_tree.png", device = "png", path = "data/output-data/street-tree-analyses/plots")
+
+
+# Plot PERCENT of UNTREED areas are EASY OR MODERATE TO PLANT by nsa
+ggplot(master_by_nsa_filtered) +
+  geom_col(aes(x = reorder(nbrdesc, perc_easy_or_moderate_of_nontreed), 
+               y = perc_easy_or_moderate_of_nontreed, 
+               fill = factor(is_target_nsa, 
+                             # Rename fill levels in legend
+                             labels=c("Counterpoint NSA"," Target NSA"))
+  )
+  ) +
+  coord_flip() +
+  labs(title = "Percent of Untreed Areas That Are Easy-Moderate to Plant",
+       x = "Neighborhood Statistical Area",
+       y = "",
+       fill = "") +
+  scale_fill_manual(values=cbPalette)
+# Save to file
+ggsave(filename = "perc_easymoderate_to_tree.png", device = "png", path = "data/output-data/street-tree-analyses/plots")
+
+
+# Plot PROPORTIONAL CONDITION of TREE SPACES by nsa
+ggplot(filter(tree_by_tree_categorized, 
+              (nbrdesc %in% target_nsas) | (nbrdesc %in% counterpoint_nsas))
+       ) +
+  geom_bar(aes(x = reorder(nbrdesc, condition=="good"), 
+               fill = condition),
+           position = "fill") +
+  coord_flip() +
+  labs(title = "Proportional Condition of Tree Spaces by Neighborhood",
+       x = "",
+       y = "",
+       fill = "Condition") +
+  scale_fill_manual(values=cbPalette)
+# Save to file
+ggsave(filename = "prop_condition_of_tree_spaces_by_nsa.png", device = "png", path = "data/output-data/street-tree-analyses/plots")
+
+
+# Plot PROPORTIONAL CONDITION of LIVING TREES by nsa
+ggplot(filter(tree_by_tree_categorized, 
+              ((nbrdesc %in% target_nsas) | (nbrdesc %in% counterpoint_nsas)) &
+                ((condition != "absent") & (condition != "stump") & (condition != "dead")))
+) +
+  geom_bar(aes(x = reorder(nbrdesc, condition=="good"), 
+               fill = condition),
+           position = "fill") +
+  coord_flip() +
+  labs(title = "Proportional Condition of Living Trees by Neighborhood",
+       x = "",
+       y = "",
+       fill = "Condition") +
+  scale_fill_manual(values=cbPalette)
+# Save to file
+ggsave(filename = "prop_condition_of_live_trees_by_nsa.png", device = "png", path = "data/output-data/street-tree-analyses/plots")
+
+
+# Plot PROPORTIONAL of PLANTABLE SPACES vs LIVE TREES by nsa
+ggplot(filter(tree_by_tree_categorized, 
+              (nbrdesc %in% target_nsas) | (nbrdesc %in% counterpoint_nsas))
+) +
+  geom_bar(aes(x = reorder(nbrdesc, has_live_tree==T), 
+               fill = factor(has_live_tree, labels = c("Dead or No Tree", "Live Tree"))),
+           position = "fill") +
+  coord_flip() +
+  labs(title = "Proportional Trees to Empty Spaces by Neighborhood",
+       x = "",
+       y = "",
+       fill = "") +
+  scale_fill_manual(values=cbPalette)
+# Save to file
+ggsave(filename = "prop_trees_to_spaces_by_nsa.png", device = "png", path = "data/output-data/street-tree-analyses/plots")
 
 

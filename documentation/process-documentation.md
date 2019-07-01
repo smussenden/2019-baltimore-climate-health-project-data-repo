@@ -8,6 +8,7 @@
      * 2009 sourced from: [NAIP](https://www.fsa.usda.gov/programs-and-services/aerial-photography/imagery-programs/naip-imagery/)
      * 2017-18 sourced from: NAIP, [Landsat](https://landsat.gsfc.nasa.gov/), Airbus
   3. Neighborhood block groupings, courtesy of City of Baltimore Dept. of Planning
+  3. Urban heat island temperature study, courtesy of the School of Urban Studies and Planning
 
 **B. Secondary data files**
   1. Thresholded raster TIFs of treecover calculated from files A.2 (at 63 and 127)
@@ -52,12 +53,12 @@
 * ZCTA: https://smussenden.carto.com/viz/8f4d2944-0b54-455e-bdeb-007001470bdb/public_map 
 * BLOCK: https://smussenden.carto.com/viz/b00d138f-744b-4767-a748-3b8d627e8786/public_map 
 
-ZCTA clipped cleaned outputs must include:
+ZCTA clipped cleaned outputs include:
 * LIDAR Treecover
 * Temp
 * EMS
 
-ZCTA extended cleaned outputs must include:
+ZCTA extended cleaned outputs include:
 * NAIP Treecover
 * Temp
 * Hosp
