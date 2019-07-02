@@ -15,7 +15,7 @@ _INCOMPLETE_
 ## Details
 
 ### Tree Height / Diameter
-All height/diameter rankings consider only NSAs with at least 100 live trees, making the sample set 234 out of the original 277. [NEED TO VERIFY THIS COUNT BEFORE PUBLICATION.]
+All height/diameter rankings consider only NSAs with at least 100 live trees, making the sample set 234 [NEED TO VERIFY THIS COUNT BEFORE PUBLICATION] out of the original 277. 
 
 #### Citywide
 * **Height**: All target neighborhoods are in the bottom 100, spread between ranks 109 (Upper Fells Point) and 233 (Madison-Eastend).
