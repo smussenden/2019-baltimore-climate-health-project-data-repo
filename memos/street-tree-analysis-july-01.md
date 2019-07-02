@@ -3,9 +3,10 @@
 _INCOMPLETE_
 
 ## Definitions
-* Neighborhoods (277): Neighborhood Statistical Areas (NSAs)
-* Target neighborhoods (15): "Berea", "Broadway East", "Oliver", "Middle East", "Biddle Street","Milton-Montford", "Madison-Eastend", "CARE", "McElderry Park", "Ellwood Park/Monument", "Patterson Place", "Patterson Park Neighborhood", "Baltimore Highlands", "Highlandtown", "Upper Fells Point"
-* Counterpoint neighborhoods (3 nearby NSAs that are richer than the target NSAs): "Butcher's Hill", "Canton", "Washington Hill"
+* **NSAs** (277): Neighborhood Statistical Areas
+* **Neighborhoods of interest** (18): The following NSAs are considered neighbhorhoods of interest:
+  * **Target neighborhoods** (15): "Berea", "Broadway East", "Oliver", "Middle East", "Biddle Street","Milton-Montford", "Madison-Eastend", "CARE", "McElderry Park", "Ellwood Park/Monument", "Patterson Place", "Patterson Park Neighborhood", "Baltimore Highlands", "Highlandtown", "Upper Fells Point"
+  * **Counterpoint neighborhoods** (3 nearby NSAs that are richer than the target NSAs): "Butcher's Hill", "Canton", "Washington Hill"
 
 ## Summary
 
@@ -14,7 +15,7 @@ _INCOMPLETE_
 ## Details
 
 ### Tree Height / Diameter
-All height/diameter rankings consider only NSAs with at least 100 live trees, making the sample set 234 out of the original 277. [NEED TO VERIFY THIS COUNT LATER.]
+All height/diameter rankings consider only NSAs with at least 100 live trees, making the sample set 234 out of the original 277. [NEED TO VERIFY THIS COUNT BEFORE PUBLICATION.]
 
 #### Citywide
 * **Height**: All target neighborhoods are in the bottom 100, spread between ranks 109 (Upper Fells Point) and 233 (Madison-Eastend).
@@ -30,7 +31,7 @@ _Click to enlarge_
 #### Within the target NSAs
 Three of the top 5 areas for both tallest trees and largest tree diameter are counterpoint neighborhoods. The same NSAs populate both groups; only the order is changed.
 
-| The 5 NSAs with the tallest trees are: | The 5 NSAs with the largest tree diameter are: |
+| The 5 NSAs of interest with the tallest trees are: | The 5 NSAs of interest with the largest tree diameter are: |
 | -------------------------------------- | ---------------------------------------------- |
 | 1. Upper Fells Point                   | 1. Washington Hill                             |
 | 2. Butcher's Hill | 2. Broadway East |
