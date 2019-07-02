@@ -24,7 +24,7 @@ _Click to enlarge_
 
 | Height | Diameter |
 | ------ | -------- |
-| <img src="https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/data/output-data/street-tree-analyses/plots/avg_tree_height_all_nsas.png?raw=true" alt="Tree Height" width="200"/> | <img src="https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/data/output-data/street-tree-analyses/plots/avg_tree_diameter_all_nsas.png?raw=true" alt="Tree Height" width="400"/>
+| <img src="https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/data/output-data/street-tree-analyses/plots/avg_tree_height_all_nsas.png?raw=true" alt="Tree Height" width="350"/> | <img src="https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/data/output-data/street-tree-analyses/plots/avg_tree_diameter_all_nsas.png?raw=true" alt="Tree Height" width="350"/>
 
 
 #### Within the target NSAs

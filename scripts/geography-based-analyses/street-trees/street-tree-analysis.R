@@ -212,7 +212,7 @@ ggsave(filename = "avg_tree_diameter_by_nsa.png", device = "png", path = "data/o
 
 
 # Plot DIAMETER of ALL nsas using controled averages
-ggplot(master_street_tree_summaries, 
+ggplot(filter(master_street_tree_summaries, !is.na(avg_diam_controled)), 
        aes(x = reorder(nbrdesc, avg_diam_controled), 
            y = avg_diam_controled, 
            fill = factor(is_target_nsa, 
@@ -229,8 +229,7 @@ ggplot(master_street_tree_summaries,
   theme(legend.position = "top")
 
 # Save to file
-ggsave(filename = "avg_tree_diameter_by_nsa.png", 
-       device = "png", path = "data/output-data/street-tree-analyses/plots", 
+ggsave(filename = "avg_tree_diameter_all_nsas.png", 
        device = "png", path = "data/output-data/street-tree-analyses/plots",
        width = 6, height = 19, units = "in")
 
