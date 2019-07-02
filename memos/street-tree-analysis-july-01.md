@@ -20,7 +20,8 @@ All height/diameter rankings consider only NSAs with at least 100 live trees, ma
 * **Height**: All target neighborhoods are in the bottom 100, spread between ranks 109 (Upper Fells Point) and 233 (Madison-Eastend).
 * **Diameter**: all target neighborhoods are in the bottom 150, spread between ranks 159 (Broadway East) and 234 (Milton-Montford).
 
-_Click to enlarge_
+_Click to enlarge_ 
+
 | Height | Diameter |
 | ------ | -------- |
 | <img src="https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/data/output-data/street-tree-analyses/plots/avg_tree_height_all_nsas.png?raw=true" alt="Tree Height" width="200"/> | <img src="https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/data/output-data/street-tree-analyses/plots/avg_tree_diameter_all_nsas.png?raw=true" alt="Tree Height" width="200"/>
