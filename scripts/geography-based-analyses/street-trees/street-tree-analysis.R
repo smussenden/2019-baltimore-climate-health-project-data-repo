@@ -23,9 +23,9 @@ rm(list=ls())
 # Set working directory
 # setwd("/Users/rready/Desktop/2019-baltimore-climate-health-project-data-repo")
 
-#########################
-### Define functions ###############################################
-########################
+#########################################
+### Define functions, store variables ###############################################
+#########################################
 cleanup <- function() {
   rm(list=setdiff(ls(pos = 1), 
                   c("cleanup",
@@ -35,11 +35,28 @@ cleanup <- function() {
                     "tree_condition_by_nsa",
                     "master_by_nsa",
                     "master_by_nsa_filtered",
-                    "cbPalette")
+                    "cbPalette",
+                    "target_nsas",
+                    "counterpoint_nsas")
   ),
   pos = 1
   )
 }
+
+# Colorblind-friendly palette
+cbPalette <- c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
+# To use for fills, add
+# scale_fill_manual(values=cbPalette)
+# To use for line and point colors, add
+# scale_colour_manual(values=cbPalette)
+
+# List of target NSAs
+target_nsas <- c("Berea", "Broadway East", "Oliver", "Middle East", "Biddle Street","Milton-Montford", "Madison-Eastend", "CARE", "McElderry Park", "Ellwood Park/Monument", "Patterson Place", "Patterson Park Neighborhood", "Baltimore Highlands", "Highlandtown", "Upper Fells Point") %>%
+  lapply(tolower)
+
+# List of nearby NSAs that are richer to use as counterpoints
+counterpoint_nsas <- c("Butcher's Hill", "Canton", "Washington Hill") %>%
+  lapply(tolower)
 
 #####################
 ##### Load data #################################################
@@ -93,23 +110,31 @@ tree_by_tree_categorized <- tree_by_tree %>%
   # Add col for second-level cat
   mutate(difficulty_level = case_when(
     # Difficulty of planting NA if tree already there.
-    has_live_tree == T ~ c,
+    has_live_tree == T ~ NA_integer_,
     # Difficulty level 1 if...
     condition == "absent" & # No tree,
       !str_detect(space_type, "potential") & # Not marked "potential" aka doesn't require breaking concrete,
       (!str_detect(spp, "not suit") | !str_detect(common, "not suit") # Not marked unsuitable.
-      ) ~ 1,
+      ) ~ 1L,
     # Difficulty level 2 if removal of dead tree required.
-    condition == "stump" | condition == "dead" ~ 2,
+    condition == "stump" | condition == "dead" ~ 2L,
     # Difficulty level 3 if... 
     condition == "absent" & # Marked absent (AND by elimination also marked potential),
       (!str_detect(spp, "not suit") | !str_detect(common, "not suit") # Not marked unsuitable.
-      ) ~ 3, 
+      ) ~ 3L, 
     # Difficulty level 4 if marked unsuitable
-    str_detect(spp, "not suit") ~ 4,
+    str_detect(spp, "not suit") ~ 4L,
     # Catches all others at difficulty level 0 (9 erratta: unknowns)
-    TRUE ~ 0
-  ) )
+    TRUE ~ 0L
+  ) ) %>%
+  mutate(is_target_nsa = case_when(
+    nbrdesc %in% target_nsas ~ T,
+    TRUE ~ F 
+  )) %>%
+  mutate(is_counterpoint_nsa = case_when(
+    nbrdesc %in% counterpoint_nsas ~ T,
+    TRUE ~ F 
+  )) 
 
 # Write to CSV for later use
 write_csv(tree_by_tree_categorized, "data/input-data/street-trees/csv/by_nsa/street_trees_nsa_categorized.csv")
@@ -308,7 +333,7 @@ tree_condition_perc_by_nsa_wide <- tree_condition_by_nsa_long %>%
   # Select cols to spread
   select(nbrdesc, condition, perc_condition_to_live_trees) %>%
   spread(condition, perc_condition_to_live_trees) %>%
-  rename(
+  dplyr::rename(
     poor_perc_of_live = poor,
     fair_perc_of_live = fair,
     good_perc_of_live = good
@@ -319,7 +344,7 @@ tree_condition_count_by_nsa_wide <- tree_condition_by_nsa_long %>%
   # Select cols to spread
   select(nbrdesc, condition, num_trees) %>%
   spread(condition, num_trees) %>%
-  rename(
+  dplyr::rename(
     poor_count = poor,
     fair_count = fair,
     good_count = good
@@ -378,51 +403,26 @@ master_by_nsa <- tree_as_percent_of_spaces_by_nsa %>%
 # Write to csv
 write_csv(master_by_nsa, "data/output-data/street-tree-analyses/master_street_tree_by_nsa.csv")
 
-
-######################################
-### Analyses based on above tables ##################################################################
-######################################
-
-# List of target NSAs
-target_nsas <- c("Berea", "Broadway East", "Oliver", "Middle East", "Biddle Street","Milton-Montford", "Madison-Eastend", "CARE", "McElderry Park", "Ellwood Park/Monument", "Patterson Place", "Patterson Park Neighborhood", "Baltimore Highlands", "Highlandtown", "Upper Fells Point") %>%
-  lapply(tolower)
-
-# List of nearby NSAs that are richer to use as counterpoints
-counterpoint_nsas <- c("Butcher's Hill", "Canton", "Washington Hill") %>%
-  lapply(tolower)
-
 # Filtered master list of all above data for target and counterpoint NSAs only
 master_by_nsa_filtered <- master_by_nsa %>%
   subset(nbrdesc %in% target_nsas) %>%
   mutate(is_target_nsa = T) %>%
   full_join(master_by_nsa %>%
-               subset(nbrdesc %in% counterpoint_nsas) %>%
-               mutate(is_target_nsa = F)) %>%
+              subset(nbrdesc %in% counterpoint_nsas) %>%
+              mutate(is_target_nsa = F)) %>%
   select(1, 31, 2:30)
 
 # Write to csv
 write_csv(master_by_nsa_filtered, "data/output-data/street-tree-analyses/master_street_tree_by_nsa_targetonly.csv")
 
 cleanup()
+
+
 #######################
-### Visualize ###
+### Visualize #################################################################
 #######################
 
-# Colorblind-friendly palette
-cbPalette <- c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
-# To use for fills, add
-# scale_fill_manual(values=cbPalette)
-# To use for line and point colors, add
-# scale_colour_manual(values=cbPalette)
-
-
-# TO DO
-# Plot height / nsa [DONE]
-# Plot diam / nsa [DONE]
-# Redo height/diam filtered for young trees (diam > x)
-# 
-
-# Plot HEIGHT by nsa
+# Plot HEIGHT by nsa for TARGET nsas
 ggplot(master_by_nsa_filtered, 
        aes(x = reorder(nbrdesc, avg_ht), 
            y = avg_ht, 
@@ -438,7 +438,7 @@ ggplot(master_by_nsa_filtered,
        fill = "") +
   scale_fill_manual(values=cbPalette) +
   theme(legend.position = "bottom")
-ggsave(filename = "avg_tree_height_by_nsa.png", device = "png", path = "data/output-data/street-tree-analyses/plots")
+ggsave(filename = "avg_tree_height_target_nsas.png", device = "png", path = "data/output-data/street-tree-analyses/plots")
 
 
 # Plot DIAMETER by nsa
@@ -584,4 +584,4 @@ ggplot(filter(tree_by_tree_categorized,
 # Save to file
 ggsave(filename = "prop_trees_to_spaces_by_nsa.png", device = "png", path = "data/output-data/street-tree-analyses/plots")
 
-
+a <- read_csv("data/output-data/street-tree-analyses/master_street_tree_by_nsa.csv")

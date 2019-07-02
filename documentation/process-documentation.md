@@ -6,9 +6,11 @@
   1. Shapefiles of Census blocks, downloaded direct from [Census.gov](https://www2.census.gov/geo/tiger/TIGER2018/TABBLOCK/). Also community statistical areas, neighborhood statistical areas and zctas.
   2. Black and white TIFs of treecover, courtesy of [Descartes Labs](https://www.descarteslabs.com/) ([G Drive](https://drive.google.com/drive/u/2/folders/17Wg6c1LxFmHYUgQpwv6-G5Z-HWx6O-Y2))
      * 2009 sourced from: [NAIP](https://www.fsa.usda.gov/programs-and-services/aerial-photography/imagery-programs/naip-imagery/)
+     * 2015 sourced from: ?
      * 2017-18 sourced from: NAIP, [Landsat](https://landsat.gsfc.nasa.gov/), Airbus
   3. Neighborhood block groupings, courtesy of City of Baltimore Dept. of Planning
-  3. Urban heat island temperature study, courtesy of the School of Urban Studies and Planning
+  4. Urban heat island temperature study, courtesy of the School of Urban Studies and Planning
+  5. Baltimore tree inventory, courtesy of the Baltimore Department of Recreation and Parks, Urban Forestry Division
 
 **B. Secondary data files**
   1. Thresholded raster TIFs of treecover calculated from files A.2 (at 63 and 127)
