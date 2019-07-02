@@ -105,13 +105,39 @@ ggplot(master_street_tree_summaries_filtered,
            )) +
   geom_col() +
   coord_flip() +
-  labs(title = "Average Tree Height by NSA",
+  labs(title = "Average Tree Height of Target NSAs",
        x = "",
        y = "",
        fill = "") +
   scale_fill_manual(values=cbPalette) +
   theme(legend.position = "bottom")
+
+# Save to file
 ggsave(filename = "avg_tree_height_target_nsas.png", device = "png", path = "data/output-data/street-tree-analyses/plots")
+
+# Plot HEIGHT by nsa for BOTTOM 100 nsas using controled averages
+ggplot(master_street_tree_summaries %>% top_n(100, -avg_ht_controled), 
+       aes(x = reorder(nbrdesc, avg_ht_controled), 
+           y = avg_ht, 
+           fill = factor(is_target_nsa, 
+                         # Rename fill levels in legend
+                         labels=c("Not Target NSA", "Target NSA"))
+           )) +
+  geom_col() +
+  coord_flip() +
+  labs(title = "Average Tree Height of Bottom 100 NSAs",
+       x = "",
+       y = "",
+       fill = "") +
+  scale_fill_manual(values=cbPalette) +
+  theme(legend.position = "bottom")
+
+# Save to file
+ggsave(filename = "avg_tree_height_bottom100_nsas.png", 
+       device = "png", path = "data/output-data/street-tree-analyses/plots",
+       width = 6, height = 9.5, units = "in")
+
+
 
 
 # Plot DIAMETER by nsa using controled averages
@@ -265,9 +291,6 @@ ggplot(filter(street_trees_categorized,
   scale_fill_manual(values=cbPalette)
 # Save to file
 ggsave(filename = "prop_trees_to_spaces_by_nsa.png", device = "png", path = "data/output-data/street-tree-analyses/plots")
-
-
-
 
 
 

@@ -15,6 +15,10 @@ _INCOMPLETE_
 
 ### Tree Height / Diameter
 
+#### Citywide
+
+
+#### Within the target NSAs
 Three of the top 5 areas for both tallest trees and largest tree diameter are counterpoint neighborhoods. The same NSAs populate both groups; only the order is changed.
 
 | The 5 NSAs with the tallest trees are: | The 5 NSAs with the largest tree diameter are: |
