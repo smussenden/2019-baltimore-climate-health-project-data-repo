@@ -424,10 +424,19 @@ cleanup()
 
 master_by_nsa <- tree_as_percent_of_spaces_by_nsa %>%
   left_join(empty_spaces_by_diff_by_nsa) %>%
-  left_join(tree_condition_by_nsa)
+  left_join(tree_condition_by_nsa) %>%
+  # Add ranking for perc good
+  arrange(nbrdesc, good_perc_of_live) %>%
+  mutate(rank_good_perc_of_live = rank(desc(good_perc_of_live), na.last = "keep", ties.method = "first")) %>%
+  # Add ranking for perc poor
+  arrange(nbrdesc, poor_perc_of_live) %>%
+  mutate(rank_poor_perc_of_live = rank(desc(poor_perc_of_live), na.last = "keep", ties.method = "first"))
 
 # Write to csv
 write_csv(master_by_nsa, "data/output-data/street-tree-analyses/master_street_tree_by_nsa.csv")
+
+# If updated elsewhere, can read in and store her to quickly update the filtered file below
+# master_by_nsa <- read_csv("data/output-data/street-tree-analyses/master_street_tree_by_nsa.csv")
 
 # Filtered master list of all above data for target and counterpoint NSAs only
 master_by_nsa_filtered <- master_by_nsa %>%
@@ -436,7 +445,7 @@ master_by_nsa_filtered <- master_by_nsa %>%
   full_join(master_by_nsa %>%
               subset(nbrdesc %in% counterpoint_nsas) %>%
               mutate(is_target_nsa = F)) %>%
-  select(1, 31, 2:42)
+  select(1, 31, 2:45)
 
 # Write to csv
 write_csv(master_by_nsa_filtered, "data/output-data/street-tree-analyses/master_street_tree_by_nsa_targetonly.csv")

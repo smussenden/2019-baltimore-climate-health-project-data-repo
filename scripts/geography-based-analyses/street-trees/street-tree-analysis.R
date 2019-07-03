@@ -9,10 +9,10 @@
 ## install.packages("janitor")
 
 library(tidyverse)
-library(readxl)
-library(janitor)
-library(magrittr)
-library(plyr)
+#library(readxl)
+#library(janitor)
+#library(magrittr)
+#library(plyr) # Note: plyr conflicts with dplyr in some cases. Use dplyr::fun() for dplyr functions when plyr is loaded.
 
 # Turn off scientific notation
 options(scipen = 999)
@@ -69,6 +69,7 @@ master_street_tree_summaries <- read_csv("data/output-data/street-tree-analyses/
   # Make "condition" a factor so it can be ordered
   mutate_at(vars(matches("condition")), 
             as.factor) %>%
+  # Add variable to track whether a target NSA
   mutate(is_target_nsa = case_when(
     nbrdesc %in% target_nsas ~ T,
     TRUE ~ F 
@@ -84,7 +85,18 @@ master_street_tree_summaries_filtered <- read_csv("data/output-data/street-tree-
     TRUE ~ F 
   ))
 
-# Need to add target NSA info
+###################################################################
+### Add more rankings on top of what was added in cleaning file ###
+###################################################################
+
+a <- master_street_tree_summaries %>%
+  # Add ranking for perc good
+  arrange(nbrdesc, x) %>%
+  mutate(rank_x = rank(desc(x), na.last = "keep", ties.method = "first"))
+
+# Update the save file
+write_csv(a, "data/output-data/street-tree-analyses/master_street_tree_by_nsa.csv")
+  
 
 #######################
 ### Visualize #####################################################################################################
@@ -235,150 +247,105 @@ ggsave(filename = "avg_tree_diameter_all_nsas.png",
 
 
 
+############################################
+### Count/Perc of trees in each NSA ########
+############################################
 
-
-
-
-
-
-
-
-
-
-
-
-# Plot EMPTY SPACES by nsa
-ggplot(master_street_tree_summaries_filtered) +
-  geom_col(aes(x = reorder(nbrdesc, perc_spaces_nontreed), 
-               y = perc_spaces_nontreed, 
-               fill = factor(is_target_nsa, 
-                             # Rename fill levels in legend
-                             labels=c("Counterpoint NSA"," Target NSA"))
-               )
-           ) +
+# Plot COUNT OF TREES for TARGET nsas
+ggplot(master_street_tree_summaries_filtered, 
+       aes(x = reorder(nbrdesc, spaces_with_live_trees), 
+           y = spaces_with_live_trees, 
+           fill = factor(is_target_nsa, 
+                         # Rename fill levels in legend
+                         labels=c("Counterpoint NSA"," Target NSA"))
+       )) +
+  geom_col() +
   coord_flip() +
-  labs(title = "Number of Spaces Without Trees",
-       x = "Neighborhood Statistical Area",
-       y = "",
-       fill = "") +
-  scale_fill_manual(values=cbPalette)
-
-
-# Plot PERCENT NONVIABLE EMPTY SPACES by nsa
-ggplot(master_street_tree_summaries_filtered) +
-  geom_col(aes(x = reorder(nbrdesc, -perc_of_nontreed_are_suitable), 
-               y = (100 - perc_of_nontreed_are_suitable ), 
-               fill = factor(is_target_nsa, 
-                             # Rename fill levels in legend
-                             labels=c("Counterpoint NSA"," Target NSA"))
-               )
-           ) +
-  coord_flip() +
-  labs(title = "Percent of Untreed Areas That Are Unsuitable for Planting",
-       x = "Neighborhood Statistical Area",
-       y = "",
-       fill = "") +
-  scale_fill_manual(values=cbPalette)
-# Save to file
-ggsave(filename = "perc_nonviable_empty.png", device = "png", path = "data/output-data/street-tree-analyses/plots")
-
-
-###################################
-### Difficulty of planting ########
-###################################
-
-# Plot PERCENT of UNTREED areas are EASY TO PLANT by nsa
-ggplot(master_street_tree_summaries_filtered) +
-  geom_col(aes(x = reorder(nbrdesc, perc_of_nontreed_easy), 
-               y = perc_of_nontreed_easy, 
-               fill = factor(is_target_nsa, 
-                             # Rename fill levels in legend
-                             labels=c("Counterpoint NSA"," Target NSA"))
-  )
-  ) +
-  coord_flip() +
-  labs(title = "Percent of Untreed Areas That Are Easy to Plant",
-       x = "Neighborhood Statistical Area",
-       y = "",
-       fill = "") +
-  scale_fill_manual(values=cbPalette)
-# Save to file
-ggsave(filename = "perc_easy_to_tree.png", device = "png", path = "data/output-data/street-tree-analyses/plots")
-
-
-# Plot PERCENT of UNTREED areas are EASY OR MODERATE TO PLANT by nsa
-ggplot(master_street_tree_summaries_filtered) +
-  geom_col(aes(x = reorder(nbrdesc, perc_easy_or_moderate_of_nontreed), 
-               y = perc_easy_or_moderate_of_nontreed, 
-               fill = factor(is_target_nsa, 
-                             # Rename fill levels in legend
-                             labels=c("Counterpoint NSA"," Target NSA"))
-  )
-  ) +
-  coord_flip() +
-  labs(title = "Percent of Untreed Areas That Are Easy-Moderate to Plant",
-       x = "Neighborhood Statistical Area",
-       y = "",
-       fill = "") +
-  scale_fill_manual(values=cbPalette)
-# Save to file
-ggsave(filename = "perc_easymoderate_to_tree.png", device = "png", path = "data/output-data/street-tree-analyses/plots")
-
-
-######################################
-### Tree condition by nsa ############
-######################################
-
-# Plot PROPORTIONAL CONDITION of TREE SPACES by nsa
-ggplot(filter(street_trees_categorized, 
-              (nbrdesc %in% target_nsas) | (nbrdesc %in% counterpoint_nsas))
-       ) +
-  geom_bar(aes(x = reorder(nbrdesc, condition=="good"), 
-               fill = condition),
-           position = "fill") +
-  coord_flip() +
-  labs(title = "Proportional Condition of Tree Spaces by Neighborhood",
-       x = "",
-       y = "",
-       fill = "Condition") +
-  scale_fill_manual(values=cbPalette)
-# Save to file
-ggsave(filename = "prop_condition_of_tree_spaces_by_nsa.png", device = "png", path = "data/output-data/street-tree-analyses/plots")
-
-
-# Plot PROPORTIONAL CONDITION of LIVING TREES by nsa
-ggplot(filter(street_trees_categorized, 
-              ((nbrdesc %in% target_nsas) | (nbrdesc %in% counterpoint_nsas)) &
-                ((condition != "absent") & (condition != "stump") & (condition != "dead")))
-) +
-  geom_bar(aes(x = reorder(nbrdesc, condition=="good"), 
-               fill = condition),
-           position = "fill") +
-  coord_flip() +
-  labs(title = "Proportional Condition of Living Trees by Neighborhood",
-       x = "",
-       y = "",
-       fill = "Condition") +
-  scale_fill_manual(values=cbPalette)
-# Save to file
-ggsave(filename = "prop_condition_of_live_trees_by_nsa.png", device = "png", path = "data/output-data/street-tree-analyses/plots")
-
-
-# Plot PROPORTIONAL of PLANTABLE SPACES vs LIVE TREES by nsa
-ggplot(filter(street_trees_categorized, 
-              (nbrdesc %in% target_nsas) | (nbrdesc %in% counterpoint_nsas))
-) +
-  geom_bar(aes(x = reorder(nbrdesc, has_live_tree==T), 
-               fill = factor(has_live_tree, labels = c("Dead or No Tree", "Live Tree"))),
-           position = "fill") +
-  coord_flip() +
-  labs(title = "Proportional Trees to Empty Spaces by Neighborhood",
+  labs(title = "Number of Trees in Each NSA",
        x = "",
        y = "",
        fill = "") +
-  scale_fill_manual(values=cbPalette)
-# Save to file
-ggsave(filename = "prop_trees_to_spaces_by_nsa.png", device = "png", path = "data/output-data/street-tree-analyses/plots")
+  scale_fill_manual(values=cbPalette) +
+  theme(legend.position = "bottom")
 
+# Plot COUNT OF TREES for ALL nsas
+ggplot(master_street_tree_summaries, 
+       aes(x = reorder(nbrdesc, spaces_with_live_trees), 
+           y = spaces_with_live_trees, 
+           fill = factor(is_target_nsa, 
+                         # Rename fill levels in legend
+                         labels=c("Counterpoint NSA"," Target NSA"))
+       )) +
+  geom_col() +
+  coord_flip() +
+  labs(title = "Number of Trees in Each NSA",
+       x = "",
+       y = "",
+       fill = "") +
+  scale_fill_manual(values=cbPalette) +
+  theme(legend.position = "top")
+
+# Save to file
+ggsave(filename = "tree_count_all_nsas.png", 
+       device = "png", path = "data/output-data/street-tree-analyses/plots/tree-count",
+       width = 6, height = 19, units = "in")
+
+### Some quick calculations comparing the targets to citywide
+# Compare DIAMETER and MEAN of ALL nsas (minus those with fewer than 50 trees)...
+master_street_tree_summaries %>%
+  filter(spaces_with_live_trees >= 50) %>%
+  summarise(diam_median = median(avg_diam),
+            diam_mean = mean(avg_diam))
+
+# ...to DIAMETER and MEAN of TARGET nsas
+master_street_tree_summaries %>%
+  filter(is_target_nsa == T) %>%
+  summarise(diam_median = median(avg_diam),
+            diam_mean = mean(avg_diam))
+
+# Distribution histograms showing HEIGHT of TARGET nsas
+ggplot(filter(street_trees_categorized, 
+                (is_target_nsa == T) & 
+                (has_live_tree == T)
+              )) +
+  geom_histogram(aes(x = dbh, fill = "nbrdesc"), binwidth = 1, show.legend = FALSE) +
+  facet_wrap(~nbrdesc, scales = "free", nrow = 3) +
+  labs(title = "Distribution of Tree Diameter Among Target Neighborhoods",
+       x = "Trunk Diameter in Inches",
+       y = "") +
+  xlim(NA, 30)
+
+# Save to file
+ggsave(filename = "tree_count_distro_target_nsas.png", 
+       device = "png", path = "data/output-data/street-tree-analyses/plots/height-diameter")
+
+# Distribution histograms showing HEIGHT of TOP 15 nsas
+street_trees_categorized %>%
+  filter((has_live_tree == T)) %>%
+  select(nbrdesc, dbh) %>%
+  # Filter by X NSAs the largest average diameter trees and at least Y trees
+  right_join(street_trees_categorized %>%
+               filter(has_live_tree == T) %>%
+               select(nbrdesc, dbh, has_live_tree) %>%
+               group_by(nbrdesc) %>%
+               summarize(med_dbh = median(dbh),
+                         num_trees = sum(has_live_tree)) %>%
+               arrange(desc(med_dbh)) %>%
+               # At least Y trees
+               filter(num_trees >= 50) %>%
+               # Top X by average diameter
+               top_n(15)
+  ) %>%
+  ggplot() +
+  geom_histogram(aes(x = dbh, fill = "nbrdesc"), binwidth = 1, show.legend = FALSE) +
+  facet_wrap(~nbrdesc, scales = "free", nrow = 3) +
+  labs(title = "Distribution of Tree Diameter Among Neighborhoods With Largest Trees",
+       x = "Trunk Diameter in Inches",
+       y = "") +
+  xlim(NA, 30)
+
+# Save to file
+ggsave(filename = "tree_count_distro_top15_nsas.png", 
+       device = "png", path = "data/output-data/street-tree-analyses/plots/height-diameter")
 
 
