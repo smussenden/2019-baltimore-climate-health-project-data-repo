@@ -10,12 +10,20 @@ _INCOMPLETE_
 
 ## Summary
 
-_INCOMPLETE_
+_Citywide counts are controled for NSAs with 50 or fewer trees._
+
+Our target neighborhoods range in rank from 22nd to 162nd for number of trees, and most are in the top 100 for health of trees (Patterson Park, Oliver, CARE, and Broadway East are the only four NSAs ranking at > 100).
+
+However, most of these trees appear to be new plantings, as these neighborhoods' average tree diameters are ranked from 159 to last, with a median average diameter of 5.54 inches and a mean of 6.1 inches. By contrast, the median average diameter citywide is 11.6 inches and a mean of 12.1 inches, both double that of the targets. 
+
+| Top 15 Diameter Distribution | Target NSA Diameter Distribution |
+| ------ | -------- |
+| <img src="https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/data/output-data/street-tree-analyses/plots/height-diameter/tree_count_distro_top15_nsas.png?raw=true" alt="Tree Height" width="500"/> | <img src="https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/data/output-data/street-tree-analyses/plots/height-diameter/tree_count_distro_target_nsas.png?raw=true" alt="Tree Height" width="500"/>
 
 ## Details
 
 ### Tree Height / Diameter
-All height/diameter rankings consider only NSAs with at least 100 live trees, making the sample set 234 [NEED TO VERIFY THIS COUNT BEFORE PUBLICATION] out of the original 277. 
+_All height/diameter rankings consider only NSAs with at least 100 live trees, making the sample set 234 [NEED TO VERIFY THIS COUNT BEFORE PUBLICATION] out of the original 277._
 
 #### Citywide
 * **Height**: All target neighborhoods are in the bottom 100, spread between ranks 109 (Upper Fells Point) and 233 (Madison-Eastend).
@@ -40,18 +48,8 @@ Three of the top 5 areas for both tallest trees and largest tree diameter are co
 | 5. Canton | 5. Butcher's Hill |
 | <img src="https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/data/output-data/street-tree-analyses/plots/height-diameter/avg_tree_height_target_nsas.png?raw=true" alt="Tree Height" width="500"/> | <img src="https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/data/output-data/street-tree-analyses/plots/height-diameter/avg_tree_diameter_target_nsas.png?raw=true" alt="Tree Height" width="500"/> |
 
-### Trees by Neighborhood 
+### Tree Overview by Neighborhood 
 
-#### Citywide
 
-_Citywide counts are controled for NSAs with 50 or fewer trees._
-
-Our target neighborhoods range in rank from 22nd to 162nd for number of trees, and most are in the top 100 for health of trees (Patterson Park, Oliver, CARE, and Broadway East are the only four NSAs ranking at > 100).
-
-However, most of these trees appear to be new plantings, as these neighborhoods' average tree diameters are ranked from 159 to last, with a median average diameter of 5.54 inches and a mean of 6.1 inches. By contrast, the median average diameter citywide is 11.6 inches and a mean of 12.1 inches, both double that of the targets. 
-
-| Height | Diameter |
-| ------ | -------- |
-| <img src="https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/data/output-data/street-tree-analyses/plots/height-diameter/tree_count_distro_top15_nsas.png?raw=true" alt="Tree Height" width="500"/> | <img src="https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/data/output-data/street-tree-analyses/plots/height-diameter/tree_count_distro_target_nsas.png?raw=true" alt="Tree Height" width="500"/>
 
  _To be continued..._
