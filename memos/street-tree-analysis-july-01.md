@@ -22,7 +22,7 @@ However, most of these trees appear to be new plantings which have not had time 
 
 ## Tree Height / Diameter
 
-* **Height**: All target neighborhoods are in the bottom 100, spread between ranks 121 (Upper Fells Point) and last at 252 (Madison-Eastend).
+* **Height**: All target neighborhoods are in the bottom half, spread between ranks 121 (Upper Fells Point) and last at 252 (Madison-Eastend).
 * **Diameter**: All target neighborhoods are in the bottom 150, spread between ranks 162 (Broadway East) and last at 252 (Milton-Montford).
 
 _Click to enlarge_ 
@@ -57,7 +57,7 @@ _Click to enlarge_
 
 ## Condition
 
-Most target neighborhoods are in the bottom 100 for percent of trees in good condition when controled for older trees (>6 inch diameter trunk), though Upper Fells Point and Patterson Park Neighborhood are ranked at 24 and 61, respectively.
+Most target neighborhoods are in the bottom half for percent of trees in good condition when controled for older trees (>6 inch diameter trunk), though Upper Fells Point and Patterson Park Neighborhood are ranked at 24 and 61, respectively.
 
 _Click to enlarge_ 
 
