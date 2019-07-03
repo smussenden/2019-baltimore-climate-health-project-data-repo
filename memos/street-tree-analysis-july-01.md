@@ -25,7 +25,7 @@ _Click to enlarge_
 
 | Height | Diameter |
 | ------ | -------- |
-| <img src="https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/data/output-data/street-tree-analyses/plots/avg_tree_height_all_nsas.png?raw=true" alt="Tree Height" width="350"/> | <img src="https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/data/output-data/street-tree-analyses/plots/avg_tree_diameter_all_nsas.png?raw=true" alt="Tree Height" width="350"/>
+| <img src="https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/data/output-data/street-tree-analyses/plots/height-diameter/avg_tree_height_all_nsas.png?raw=true" alt="Tree Height" width="350"/> | <img src="https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/data/output-data/street-tree-analyses/plots/height-diameter/avg_tree_diameter_all_nsas.png?raw=true" alt="Tree Height" width="350"/>
 
 
 #### Within the target NSAs
@@ -38,7 +38,7 @@ Three of the top 5 areas for both tallest trees and largest tree diameter are co
 | 3. Washington Hill | 3. Upper Fells Point |
 | 4. Broadway East | 4. Canton |
 | 5. Canton | 5. Butcher's Hill |
-| <img src="https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/data/output-data/street-tree-analyses/plots/avg_tree_height_target_nsas.png?raw=true" alt="Tree Height" width="500"/> | <img src="https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/data/output-data/street-tree-analyses/plots/avg_tree_diameter_target_nsas.png?raw=true" alt="Tree Height" width="500"/> |
+| <img src="https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/data/output-data/street-tree-analyses/plots/height-diameter/avg_tree_height_target_nsas.png?raw=true" alt="Tree Height" width="500"/> | <img src="https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/data/output-data/street-tree-analyses/plots/height-diameter/avg_tree_diameter_target_nsas.png?raw=true" alt="Tree Height" width="500"/> |
 
 ### Trees by Neighborhood 
 
@@ -50,6 +50,8 @@ Our target neighborhoods range in rank from 22nd to 162nd for number of trees, a
 
 However, most of these trees appear to be new plantings, as these neighborhoods' average tree diameters are ranked from 159 to last, with a median average diameter of 5.54 inches and a mean of 6.1 inches. By contrast, the median average diameter citywide is 11.6 inches and a mean of 12.1 inches, both double that of the targets. 
 
-
+| Height | Diameter |
+| ------ | -------- |
+| <img src="https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/data/output-data/street-tree-analyses/plots/height-diameter/tree_count_distro_top15_nsas.png?raw=true" alt="Tree Height" width="500"/> | <img src="https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/data/output-data/street-tree-analyses/plots/height-diameter/tree_count_distro_target_nsas.png?raw=true" alt="Tree Height" width="500"/>
 
  _To be continued..._
