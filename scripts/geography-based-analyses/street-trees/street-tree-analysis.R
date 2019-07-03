@@ -357,7 +357,7 @@ wk %>% # Must run from line 320(ish)
                fill = factor(is_target_nsa, labels=c("Counterpoint NSA"," Target NSA"))
                )) +
   coord_flip() +
-  labs(title = "Percent Young Live Trees",
+  labs(title = "Percent Young (<4 inches) Live Trees",
        x = "",
        y = "",
        fill = "") +
