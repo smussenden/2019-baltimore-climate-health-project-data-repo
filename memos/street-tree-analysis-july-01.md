@@ -8,10 +8,6 @@ _INCOMPLETE_
 * **Neighborhoods of interest** (18): The following NSAs are considered neighbhorhoods of interest:
   * **Target neighborhoods** (15): "Berea", "Broadway East", "Oliver", "Middle East", "Biddle Street","Milton-Montford", "Madison-Eastend", "CARE", "McElderry Park", "Ellwood Park/Monument", "Patterson Place", "Patterson Park Neighborhood", "Baltimore Highlands", "Highlandtown", "Upper Fells Point"
   * **Counterpoint neighborhoods** (3 nearby NSAs that are richer than the target NSAs): "Butcher's Hill", "Canton", "Washington Hill"
-  
-### Example Trees 
-* Biggest tree in Broadway East (that's not in a park) has a 33 inch trunk (1600 North Washington Street). It is in "good" condition. This tree is huge for this area, where most tree trunks are just a few inches across. But it would be middling in Roland Park, where 146 trees have trunks of that size or larger, and three dozen have trunks of 40 inches across or more.
-* The largest tree in Roland Park is 68 inches across (3901 Beech Ave). It is in "fair" condition.
 
 
 ## Summary
@@ -19,6 +15,10 @@ _INCOMPLETE_
 Target neighborhoods range in rank from 22nd (Patterson Park) to 162nd (Patterson Place) for number of trees, and most are in the top 100 for health of trees (Patterson Park, Oliver, CARE, and Broadway East are the only four NSAs ranking below the top 100).
 
 However, most of these trees appear to be new plantings which have not had time to succumb to disease, weather or consequences of poor maintenance.
+
+### Example Trees 
+* Biggest tree in Broadway East (that's not in a park) has a 33 inch trunk (1600 North Washington Street). It is in "good" condition. This tree is huge for this area, where most tree trunks are just a few inches across. But it would be middling in Roland Park, where 146 trees have trunks of that size or larger, and three dozen have trunks of 40 inches across or more.
+* The largest tree in Roland Park is 68 inches across (3901 Beech Ave). It is in "fair" condition.
 
 ## Tree Height / Diameter
 
