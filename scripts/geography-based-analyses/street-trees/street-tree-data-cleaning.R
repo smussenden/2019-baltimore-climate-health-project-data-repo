@@ -399,11 +399,11 @@ tree_condition_by_nsa <- tree_condition_by_nsa %>%
   left_join(tree_height_diam_by_nsa) %>%
   # Drop combined totals cols
   select(-contains("combined")) %>%
-  # If fewer than 100 trees, make a new cols for height and diameter, replace number with NA
+  # If fewer than 50 trees, make a new cols for height and diameter, replace number with NA
   mutate(avg_ht_controled = ifelse(
-    spaces_with_live_trees < 100, NA_real_, avg_ht),
+    spaces_with_live_trees < 50, NA_real_, avg_ht),
     avg_diam_controled = ifelse(
-      spaces_with_live_trees < 100, NA_real_, avg_diam)
+      spaces_with_live_trees < 50, NA_real_, avg_diam)
   ) %>%
   # Add ranking for each category so can say NSA is #x in terms of each category citywide
   dplyr::arrange(nbrdesc, avg_ht_controled) %>%
@@ -445,7 +445,7 @@ master_by_nsa_filtered <- master_by_nsa %>%
   full_join(master_by_nsa %>%
               subset(nbrdesc %in% counterpoint_nsas) %>%
               mutate(is_target_nsa = F)) %>%
-  select(1, 31, 2:45)
+  select(1, 31, 2:44)
 
 # Write to csv
 write_csv(master_by_nsa_filtered, "data/output-data/street-tree-analyses/master_street_tree_by_nsa_targetonly.csv")

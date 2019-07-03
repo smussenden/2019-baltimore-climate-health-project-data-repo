@@ -7,10 +7,9 @@ _INCOMPLETE_
 * **Neighborhoods of interest** (18): The following NSAs are considered neighbhorhoods of interest:
   * **Target neighborhoods** (15): "Berea", "Broadway East", "Oliver", "Middle East", "Biddle Street","Milton-Montford", "Madison-Eastend", "CARE", "McElderry Park", "Ellwood Park/Monument", "Patterson Place", "Patterson Park Neighborhood", "Baltimore Highlands", "Highlandtown", "Upper Fells Point"
   * **Counterpoint neighborhoods** (3 nearby NSAs that are richer than the target NSAs): "Butcher's Hill", "Canton", "Washington Hill"
+* Citywide calculations are controled for neighborhoods with at least 50 trees, for a total of 252 neighborhoods out of the total 277.
 
 ## Summary
-
-_Citywide counts are controled for NSAs with 50 or fewer trees._
 
 Our target neighborhoods range in rank from 22nd to 162nd for number of trees, and most are in the top 100 for health of trees (Patterson Park, Oliver, CARE, and Broadway East are the only four NSAs ranking at > 100).
 
@@ -23,11 +22,10 @@ However, most of these trees appear to be new plantings, as these neighborhoods'
 ## Details
 
 ### Tree Height / Diameter
-_All height/diameter rankings consider only NSAs with at least 100 live trees, making the sample set 234 [NEED TO VERIFY THIS COUNT BEFORE PUBLICATION] out of the original 277._
 
 #### Citywide
-* **Height**: All target neighborhoods are in the bottom 100, spread between ranks 109 (Upper Fells Point) and 233 (Madison-Eastend).
-* **Diameter**: all target neighborhoods are in the bottom 150, spread between ranks 159 (Broadway East) and last at 234 (Milton-Montford).
+* **Height**: All target neighborhoods are in the bottom 100, spread between ranks 121 (Upper Fells Point) and 252 (Madison-Eastend).
+* **Diameter**: all target neighborhoods are in the bottom 150, spread between ranks 162 (Broadway East) and last at 252 (Milton-Montford).
 
 _Click to enlarge_ 
 

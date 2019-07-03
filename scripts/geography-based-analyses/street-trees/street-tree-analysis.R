@@ -85,18 +85,24 @@ master_street_tree_summaries_filtered <- read_csv("data/output-data/street-tree-
     TRUE ~ F 
   ))
 
+# Quick count
+master_street_tree_summaries %>%
+  filter(num_spaces_with_live_trees >= 50) %>%
+  select(nbrdesc) %>%
+  dplyr::summarise(n())
+
 ###################################################################
 ### Add more rankings on top of what was added in cleaning file ###
 ###################################################################
 
-a <- master_street_tree_summaries %>%
-  # Add ranking for perc good
-  arrange(nbrdesc, x) %>%
-  mutate(rank_x = rank(desc(x), na.last = "keep", ties.method = "first"))
+# a <- master_street_tree_summaries %>%
+#   # Add ranking for perc good
+#   arrange(nbrdesc, x) %>%
+#   mutate(rank_x = rank(desc(x), na.last = "keep", ties.method = "first"))
+# 
+# # Update the save file
+# write_csv(a, "data/output-data/street-tree-analyses/master_street_tree_by_nsa.csv")
 
-# Update the save file
-write_csv(a, "data/output-data/street-tree-analyses/master_street_tree_by_nsa.csv")
-  
 
 #######################
 ### Visualize #####################################################################################################
@@ -125,55 +131,7 @@ ggplot(master_street_tree_summaries_filtered,
   theme(legend.position = "bottom")
 
 # Save to file
-ggsave(filename = "avg_tree_height_target_nsas.png", device = "png", path = "data/output-data/street-tree-analyses/plots")
-
-# Plot HEIGHT by nsa for BOTTOM 100 nsas using controled averages
-ggplot(master_street_tree_summaries %>% 
-         top_n(100, -avg_ht_controled) %>%
-         filter(!is.na(avg_ht_controled)), 
-       aes(x = reorder(nbrdesc, avg_ht_controled), 
-           y = avg_ht, 
-           fill = factor(is_target_nsa, 
-                         # Rename fill levels in legend
-                         labels=c("Not Target NSA", "Target NSA"))
-           )) +
-  geom_col() +
-  coord_flip() +
-  labs(title = "Average Tree Height of Bottom 100 NSAs",
-       x = "",
-       y = "",
-       fill = "") +
-  scale_fill_manual(values=cbPalette) +
-  theme(legend.position = "bottom")
-
-# Save to file
-ggsave(filename = "avg_tree_height_bottom100_nsas.png", 
-       device = "png", path = "data/output-data/street-tree-analyses/plots",
-       width = 6, height = 9.5, units = "in")
-
-# Plot HEIGHT by nsa for TOP 100 nsas using controled averages
-ggplot(master_street_tree_summaries %>% 
-         top_n(100, avg_ht_controled) %>%
-         filter(!is.na(avg_ht_controled)), 
-       aes(x = reorder(nbrdesc, avg_ht_controled), 
-           y = avg_ht_controled, 
-           fill = factor(is_target_nsa, 
-                         # Rename fill levels in legend
-                         labels=c("Not Target NSA"))
-           )) +
-  geom_col() +
-  coord_flip() +
-  labs(title = "Average Tree Height of Top 100 NSAs",
-       x = "",
-       y = "",
-       fill = "") +
-  scale_fill_manual(values=cbPalette) +
-  theme(legend.position = "bottom")
-
-# Save to file
-ggsave(filename = "avg_tree_height_top100_nsas.png", 
-       device = "png", path = "data/output-data/street-tree-analyses/plots",
-       width = 6, height = 9.5, units = "in")
+ggsave(filename = "avg_tree_height_target_nsas.png", device = "png", path = "data/output-data/street-tree-analyses/plots/height-diameter")
 
 # Plot HEIGHT by nsa for ALL nsas using controled averages
 ggplot(filter(master_street_tree_summaries, !is.na(avg_ht_controled)), 
@@ -194,7 +152,7 @@ ggplot(filter(master_street_tree_summaries, !is.na(avg_ht_controled)),
 
 # Save to file
 ggsave(filename = "avg_tree_height_all_nsas.png", 
-       device = "png", path = "data/output-data/street-tree-analyses/plots",
+       device = "png", path = "data/output-data/street-tree-analyses/plots/height-diameter",
        width = 6, height = 19, units = "in")
 
 
@@ -220,7 +178,7 @@ ggplot(master_street_tree_summaries_filtered,
   theme(legend.position = "bottom")
 
 # Save to file
-ggsave(filename = "avg_tree_diameter_by_nsa.png", device = "png", path = "data/output-data/street-tree-analyses/plots")
+ggsave(filename = "avg_tree_diameter_by_nsa.png", device = "png", path = "data/output-data/street-tree-analyses/plots/height-diameter")
 
 
 # Plot DIAMETER of ALL nsas using controled averages
@@ -242,7 +200,7 @@ ggplot(filter(master_street_tree_summaries, !is.na(avg_diam_controled)),
 
 # Save to file
 ggsave(filename = "avg_tree_diameter_all_nsas.png", 
-       device = "png", path = "data/output-data/street-tree-analyses/plots",
+       device = "png", path = "data/output-data/street-tree-analyses/plots/height-diameter",
        width = 6, height = 19, units = "in")
 
 
@@ -347,5 +305,6 @@ street_trees_categorized %>%
 # Save to file
 ggsave(filename = "tree_count_distro_top15_nsas.png", 
        device = "png", path = "data/output-data/street-tree-analyses/plots/height-diameter")
+
 
 
