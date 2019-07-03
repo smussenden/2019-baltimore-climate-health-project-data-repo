@@ -20,10 +20,14 @@ rm(list=ls())
 ip_full_zip <- read_csv("data/output-data/hscrc-hospital-data/data_by_zip/ip/ip_full_zip_demographics_heat.csv")
 ip_full_zip_medicaid <- read_csv("data/output-data/hscrc-hospital-data/data_by_zip/ip/ip_full_medicaid_demographics_heat.csv")
 ip_full_zip_qtr <- read_csv("data/output-data/hscrc-hospital-data/data_by_zip/ip/ip_full_qtr_demographics_heat.csv")
+ip_full_zip_race <- read_csv("data/output-data/hscrc-hospital-data/data_by_zip/ip/ip_full_race_demographics_heat.csv")
+ip_full_zip_age <- read_csv("data/output-data/hscrc-hospital-data/data_by_zip/ip/ip_full_age_demographics_heat.csv")
 
 op_er_full_zip <- read_csv("data/output-data/hscrc-hospital-data/data_by_zip/op_er/op_er_full_zip_demographics_heat.csv")
 op_er_full_zip_medicaid <- read_csv("data/output-data/hscrc-hospital-data/data_by_zip/op_er/op_er_full_medicaid_demographics_heat.csv")
 op_er_full_zip_qtr <- read_csv("data/output-data/hscrc-hospital-data/data_by_zip/op_er/op_er_full_qtr_demographics_heat.csv")
+op_er_full_zip_race <- read_csv("data/output-data/hscrc-hospital-data/data_by_zip/op_er/op_er_full_race_demographics_heat.csv")
+op_er_full_zip_age <- read_csv("data/output-data/hscrc-hospital-data/data_by_zip/op_er/op_er_full_age_demographics_heat.csv")
 
 ###################################################################
 ######## Load in unclipped tree heat temp demographic info ########
@@ -130,6 +134,9 @@ make_correlation_matrix(ip_full_zip, "ip_full_zip", "ip")
 make_correlation_matrix(ip_full_zip, "ip_full_zip", "ip")
 make_correlation_matrix(ip_full_zip_medicaid, "ip_full_zip_medicaid", "ip")
 make_correlation_matrix(ip_full_zip_qtr, "ip_full_zip_qtr", "ip")
+make_correlation_matrix(ip_full_zip_race, "ip_full_zip_race", "ip")
+make_correlation_matrix(ip_full_zip_age, "ip_full_zip_age", "ip")
+
 
 #################################################################
 ########## Run OP_ER Correlation Matrix ############################
@@ -138,7 +145,8 @@ make_correlation_matrix(ip_full_zip_qtr, "ip_full_zip_qtr", "ip")
 make_correlation_matrix(op_er_full_zip, "op_er_full_zip", "op_er")
 make_correlation_matrix(op_er_full_zip_medicaid, "op_er_full_zip_medicaid", "op_er")
 make_correlation_matrix(op_er_full_zip_qtr, "op_er_full_zip_qtr", "op_er")
-
+make_correlation_matrix(op_er_full_zip_race, "op_er_full_zip_race", "op_er")
+make_correlation_matrix(op_er_full_zip_age, "op_er_full_zip_age", "op_er")
 
 
 
