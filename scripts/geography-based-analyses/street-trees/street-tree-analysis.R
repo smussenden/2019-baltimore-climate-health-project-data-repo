@@ -91,6 +91,9 @@ master_street_tree_summaries %>%
   select(nbrdesc) %>%
   dplyr::summarise(n())
 
+# Create a temp working table to consistently overwrite without messing up loaded table
+wk <- street_trees_categorized
+
 ###################################################################
 ### Add more rankings on top of what was added in cleaning file ###
 ###################################################################
@@ -306,5 +309,50 @@ street_trees_categorized %>%
 ggsave(filename = "tree_count_distro_top15_nsas.png", 
        device = "png", path = "data/output-data/street-tree-analyses/plots/height-diameter")
 
+# What percent of live trees are young in target nsas?
+wk <- street_trees_categorized %>%
+  # 1. Count live trees
+  filter(has_live_tree == T) %>%
+  select(nbrdesc) %>%
+  group_by(nbrdesc) %>%
+  dplyr::summarise(n_live = n()) %>%
+  # 2. Count number of trees under a low diameter (4 inches)
+  right_join(street_trees_categorized %>%
+               filter(has_live_tree == T) %>%
+               select(nbrdesc, dbh) %>%
+               mutate(is_young = ifelse(dbh < 4, T, F)) %>%
+               group_by(nbrdesc, is_young) %>%
+               dplyr::summarise(n_young = n()) %>%
+               filter(is_young == T) %>%
+               select(-is_young)
+  ) %>%
+  # 3. Divide young by live for percent
+  mutate(perc_young = round(100*(n_young/n_live), 2)) %>%
+  # 4. Rejoin full table, controled for 
+  right_join(master_street_tree_summaries) %>%
+  select(-n_live) %>%
+  # Add ranking for perc young
+  arrange(nbrdesc, perc_young) %>%
+  mutate(rank_perc_young = rank(desc(perc_young), na.last = "keep", ties.method = "first"))
 
+# Plot PERCENT of live trees are YOUNG in ALL nsas
+wk %>%
+  # Control for at least 50 trees
+  filter(spaces_with_live_trees >= 50) %>%
+  ggplot() +
+  geom_col(aes(x = reorder(nbrdesc, perc_young), 
+               y = perc_young, 
+               fill = factor(is_target_nsa, labels=c("Counterpoint NSA"," Target NSA"))
+               )) +
+  coord_flip() +
+  labs(title = "Percent Young Live Trees",
+       x = "",
+       y = "",
+       fill = "") +
+  scale_fill_manual(values=cbPalette) +
+  theme(legend.position = "top")
 
+# Save to file
+ggsave(filename = "perc_young_all_nsas.png", 
+       device = "png", path = "data/output-data/street-tree-analyses/plots/height-diameter",
+       width = 6, height = 19, units = "in")
