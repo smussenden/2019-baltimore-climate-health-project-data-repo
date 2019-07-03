@@ -8,6 +8,10 @@ _INCOMPLETE_
 * **Neighborhoods of interest** (18): The following NSAs are considered neighbhorhoods of interest:
   * **Target neighborhoods** (15): "Berea", "Broadway East", "Oliver", "Middle East", "Biddle Street","Milton-Montford", "Madison-Eastend", "CARE", "McElderry Park", "Ellwood Park/Monument", "Patterson Place", "Patterson Park Neighborhood", "Baltimore Highlands", "Highlandtown", "Upper Fells Point"
   * **Counterpoint neighborhoods** (3 nearby NSAs that are richer than the target NSAs): "Butcher's Hill", "Canton", "Washington Hill"
+  
+### Example Trees 
+* Biggest tree in Broadway East (that's not in a park) has a 33 inch trunk (1600 North Washington Street). It is in "good" condition. This tree is huge for this area, where most tree trunks are just a few inches across. But it would be middling in Roland Park, where 146 trees have trunks of that size or larger, and three dozen have trunks of 40 inches across or more.
+* The largest tree in Roland Park is 68 inches across (3901 Beech Ave). It is in "fair" condition.
 
 
 ## Summary
@@ -52,7 +56,12 @@ _Click to enlarge_
 
 <img src="https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/data/output-data/street-tree-analyses/plots/height-diameter/perc_young_all_nsas.png?raw=true" alt="NSAs Ranked by Percent of Young Trees" width="500"/>
 
-### More Tree Data 
+
+### Condition
+
+Most target neighborhoods are in the bottom 100 for percent of trees in good condition when controled for older trees (>6 inch diameter trunk), though Upper Fells Point and Patterson Park Neighborhood are ranked at 24 and 61, respectively.
+
+<img src="https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/data/output-data/street-tree-analyses/plots/condition/condition_good_all_nsas.png?raw=true" alt="Percent of Live, Older Trees in Good Condition by NSA" width="500"/>
 
 
 

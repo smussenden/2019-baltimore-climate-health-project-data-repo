@@ -62,13 +62,21 @@ counterpoint_nsas <- c("Butcher's Hill", "Canton", "Washington Hill") %>%
 ### Load data created by "street-tree-data-cleaning.R"
 
 # Load the full dataset with categories added in cleaning file
-street_trees_categorized <- read_csv("data/input-data/street-trees/csv/by_nsa/street_trees_nsa_categorized.csv")
+street_trees_categorized <- read_csv("data/input-data/street-trees/csv/by_nsa/street_trees_nsa_categorized.csv") %>%
+  # Make "condition" a factor so it can be ordered
+  mutate_at(vars(matches("condition")), as.factor) %>%
+  mutate(condition = fct_relevel(condition, 
+                                 c("absent",
+                                   "stump",
+                                   "dead",
+                                   "poor",
+                                   "fair",
+                                   "good",
+                                   "unknown")
+  ))
 
 # Load the master summaries table created in cleaning file
 master_street_tree_summaries <- read_csv("data/output-data/street-tree-analyses/master_street_tree_by_nsa.csv") %>%
-  # Make "condition" a factor so it can be ordered
-  mutate_at(vars(matches("condition")), 
-            as.factor) %>%
   # Add variable to track whether a target NSA
   mutate(is_target_nsa = case_when(
     nbrdesc %in% target_nsas ~ T,
@@ -77,9 +85,6 @@ master_street_tree_summaries <- read_csv("data/output-data/street-tree-analyses/
 
 # Load the filtered master summaries table created in cleaning file
 master_street_tree_summaries_filtered <- read_csv("data/output-data/street-tree-analyses/master_street_tree_by_nsa_targetonly.csv") %>%
-  # Make "condition" a factor so it can be ordered
-  mutate_at(vars(matches("condition")), 
-            as.factor) %>%
   mutate(is_target_nsa = case_when(
     nbrdesc %in% target_nsas ~ T,
     TRUE ~ F 
@@ -88,6 +93,13 @@ master_street_tree_summaries_filtered <- read_csv("data/output-data/street-tree-
 # Quick count
 master_street_tree_summaries %>%
   filter(num_spaces_with_live_trees >= 50) %>%
+  select(nbrdesc) %>%
+  dplyr::summarise(n())
+
+# Quick count at a value
+street_trees_categorized %>%
+  right_join(master_street_tree_summaries %>% filter(num_spaces_with_live_trees >= 50)) %>%
+  filter(dbh >= 40, nbrdesc %in% "roland park") %>%
   select(nbrdesc) %>%
   dplyr::summarise(n())
 
@@ -284,7 +296,7 @@ ggsave(filename = "tree_count_distro_target_nsas.png",
 street_trees_categorized %>%
   filter((has_live_tree == T)) %>%
   select(nbrdesc, dbh) %>%
-  # Filter by X NSAs the largest average diameter trees and at least Y trees
+  # Filter by X NSAs with the largest average diameter trees and at least Y trees
   right_join(street_trees_categorized %>%
                filter(has_live_tree == T) %>%
                select(nbrdesc, dbh, has_live_tree) %>%
@@ -316,7 +328,7 @@ wk <- street_trees_categorized %>%
   select(nbrdesc) %>%
   group_by(nbrdesc) %>%
   dplyr::summarise(n_live = n()) %>%
-  # 2. Count number of trees under a low diameter (4 inches)
+  # 2. Filter out trees under a low diameter (4 inches)
   right_join(street_trees_categorized %>%
                filter(has_live_tree == T) %>%
                select(nbrdesc, dbh) %>%
@@ -335,8 +347,8 @@ wk <- street_trees_categorized %>%
   arrange(nbrdesc, perc_young) %>%
   mutate(rank_perc_young = rank(desc(perc_young), na.last = "keep", ties.method = "first"))
 
-# Plot PERCENT of live trees are YOUNG in ALL nsas
-wk %>%
+# Plot PERCENT DISTRIBUTION of live trees are YOUNG in ALL nsas
+wk %>% # Must run from line 320(ish)
   # Control for at least 50 trees
   filter(spaces_with_live_trees >= 50) %>%
   ggplot() +
@@ -355,4 +367,160 @@ wk %>%
 # Save to file
 ggsave(filename = "perc_young_all_nsas.png", 
        device = "png", path = "data/output-data/street-tree-analyses/plots/height-diameter",
+       width = 6, height = 19, units = "in")
+
+
+############################################
+### Tree CONDITION by neighborhood #########
+############################################
+
+
+# Condidering only older trees (more than 6 inches), what is the proportional condition of living trees by nsa?
+
+# DISTRIBUTION histogram showing DIAMETER of ALL nsas to find young trees
+# street_trees_categorized %>%
+#   filter((has_live_tree == T)) %>%
+#   select(nbrdesc, dbh) %>%
+#   ggplot() +
+#   geom_histogram(aes(x = dbh, fill = "nbrdesc"), binwidth = 1, show.legend = FALSE) +
+#   labs(title = "Distribution of Tree Diameter Across All Neighborhoods",
+#        x = "Trunk Diameter in Inches",
+#        y = "") +
+#   # Adjust X tics
+#   scale_x_continuous(breaks = seq(0, 60, by = 2), limits = c(NA, 60))
+
+## WORKING TABLE for CONDITION PLOTS
+wk <- street_trees_categorized %>%
+  filter((has_live_tree == T), dbh > 6) %>%
+  select(nbrdesc, condition, is_target_nsa) %>%
+  #group_by(nbrdesc, condition) %>%
+  #summarize(num_condition = n()) %>%
+  # Filter out nsas with fewer than 50 trees
+  right_join(street_trees_categorized %>%
+               filter(has_live_tree == T, dbh > 6) %>%
+               select(nbrdesc, dbh, has_live_tree) %>%
+               group_by(nbrdesc) %>%
+               summarize(num_trees = sum(has_live_tree)) %>%
+               # At least 50 trees
+               filter(num_trees >= 50)) %>%
+  select(nbrdesc, condition, is_target_nsa)
+
+# PROPORTIONAL CONDITION of LIVING, OLDER trees across ALL nsas
+wk %>%
+  ggplot() +
+  geom_bar(aes(x = reorder(nbrdesc, condition=="good"), 
+               fill = condition),
+           position = "fill") +
+  coord_flip() +
+  labs(title = "Proportional Condition of Live, \nOlder Trees (>6 in) by NSA",
+       x = "",
+       y = "",
+       fill = "Condition") +
+  scale_fill_manual(values=cbPalette) +
+  theme(legend.position = "top")
+
+# Save to file
+ggsave(filename = "prop_condition_all_nsas.png", 
+       device = "png", path = "data/output-data/street-tree-analyses/plots/condition",
+       width = 6, height = 19, units = "in")
+
+# PROPORTIONAL CONDITION of LIVING, OLDER trees across TARGET nsas
+wk %>%
+  filter(is_target_nsa == T) %>%
+  ggplot() +
+  geom_bar(aes(x = reorder(nbrdesc, condition=="good"), 
+               fill = condition),
+           position = "fill") +
+  coord_flip() +
+  labs(title = "Proportional Condition of Live, \nOlder Trees (>6 in) in Target NSAs",
+       x = "",
+       y = "",
+       fill = "Condition") +
+  scale_fill_manual(values=cbPalette) +
+  theme(legend.position = "top")
+
+# Save to file
+ggsave(filename = "prop_condition_target_nsas.png", 
+       device = "png", path = "data/output-data/street-tree-analyses/plots/condition")
+
+# PROPORTIONAL CONDITION of LIVING, OLDER trees across TOP 15 CONDITION == GOOD nsas
+wk %>%
+  right_join(wk %>% 
+               select(nbrdesc, condition) %>%
+               filter(condition == "good") %>%
+               select(nbrdesc) %>%
+               group_by(nbrdesc) %>%
+               summarize(num_condition = n()) %>%
+               arrange(desc(num_condition)) %>%
+               top_n(15)
+               ) %>%
+  ggplot() +
+  geom_bar(aes(x = reorder(nbrdesc, condition=="good"), 
+               fill = condition),
+           position = "fill") +
+  coord_flip() +
+  labs(title = "Proportional Condition of Live, \nOlder Trees (>6 in) in NSAs with the \nHighest Percent of Good Condition Trees",
+       x = "",
+       y = "",
+       fill = "Condition") +
+  scale_fill_manual(values=cbPalette) +
+  theme(legend.position = "top")
+
+# Save to file
+ggsave(filename = "prop_condition_top15_nsas.png", 
+       device = "png", path = "data/output-data/street-tree-analyses/plots/condition")
+
+# Find rankings of PERC GOOD
+# wk (ln 393) is already filtered for only live trees and nsas with fewer than 50 trees
+good_ranking <- wk %>% 
+  # 1. Find count at each condition
+  select(nbrdesc, condition) %>%
+  #filter(condition == "good") %>%
+  select(nbrdesc, condition) %>%
+  group_by(nbrdesc, condition) %>%
+  summarize(num_condition = n()) %>%
+  # 2. Find total live trees 
+  left_join(street_trees_categorized %>% 
+              filter((has_live_tree == T), dbh > 6) %>%
+              select(nbrdesc) %>%
+              group_by(nbrdesc) %>%
+              dplyr::summarize(num_live = n()) %>%
+              select(nbrdesc, num_live)) %>%
+  # 3. Find percent of condition to live
+  mutate(perc_condition = round(100*(num_condition/num_live), 2)) %>%
+  # 4. Drop cconditions that aren't "good"
+  filter(condition == "good") %>%
+  dplyr::rename(perc_good = perc_condition,
+                num_good = num_condition) %>%
+  # 5. Arrange and rank
+  select(nbrdesc, num_good, perc_good) %>%
+  arrange(desc(perc_good)) %>%
+  ungroup %>%
+  dplyr::mutate(perc_good_rank = rank(desc(perc_good), na.last = "keep", ties.method = "first")) %>%
+  # 6. Add whether target nsa
+  mutate(is_target_nsa = case_when(
+    nbrdesc %in% target_nsas ~ T,
+    TRUE ~ F 
+  ))
+
+# PERCENT of GOOD condition trees
+ggplot(good_ranking, 
+       aes(x = reorder(nbrdesc, perc_good), 
+           y = perc_good, 
+           fill = factor(is_target_nsa, 
+                         # Rename fill levels in legend
+                         labels=c("Not Target NSA"," Target NSA"))
+       )) +
+  geom_col() +
+  coord_flip() +
+  labs(title = "Percent of Live, Older Trees (>6 in) \nin Good Condition by NSA",
+       x = "",
+       y = "",
+       fill = "") +
+  scale_fill_manual(values=cbPalette) +
+  theme(legend.position = "top")
+
+# Save to file
+ggsave(filename = "condition_good_all_nsas.png", 
+       device = "png", path = "data/output-data/street-tree-analyses/plots/condition",
        width = 6, height = 19, units = "in")

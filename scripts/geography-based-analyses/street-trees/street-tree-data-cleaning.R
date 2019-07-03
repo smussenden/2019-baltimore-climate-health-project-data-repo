@@ -81,8 +81,7 @@ tree_by_tree <- read_csv("data/input-data/street-trees/csv/by_nsa/street_trees_n
                                    "fair",
                                    "good",
                                    "unknown")
-  )
-  ) %>%
+  )) %>%
   mutate_at(vars(matches("tree_ht"), matches("dbh")), as.numeric)
 
 ###################################
