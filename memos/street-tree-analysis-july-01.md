@@ -20,9 +20,7 @@ Target neighborhoods range in rank from 22nd (Patterson Park) to 162nd (Patterso
 
 However, most of these trees appear to be new plantings which have not had time to succumb to disease, weather or consequences of poor maintenance.
 
-## Details
-
-### Tree Height / Diameter
+## Tree Height / Diameter
 
 * **Height**: All target neighborhoods are in the bottom 100, spread between ranks 121 (Upper Fells Point) and last at 252 (Madison-Eastend).
 * **Diameter**: All target neighborhoods are in the bottom 150, spread between ranks 162 (Broadway East) and last at 252 (Milton-Montford).
@@ -57,11 +55,21 @@ _Click to enlarge_
 <img src="https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/data/output-data/street-tree-analyses/plots/height-diameter/perc_young_all_nsas.png?raw=true" alt="NSAs Ranked by Percent of Young Trees" width="500"/>
 
 
-### Condition
+## Condition
 
 Most target neighborhoods are in the bottom 100 for percent of trees in good condition when controled for older trees (>6 inch diameter trunk), though Upper Fells Point and Patterson Park Neighborhood are ranked at 24 and 61, respectively.
 
-<img src="https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/data/output-data/street-tree-analyses/plots/condition/condition_good_all_nsas.png?raw=true" alt="Percent of Live, Older Trees in Good Condition by NSA" width="500"/>
+_Click to enlarge_ 
+
+| Percent in Good Condition | Proportion of Conditions |
+| --- | --- |
+| <img src="https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/data/output-data/street-tree-analyses/plots/condition/condition_good_all_nsas.png?raw=true" alt="Percent of Live, Older Trees in Good Condition by NSA" width="500"/> | <img src="https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/data/output-data/street-tree-analyses/plots/condition/prop_condition_all_nsas.png?raw=true" alt="Proportional Condition of Live, Older Trees (>6 in) by NSA" width="500"/> |
+
+A closer look at the proportional conditions of the target NSAs compared to the NSAs with the most trees in good condition:
+
+| Target NSAs | Highest Percentage of Good Condition Trees |
+| --- | --- | 
+| <img src="https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/data/output-data/street-tree-analyses/plots/condition/prop_condition_target_nsas.png?raw=true" alt="Percent of Live, Older Trees in Good Condition by NSA" width="500"/> | <img src="https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/data/output-data/street-tree-analyses/plots/condition/prop_condition_top15_nsas.png?raw=true" alt="Proportional Condition of Live, Older Trees (>6 in) by NSA" width="500"/> |
 
 
 
