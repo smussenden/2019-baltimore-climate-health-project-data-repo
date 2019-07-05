@@ -129,8 +129,8 @@ temp_data <- temp_data %>%
          TEMPERATURE = as.numeric(TEMPERATURE))
 
 # DMH Calculate Heat Index Temperature -- TY, TY, TY weathermetrics package! 
-# temp_data <- temp_data %>%
-#  mutate(HEAT_INDEX = heat.index(t=TEMPERATURE, dp=DEW_POINT, temperature.metric = "fahrenheit", output.metric = "fahrenheit"))
+temp_data <- temp_data %>%
+  mutate(HEAT_INDEX = heat.index(t=TEMPERATURE, dp=DEW_POINT, temperature.metric = "fahrenheit", output.metric = "fahrenheit"))
 
 # DMH Round temperature
  temp_data <- temp_data %>%
@@ -150,9 +150,9 @@ temp_data <- temp_data %>%
 # Note, of the 581,530 observations in EMS ALL, 9190 failed to join in the merge because we are missing temperature values for those times.  In some cases entire days are missing, in some cases it's a few hours.  Rather than introduce new errors by imputing temperature values, we're going to leave these out.  They are mostly wintertime temps.
 full_data <- inner_join(EMS_all, temp_data, by=c("temp_time"))
 
-#################################
-# Adjust for Urban Heat Island ##
-#################################
+##########################################################
+# Adjust for Urban Heat Island and Calculate Heat Index ##
+##########################################################
 
 # Load urban heat island data with morning, aft and night median temperature.
 urban_heat_zcta <- read_csv("data/output-data/cleaned/tree-temp-demographic-w-naip-lidar-use/zcta_clipped_lidartree_temp.csv")
@@ -191,7 +191,7 @@ full_data <- full_data %>%
   inner_join(urban_heat_zcta, by=c("zipcode"))
 glimpse(full_data)
 
-# Create columns with adjusted temperature and adjusted heat index
+# Create columns with adjusted temperature
 full_data <- full_data %>%
   mutate(hour = hour(datetime)) %>%
   mutate(adjusted_temperature =
@@ -201,15 +201,11 @@ full_data <- full_data %>%
                      hour >= 0 ~ as.character(temperature + pm_difference)
                      ),
          adjusted_temperature = round(as.numeric(adjusted_temperature), 0)
-      ) %>%
-  mutate(adjusted_heat_index =
-           case_when(hour >= 20 ~ as.character(heat_index + pm_difference),
-                     hour >= 12 ~ as.character(heat_index + aft_difference),
-                     hour >= 4 ~ as.character(heat_index + am_difference),
-                     hour >= 0 ~ as.character(heat_index + pm_difference)
-           ),
-         adjusted_heat_index = round(as.numeric(adjusted_heat_index), 0)
-  )
+      )
+
+# Now that we've adjusted temperature, calculate the adjusted heat index
+full_data <- full_data %>%
+  mutate(adjusted_heat_index = heat.index(t=adjusted_temperature, dp=dew_point, temperature.metric = "fahrenheit", output.metric = "fahrenheit"))
 
 ##################################################
 ### Create Temperature and Heat Index Buckets ####
@@ -743,7 +739,8 @@ sd_call_heat_index_ratio_primary_impression_group <- full_data %>%
   mutate(call_to_heat_index_ratio_mean = mean(na.rm=TRUE, c(`0s`, `10s`, `20s`, `30s`,`40s`,`50s`,`60s`,`70s`, `80s`, `90s`, `100s`, `110s`))) %>%
   mutate(call_to_heat_index_ratio_sd = sd(na.rm=TRUE, c(`0s`, `10s`, `20s`, `30s`,`40s`,`50s`,`60s`,`70s`, `80s`, `90s`, `100s`, `110s`))) %>%
   mutate_at(vars(contains("0s")), ~((.-call_to_heat_index_ratio_mean)/call_to_heat_index_ratio_sd)*-1) %>%
-  rename_at(vars(contains("0s")), funs(paste0(.,"_-sd")))
+  rename_at(vars(contains("0s")), funs(paste0(.,"_-sd"))) %>%
+  mutate(`sd_%_of_mean` = (call_to_heat_index_ratio_sd/call_to_heat_index_ratio_mean)*100)
 
 #### Table 3 | Primary Impression Group | Percentage of Calls | 10 Degree Buckets #####
 # Percentage expressed as number of calls for a given condition in a given bucket dividied by total number of calls for that bucket.
@@ -793,7 +790,8 @@ sd_call_heat_index_ratio_binary_primary_impression_group <- full_data %>%
   mutate(call_to_heat_index_ratio_mean = mean(na.rm=TRUE, c(`not_unsafe_under_79`,`unsafe_80_plus`))) %>%
   mutate(call_to_heat_index_ratio_sd = sd(na.rm=TRUE, c(`not_unsafe_under_79`,`unsafe_80_plus`))) %>%
   mutate_at(vars(contains("safe")), ~((.-call_to_heat_index_ratio_mean)/call_to_heat_index_ratio_sd)*-1) %>%
-  rename_at(vars(contains("safe")), funs(paste0(.,"_-sd")))
+  rename_at(vars(contains("safe")), funs(paste0(.,"_-sd"))) %>%
+  mutate(`sd_%_of_mean` = (call_to_heat_index_ratio_sd/call_to_heat_index_ratio_mean)*100)
 
 #### Table 3 | Primary Impression Group | Percentage of Calls | Binary NWS Buckets #####
 # Percentage expressed as number of calls for a given condition in a given bucket dividied by total number of calls for that bucket.
@@ -843,7 +841,8 @@ sd_call_heat_index_ratio_three_primary_impression_group <- full_data %>%
   mutate(call_to_heat_index_ratio_mean = mean(na.rm=TRUE, c(`not_unsafe_under_79`, `all_caution_80_102`, `all_danger_103_plus`))) %>%
   mutate(call_to_heat_index_ratio_sd = sd(na.rm=TRUE, c(`not_unsafe_under_79`, `all_caution_80_102`, `all_danger_103_plus`))) %>%
   mutate_at(vars(contains("safe"), contains("caution"), contains("danger")), ~((.-call_to_heat_index_ratio_mean)/call_to_heat_index_ratio_sd)*-1) %>%
-  rename_at(vars(contains("safe"), contains("caution"), contains("danger")), funs(paste0(.,"_-sd")))
+  rename_at(vars(contains("safe"), contains("caution"), contains("danger")), funs(paste0(.,"_-sd"))) %>%
+  mutate(`sd_%_of_mean` = (call_to_heat_index_ratio_sd/call_to_heat_index_ratio_mean)*100)
 
 #### Table 3 | Primary Impression Group | Percentage of Calls | three NWS Buckets #####
 # Percentage expressed as number of calls for a given condition in a given bucket dividied by total number of calls for that bucket.
@@ -892,7 +891,8 @@ sd_call_heat_index_ratio_five_primary_impression_group <- full_data %>%
   mutate(call_to_heat_index_ratio_mean = mean(na.rm=TRUE, c(`not_unsafe_under_79`, `caution_80_90`, `extreme_caution_91_102`, `danger_103_124`))) %>%
   mutate(call_to_heat_index_ratio_sd = sd(na.rm=TRUE, c(`not_unsafe_under_79`, `caution_80_90`, `extreme_caution_91_102`, `danger_103_124`))) %>%
   mutate_at(vars(contains("safe"), contains("caution"), contains("danger")), ~((.-call_to_heat_index_ratio_mean)/call_to_heat_index_ratio_sd)*-1) %>%
-  rename_at(vars(contains("safe"), contains("caution"), contains("danger")), funs(paste0(.,"_-sd")))
+  rename_at(vars(contains("safe"), contains("caution"), contains("danger")), funs(paste0(.,"_-sd"))) %>%
+  mutate(`sd_%_of_mean` = (call_to_heat_index_ratio_sd/call_to_heat_index_ratio_mean)*100)
 
 #### Table 3 | Primary Impression Group | Percentage of Calls | five NWS Buckets #####
 # Percentage expressed as number of calls for a given condition in a given bucket dividied by total number of calls for that bucket.
@@ -947,7 +947,8 @@ sd_call_heat_index_ratio_primary_impression_group <- full_data %>%
   mutate(call_to_heat_index_ratio_mean = mean(na.rm=TRUE, c(`50s`,`60s`,`70s`, `80s`, `90s`, `100s`, `110s`))) %>%
   mutate(call_to_heat_index_ratio_sd = sd(na.rm=TRUE, c(`50s`,`60s`,`70s`, `80s`, `90s`, `100s`, `110s`))) %>%
   mutate_at(vars(contains("0s")), ~((.-call_to_heat_index_ratio_mean)/call_to_heat_index_ratio_sd)*-1) %>%
-  rename_at(vars(contains("0s")), funs(paste0(.,"_-sd")))
+  rename_at(vars(contains("0s")), funs(paste0(.,"_-sd"))) %>%
+  mutate(`sd_%_of_mean` = (call_to_heat_index_ratio_sd/call_to_heat_index_ratio_mean)*100)
 
 #### Table 3 | Primary Impression Group | Percentage of Calls | 10 Degree Buckets #####
 # Percentage expressed as number of calls for a given condition in a given bucket dividied by total number of calls for that bucket.
@@ -997,7 +998,8 @@ sd_call_heat_index_ratio_binary_primary_impression_group <- full_data %>%
   mutate(call_to_heat_index_ratio_mean = mean(na.rm=TRUE, c(`not_unsafe_under_79`,`unsafe_80_plus`))) %>%
   mutate(call_to_heat_index_ratio_sd = sd(na.rm=TRUE, c(`not_unsafe_under_79`,`unsafe_80_plus`))) %>%
   mutate_at(vars(contains("safe")), ~((.-call_to_heat_index_ratio_mean)/call_to_heat_index_ratio_sd)*-1) %>%
-  rename_at(vars(contains("safe")), funs(paste0(.,"_-sd")))
+  rename_at(vars(contains("safe")), funs(paste0(.,"_-sd"))) %>%
+  mutate(`sd_%_of_mean` = (call_to_heat_index_ratio_sd/call_to_heat_index_ratio_mean)*100)
 
 #### Table 3 | Primary Impression Group | Percentage of Calls | Binary NWS Buckets #####
 # Percentage expressed as number of calls for a given condition in a given bucket dividied by total number of calls for that bucket.
@@ -1047,7 +1049,8 @@ sd_call_heat_index_ratio_three_primary_impression_group <- full_data %>%
   mutate(call_to_heat_index_ratio_mean = mean(na.rm=TRUE, c(`not_unsafe_under_79`, `all_caution_80_102`, `all_danger_103_plus`))) %>%
   mutate(call_to_heat_index_ratio_sd = sd(na.rm=TRUE, c(`not_unsafe_under_79`, `all_caution_80_102`, `all_danger_103_plus`))) %>%
   mutate_at(vars(contains("safe"), contains("caution"), contains("danger")), ~((.-call_to_heat_index_ratio_mean)/call_to_heat_index_ratio_sd)*-1) %>%
-  rename_at(vars(contains("safe"), contains("caution"), contains("danger")), funs(paste0(.,"_-sd")))
+  rename_at(vars(contains("safe"), contains("caution"), contains("danger")), funs(paste0(.,"_-sd"))) %>%
+  mutate(`sd_%_of_mean` = (call_to_heat_index_ratio_sd/call_to_heat_index_ratio_mean)*100)
 
 #### Table 3 | Primary Impression Group | Percentage of Calls | three NWS Buckets #####
 # Percentage expressed as number of calls for a given condition in a given bucket dividied by total number of calls for that bucket.
@@ -1096,7 +1099,8 @@ sd_call_heat_index_ratio_five_primary_impression_group <- full_data %>%
   mutate(call_to_heat_index_ratio_mean = mean(na.rm=TRUE, c(`not_unsafe_under_79`, `caution_80_90`, `extreme_caution_91_102`, `danger_103_124`))) %>%
   mutate(call_to_heat_index_ratio_sd = sd(na.rm=TRUE, c(`not_unsafe_under_79`, `caution_80_90`, `extreme_caution_91_102`, `danger_103_124`))) %>%
   mutate_at(vars(contains("safe"), contains("caution"), contains("danger")), ~((.-call_to_heat_index_ratio_mean)/call_to_heat_index_ratio_sd)*-1) %>%
-  rename_at(vars(contains("safe"), contains("caution"), contains("danger")), funs(paste0(.,"_-sd")))
+  rename_at(vars(contains("safe"), contains("caution"), contains("danger")), funs(paste0(.,"_-sd"))) %>%
+  mutate(`sd_%_of_mean` = (call_to_heat_index_ratio_sd/call_to_heat_index_ratio_mean)*100)
 
 #### Table 3 | Primary Impression Group | Percentage of Calls | five NWS Buckets #####
 # Percentage expressed as number of calls for a given condition in a given bucket dividied by total number of calls for that bucket.
@@ -1112,3 +1116,4 @@ percent_calls_condition_five_primary_impression_group <- full_data %>%
   select(primary_impression_group, adjusted_heat_index_nws_five_scale_bucket, percent_calls_w_condition) %>%
   spread(adjusted_heat_index_nws_five_scale_bucket, percent_calls_w_condition) %>%
   select(primary_impression_group, `not_unsafe_under_79`, `caution_80_90`, `extreme_caution_91_102`, `danger_103_124`)
+
