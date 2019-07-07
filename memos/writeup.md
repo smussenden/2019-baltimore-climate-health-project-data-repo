@@ -62,7 +62,9 @@ Importantly, we are not suggesting causal relationships, that heat *caused* in w
 Coming soon
 
 ## Heat and Health
-Updating winter analysis, TK
+
+
+
 
 ## Trees
 In Baltimore, trees are also not distributed equally across the city.  There is extremely wide variation in the amount of land area in each neighborhood covered by tree canopy.  

@@ -191,3 +191,22 @@ ip_full_zip_joined <- zcta_not_clipped_balt_city_border_tree_temp_demographics %
 
 write_csv(ip_full_zip_joined, "data/output-data/hscrc-hospital-data/joined_data/ip_full_zip_joined.csv")
 
+#####################################
+#### OTHER #####
+#####################################
+
+# Poverty explains these thigs better than anything else
+merge_demographics_heat_tree <- zcta_not_clipped_balt_city_border_tree_temp_demographics %>%
+  left_join(ip_full_zip, by = 'zcta')
+
+glimpse(merge_demographics_heat_tree)
+
+# Multiple Linear Regression Example 
+merge_demographics_heat_tree <- merge_demographics_heat_tree %>%
+  select(-zcta, -matches("127|63|multirace|count|percap|population"))
+fit <- lm(asthma_prev ~ temp_median_aft, data=merge_demographics_heat_tree)
+summary(fit) # show results
+
+fit <- lm(asthma_prev ~ temp_median_aft `poverty_%.x`, data=merge_demographics_heat_tree)
+summary(fit) # show results
+https://www.datacamp.com/community/tutorials/linear-regression-R
