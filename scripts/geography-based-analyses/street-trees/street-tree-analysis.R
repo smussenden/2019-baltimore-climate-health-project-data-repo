@@ -378,10 +378,7 @@ ggsave(filename = "height_distro_top15_nsas.png",
        device = "png", path = "data/output-data/street-tree-analyses/plots/height-diameter")
 
 
-
-
-
-# DISTRIBUTION line showing DIAMETER of TOP 15 nsas
+# DISTRIBUTION lines showing DIAMETER of TOP 15 nsas
 wk <- street_trees_categorized %>%
   filter((has_live_tree == T)) %>%
   select(nbrdesc, dbh) %>%
@@ -403,18 +400,55 @@ ggplot() +
   # Top 15 NSAs
   geom_density(data = wk, 
                aes(x = dbh),
-               color = "#00FF00") +
-  xlim(NA, 50) +
+               color = "#00FF00")+
   # Target NSAs
   geom_density(data = filter(street_trees_categorized, (is_target_nsa == T) & (has_live_tree == T)), 
                aes(x = dbh),
                color = "#FF0000") +
   labs(title = "Distribution of Tree Diameter, Target NSAs (red) vs. Top 15 (green)",
        x = "Tree Diameter in Inches",
-       y = "")
+       y = "") +
+  xlim(NA, 50) 
   
 # Save to file
 ggsave(filename = "diameter_distro_comparative_nsas.png", 
+       device = "png", path = "data/output-data/street-tree-analyses/plots/height-diameter")
+
+
+# DISTRIBUTION lines showing HEIGHT of TOP 15 nsas
+wk <- street_trees_categorized %>%
+  filter((has_live_tree == T)) %>%
+  select(nbrdesc, tree_ht) %>%
+  # Filter by X NSAs with the largest average diameter trees and at least Y trees
+  right_join(street_trees_categorized %>%
+               filter(has_live_tree == T) %>%
+               select(nbrdesc, tree_ht, has_live_tree) %>%
+               group_by(nbrdesc) %>%
+               summarize(med_tree_ht = median(tree_ht),
+                         num_trees = sum(has_live_tree)) %>%
+               arrange(desc(med_tree_ht)) %>%
+               # At least Y trees
+               filter(num_trees >= 50) %>%
+               # Top X by average diameter
+               top_n(15)
+  )
+
+ggplot() +
+  # Top 15 NSAs
+  geom_density(data = wk, 
+               aes(x = tree_ht),
+               color = "#00FF00") +
+  # Target NSAs
+  geom_density(data = filter(street_trees_categorized, (is_target_nsa == T) & (has_live_tree == T)), 
+               aes(x = tree_ht),
+               color = "#FF0000") +
+  labs(title = "Distribution of Tree Diameter, Target NSAs (red) vs. Top 15 (green)",
+       x = "Tree Diameter in Inches",
+       y = "") +
+  xlim(NA, 90) 
+  
+# Save to file
+ggsave(filename = "height_distro_comparative_nsas.png", 
        device = "png", path = "data/output-data/street-tree-analyses/plots/height-diameter")
 
 ###################################
