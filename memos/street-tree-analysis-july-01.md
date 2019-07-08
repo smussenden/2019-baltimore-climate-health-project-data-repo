@@ -90,7 +90,7 @@ Target neighborhoods' median average diameter is 5.54 inches and the mean is 6.1
 
 Most of the target neighborhoods are in the top 50 for greatest percent of young trees. In other words, the target NSAs have a greater percentage of young trees compared to live trees than do other neighborhoods in the city.
 
-The charts below show a pronounced shift toward the left of the graph for target NSAs compared with the top 15 NSAs with the largest trees.
+The charts below show this as a pronounced shift toward the left of the graph for target NSAs compared with the top 15 NSAs with the largest trees.
 
 _Click to enlarge_ 
 
