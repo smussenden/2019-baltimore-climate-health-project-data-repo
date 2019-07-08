@@ -97,7 +97,7 @@ master_street_tree_summaries %>%
   dplyr::summarise(n())
 
 street_trees_categorized %>%
-  filter(nbrdesc %in% "mcelderry park", has_live_tree == T) %>%
+  filter(nbrdesc %in% "madison-eastend", has_live_tree == T, loc_type %in% "street") %>%
   dplyr::summarise(n())
 
 # Quick count at a value
@@ -378,7 +378,7 @@ ggsave(filename = "height_distro_top15_nsas.png",
        device = "png", path = "data/output-data/street-tree-analyses/plots/height-diameter")
 
 
-# DISTRIBUTION lines showing DIAMETER of TOP 15 nsas
+# DISTRIBUTION lines showing DIAMETER compared to TOP 15 nsas
 wk <- street_trees_categorized %>%
   filter((has_live_tree == T)) %>%
   select(nbrdesc, dbh) %>%
@@ -404,7 +404,7 @@ ggplot() +
   # Target NSAs
   geom_density(data = filter(street_trees_categorized, (is_target_nsa == T) & (has_live_tree == T)), 
                aes(x = dbh),
-               color = "##E69F00") +
+               color = "#E69F00") +
   labs(title = "Distribution of Tree Diameter, Target NSAs (yellow) vs. Top 15 (blue)",
        x = "Tree Diameter in Inches",
        y = "") +
@@ -415,7 +415,7 @@ ggsave(filename = "diameter_distro_comparative_nsas.png",
        device = "png", path = "data/output-data/street-tree-analyses/plots/height-diameter")
 
 
-# DISTRIBUTION lines showing HEIGHT of TOP 15 nsas
+# DISTRIBUTION lines showing HEIGHT compared to TOP 15 nsas
 wk <- street_trees_categorized %>%
   filter((has_live_tree == T)) %>%
   select(nbrdesc, tree_ht) %>%
@@ -441,7 +441,7 @@ ggplot() +
   # Target NSAs
   geom_density(data = filter(street_trees_categorized, (is_target_nsa == T) & (has_live_tree == T)), 
                aes(x = tree_ht),
-               color = "##E69F00") +
+               color = "#E69F00") +
   labs(title = "Distribution of Tree Diameter, Target NSAs (yellow) vs. Top 15 (blue)",
        x = "Tree Diameter in Inches",
        y = "") +

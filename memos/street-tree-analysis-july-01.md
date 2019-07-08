@@ -20,6 +20,7 @@ However, most of these trees appear to be new plantings which have not had time 
 ### Neighborhood Observations / Example trees
 #### Citywide
 * 118,628 trees
+* 91,529 non-park trees (23%; difference: 27,099)
 * The tallest tree in the city (that is not in a park) is in front of 6212 Woodcrest Ave: 120' tall, 35.8" diameter trunk, fair condition.
 * The tree with the largest diameter (that is not in a park) is (or was?) in front of 204 Saint Dunstans Road: 86" across, 60' tall, poor condition marked for removal.
 * The next-largest-diameter tree (not in a park) is in a forest front of 5606 Wildwood Lane: 72" across, 60' tall, fair condition
@@ -27,18 +28,21 @@ However, most of these trees appear to be new plantings which have not had time 
 
 #### Broadway East
 * 386 trees
+* 303 non-park trees (21%; difference: 83)
 * Largest-diameter tree in Broadway East (that's not in a park) has a 33" trunk and is 50' tall (1600 North Washington Street). It is in "good" condition. This tree is huge for this area, where most tree trunks are just a few inches across. But it would be middling in Roland Park (see below).
 * The tallest tree is 55' tall and 24" across, on the side of 1420 N. Milton Ave. "Good" condition.
 * The largest (height and width) poor condition tree is on the side of 1746 E. Lafayette Ave: 30" wide, 45' tall.
 
 #### Roland Park
 * 2,910 trees
+* 2,871 non-park trees (1%; difference: 39)
 * In RP, 146 trees have trunks of the Broadway East's largest size or larger.
 * Three dozen have trunks of 40 inches across or more.
 * The largest-diameter tree in Roland Park is 68 inches across (3901 Beech Ave). It is in "fair" condition.
 
 #### Baltimore Highlands
 * 411 trees
+* 411 non-park trees (difference: 0)
 * Many larger trees along Roberts Place road
 * Trees on Conkling, Esther and Dean are likely to be park trees.
 * The tallest non-park tree in BH is on 3600 Pulaski Hwy: 40' tall, fair condition, 33.8" diameter, in well/pit.
@@ -48,6 +52,7 @@ However, most of these trees appear to be new plantings which have not had time 
 
 #### Patterson Place
 * 240 trees
+* 240 non-park trees (difference: 0)
 * The largest (diameter and height) tree in PP in poor condition is a tree in front of 2400 E Baltimore St: 14.4" diameter, 45' tall, poor condition.
 * Another large tree, in fair condition, is on the side of the same building (possibly on N. Montford).
 * The south end of Montford has a number of PP's larger trees.
@@ -55,11 +60,13 @@ However, most of these trees appear to be new plantings which have not had time 
   
 #### McElderry Park
 * 751 trees
+* 743 non-park trees (1%; difference: 8)
 * Tallest: front of 510 N Milton Ave, 45' tall, 14.4" across, "good" condition
 * Widest: side of 2711 Jefferson St, 32.2" wide, 40' tall, "fair" condition
 
 #### Madison East End
 * 451 trees
+* 373 non-park trees (17%; difference: 78)
 * Tallest: front of 912 N Lakewood Ave, 40' tall, 17.6" across, "good" condition
 * Widest: side of 3021 E Madison St, 23.8" across, 40' tall, "poor" condition
   
@@ -126,5 +133,3 @@ A closer look at the proportional conditions of the target NSAs compared to the 
 | <img src="https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/data/output-data/street-tree-analyses/plots/condition/prop_condition_target_nsas.png?raw=true" alt="Percent of Live, Older Trees in Good Condition by NSA" width="500"/> | <img src="https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/data/output-data/street-tree-analyses/plots/condition/prop_condition_top15_nsas.png?raw=true" alt="Proportional Condition of Live, Older Trees (>6 in) by NSA" width="500"/> |
 
 
-
- _To be continued..._
