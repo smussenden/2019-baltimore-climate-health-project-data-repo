@@ -400,12 +400,12 @@ ggplot() +
   # Top 15 NSAs
   geom_density(data = wk, 
                aes(x = dbh),
-               color = "#00FF00")+
+               color = "#0072B2")+
   # Target NSAs
   geom_density(data = filter(street_trees_categorized, (is_target_nsa == T) & (has_live_tree == T)), 
                aes(x = dbh),
-               color = "#FF0000") +
-  labs(title = "Distribution of Tree Diameter, Target NSAs (red) vs. Top 15 (green)",
+               color = "##E69F00") +
+  labs(title = "Distribution of Tree Diameter, Target NSAs (yellow) vs. Top 15 (blue)",
        x = "Tree Diameter in Inches",
        y = "") +
   xlim(NA, 50) 
@@ -437,12 +437,12 @@ ggplot() +
   # Top 15 NSAs
   geom_density(data = wk, 
                aes(x = tree_ht),
-               color = "#00FF00") +
+               color = "#0072B2") +
   # Target NSAs
   geom_density(data = filter(street_trees_categorized, (is_target_nsa == T) & (has_live_tree == T)), 
                aes(x = tree_ht),
-               color = "#FF0000") +
-  labs(title = "Distribution of Tree Diameter, Target NSAs (red) vs. Top 15 (green)",
+               color = "##E69F00") +
+  labs(title = "Distribution of Tree Diameter, Target NSAs (yellow) vs. Top 15 (blue)",
        x = "Tree Diameter in Inches",
        y = "") +
   xlim(NA, 90) 
