@@ -96,6 +96,10 @@ master_street_tree_summaries %>%
   select(nbrdesc) %>%
   dplyr::summarise(n())
 
+street_trees_categorized %>%
+  filter(nbrdesc %in% "mcelderry park", has_live_tree == T) %>%
+  dplyr::summarise(n())
+
 # Quick count at a value
 street_trees_categorized %>%
   right_join(master_street_tree_summaries %>% filter(num_spaces_with_live_trees >= 50)) %>%
@@ -405,11 +409,13 @@ ggplot() +
   geom_density(data = filter(street_trees_categorized, (is_target_nsa == T) & (has_live_tree == T)), 
                aes(x = dbh),
                color = "#FF0000") +
-  labs(title = "Distribution of Tree Diameter",
+  labs(title = "Distribution of Tree Diameter, Target NSAs (red) vs. Top 15 (green)",
        x = "Tree Diameter in Inches",
        y = "")
   
-
+# Save to file
+ggsave(filename = "diameter_distro_comparative_nsas.png", 
+       device = "png", path = "data/output-data/street-tree-analyses/plots/height-diameter")
 
 ###################################
 ### Distribution of young trees ###
@@ -618,3 +624,14 @@ ggplot(good_ranking,
 ggsave(filename = "condition_good_all_nsas.png", 
        device = "png", path = "data/output-data/street-tree-analyses/plots/condition",
        width = 6, height = 19, units = "in")
+
+####################################################
+### Density of "tree removal" (field: mt) by NSA ###
+####################################################
+
+
+
+###############
+### Above calcs but with parks removed
+###############
+# By street? By loc_type == park?

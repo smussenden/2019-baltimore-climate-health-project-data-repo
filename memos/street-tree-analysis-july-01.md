@@ -16,9 +16,53 @@ Target neighborhoods range in rank from 22nd (Patterson Park) to 162nd (Patterso
 
 However, most of these trees appear to be new plantings which have not had time to succumb to disease, weather or consequences of poor maintenance.
 
-### Example Trees 
-* Biggest tree in Broadway East (that's not in a park) has a 33 inch trunk (1600 North Washington Street). It is in "good" condition. This tree is huge for this area, where most tree trunks are just a few inches across. But it would be middling in Roland Park, where 146 trees have trunks of that size or larger, and three dozen have trunks of 40 inches across or more.
-* The largest tree in Roland Park is 68 inches across (3901 Beech Ave). It is in "fair" condition.
+
+### Neighborhood Observations / Example trees
+#### Citywide
+* 118,628 trees
+* The tallest tree in the city (that is not in a park) is in front of 6212 Woodcrest Ave: 120' tall, 35.8" diameter trunk, fair condition.
+* The tree with the largest diameter (that is not in a park) is (or was?) in front of 204 Saint Dunstans Road: 86" across, 60' tall, poor condition marked for removal.
+* The next-largest-diameter tree (not in a park) is in a forest front of 5606 Wildwood Lane: 72" across, 60' tall, fair condition
+* There's a tree almost as large as the one on Wildwood Lane (70" across, 60' tall) behind 6151 Metro Dr that would probably be easier to get a picture of, though I couldn't find it for certain on G Maps.
+
+#### Broadway East
+* 386 trees
+* Largest-diameter tree in Broadway East (that's not in a park) has a 33" trunk and is 50' tall (1600 North Washington Street). It is in "good" condition. This tree is huge for this area, where most tree trunks are just a few inches across. But it would be middling in Roland Park (see below).
+* The tallest tree is 55' tall and 24" across, on the side of 1420 N. Milton Ave. "Good" condition.
+* The largest (height and width) poor condition tree is on the side of 1746 E. Lafayette Ave: 30" wide, 45' tall.
+
+#### Roland Park
+* 2,910 trees
+* In RP, 146 trees have trunks of the Broadway East's largest size or larger.
+* Three dozen have trunks of 40 inches across or more.
+* The largest-diameter tree in Roland Park is 68 inches across (3901 Beech Ave). It is in "fair" condition.
+
+#### Baltimore Highlands
+* 411 trees
+* Many larger trees along Roberts Place road
+* Trees on Conkling, Esther and Dean are likely to be park trees.
+* The tallest non-park tree in BH is on 3600 Pulaski Hwy: 40' tall, fair condition, 33.8" diameter, in well/pit.
+* The largest-diameter tree in BH is alegedly a 41" multi-stem 30' tree in an open/unrestricted space on 3800 E Lombard St, but nothing on Google Maps matches that description. Worth checking out but it's a semi-industrial area.
+* 3525 E Fayette St: Poor condition 25' tree scheduled for removal due to "mechanical damage," "poor root system."
+* 4001 E Lombard St: Poor condition 20' tree scheduled for removal due to "mechanical damage."
+
+#### Patterson Place
+* 240 trees
+* The largest (diameter and height) tree in PP in poor condition is a tree in front of 2400 E Baltimore St: 14.4" diameter, 45' tall, poor condition.
+* Another large tree, in fair condition, is on the side of the same building (possibly on N. Montford).
+* The south end of Montford has a number of PP's larger trees.
+* Sad-looking 40' tree at 114 N. Milton Ave marked "poor," "priority prune." (It's marked well/pit but looks like a planter/raised-bed on G Maps.)
+  
+#### McElderry Park
+* 751 trees
+* Tallest: front of 510 N Milton Ave, 45' tall, 14.4" across, "good" condition
+* Widest: side of 2711 Jefferson St, 32.2" wide, 40' tall, "fair" condition
+
+#### Madison East End
+* 451 trees
+* Tallest: front of 912 N Lakewood Ave, 40' tall, 17.6" across, "good" condition
+* Widest: side of 3021 E Madison St, 23.8" across, 40' tall, "poor" condition
+  
 
 ## Tree Height / Diameter
 
