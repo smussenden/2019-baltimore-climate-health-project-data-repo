@@ -9,6 +9,7 @@
 ## install.packages("janitor")
 
 library(tidyverse)
+require(scales) # For percent labeling on distribution tables
 #library(readxl)
 #library(janitor)
 #library(magrittr)
@@ -408,7 +409,8 @@ ggplot() +
   labs(title = "Distribution of Tree Diameter, Target NSAs (yellow) vs. Top 15 (blue)",
        x = "Tree Diameter in Inches",
        y = "") +
-  xlim(NA, 50) 
+  xlim(NA, 50) +
+  scale_y_continuous(labels = percent)
   
 # Save to file
 ggsave(filename = "diameter_distro_comparative_nsas.png", 
@@ -445,8 +447,9 @@ ggplot() +
   labs(title = "Distribution of Tree Diameter, Target NSAs (yellow) vs. Top 15 (blue)",
        x = "Tree Diameter in Inches",
        y = "") +
-  xlim(NA, 90) 
-  
+  xlim(NA, 90) +
+  scale_y_continuous(labels = percent)
+
 # Save to file
 ggsave(filename = "height_distro_comparative_nsas.png", 
        device = "png", path = "data/output-data/street-tree-analyses/plots/height-diameter")
