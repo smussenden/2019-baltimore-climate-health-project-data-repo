@@ -344,7 +344,7 @@ ggplot(filter(street_trees_categorized,
 ggsave(filename = "height_distro_target_nsas.png", 
        device = "png", path = "data/output-data/street-tree-analyses/plots/height-diameter")
 
-# DISTRIBUTION histograms showing DIAMETER of TOP 15 nsas
+# DISTRIBUTION histograms showing HEIGHT of TOP 15 nsas
 street_trees_categorized %>%
   filter((has_live_tree == T)) %>%
   select(nbrdesc, tree_ht) %>%
@@ -372,6 +372,43 @@ street_trees_categorized %>%
  # Save to file
 ggsave(filename = "height_distro_top15_nsas.png", 
        device = "png", path = "data/output-data/street-tree-analyses/plots/height-diameter")
+
+
+
+
+
+# DISTRIBUTION line showing DIAMETER of TOP 15 nsas
+wk <- street_trees_categorized %>%
+  filter((has_live_tree == T)) %>%
+  select(nbrdesc, dbh) %>%
+  # Filter by X NSAs with the largest average diameter trees and at least Y trees
+  right_join(street_trees_categorized %>%
+               filter(has_live_tree == T) %>%
+               select(nbrdesc, dbh, has_live_tree) %>%
+               group_by(nbrdesc) %>%
+               summarize(med_dbh = median(dbh),
+                         num_trees = sum(has_live_tree)) %>%
+               arrange(desc(med_dbh)) %>%
+               # At least Y trees
+               filter(num_trees >= 50) %>%
+               # Top X by average diameter
+               top_n(15)
+  )
+
+ggplot() +
+  # Top 15 NSAs
+  geom_density(data = wk, 
+               aes(x = dbh),
+               color = "#00FF00") +
+  xlim(NA, 50) +
+  # Target NSAs
+  geom_density(data = filter(street_trees_categorized, (is_target_nsa == T) & (has_live_tree == T)), 
+               aes(x = dbh),
+               color = "#FF0000") +
+  labs(title = "Distribution of Tree Diameter",
+       x = "Tree Diameter in Inches",
+       y = "")
+  
 
 
 ###################################
