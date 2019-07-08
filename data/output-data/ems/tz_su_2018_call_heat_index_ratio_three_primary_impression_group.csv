@@ -1,0 +1,31 @@
+primary_impression_group,not_unsafe_under_79,all_caution_80_102,all_danger_103_plus
+Altered Level of Consciousness,230,120.7,NA
+Asthma,115,134.11111111111111,NA
+Behavioral/Psychiatric Disorder,76.66666666666667,75.4375,53
+Cardiac Arrest,920,301.75,53
+Cardiac Rhythm Disturbance,460,1207,NA
+Chest Pain - STEMI,NA,1207,NA
+Chest Pain/Discomfort,57.5,50.291666666666664,53
+CHF (Congestive Heart Failure),460,402.3333333333333,NA
+COPD (Emphysema/Chronic Bronchitis),306.6666666666667,109.72727272727273,53
+Dehydration,460,1207,53
+Diabetic Hyperglycemia,306.6666666666667,201.16666666666666,NA
+Diabetic Hypoglycemia,230,241.4,NA
+Dizziness / Vertigo,920,603.5,NA
+End Stage Renal Disease,920,NA,NA
+ETOH Abuse,131.42857142857142,86.21428571428571,26.5
+Flu-like Illness,NA,301.75,NA
+Heat Exhaustion/Heat Stroke,NA,603.5,53
+Hyperkalemia,920,NA,NA
+Hypertension,153.33333333333334,603.5,53
+Hypotension,230,1207,NA
+Obvious Death,920,1207,53
+Other Cardiovascular Problem,NA,1207,NA
+Respiratory Distress,230,134.11111111111111,NA
+Seizure,102.22222222222223,57.476190476190474,53
+Stroke/CVA,920,150.875,NA
+Substance/Drug Abuse,153.33333333333334,86.21428571428571,NA
+Syncope/Fainting,306.6666666666667,301.75,NA
+Unconscious,230,402.3333333333333,NA
+Withdrawal/Overdose Drugs,54.11764705882353,57.476190476190474,17.666666666666668
+Withdrawal/Overdose ETOH,460,150.875,10.6
