@@ -50,7 +50,11 @@ _Click to enlarge_
 
 | Top 15 Diameter Distribution | Target NSA Diameter Distribution |
 | ------ | -------- |
-| <img src="https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/data/output-data/street-tree-analyses/plots/height-diameter/tree_count_distro_top15_nsas.png?raw=true" alt="Tree Diameter Top 15" width="500"/> | <img src="https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/data/output-data/street-tree-analyses/plots/height-diameter/tree_count_distro_target_nsas.png?raw=true" alt="Tree Diameter Target NSAs" width="500"/>
+| <img src="https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/data/output-data/street-tree-analyses/plots/height-diameter/diameter_distro_top15_nsas.png?raw=true" alt="Tree Diameter Top 15" width="500"/> | <img src="https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/data/output-data/street-tree-analyses/plots/height-diameter/diameter_distro_target_nsas.png?raw=true" alt="Tree Diameter Target NSAs" width="500"/>
+
+| Top 15 Height Distribution | Target NSA Height Distribution |
+| ------ | -------- |
+| <img src="https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/data/output-data/street-tree-analyses/plots/height-diameter/height_distro_top15_nsas.png?raw=true" alt="Tree Diameter Top 15" width="500"/> | <img src="https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/data/output-data/street-tree-analyses/plots/height-diameter/height_distro_target_nsas.png?raw=true" alt="Tree Diameter Target NSAs" width="500"/>
 
 <img src="https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/data/output-data/street-tree-analyses/plots/height-diameter/perc_young_all_nsas.png?raw=true" alt="NSAs Ranked by Percent of Young Trees" width="500"/>
 

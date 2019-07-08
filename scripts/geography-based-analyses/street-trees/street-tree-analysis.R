@@ -263,6 +263,10 @@ ggsave(filename = "tree_count_all_nsas.png",
        device = "png", path = "data/output-data/street-tree-analyses/plots/tree-count",
        width = 6, height = 19, units = "in")
 
+#########################
+### Height / Diameter ###
+#########################
+
 ### Some quick calculations comparing the targets to citywide
 # Compare DIAMETER and MEAN of ALL nsas (minus those with fewer than 50 trees)...
 master_street_tree_summaries %>%
@@ -276,7 +280,7 @@ master_street_tree_summaries %>%
   summarise(diam_median = median(avg_diam),
             diam_mean = mean(avg_diam))
 
-# Distribution histograms showing HEIGHT of TARGET nsas
+# DISTRIBUTION histograms showing DIAMETER of TARGET nsas
 ggplot(filter(street_trees_categorized, 
                 (is_target_nsa == T) & 
                 (has_live_tree == T)
@@ -289,10 +293,10 @@ ggplot(filter(street_trees_categorized,
   xlim(NA, 30)
 
 # Save to file
-ggsave(filename = "tree_count_distro_target_nsas.png", 
+ggsave(filename = "diameter_distro_target_nsas.png", 
        device = "png", path = "data/output-data/street-tree-analyses/plots/height-diameter")
 
-# Distribution histograms showing HEIGHT of TOP 15 nsas
+# DISTRIBUTION histograms showing DIAMETER of TOP 15 nsas
 street_trees_categorized %>%
   filter((has_live_tree == T)) %>%
   select(nbrdesc, dbh) %>%
@@ -318,8 +322,61 @@ street_trees_categorized %>%
   xlim(NA, 30)
 
 # Save to file
-ggsave(filename = "tree_count_distro_top15_nsas.png", 
+ggsave(filename = "diameter_distro_top15_nsas.png", 
        device = "png", path = "data/output-data/street-tree-analyses/plots/height-diameter")
+
+
+
+
+# DISTRIBUTION histograms showing HEIGHT of TARGET nsas
+ggplot(filter(street_trees_categorized, 
+              (is_target_nsa == T) & 
+                (has_live_tree == T)
+)) +
+  geom_histogram(aes(x = tree_ht, fill = "nbrdesc"), binwidth = 3, show.legend = FALSE) +
+  facet_wrap(~nbrdesc, scales = "free", nrow = 3) +
+  labs(title = "Distribution of Tree Height Among Target Neighborhoods",
+       x = "Tree Height in Inches",
+       y = "") +
+  xlim(NA, 100)
+
+# Save to file
+ggsave(filename = "height_distro_target_nsas.png", 
+       device = "png", path = "data/output-data/street-tree-analyses/plots/height-diameter")
+
+# DISTRIBUTION histograms showing DIAMETER of TOP 15 nsas
+street_trees_categorized %>%
+  filter((has_live_tree == T)) %>%
+  select(nbrdesc, tree_ht) %>%
+  # Filter by X NSAs with the largest average height trees and at least Y trees
+  right_join(street_trees_categorized %>%
+               filter(has_live_tree == T) %>%
+               select(nbrdesc, tree_ht, has_live_tree) %>%
+               group_by(nbrdesc) %>%
+               summarize(med_tree_ht = median(tree_ht),
+                         num_trees = sum(has_live_tree)) %>%
+               arrange(desc(med_tree_ht)) %>%
+               # At least Y trees
+               filter(num_trees >= 50) %>%
+               # Top X by average diameter
+               top_n(15)
+  ) %>%
+  ggplot() +
+  geom_histogram(aes(x = tree_ht, fill = "nbrdesc"), binwidth = 3, show.legend = FALSE) +
+  facet_wrap(~nbrdesc, scales = "free", nrow = 3) +
+  labs(title = "Distribution of Tree Height Among Neighborhoods With Largest Trees",
+       x = "Tree Height in Inches",
+       y = "") +
+  xlim(NA, 100)
+
+ # Save to file
+ggsave(filename = "height_distro_top15_nsas.png", 
+       device = "png", path = "data/output-data/street-tree-analyses/plots/height-diameter")
+
+
+###################################
+### Distribution of young trees ###
+###################################
 
 # What percent of live trees are young in target nsas?
 wk <- street_trees_categorized %>%
