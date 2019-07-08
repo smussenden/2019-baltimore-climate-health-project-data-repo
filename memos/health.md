@@ -79,7 +79,10 @@ The numbers below reflect this calls per hour statistic.
 
 ### EMS Analysis - Findings
 
-We first examined EMS calls during the summer of 2018 (June 21 to September 20) to see how calls varied by temperature within a single season.
+We first examined EMS calls during the summer of 2018 (June 21 to September 20) to see how calls varied by temperature within a single season.  In the heat index danger zone, asthma calls happen at a rate of one every 2.4 hours, up from one every 3.2 hours when it's under 80 degrees. COPD shows a similar increase, from a call every 4.6 hours when it's under 80 degrees to a call every 3.3 hours when it's over 103 degrees. 
+
+Behavioral/Psychiatric disorder calls are also more common, at a rate of one call per hour in the danger zone, compared with a call every 1.7 hours when it's under 80 degrees. Heat exhaustion/Heat stroke shows the biggest change, from one call every four days on average (102.2 hours) to one call every 2.5 hours. 
+
 
 Most Notable Increases
 Heat Exhaustion/Heat Stroke	102.222222	29.071429	6.140625	2.6500000
