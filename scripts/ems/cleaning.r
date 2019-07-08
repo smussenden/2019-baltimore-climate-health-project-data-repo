@@ -58,7 +58,7 @@ EMS_all <- EMS_all %>%
            destination_patient_disposition != "No Patient Found" &
            destination_patient_disposition != "Cancelled en Route/On Arrival" &
            destination_patient_disposition != "Cancelled Prior to Response" &
-           # destination_patient_disposition != "Provided ALS personnel to scene, no transport" &
+           destination_patient_disposition != "Provided ALS personnel to scene, no transport" &
            destination_patient_disposition != "Standby Only - No Patient Contacts" &
            destination_patient_disposition != "Cancelled On Arrival" &
            destination_patient_disposition != "Operational Support Provided Only")
@@ -141,8 +141,8 @@ temp_data <- temp_data %>%
 #  group_by(year(DATETIME)) %>%
 #  summarise(count = n())
 
-# DMH Round temperature
- temp_data <- temp_data %>%
+# Round temperature
+temp_data <- temp_data %>%
    mutate(TEMPERATURE = round(as.numeric(TEMPERATURE),0))
 
 # Take out inconsistent values that don't match our 54 method. 
@@ -150,6 +150,11 @@ temp_data <- temp_data %>%
   filter(str_detect(temp_time, ":54")) %>%
   filter(TEMPERATURE != 1) %>%
   distinct()
+
+# Filter dates to match our EMS call data 
+
+temp_data <- temp_data %>%
+  filter(DATETIME >= date("2014-01-1") & DATETIME <= ("2018-11-30"))
 
 ############################################
 # Merge Temperature/Heat Index & EMS Data ##
@@ -294,7 +299,6 @@ full_data <- full_data %>%
   )
   )
 
-
 #### Heat Index Buckets #######
 
 # Create a heat index bucket in main data set, one bucket per 10 degree block and a column so we can sort by heat_index_bucket nicely.
@@ -372,20 +376,19 @@ full_data <- full_data %>%
   )
 
 ##############################################################################
-########### RUN THESE TO JUST FILTER FOR SUMMER ###########################
+########### RUN THESE TO JUST FILTER FOR SUMMER 2018 #########################
 ##############################################################################
 # IF RUN THESE, SKIP DOWN TO SECOND SET OF CREATE MATRIXES
 
 full_data <- full_data %>%
   mutate(year = year(datetime)) %>%
   mutate(month = month(datetime)) %>%
-  filter(datetime >= date("2018-06-21") & datetime <= ("2018-09-21") )
+  filter(datetime >= date("2018-06-21") & datetime <= ("2018-09-21"))
 
 temp_data <- temp_data %>%
   mutate(year = year(DATETIME)) %>%
   mutate(month = month(DATETIME)) %>%
   filter(DATETIME >= date("2018-06-21") & DATETIME <= ("2018-09-20") )
-
 
 ##############################################################################
 ########### RUN THESE JUST TO JUST FILTER FOR TARGET ZIPS ####################
