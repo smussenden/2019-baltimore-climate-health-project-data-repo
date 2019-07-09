@@ -608,7 +608,7 @@ ggsave(filename = "prop_condition_top15_nsas.png",
        device = "png", path = "data/output-data/street-tree-analyses/plots/condition")
 
 # Find rankings of PERC GOOD
-# wk (ln 393) is already filtered for only live trees and nsas with fewer than 50 trees
+# wk (ln 530) is already filtered for only live trees and nsas with fewer than 50 trees
 good_ranking <- wk %>% 
   # 1. Find count at each condition
   select(nbrdesc, condition) %>%
@@ -661,6 +661,64 @@ ggplot(good_ranking,
 ggsave(filename = "condition_good_all_nsas.png", 
        device = "png", path = "data/output-data/street-tree-analyses/plots/condition",
        width = 6, height = 19, units = "in")
+
+
+
+# Find rankings of PERC POOR
+# wk (ln 530) is already filtered for only live trees and nsas with fewer than 50 trees
+poor_ranking <- wk %>% 
+  # 1. Find count at each condition
+  select(nbrdesc, condition) %>%
+  group_by(nbrdesc, condition) %>%
+  summarize(num_condition = n()) %>%
+  # 2. Find total live trees 
+  left_join(street_trees_categorized %>% 
+              filter((has_live_tree == T), dbh > 6) %>%
+              select(nbrdesc) %>%
+              group_by(nbrdesc) %>%
+              dplyr::summarize(num_live = n()) %>%
+              select(nbrdesc, num_live)) %>%
+  # 3. Find percent of condition to live
+  mutate(perc_condition = round(100*(num_condition/num_live), 2)) %>%
+  # 4. Drop cconditions that aren't "good"
+  filter(condition == "poor") %>%
+  dplyr::rename(perc_poor = perc_condition,
+                num_poor = num_condition) %>%
+  # 5. Arrange and rank
+  select(nbrdesc, num_poor, perc_poor) %>%
+  arrange(desc(perc_poor)) %>%
+  ungroup %>%
+  dplyr::mutate(perc_poor_rank = rank(desc(perc_poor), na.last = "keep", ties.method = "first")) %>%
+  # 6. Add whether target nsa
+  mutate(is_target_nsa = case_when(
+    nbrdesc %in% target_nsas ~ T,
+    TRUE ~ F 
+  ))
+
+# PERCENT of GOOD condition trees
+ggplot(poor_ranking, 
+       aes(x = reorder(nbrdesc, perc_poor), 
+           y = perc_poor, 
+           fill = factor(is_target_nsa, 
+                         # Rename fill levels in legend
+                         labels=c("Not Target NSA"," Target NSA"))
+       )) +
+  geom_col() +
+  coord_flip() +
+  labs(title = "Percent of Live, Older Trees (>6 in) \nin Poor Condition by NSA",
+       x = "",
+       y = "",
+       fill = "") +
+  scale_fill_manual(values=cbPalette) +
+  theme(legend.position = "top")
+
+# Save to file
+ggsave(filename = "condition_poor_all_nsas.png", 
+       device = "png", path = "data/output-data/street-tree-analyses/plots/condition",
+       width = 6, height = 19, units = "in")
+
+
+
 
 ####################################################
 ### Density of "tree removal" (field: mt) by NSA ###

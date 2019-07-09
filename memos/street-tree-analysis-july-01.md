@@ -14,7 +14,9 @@ _INCOMPLETE_
 
 Target neighborhoods range in rank from 22nd (Patterson Park) to 162nd (Patterson Place) for number of trees, and most are in the top 100 for health of trees (Patterson Park, Oliver, CARE, and Broadway East are the only four NSAs ranking below the top 100).
 
-However, most of these trees appear to be new plantings which have not had time to succumb to disease, weather or consequences of poor maintenance. When controled for younger trees, all but two of the target neighborhoods fall into the bottom half for tree condition. The target neighborhoods have significantly higher rates of young trees than others in the city, with most falling in the top 50% for percent of young trees to older trees (based on trunk diameter).
+However, most of these trees appear to be new plantings which have not had time to succumb to disease, weather or consequences of poor maintenance. The target neighborhoods have significantly higher rates of young trees than others in the city, with most falling in the top 50% for percent of young trees to older trees (based on trunk diameter). 
+
+When controled to consider only the condition of younger trees, all but two of the target neighborhoods fall into the bottom half for trees in "good" condition. It should be noted, however, that the target NSAs are evenly distributed across the city in terms of percent of trees in "poor" condition, so most of the disparity rests in the middle condition, "fair."
 
 
 ### Neighborhood Observations / Example trees
@@ -125,6 +127,7 @@ _Click to enlarge_
 | Percent in Good Condition | Proportion of Conditions |
 | --- | --- |
 | <img src="https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/data/output-data/street-tree-analyses/plots/condition/condition_good_all_nsas.png?raw=true" alt="Percent of Live, Older Trees in Good Condition by NSA" width="500"/> | <img src="https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/data/output-data/street-tree-analyses/plots/condition/prop_condition_all_nsas.png?raw=true" alt="Proportional Condition of Live, Older Trees (>6 in) by NSA" width="500"/> |
+| <img src="https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/data/output-data/street-tree-analyses/plots/condition/condition_poor_all_nsas.png?raw=true" alt="Percent of Live, Older Trees in Poor Condition by NSA" width="500"/> | |
 
 A closer look at the proportional conditions of the target NSAs compared to the NSAs with the most trees in good condition:
 
