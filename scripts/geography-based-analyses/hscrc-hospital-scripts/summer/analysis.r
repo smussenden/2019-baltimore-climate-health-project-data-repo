@@ -17,16 +17,6 @@ rm(list=ls())
 ##### Load Hospital Data ########
 #################################
 
-op_er_full_zip_medicaid_test<- op_er_full_zip_medicaid %>%
-  select(zcta, medicaid_hypertension_prev)
-
-#Merge dataframe with demographic/heat information
-merge_demographics_heat_tree <- zcta_not_clipped_balt_city_border_tree_temp_demographics %>%
-  left_join(op_er_full_zip_medicaid_test, by = 'zcta') %>%
-  select(zcta, temp_median_aft, medicaid_hypertension_prev)
-
-plot(merge_demographics_heat_tree$temp_median_aft ~ merge_demographics_heat_tree$medicaid_hypertension_prev)
-
 ip_full_zip <- read_csv("data/output-data/hscrc-hospital-data/data_by_zip/ip/ip_full_zip_demographics_heat.csv")
 ip_full_zip_medicaid <- read_csv("data/output-data/hscrc-hospital-data/data_by_zip/ip/ip_full_medicaid_demographics_heat.csv")
 ip_full_zip_qtr <- read_csv("data/output-data/hscrc-hospital-data/data_by_zip/ip/ip_full_qtr_demographics_heat.csv")
