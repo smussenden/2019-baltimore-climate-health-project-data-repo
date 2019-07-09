@@ -737,13 +737,37 @@ ggsave(filename = "condition_poor_all_nsas.png",
 
 
 
-####################################################
-### Density of "tree removal" (field: mt) by NSA ###
-####################################################
+#######################################################
+### Trees to suitable / unsuitable plantable spaces ###
+#######################################################
 
+street_trees_categorized %>%
+  filter(is_target_nsa == T) %>%
+  select(nbrdesc, difficulty_level) %>%
+  mutate(difficulty_level = if_else(is.na(difficulty_level), "Live", as.character(difficulty_level))) %>%
+  mutate_at(vars(matches("difficulty_level")), as.factor) %>%
+  mutate(difficulty_level = recode(difficulty_level,
+                                   "Live" = "Live Tree",
+                                   "1" = "Easiest to Plant",
+                                   "2" = "Removal Required", 
+                                   "3" = "Must Break Concrete",
+                                   "4" = "Unsuitable")) %>%
+  mutate(difficulty_level = fct_relevel(difficulty_level,
+                                   c("Live Tree",
+                                   "Easiest to Plant",
+                                   "Removal Required", 
+                                   "Must Break Concrete",
+                                   "Unsuitable"))) %>%
+  ggplot() +
+  geom_bar(aes(x = reorder(nbrdesc, difficulty_level == "Live Tree"), 
+               #fill = forcats::fct_rev(difficulty_level)),
+               fill = difficulty_level),
+           position = position_fill(reverse = TRUE)) +
+           #position = "fill") +
+  coord_flip() +
+  labs(title = "Available Tree Spaces by NSA",
+       x = "",
+       y = "",
+       fill = "") +
+  scale_fill_manual(values=cbPalette)
 
-
-###############
-### Above calcs but with parks removed
-###############
-# By street? By loc_type == park?
