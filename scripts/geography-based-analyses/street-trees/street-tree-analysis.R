@@ -444,7 +444,7 @@ ggplot() +
   geom_density(data = filter(street_trees_categorized, (is_target_nsa == T) & (has_live_tree == T)), 
                aes(x = tree_ht),
                color = "#E69F00") +
-  labs(title = "Distribution of Tree Diameter, Target NSAs (yellow) vs. Top 15 (blue)",
+  labs(title = "Distribution of Tree Height, Target NSAs (yellow) vs. Top 15 (blue)",
        x = "Tree Diameter in Inches",
        y = "") +
   xlim(NA, 90) +
