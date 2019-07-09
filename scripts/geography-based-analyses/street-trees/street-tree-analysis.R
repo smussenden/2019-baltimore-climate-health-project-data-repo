@@ -7,9 +7,11 @@
 ## install.packages('tidyverse')
 ## install.packages("corrr")
 ## install.packages("janitor")
+## install.packages("DescTools")
 
 library(tidyverse)
 require(scales) # For percent labeling on distribution tables
+library("DescTools") # For %like% operator
 #library(readxl)
 #library(janitor)
 #library(magrittr)
@@ -94,6 +96,11 @@ master_street_tree_summaries_filtered <- read_csv("data/output-data/street-tree-
 # Quick count
 master_street_tree_summaries %>%
   filter(num_spaces_with_live_trees >= 50) %>%
+  select(nbrdesc) %>%
+  dplyr::summarise(n())
+
+street_trees_categorized %>%
+  filter(notes %like% "%lightning%") %>%
   select(nbrdesc) %>%
   dplyr::summarise(n())
 
@@ -430,7 +437,7 @@ ggsave(filename = "diameter_distro_comparative_nsas.png",
 wk <- street_trees_categorized %>%
   filter((has_live_tree == T) & (loc_type %in% "street")) %>%
   select(nbrdesc, tree_ht) %>%
-  # Filter by X NSAs with the largest average diameter trees and at least Y trees
+  # Filter by X NSAs with the largest average height trees and at least Y trees
   right_join(street_trees_categorized %>%
                filter((has_live_tree == T) & (loc_type %in% "street")) %>%
                select(nbrdesc, tree_ht, has_live_tree) %>%
