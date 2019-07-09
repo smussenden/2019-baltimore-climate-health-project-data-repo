@@ -127,7 +127,11 @@ _Click to enlarge_
 | Percent in Good Condition | Proportion of Conditions |
 | --- | --- |
 | <img src="https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/data/output-data/street-tree-analyses/plots/condition/condition_good_all_nsas.png?raw=true" alt="Percent of Live, Older Trees in Good Condition by NSA" width="500"/> | <img src="https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/data/output-data/street-tree-analyses/plots/condition/prop_condition_all_nsas.png?raw=true" alt="Proportional Condition of Live, Older Trees (>6 in) by NSA" width="500"/> |
-| <img src="https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/data/output-data/street-tree-analyses/plots/condition/condition_poor_all_nsas.png?raw=true" alt="Percent of Live, Older Trees in Poor Condition by NSA" width="500"/> | |
+| <img src="https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/data/output-data/street-tree-analyses/plots/condition/condition_poor_all_nsas.png?raw=true" alt="Percent of Live, Older Trees in Poor Condition by NSA" width="500"/> | 
+| sub table col 1 | sub table col 2 | 
+| --- | --- |
+| data | data |
+|
 
 A closer look at the proportional conditions of the target NSAs compared to the NSAs with the most trees in good condition:
 
