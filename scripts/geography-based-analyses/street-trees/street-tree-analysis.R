@@ -428,11 +428,11 @@ ggsave(filename = "diameter_distro_comparative_nsas.png",
 
 # DISTRIBUTION lines showing HEIGHT compared to TOP 15 nsas
 wk <- street_trees_categorized %>%
-  filter((has_live_tree == T)) %>%
+  filter((has_live_tree == T) & (loc_type %in% "street")) %>%
   select(nbrdesc, tree_ht) %>%
   # Filter by X NSAs with the largest average diameter trees and at least Y trees
   right_join(street_trees_categorized %>%
-               filter(has_live_tree == T) %>%
+               filter((has_live_tree == T) & (loc_type %in% "street")) %>%
                select(nbrdesc, tree_ht, has_live_tree) %>%
                group_by(nbrdesc) %>%
                summarize(med_tree_ht = median(tree_ht),
@@ -450,13 +450,14 @@ ggplot() +
                aes(x = tree_ht),
                color = "#0072B2") +
   # Target NSAs
-  geom_density(data = filter(street_trees_categorized, (is_target_nsa == T) & (has_live_tree == T)), 
+  geom_density(data = filter(street_trees_categorized, (is_target_nsa == T) & (has_live_tree == T) & (loc_type %in% "street")), 
                aes(x = tree_ht),
                color = "#E69F00") +
   labs(title = "Distribution of Tree Height, Target NSAs (yellow) vs. Top 15 (blue)",
        x = "Tree Diameter in Inches",
        y = "") +
   xlim(NA, 90) +
+  geom_text(aes(x = x, y = y, label = label), data = label, vjust = "top", hjust = "right") +
   scale_y_continuous(labels = percent)
 
 # Save to file
