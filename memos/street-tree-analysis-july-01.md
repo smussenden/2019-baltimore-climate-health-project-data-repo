@@ -14,7 +14,7 @@ _INCOMPLETE_
 
 Target neighborhoods range in rank from 22nd (Patterson Park) to 162nd (Patterson Place) for number of trees, and most are in the top 100 for health of trees (Patterson Park, Oliver, CARE, and Broadway East are the only four NSAs ranking below the top 100).
 
-However, most of these trees appear to be new plantings which have not had time to succumb to disease, weather or consequences of poor maintenance.
+However, most of these trees appear to be new plantings which have not had time to succumb to disease, weather or consequences of poor maintenance. When controled for younger trees, all but two of the target neighborhoods fall into the bottom half for tree condition. The target neighborhoods have significantly higher rates of young trees than others in the city, with most falling in the top 50% for percent of young trees to older trees (based on trunk diameter).
 
 
 ### Neighborhood Observations / Example trees
@@ -31,7 +31,7 @@ However, most of these trees appear to be new plantings which have not had time 
 * 303 non-park trees (21%; difference: 83)
 * Largest-diameter tree in Broadway East (that's not in a park) has a 33" trunk and is 50' tall (1600 North Washington Street). It is in "good" condition. This tree is huge for this area, where most tree trunks are just a few inches across. But it would be middling in Roland Park (see below).
 * The tallest tree is 55' tall and 24" across, on the side of 1420 N. Milton Ave. "Good" condition.
-* The largest (height and width) poor condition tree is on the side of 1746 E. Lafayette Ave: 30" wide, 45' tall.
+* The largest (height and width) poor-condition tree is on the side of 1746 E. Lafayette Ave: 30" wide, 45' tall.
 
 #### Roland Park
 * 2,910 trees
@@ -82,7 +82,7 @@ _Click to enlarge_
 | ------ | -------- |
 | <img src="https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/data/output-data/street-tree-analyses/plots/height-diameter/avg_tree_height_all_nsas.png?raw=true" alt="Average Tree Height in All NSAs" width="350"/> | <img src="https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/data/output-data/street-tree-analyses/plots/height-diameter/avg_tree_diameter_all_nsas.png?raw=true" alt="Average Tree Diameter in All NSAs" width="350"/>
 
-Three of the top 5 areas for both tallest trees and largest tree diameter are counterpoint neighborhoods. The same NSAs populate both groups; only the order is changed.
+When considering only neighborhoods of interest, three of the top 5 areas for both tallest trees and largest tree diameter are counterpoint neighborhoods. The same NSAs populate both groups; only the order is changed.
 
 | The 5 NSAs of interest with the tallest trees are: | The 5 NSAs of interest with the largest tree diameter are: |
 | -------------------------------------- | ---------------------------------------------- |
