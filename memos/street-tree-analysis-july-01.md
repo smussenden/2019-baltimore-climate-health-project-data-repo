@@ -122,12 +122,14 @@ _Click to enlarge_
 
 Most target neighborhoods are in the bottom half for percent of trees in good condition when controled for older trees (>6 inch diameter trunk), though Upper Fells Point and Patterson Park Neighborhood are ranked at 24 and 61, respectively.
 
+However, target NSAs are distributed equally among other neighborhoods for percent of trees in poor condition.
+
 _Click to enlarge_ 
 
 | Percent in Good Condition | Proportion of Conditions |
 | --- | --- |
 | <img src="https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/data/output-data/street-tree-analyses/plots/condition/condition_good_all_nsas.png?raw=true" alt="Percent of Live, Older Trees in Good Condition by NSA" width="500"/> | <img src="https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/data/output-data/street-tree-analyses/plots/condition/prop_condition_all_nsas.png?raw=true" alt="Proportional Condition of Live, Older Trees (>6 in) by NSA" width="500"/> |
-| <img src="https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/data/output-data/street-tree-analyses/plots/condition/condition_poor_all_nsas.png?raw=true" alt="Percent of Live, Older Trees in Poor Condition by NSA" width="500"/> | **Target NSAs arranged in order of count of poor-condition/good-condition, older trees:**<br>  1 oliver: 64 / 181<br>2 broadway east: 45 / 93<br>3 ellwood park/monument: 33 / 70<br>4 mcelderry park: 25 / 117<br>5 upper fells point: 23 / 360<br>6 care: 20 / 48<br>7 patterson park neighborhood: 20 / 263<br>8 baltimore highlands: 19 / 44<br>9 highlandtown: 18 / 129<br>10 berea: 14 / 75<br>11 madison-eastend: 14 / 41<br>12 middle east: 12 / 84<br>13 patterson place: 12 / 65<br>14 biddle street: 5 / 59<br>15 milton-montford: 3 / 29 |
+| <img src="https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/data/output-data/street-tree-analyses/plots/condition/condition_poor_all_nsas.png?raw=true" alt="Percent of Live, Older Trees in Poor Condition by NSA" width="500"/> | **Target NSAs arranged in order of count of older, poor-condition / good-condition trees:**<br>  1 oliver: 64 / 181<br>2 broadway east: 45 / 93<br>3 ellwood park/monument: 33 / 70<br>4 mcelderry park: 25 / 117<br>5 upper fells point: 23 / 360<br>6 care: 20 / 48<br>7 patterson park neighborhood: 20 / 263<br>8 baltimore highlands: 19 / 44<br>9 highlandtown: 18 / 129<br>10 berea: 14 / 75<br>11 madison-eastend: 14 / 41<br>12 middle east: 12 / 84<br>13 patterson place: 12 / 65<br>14 biddle street: 5 / 59<br>15 milton-montford: 3 / 29 |
 
 A closer look at the proportional conditions of the target NSAs compared to the NSAs with the most trees in good condition:
 

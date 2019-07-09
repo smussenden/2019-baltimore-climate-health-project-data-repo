@@ -104,9 +104,11 @@ street_trees_categorized %>%
 # Quick count at a value
 street_trees_categorized %>%
   right_join(master_street_tree_summaries %>% filter(num_spaces_with_live_trees >= 50)) %>%
-  filter(dbh >= 40, nbrdesc %in% "roland park") %>%
+  filter(dbh >= 6, is_target_nsa == T, condition == "good") %>%
   select(nbrdesc) %>%
-  dplyr::summarise(n())
+  #group_by(nbrdesc) %>%
+  dplyr::summarise(n = n()) %>%
+  arrange(desc(n))
 
 # Create a temp working table to consistently overwrite without messing up loaded table
 wk <- street_trees_categorized
@@ -381,11 +383,11 @@ ggsave(filename = "height_distro_top15_nsas.png",
 
 # DISTRIBUTION lines showing DIAMETER compared to TOP 15 nsas
 wk <- street_trees_categorized %>%
-  filter((has_live_tree == T)) %>%
+  filter((has_live_tree == T) & (loc_type %in% "street")) %>%
   select(nbrdesc, dbh) %>%
   # Filter by X NSAs with the largest average diameter trees and at least Y trees
   right_join(street_trees_categorized %>%
-               filter(has_live_tree == T) %>%
+               filter((has_live_tree == T) & (loc_type %in% "street")) %>%
                select(nbrdesc, dbh, has_live_tree) %>%
                group_by(nbrdesc) %>%
                summarize(med_dbh = median(dbh),
@@ -397,19 +399,26 @@ wk <- street_trees_categorized %>%
                top_n(15)
   )
 
+label <- tibble(
+  x = Inf,
+  y = Inf,
+  label = "Park trees were excluded \nfrom these calculations."
+)
+
 ggplot() +
   # Top 15 NSAs
   geom_density(data = wk, 
                aes(x = dbh),
                color = "#0072B2")+
   # Target NSAs
-  geom_density(data = filter(street_trees_categorized, (is_target_nsa == T) & (has_live_tree == T)), 
+  geom_density(data = filter(street_trees_categorized, (is_target_nsa == T) & (has_live_tree == T) & (loc_type %in% "street")), 
                aes(x = dbh),
                color = "#E69F00") +
   labs(title = "Distribution of Tree Diameter, Target NSAs (yellow) vs. Top 15 (blue)",
        x = "Tree Diameter in Inches",
        y = "") +
   xlim(NA, 50) +
+  geom_text(aes(x = x, y = y, label = label), data = label, vjust = "top", hjust = "right") +
   scale_y_continuous(labels = percent)
   
 # Save to file
