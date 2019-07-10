@@ -907,7 +907,6 @@ ggsave(filename = "perc_suitable_all_nsas.png",
   
  
 # Plot UNSUITABLE spaces as percent of EMPTY spaces
-# master_street_tree_summaries$perc_of_nontreed_are_suitable
 master_street_tree_summaries %>%
   select(nbrdesc, perc_of_nontreed_are_suitable, is_target_nsa) %>%
   mutate(perc_of_nontreed_not_suitable = 100 - perc_of_nontreed_are_suitable) %>%
@@ -929,7 +928,39 @@ ggsave(filename = "perc_unsuitable_all_nsas.png",
        width = 6, height = 19, units = "in")
 
 
+# Plot easy/hard/hardest plantable spaces
+street_trees_categorized %>%
+  # Filter out trees and unknowns
+  filter(!is.na(difficulty_level) & (!is.na(nbrdesc)) & (difficulty_level_char != "0")) %>% 
+  # Select name, diff level (num and char), is_target_nsa
+  select(nbrdesc, difficulty_level, difficulty_level_char, is_target_nsa) %>%
+  mutate(color = ifelse(is_target_nsa == T, "#D55E00", "#999999")) %>%
+  # At this point, table is still organized by nbrdesc alphabetical order
+  # Begin plot
+  ggplot() +
+  geom_bar(aes(
+    # Set the X axis to nbrdesc...
+    x = reorder(nbrdesc, 
+                # ...ordered by the percent that is Easiest to Plant
+                difficulty_level_char == "Easiest to Plant"),
+    # Make the plot a stacked proportion bar
+    fill = difficulty_level_char),
+    # Horizontally flip the bar fills
+    position = position_fill(reverse = TRUE)
+  ) +
+  # Vertically flip the x and y axes
+  coord_flip() +
+  # Set the colors to a colorblind-friendly palette
+  scale_fill_manual(values=cbPalette) +
+  # Define position and content of legends and labels
+  theme(legend.position = "top") +
+  labs(title = "",
+       x = "",
+       y = "",
+       fill = "")
 
-
- 
+# Save to file
+ggsave(filename = "spaces_difficulty_all_nsas.png", 
+       device = "png", path = "data/output-data/street-tree-analyses/plots/plantable-spaces",
+       width = 6, height = 19, units = "in")
 
