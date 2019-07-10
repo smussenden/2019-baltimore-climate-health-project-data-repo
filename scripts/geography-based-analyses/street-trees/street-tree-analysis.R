@@ -772,23 +772,22 @@ ggsave(filename = "condition_poor_all_nsas.png",
 street_trees_categorized %>%
   select(nbrdesc, difficulty_level, difficulty_level_char, is_target_nsa) %>%
   filter((!is.na(nbrdesc)) & (difficulty_level_char != "0")) %>%
-  #filter(is_target_nsa == T) %>%
+  filter(is_target_nsa == T) %>%
   ggplot() +
   geom_bar(aes(x = reorder(nbrdesc, difficulty_level_char == "Easiest to Plant"), 
                #fill = forcats::fct_rev(difficulty_level)),
                fill = difficulty_level_char),
            position = position_fill(reverse = TRUE)) +
   coord_flip() +
-  labs(title = "Available Tree Spaces by NSA",
+  labs(title = "Available Tree Spaces by NSA Ordered by Number of \"Easiest to Plant\" Spaces",
        x = "",
        y = "",
        fill = "") +
   scale_fill_manual(values=cbPalette)
 
 # Save to file
-ggsave(filename = "plantable_spaces_all_nsas.png", 
-       device = "png", path = "data/output-data/street-tree-analyses/plots/plantable_spaces",
-       width = 6, height = 19, units = "in")
+ggsave(filename = "plantable_spaces_diff_target_nsas.png", 
+       device = "png", path = "data/output-data/street-tree-analyses/plots/plantable-spaces")
 
 
 # Plot LIVE TREES to empty, SUITABLE spaces
@@ -818,7 +817,7 @@ street_trees_categorized %>%
 
 # Save to file
 ggsave(filename = "trees_to_suitable_all_nsas.png", 
-       device = "png", path = "data/output-data/street-tree-analyses/plots/plantable_spaces",
+       device = "png", path = "data/output-data/street-tree-analyses/plots/plantable-spaces",
        width = 6, height = 19, units = "in")
 
 
@@ -849,7 +848,7 @@ street_trees_categorized %>%
 
 # Save to file
 ggsave(filename = "trees_to_unsuitable_all_nsas.png", 
-       device = "png", path = "data/output-data/street-tree-analyses/plots/plantable_spaces",
+       device = "png", path = "data/output-data/street-tree-analyses/plots/plantable-spaces",
        width = 6, height = 19, units = "in")
 
 
@@ -880,7 +879,7 @@ street_trees_categorized %>%
 
 # Save to file
 ggsave(filename = "suitable_to_unsuitable_all_nsas.png", 
-       device = "png", path = "data/output-data/street-tree-analyses/plots/plantable_spaces",
+       device = "png", path = "data/output-data/street-tree-analyses/plots/plantable-spaces",
        width = 6, height = 19, units = "in")
 
 
@@ -902,7 +901,7 @@ master_street_tree_summaries %>%
 
 # Save to file
 ggsave(filename = "perc_suitable_all_nsas.png", 
-       device = "png", path = "data/output-data/street-tree-analyses/plots/plantable_spaces",
+       device = "png", path = "data/output-data/street-tree-analyses/plots/plantable-spaces",
        width = 6, height = 19, units = "in")
   
  
@@ -924,7 +923,7 @@ master_street_tree_summaries %>%
 
 # Save to file
 ggsave(filename = "perc_unsuitable_all_nsas.png", 
-       device = "png", path = "data/output-data/street-tree-analyses/plots/plantable_spaces",
+       device = "png", path = "data/output-data/street-tree-analyses/plots/plantable-spaces",
        width = 6, height = 19, units = "in")
 
 
@@ -962,7 +961,7 @@ street_trees_categorized %>%
 # Save to file
 ggsave(filename = "spaces_difficulty_all_nsas.png", 
        device = "png", path = "data/output-data/street-tree-analyses/plots/plantable-spaces",
-       width = 6, height = 19, units = "in")
+       width = 7, height = 19, units = "in")
 
 
 # Plot PERCENT of UNTREED areas are EASY TO PLANT by nsa
@@ -981,7 +980,7 @@ master_street_tree_summaries %>%
     scale_fill_manual(values=cbPalette) +
   # Define position and content of legends and labels
   theme(legend.position = "top") +
-  labs(title = "Percent of Untreed Areas That Are Easy to Plant",
+  labs(title = "Percent of Untreed Areas \nEasy to Plant",
        x = "",
        y = "",
        fill = "")
@@ -1004,7 +1003,7 @@ master_street_tree_summaries %>%
     )
     ) +
     coord_flip() +
-    labs(title = "Percent of Untreed Areas That Are Easy-Moderate to Plant",
+    labs(title = "Percent of Untreed Areas \nEasy-Moderate to Plant",
          x = "Neighborhood Statistical Area",
          y = "",
          fill = "") +
