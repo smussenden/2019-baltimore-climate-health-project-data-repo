@@ -964,3 +964,53 @@ ggsave(filename = "spaces_difficulty_all_nsas.png",
        device = "png", path = "data/output-data/street-tree-analyses/plots/plantable-spaces",
        width = 6, height = 19, units = "in")
 
+
+# Plot PERCENT of UNTREED areas are EASY TO PLANT by nsa
+master_street_tree_summaries %>%
+  # Filter out trees and unknowns
+  filter(!is.na(perc_of_nontreed_easy) & (!is.na(nbrdesc))) %>%
+  ggplot() +
+    geom_col(aes(x = reorder(nbrdesc, perc_of_nontreed_easy), 
+                 y = perc_of_nontreed_easy, 
+                 fill = factor(is_target_nsa, 
+                               # Rename fill levels in legend
+                               labels=c("Counterpoint NSA"," Target NSA"))
+    )
+    ) +
+    coord_flip() +
+    scale_fill_manual(values=cbPalette) +
+  # Define position and content of legends and labels
+  theme(legend.position = "top") +
+  labs(title = "Percent of Untreed Areas That Are Easy to Plant",
+       x = "",
+       y = "",
+       fill = "")
+# Save to file
+ggsave(filename = "perc_easy_to_tree.png", 
+       device = "png", path = "data/output-data/street-tree-analyses/plots/plantable-spaces",
+       width = 6, height = 19, units = "in")
+
+
+# Plot PERCENT of UNTREED areas are EASY OR MODERATE TO PLANT by nsa
+master_street_tree_summaries %>%
+  # Filter out trees and unknowns
+  filter(!is.na(perc_of_nontreed_easy) & (!is.na(nbrdesc))) %>%
+  ggplot() +
+    geom_col(aes(x = reorder(nbrdesc, perc_easy_or_moderate_of_nontreed), 
+                 y = perc_easy_or_moderate_of_nontreed, 
+                 fill = factor(is_target_nsa, 
+                               # Rename fill levels in legend
+                               labels=c("Counterpoint NSA"," Target NSA"))
+    )
+    ) +
+    coord_flip() +
+    labs(title = "Percent of Untreed Areas That Are Easy-Moderate to Plant",
+         x = "Neighborhood Statistical Area",
+         y = "",
+         fill = "") +
+    scale_fill_manual(values=cbPalette)
+# Save to file
+ggsave(filename = "perc_easymoderate_to_tree.png", 
+       device = "png", path = "data/output-data/street-tree-analyses/plots/plantable-spaces",
+       width = 6, height = 19, units = "in")
+

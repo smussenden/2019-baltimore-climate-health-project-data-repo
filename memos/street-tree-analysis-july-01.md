@@ -148,15 +148,15 @@ _Click to enlarge_
     <th></th>
   </tr>
   <tr>
-    <td><img src="https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/data/output-data/street-tree-analyses/plots/plantable-spaces/plantable_spaces_all_nsas.png?raw=true" alt="" width="500"/></td>
-    <td><img src="https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/data/output-data/street-tree-analyses/plots/plantable-spaces/suitable_to_unsuitable_all_nsas.png?raw=true" alt="" width="500"/></td>
-  </tr>
-  <tr>
-    <td><img src="https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/data/output-data/street-tree-analyses/plots/plantable-spaces/trees_to_suitable_all_nsas.png?raw=true" alt="" width="500"/></td>
-    <td><img src="https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/data/output-data/street-tree-analyses/plots/plantable-spaces/trees_to_unsuitable_all_nsas.png?raw=true" alt="" width="500"/></td>
-  </tr>
-  <tr>
     <td><img src="https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/data/output-data/street-tree-analyses/plots/plantable-spaces/perc_suitable_all_nsas.png?raw=true" alt="" width="500"/></td>
     <td><img src="https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/data/output-data/street-tree-analyses/plots/plantable-spaces/perc_unsuitable_all_nsas.png?raw=true" alt="" width="500"/></td>
+  </tr>
+  <tr>
+    <td><img src="https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/data/output-data/street-tree-analyses/plots/plantable-spaces/perc_easy_to_tree.png?raw=true" alt="" width="500"/></td>
+    <td><img src="https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/data/output-data/street-tree-analyses/plots/plantable-spaces/perc_easymoderate_to_tree.png?raw=true" alt="" width="500"/></td>
+  </tr>
+  <tr>
+    <td></td>
+    <td></td>
   </tr>
 </table>
