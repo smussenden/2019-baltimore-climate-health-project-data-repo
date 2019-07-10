@@ -153,7 +153,7 @@ _Click to enlarge_
   </tr>
   <tr>
     <td><img src="https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/data/output-data/street-tree-analyses/plots/plantable-spaces/perc_easy_to_tree.png?raw=true" alt="" width="500"/></td>
-    <td><img src="https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/data/output-data/street-tree-analyses/plots/plantable-spaces/perc_easymoderate_to_tree.png?raw=true" alt="" width="500"/></td>
+    <td><img src="https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/data/output-data/street-tree-analyses/plots/plantable-spaces/perc_easy_moderate_to_tree.png?raw=true" alt="" width="500"/></td>
   </tr>
   <tr>
     <td></td>
