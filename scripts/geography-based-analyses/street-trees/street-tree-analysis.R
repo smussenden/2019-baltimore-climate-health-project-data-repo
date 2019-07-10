@@ -1003,6 +1003,7 @@ master_street_tree_summaries %>%
     )
     ) +
     coord_flip() +
+    theme(legend.position = "top") +
     labs(title = "Percent of Untreed Areas \nEasy-Moderate to Plant",
          x = "Neighborhood Statistical Area",
          y = "",
