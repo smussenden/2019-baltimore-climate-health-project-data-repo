@@ -787,7 +787,7 @@ street_trees_categorized %>%
 
 # Save to file
 ggsave(filename = "plantable_spaces_all_nsas.png", 
-       device = "png", path = "data/output-data/street-tree-analyses/plots/tree-counts",
+       device = "png", path = "data/output-data/street-tree-analyses/plots/plantable_spaces",
        width = 6, height = 19, units = "in")
 
 
@@ -818,7 +818,7 @@ street_trees_categorized %>%
 
 # Save to file
 ggsave(filename = "trees_to_suitable_all_nsas.png", 
-       device = "png", path = "data/output-data/street-tree-analyses/plots/tree-counts",
+       device = "png", path = "data/output-data/street-tree-analyses/plots/plantable_spaces",
        width = 6, height = 19, units = "in")
 
 
@@ -849,7 +849,7 @@ street_trees_categorized %>%
 
 # Save to file
 ggsave(filename = "trees_to_unsuitable_all_nsas.png", 
-       device = "png", path = "data/output-data/street-tree-analyses/plots/tree-counts",
+       device = "png", path = "data/output-data/street-tree-analyses/plots/plantable_spaces",
        width = 6, height = 19, units = "in")
 
 
@@ -880,7 +880,7 @@ street_trees_categorized %>%
 
 # Save to file
 ggsave(filename = "suitable_to_unsuitable_all_nsas.png", 
-       device = "png", path = "data/output-data/street-tree-analyses/plots/tree-counts",
+       device = "png", path = "data/output-data/street-tree-analyses/plots/plantable_spaces",
        width = 6, height = 19, units = "in")
 
 
@@ -902,7 +902,7 @@ master_street_tree_summaries %>%
 
 # Save to file
 ggsave(filename = "perc_suitable_all_nsas.png", 
-       device = "png", path = "data/output-data/street-tree-analyses/plots/tree-counts",
+       device = "png", path = "data/output-data/street-tree-analyses/plots/plantable_spaces",
        width = 6, height = 19, units = "in")
   
  
@@ -925,7 +925,7 @@ master_street_tree_summaries %>%
 
 # Save to file
 ggsave(filename = "perc_unsuitable_all_nsas.png", 
-       device = "png", path = "data/output-data/street-tree-analyses/plots/tree-counts",
+       device = "png", path = "data/output-data/street-tree-analyses/plots/plantable_spaces",
        width = 6, height = 19, units = "in")
 
 

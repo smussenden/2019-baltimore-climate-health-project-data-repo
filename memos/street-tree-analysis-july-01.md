@@ -141,21 +141,22 @@ A closer look at the proportional conditions of the target NSAs compared to the 
 
 ## Plantable Spaces
 
+_Click to enlarge_
 <table>
   <tr>
     <th></th>
     <th></th>
   </tr>
   <tr>
-    <td><img src="https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/data/output-data/street-tree-analyses/plots/tree-counts/plantable_spaces_all_nsas.png?raw=true" alt="" width="500"/></td>
-    <td><img src="https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/data/output-data/street-tree-analyses/plots/tree-counts/suitable_to_unsuitable_all_nsas.png?raw=true" alt="" width="500"/></td>
+    <td><img src="https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/data/output-data/street-tree-analyses/plots/plantable-spaces/plantable_spaces_all_nsas.png?raw=true" alt="" width="500"/></td>
+    <td><img src="https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/data/output-data/street-tree-analyses/plots/plantable-spaces/suitable_to_unsuitable_all_nsas.png?raw=true" alt="" width="500"/></td>
   </tr>
   <tr>
-    <td><img src="https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/data/output-data/street-tree-analyses/plots/tree-counts/trees_to_suitable_all_nsas.png?raw=true" alt="" width="500"/></td>
-    <td><img src="https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/data/output-data/street-tree-analyses/plots/tree-counts/trees_to_unsuitable_all_nsas.png?raw=true" alt="" width="500"/></td>
+    <td><img src="https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/data/output-data/street-tree-analyses/plots/plantable-spaces/trees_to_suitable_all_nsas.png?raw=true" alt="" width="500"/></td>
+    <td><img src="https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/data/output-data/street-tree-analyses/plots/plantable-spaces/trees_to_unsuitable_all_nsas.png?raw=true" alt="" width="500"/></td>
   </tr>
   <tr>
-    <td><img src="https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/data/output-data/street-tree-analyses/plots/tree-counts/perc_suitable_all_nsas.png?raw=true" alt="" width="500"/></td>
-    <td><img src="https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/data/output-data/street-tree-analyses/plots/tree-counts/perc_unsuitable_all_nsas.png?raw=true" alt="" width="500"/></td>
+    <td><img src="https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/data/output-data/street-tree-analyses/plots/plantable-spaces/perc_suitable_all_nsas.png?raw=true" alt="" width="500"/></td>
+    <td><img src="https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/data/output-data/street-tree-analyses/plots/plantable-spaces/perc_unsuitable_all_nsas.png?raw=true" alt="" width="500"/></td>
   </tr>
 </table>
