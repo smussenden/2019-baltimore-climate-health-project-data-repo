@@ -139,4 +139,23 @@ A closer look at the proportional conditions of the target NSAs compared to the 
 | --- | --- | 
 | <img src="https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/data/output-data/street-tree-analyses/plots/condition/prop_condition_target_nsas.png?raw=true" alt="Percent of Live, Older Trees in Good Condition by NSA" width="500"/> | <img src="https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/data/output-data/street-tree-analyses/plots/condition/prop_condition_top15_nsas.png?raw=true" alt="Proportional Condition of Live, Older Trees (>6 in) by NSA" width="500"/> |
 
+## Plantable Spaces
 
+<table>
+  <tr>
+    <th></th>
+    <th></th>
+  </tr>
+  <tr>
+    <td><img src="https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/data/output-data/street-tree-analyses/plots/tree-counts/plantable_spaces_all_nsas.png?raw=true" alt="" width="500"/></td>
+    <td><img src="https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/data/output-data/street-tree-analyses/plots/tree-counts/suitable_to_unsuitable_all_nsas.png?raw=true" alt="" width="500"/></td>
+  </tr>
+  <tr>
+    <td><img src="https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/data/output-data/street-tree-analyses/plots/tree-counts/trees_to_suitable_all_nsas.png?raw=true" alt="" width="500"/></td>
+    <td><img src="https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/data/output-data/street-tree-analyses/plots/tree-counts/trees_to_unsuitable_all_nsas.png?raw=true" alt="" width="500"/></td>
+  </tr>
+  <tr>
+    <td><img src="https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/data/output-data/street-tree-analyses/plots/tree-counts/perc_suitable_all_nsas.png?raw=true" alt="" width="500"/></td>
+    <td><img src="https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/data/output-data/street-tree-analyses/plots/tree-counts/perc_unsuitable_all_nsas.png?raw=true" alt="" width="500"/></td>
+  </tr>
+</table>

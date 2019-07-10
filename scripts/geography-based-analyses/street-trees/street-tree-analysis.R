@@ -44,7 +44,14 @@ cleanup <- function() {
 }
 
 # Colorblind-friendly palette
-cbPalette <- c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
+cbPalette <- c("#999999", # Dark Gray
+               "#E69F00", # Mustard Yellow
+               "#56B4E9", # Sky Blue
+               "#009E73", # Strong Green
+               "#F0E442", # Lemon Yellow
+               "#0072B2", # Denim Blue
+               "#D55E00", # Rust Orange
+               "#CC79A7") # Lavender
 # To use for fills, add
 # scale_fill_manual(values=cbPalette)
 # To use for line and point colors, add
@@ -76,7 +83,22 @@ street_trees_categorized <- read_csv("data/input-data/street-trees/csv/by_nsa/st
                                    "fair",
                                    "good",
                                    "unknown")
-  ))
+  )) %>%
+  mutate(difficulty_level = as.integer(difficulty_level)) %>%
+  mutate(difficulty_level_char = if_else(is.na(difficulty_level), "Live", as.character(difficulty_level))) %>%
+  mutate_at(vars(matches("difficulty_level_char")), as.factor) %>%
+  mutate(difficulty_level_char = recode(difficulty_level_char,
+                                   "Live" = "Live Tree",
+                                   "1" = "Easiest to Plant",
+                                   "2" = "Removal Required", 
+                                   "3" = "Must Break Concrete",
+                                   "4" = "Unsuitable")) %>%
+  mutate(difficulty_level_char = fct_relevel(difficulty_level_char,
+                                        c("Live Tree",
+                                          "Easiest to Plant",
+                                          "Removal Required", 
+                                          "Must Break Concrete",
+                                          "Unsuitable")))
 
 # Load the master summaries table created in cleaning file
 master_street_tree_summaries <- read_csv("data/output-data/street-tree-analyses/master_street_tree_by_nsa.csv") %>%
@@ -92,6 +114,28 @@ master_street_tree_summaries_filtered <- read_csv("data/output-data/street-tree-
     nbrdesc %in% target_nsas ~ T,
     TRUE ~ F 
   ))
+
+
+###################################################################
+### Add more rankings on top of what was added in cleaning file ###
+###################################################################
+
+# a <- master_street_tree_summaries %>%
+#   # Add ranking for perc good
+#   arrange(nbrdesc, x) %>%
+#   mutate(rank_x = rank(desc(x), na.last = "keep", ties.method = "first"))
+# 
+# # Update the save file
+# write_csv(a, "data/output-data/street-tree-analyses/master_street_tree_by_nsa.csv")
+
+
+#######################
+### Visualize #####################################################################################################
+#######################
+
+#############################
+### Counts to console #######
+#############################
 
 # Quick count
 master_street_tree_summaries %>%
@@ -116,26 +160,6 @@ street_trees_categorized %>%
   #group_by(nbrdesc) %>%
   dplyr::summarise(n = n()) %>%
   arrange(desc(n))
-
-# Create a temp working table to consistently overwrite without messing up loaded table
-wk <- street_trees_categorized
-
-###################################################################
-### Add more rankings on top of what was added in cleaning file ###
-###################################################################
-
-# a <- master_street_tree_summaries %>%
-#   # Add ranking for perc good
-#   arrange(nbrdesc, x) %>%
-#   mutate(rank_x = rank(desc(x), na.last = "keep", ties.method = "first"))
-# 
-# # Update the save file
-# write_csv(a, "data/output-data/street-tree-analyses/master_street_tree_by_nsa.csv")
-
-
-#######################
-### Visualize #####################################################################################################
-#######################
 
 
 ############################################
@@ -389,6 +413,7 @@ ggsave(filename = "height_distro_top15_nsas.png",
 
 
 # DISTRIBUTION lines showing DIAMETER compared to TOP 15 nsas
+# Create a temp working table to consistently overwrite without messing up loaded table
 wk <- street_trees_categorized %>%
   filter((has_live_tree == T) & (loc_type %in% "street")) %>%
   select(nbrdesc, dbh) %>%
@@ -543,7 +568,9 @@ ggsave(filename = "perc_young_all_nsas.png",
 #   # Adjust X tics
 #   scale_x_continuous(breaks = seq(0, 60, by = 2), limits = c(NA, 60))
 
+
 ## WORKING TABLE for CONDITION PLOTS
+# Create a temp working table to consistently overwrite without messing up loaded table
 wk <- street_trees_categorized %>%
   filter((has_live_tree == T), dbh > 6) %>%
   select(nbrdesc, condition, is_target_nsa) %>%
@@ -741,33 +768,168 @@ ggsave(filename = "condition_poor_all_nsas.png",
 ### Trees to suitable / unsuitable plantable spaces ###
 #######################################################
 
+# Plot ALL PLANTING DIFFICULTIES
 street_trees_categorized %>%
-  filter(is_target_nsa == T) %>%
-  select(nbrdesc, difficulty_level) %>%
-  mutate(difficulty_level = if_else(is.na(difficulty_level), "Live", as.character(difficulty_level))) %>%
-  mutate_at(vars(matches("difficulty_level")), as.factor) %>%
-  mutate(difficulty_level = recode(difficulty_level,
-                                   "Live" = "Live Tree",
-                                   "1" = "Easiest to Plant",
-                                   "2" = "Removal Required", 
-                                   "3" = "Must Break Concrete",
-                                   "4" = "Unsuitable")) %>%
-  mutate(difficulty_level = fct_relevel(difficulty_level,
-                                   c("Live Tree",
-                                   "Easiest to Plant",
-                                   "Removal Required", 
-                                   "Must Break Concrete",
-                                   "Unsuitable"))) %>%
+  select(nbrdesc, difficulty_level, difficulty_level_char, is_target_nsa) %>%
+  filter((!is.na(nbrdesc)) & (difficulty_level_char != "0")) %>%
+  #filter(is_target_nsa == T) %>%
   ggplot() +
-  geom_bar(aes(x = reorder(nbrdesc, difficulty_level == "Live Tree"), 
+  geom_bar(aes(x = reorder(nbrdesc, difficulty_level_char == "Easiest to Plant"), 
                #fill = forcats::fct_rev(difficulty_level)),
-               fill = difficulty_level),
+               fill = difficulty_level_char),
            position = position_fill(reverse = TRUE)) +
-           #position = "fill") +
   coord_flip() +
   labs(title = "Available Tree Spaces by NSA",
        x = "",
        y = "",
        fill = "") +
   scale_fill_manual(values=cbPalette)
+
+# Save to file
+ggsave(filename = "plantable_spaces_all_nsas.png", 
+       device = "png", path = "data/output-data/street-tree-analyses/plots/tree-counts",
+       width = 6, height = 19, units = "in")
+
+
+# Plot LIVE TREES to empty, SUITABLE spaces
+street_trees_categorized %>%
+  select(nbrdesc, difficulty_level, difficulty_level_char, is_target_nsa) %>%
+  filter((!is.na(nbrdesc)) & (difficulty_level_char != "0")) %>%
+  mutate(diff_grouping = case_when(
+    is.na(difficulty_level) ~ "Live Tree",
+    difficulty_level == 4L ~ "Unsuitable Space",
+    TRUE ~ "Suitable Space"
+  )) %>%
+  # select(nbrdesc, diff_grouping) %>%
+  # group_by(nbrdesc, diff_grouping) %>%
+  # summarise(n())
+  filter(diff_grouping != "Unsuitable Space") %>%
+  ggplot() +
+  geom_bar(aes(x = reorder(nbrdesc, diff_grouping == "Suitable Space"),
+               fill = diff_grouping),
+           position = position_fill(reverse = TRUE)) +
+  coord_flip() +
+  scale_fill_manual(values=cbPalette) +
+  theme(legend.position = "top") +
+  labs(title = "Percent Live Trees to \nEmpty Spaces Suitable for Planting",
+       x = "",
+       y = "",
+       fill = "")
+
+# Save to file
+ggsave(filename = "trees_to_suitable_all_nsas.png", 
+       device = "png", path = "data/output-data/street-tree-analyses/plots/tree-counts",
+       width = 6, height = 19, units = "in")
+
+
+# Plot LIVE TREES to empty, UNSUITABLE spaces
+street_trees_categorized %>%
+  select(nbrdesc, difficulty_level, difficulty_level_char, is_target_nsa) %>%
+  filter((!is.na(nbrdesc)) & (difficulty_level_char != "0")) %>%
+  mutate(diff_grouping = case_when(
+    is.na(difficulty_level) ~ "Live Tree",
+    difficulty_level == 4L ~ "Unsuitable Space",
+    TRUE ~ "Suitable Space"
+  )) %>%
+  # select(nbrdesc, diff_grouping) %>%
+  # group_by(nbrdesc, diff_grouping) %>%
+  # summarise(n())
+  filter(diff_grouping != "Suitable Space") %>%
+  ggplot() +
+  geom_bar(aes(x = reorder(nbrdesc, diff_grouping == "Unsuitable Space"),
+               fill = diff_grouping),
+           position = position_fill(reverse = TRUE)) +
+  coord_flip() +
+  scale_fill_manual(values=cbPalette) +
+  theme(legend.position = "top") +
+  labs(title = "Percent Live Trees to \nEmpty Spaces Not Suitable for Planting",
+       x = "",
+       y = "",
+       fill = "")
+
+# Save to file
+ggsave(filename = "trees_to_unsuitable_all_nsas.png", 
+       device = "png", path = "data/output-data/street-tree-analyses/plots/tree-counts",
+       width = 6, height = 19, units = "in")
+
+
+# Plot UNSUITABLE to SUITABLE
+street_trees_categorized %>%
+  select(nbrdesc, difficulty_level, difficulty_level_char, is_target_nsa) %>%
+  filter((!is.na(nbrdesc)) & (difficulty_level_char != "0")) %>%
+  mutate(diff_grouping = case_when(
+    is.na(difficulty_level) ~ "Live Tree",
+    difficulty_level == 4L ~ "Unsuitable Space",
+    TRUE ~ "Suitable Space"
+  )) %>%
+  # select(nbrdesc, diff_grouping) %>%
+  # group_by(nbrdesc, diff_grouping) %>%
+  # summarise(n())
+  filter(diff_grouping != "Live Tree") %>%
+  ggplot() +
+  geom_bar(aes(x = reorder(nbrdesc, diff_grouping == "Unsuitable Space"),
+               fill = diff_grouping),
+           position = position_fill(reverse = TRUE)) +
+  coord_flip() +
+  scale_fill_manual(values=cbPalette) +
+  theme(legend.position = "top") +
+  labs(title = "Percent Empty Spaces Suitable for Planting \nto Those Not Suitable for Planting",
+       x = "",
+       y = "",
+       fill = "")
+
+# Save to file
+ggsave(filename = "suitable_to_unsuitable_all_nsas.png", 
+       device = "png", path = "data/output-data/street-tree-analyses/plots/tree-counts",
+       width = 6, height = 19, units = "in")
+
+
+# Plot SUITABLE spaces as percent of EMPTY spaces
+# master_street_tree_summaries$perc_of_nontreed_are_suitable
+master_street_tree_summaries %>%
+  select(nbrdesc, perc_of_nontreed_are_suitable, is_target_nsa) %>%
+  ggplot() +
+  geom_col(aes(x = reorder(nbrdesc, perc_of_nontreed_are_suitable),
+               y = perc_of_nontreed_are_suitable,
+               fill = factor(is_target_nsa, labels=c("Not Target NSA"," Target NSA")))) +
+  coord_flip() +
+  labs(title = "Percent of Empty Spaces are Suitable",
+       x = "",
+       y = "",
+       fill = "") +
+  theme(legend.position = "top") +
+  scale_fill_manual(values=cbPalette)
+
+# Save to file
+ggsave(filename = "perc_suitable_all_nsas.png", 
+       device = "png", path = "data/output-data/street-tree-analyses/plots/tree-counts",
+       width = 6, height = 19, units = "in")
+  
+ 
+# Plot UNSUITABLE spaces as percent of EMPTY spaces
+# master_street_tree_summaries$perc_of_nontreed_are_suitable
+master_street_tree_summaries %>%
+  select(nbrdesc, perc_of_nontreed_are_suitable, is_target_nsa) %>%
+  mutate(perc_of_nontreed_not_suitable = 100 - perc_of_nontreed_are_suitable) %>%
+  ggplot() +
+  geom_col(aes(x = reorder(nbrdesc, perc_of_nontreed_not_suitable),
+               y = perc_of_nontreed_not_suitable,
+               fill = factor(is_target_nsa, labels=c("Not Target NSA"," Target NSA")))) +
+  coord_flip() +
+  labs(title = "Percent of Empty Spaces Not Suitable",
+       x = "",
+       y = "",
+       fill = "") +
+  theme(legend.position = "top") +
+  scale_fill_manual(values=cbPalette)
+
+# Save to file
+ggsave(filename = "perc_unsuitable_all_nsas.png", 
+       device = "png", path = "data/output-data/street-tree-analyses/plots/tree-counts",
+       width = 6, height = 19, units = "in")
+
+
+
+
+ 
 
