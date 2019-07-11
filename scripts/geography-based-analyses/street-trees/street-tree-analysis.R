@@ -11,7 +11,8 @@
 
 library(tidyverse)
 require(scales) # For percent labeling on distribution tables
-library("DescTools") # For %like% operator
+library(DescTools) # For %like% operator
+library(gridExtra) # For outputting tables to PDF
 #library(readxl)
 #library(janitor)
 #library(magrittr)
@@ -1013,4 +1014,23 @@ master_street_tree_summaries %>%
 ggsave(filename = "perc_easymoderate_to_tree.png", 
        device = "png", path = "data/output-data/street-tree-analyses/plots/plantable-spaces",
        width = 6, height = 19, units = "in")
+
+
+###################
+### Output some useful tables
+###################
+
+# Perc nontreed spaces suitable
+wk <- master_street_tree_summaries %>%
+  filter(is_target_nsa == T) %>%
+  select(nbrdesc, perc_of_nontreed_are_suitable, rank_perc_of_nontreed_are_suitable) %>%
+  arrange(rank_perc_of_nontreed_are_suitable)
+
+
+pdf("perc_nontreed_suitable_table.pdf", height=11, width=8.5)
+grid.table(wk)
+dev.off()
+
+
+
 
