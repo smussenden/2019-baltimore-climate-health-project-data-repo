@@ -11,11 +11,51 @@ library(tidyverse)
 library(corrr)
 
 
-#################################################################
-######## Load Data Produced in Cleaning.r Script File ###########
-#################################################################
+###############################
+######## Load Data  ###########
+###############################
 
-nsa_tree_temp_demographics <- read_csv("data/output-data/cleaned/tree-temp-demographic-w-naip-lidar-use/nsa_lidartree_temp.csv")
+### Load Data Produced in Cleaning.r
+nsa_tree_temp_demographics <- read_csv("data/output-data/cleaned/tree-temp-demographic-w-naip-lidar-use/nsa_lidartree_temp.csv") %>%
+  mutate_at(vars(starts_with("temp")), as.double)
+
+### Load data created by "street-tree-data-cleaning.R"
+# Load the full dataset with categories added in cleaning file
+street_trees_categorized <- read_csv("data/input-data/street-trees/csv/by_nsa/street_trees_nsa_categorized.csv") %>%
+  # Make "condition" a factor so it can be ordered
+  mutate_at(vars(matches("condition")), as.factor) %>%
+  mutate(condition = fct_relevel(condition, 
+                                 c("absent",
+                                   "stump",
+                                   "dead",
+                                   "poor",
+                                   "fair",
+                                   "good",
+                                   "unknown")
+  )) %>%
+  mutate(difficulty_level = as.integer(difficulty_level)) %>%
+  mutate(difficulty_level_char = if_else(is.na(difficulty_level), "Live", as.character(difficulty_level))) %>%
+  mutate_at(vars(matches("difficulty_level_char")), as.factor) %>%
+  mutate(difficulty_level_char = recode(difficulty_level_char,
+                                        "Live" = "Live Tree",
+                                        "1" = "Easiest to Plant",
+                                        "2" = "Removal Required", 
+                                        "3" = "Must Break Concrete",
+                                        "4" = "Unsuitable")) %>%
+  mutate(difficulty_level_char = fct_relevel(difficulty_level_char,
+                                             c("Live Tree",
+                                               "Easiest to Plant",
+                                               "Removal Required", 
+                                               "Must Break Concrete",
+                                               "Unsuitable")))
+
+# Load the master summaries table created in cleaning file
+master_street_tree_summaries <- read_csv("data/output-data/street-tree-analyses/master_street_tree_by_nsa.csv") %>%
+  # Add variable to track whether a target NSA
+  mutate(is_target_nsa = case_when(
+    nbrdesc %in% target_nsas ~ T,
+    TRUE ~ F 
+  ))
 
 #################################################################
 ########## Define Functions #####################################
@@ -28,7 +68,9 @@ source("scripts/geography-based-analyses/tree-temp-demographics/functions.R")
 select_x <- function(df){
   return(df %>%
     select_if(is.numeric) %>%
-    select(-objectid, -acres, -label))
+    select(-matches("objectid"), -matches("acres"), -starts_with('rank')))
+  #-contains("combined")
+  # -var(starts_with('rank'))
 }
 
 # Cleanup
@@ -37,6 +79,8 @@ cleanup <- function() {
                   c("make_correlation_matrix_graphic", 
                     "write_matrix_csv", 
                     "nsa_tree_temp_demographics", 
+                    "street_trees_categorized",
+                    "master_street_tree_summaries",
                     "select_x", 
                     "cleanup")
                   ),
@@ -134,3 +178,56 @@ ggplot(nsa_tree_temp_demographics, aes(x=`07_lid_mean`, y=lid_change_percent_poi
 # Change the point size, and shape
 
 plot(nsa_tree_temp_demographics$temp_mean_aft, nsa_tree_temp_demographics$lid_change_percent_point)
+
+
+##############################
+##### ROX ANALYSIS ###########
+##############################
+
+### Build correlation matrix df
+tree_var_to_condition_corr_df <- nsa_tree_temp_demographics %>%
+  rename_all(tolower) %>%
+  mutate_all(tolower) %>%
+  left_join(master_street_tree_summaries, by = c("nsa_name" = "nbrdesc")) %>%
+  mutate_at(vars(starts_with("temp")), as.double) %>%
+  select_x()
+
+### Temp to mean at condition
+# Build correlation matrix
+temp_to_condition_corr_matrix <- tree_var_to_condition_corr_df %>%
+  as.matrix() %>%
+  correlate() %>%
+  focus(ends_with("_perc_of_live")) %>%
+  mutate(variable=rowname) %>%
+  filter(str_detect(variable, "^temp_")) %>%
+  select(variable, everything(), -rowname) 
+
+# Make correlation long instead of wide so it can be passed to ggplot correctly. 
+temp_to_condition_corr_matrix_long <- temp_to_condition_corr_matrix %>%
+  gather("variable_2", "value", 2:4) %>%
+  arrange(desc(value))
+
+# Build graphic
+make_correlation_matrix_graphic(temp_to_condition_corr_matrix_long, "NSA")
+
+
+### Tmep to height/diameter
+# Build correlation matrix
+temp_to_size_corr_matrix <- tree_var_to_condition_corr_df %>%
+  select(matches("temp_mean_aft"), matches("temp_median_aft"), avg_ht, avg_ht_controled, avg_diam, avg_diam_controled) %>%
+  as.matrix() %>%
+  correlate() %>%
+  focus(matches("avg_")) %>%
+  mutate(variable=rowname) %>%
+  select(variable, everything(), -rowname) 
+
+# Make correlation long instead of wide so it can be passed to ggplot correctly. 
+temp_to_size_corr_matrix_long <- temp_to_size_corr_matrix %>%
+  gather("variable_2", "value", 2:5) %>%
+  arrange(desc(value))
+
+# Build graphic
+make_correlation_matrix_graphic(temp_to_size_corr_matrix_long, "NSA")
+
+
+

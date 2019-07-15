@@ -1016,21 +1016,3 @@ ggsave(filename = "perc_easymoderate_to_tree.png",
        width = 6, height = 19, units = "in")
 
 
-###################
-### Output some useful tables
-###################
-
-# Perc nontreed spaces suitable
-wk <- master_street_tree_summaries %>%
-  filter(is_target_nsa == T) %>%
-  select(nbrdesc, perc_of_nontreed_are_suitable, rank_perc_of_nontreed_are_suitable) %>%
-  arrange(rank_perc_of_nontreed_are_suitable)
-
-
-pdf("perc_nontreed_suitable_table.pdf", height=11, width=8.5)
-grid.table(wk)
-dev.off()
-
-
-
-

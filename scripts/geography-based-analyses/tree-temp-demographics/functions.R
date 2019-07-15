@@ -40,12 +40,11 @@ make_correlation_matrix_graphic <- function(dataframe, grouping = "GROUPING") {
   ggplot(data = dataframe, aes(x = variable_2, y = variable)) +
     geom_tile(aes(fill = value)) +
     scale_fill_gradient2(low = "blue", high = "red", mid="white", midpoint=0) +
-    geom_text(aes(label = round(value, 2)*100), size = 2) +
+    geom_text(aes(label = round(value, 2)*100), size = 10) +
     ggtitle(chart_title) +
-    theme(axis.text.x = element_text(angle=50,hjust=1),
-          plot.title = element_text(),
-          axis.title.x = element_text(),
-          axis.title.y = element_text()
+    theme(axis.text=element_text(size=14),
+          axis.text.x = element_text(size=14,angle=50,hjust=1),
+          plot.title = element_text(size=14)
     )
   # Create filename and filepath to save image. 
   filename <- paste0(dataframe_name,".png")
