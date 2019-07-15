@@ -117,6 +117,8 @@ _Click to enlarge_
 
 <img src="https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/data/output-data/street-tree-analyses/plots/height-diameter/perc_young_all_nsas.png?raw=true" alt="NSAs Ranked by Percent of Young Trees" width="500"/>
 
+The correlation between size and temperature is evident in the following charts:
+<img src="https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/data/output-data/plots/correlation-matrix-images/temp_to_size_corr_matrix_long.png?raw=true" alt="" width="500"/>
 
 ## Condition
 
