@@ -183,7 +183,7 @@ _Click to enlarge_
 
 ### Across the City
 
-The two most common types of trees in the city are maple and oak (genera acer and quercus). There are 22,627 maple trees and 8,700 oak, when not considering park trees. (When including park trees, there are 25,880 maple and considerably more oak, at 14,680.) 
+The two most common types of trees in the city are **maple** and **oak** (genera acer and quercus). There are 22,627 maple trees and 8,700 oak, when not considering park trees. (When including park trees, there are 25,880 maple and considerably more oak, at 14,680.) 
 
 Tilia — commonly known as linden, basswood or lime — comes in third at 6,896, sharing the 6k range with zelkova in fourth, at 6404.
 
@@ -191,7 +191,9 @@ Tilia — commonly known as linden, basswood or lime — comes in third at 6,896
 
 ### Within Target Neighborhoods
 
-Within the target neighborhoods, maple and oak are still the most common two genera (2195 and 717), but numbers three and four differ from the citywide average. Third is gleditsia — commonly known as honey or thorny locust — with 645, and prunus — which includes cherry trees — with 617.
+Within the target neighborhoods, **maple** and **oak** are still the most common two genera (2195 and 717), but numbers three and four differ from the citywide average. 
+
+Third is gleditsia — commonly known as honey or thorny locust — with 645, and prunus — which includes cherry trees — with 617.
 
 <img src="https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/data/output-data/street-tree-analyses/plots/tree-variety/count_of_trees_per_genus_targetnsas.png?raw=true" alt="" />
 
@@ -199,6 +201,10 @@ Here is a closer look at the tree genera in each of our target NSAs, with three 
 
 <img src="https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/data/output-data/street-tree-analyses/plots/tree-variety/count_of_trees_per_genus_by_nsa.png?raw=true" alt="" />
 
+### Distribution of Tree Genera
 
+Experts have told us diversity of tree types is important for tree canopy resilience because it protects against mass dieoffs caused by disease or pests. This analysis shows the distribution of variety is not equally spread across the city.
+
+<img src="https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/data/output-data/street-tree-analyses/plots/tree-variety/distribution_of_tree_variety.png?raw=true" alt="" />
 
 
