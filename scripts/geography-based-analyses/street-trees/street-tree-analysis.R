@@ -1140,6 +1140,13 @@ ggsave(filename = "count_of_trees_per_genus.png",
        device = "png", path = "data/output-data/street-tree-analyses/plots/tree-variety")
 
 # View number of trees per genus for target NSAs only
+View(wk %>%
+       filter(is_target_nsa) %>%
+       select(genus_clean) %>%
+       group_by(genus_clean) %>%
+       dplyr::summarize(count_in_genus = n()) %>%
+       arrange(desc(count_in_genus)))
+
 label <- tibble(
   x = Inf,
   y = Inf,
@@ -1175,21 +1182,26 @@ View(wk %>%
        arrange(nbrdesc))
 
 wk %>%
-  select(nbrdesc, is_target_nsa, genus_clean) %>%
-  filter(is_target_nsa == T) %>%
+  select(nbrdesc, is_target_nsa, is_counterpoint_nsa, genus_clean) %>%
+  filter((is_target_nsa == T) | (is_counterpoint_nsa == T)) %>%
   group_by(nbrdesc, is_target_nsa, genus_clean) %>%
   dplyr::summarize(count_in_genus = n()) %>%
   ungroup() %>%
   left_join(wk) %>%
-  filter(count_in_genus >= 20) %>%
+  filter(count_in_genus >= 10) %>%
   mutate(genus_clean = genus_clean) %>%
-  ggplot(aes(x = genus_clean)) +
+  ggplot(aes(x = genus_clean, 
+             fill = factor(is_target_nsa, 
+                    # Rename fill levels in legend
+                    labels=c("Counterpoint NSA"," Target NSA")))) +
   geom_bar() +
   facet_wrap(~nbrdesc, scales = "free", nrow = 3) +
   labs(title = "Number of Trees in Each Genus Within Each Target Neighborhood",
        x = "",
-       y = "") +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) 
+       y = "",
+       fill = "") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  scale_fill_manual(values=cbPalette)
 # Save to file
 ggsave(filename = "count_of_trees_per_genus_by_nsa.png", 
        device = "png", path = "data/output-data/street-tree-analyses/plots/tree-variety")
