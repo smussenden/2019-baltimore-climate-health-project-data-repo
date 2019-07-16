@@ -1015,4 +1015,183 @@ ggsave(filename = "perc_easymoderate_to_tree.png",
        device = "png", path = "data/output-data/street-tree-analyses/plots/plantable-spaces",
        width = 6, height = 19, units = "in")
 
+#############################
+### Variety analysis ########
+#############################
+
+# Working table with lightly cleaned genus field
+wk <- street_trees_categorized %>% 
+  filter((has_live_tree == T), (!is.na(nbrdesc))) %>%
+  mutate(genus_clean = if_else(is.na(genus) | str_detect(genus, pattern = "\\.|,"), word(spp,1), genus)) %>%
+  mutate(genus_clean = case_when(
+    genus_clean == "horsechestnut" ~ "aesculus",
+    genus_clean == "goldenraintree" ~ "koelreuteria",
+    genus_clean == "honeylocust" ~ "gleditsia",
+    genus_clean == "japanese pagodatree" ~ "styphnolobium",
+    genus_clean == "mimosa" ~ "albizia",
+    genus_clean == "royal paulownia" ~ "paulownia tomentosa",
+    genus_clean == "tuliptree" ~ "liriodendron",
+    genus_clean == "tree of heaven" ~ "ailanthus",
+    genus_clean == "yellowwood" ~ "cladrastis",
+    genus_clean == "blackgum" ~ "nyssa",
+    genus_clean == "boxelder" ~ "acer",
+    genus_clean == "douglas-fir" ~ "pseudotsuga",
+    genus_clean == "katsuratree" ~ "cercidiphyllum",
+    genus_clean == "kentucky coffeetree" ~ "gymnocladus",
+    genus_clean == "persian parrotia" ~ "parrotia",
+    TRUE ~ genus_clean
+  )) %>%
+  filter((genus_clean != "vacant"), (loc_type %in% "street"))
+
+# How many of each type of tree are in each NSA?
+View(wk %>%
+  filter(loc_type %in% "street") %>%
+  select(nbrdesc, spp, genus_clean, is_target_nsa)  %>%
+  group_by(nbrdesc, genus_clean, is_target_nsa) %>%
+  dplyr::summarize(count_trees = n()) )
+
+# How many varieties are in each NSA?
+variety_counts_all <- wk %>%
+  select(nbrdesc, spp, genus_clean, is_target_nsa) %>%
+  group_by(nbrdesc, is_target_nsa) %>%
+  dplyr::summarise(count_genus = n_distinct(genus_clean)) %>%
+  arrange(desc(count_genus)) %>%
+  arrange(desc(is_target_nsa))
+
+# Distribution of genus across NSAs
+# 1 find how many types of trees each NSA has
+# 2a pull 15 NSAs with the most types of trees
+# 2b pull 15 NSAs with the most trees
+# Graph them
+
+label <- tibble(
+  x = Inf,
+  y = Inf,
+  label = "Park trees were excluded \nfrom these calculations."
+)
+
+ggplot() +
+  # Target NSAs
+  geom_density(data = filter(variety_counts_all, is_target_nsa == T),
+               aes(x = count_genus),
+               color = "#E69F00") +
+  # Top NSAs by variety
+  geom_density(data = variety_counts_all,
+                 # arrange(desc(count_genus)) %>%
+                 # ungroup() %>%
+                 # top_n(15),
+               aes(x = count_genus),
+               color = "#0072B2") +
+  # Top NSAs by individual tree count
+  geom_density(data = variety_counts_all %>%
+                 right_join(wk %>%
+                              select(nbrdesc) %>%
+                              group_by(nbrdesc) %>%
+                              dplyr::summarize(num_trees = n()) %>%
+                              arrange(desc(num_trees)) %>%
+                              top_n(15)),
+               aes(x = count_genus),
+               color = "#000000") +
+  labs(title = "Distribution of Tree Variety Across Neighborhoods: \nTarget NSAs (yellow) \nCitywide (blue) \nTop 15 by Tree Count (black)",
+       x = "Distinct Tree Genera Represented",
+       y = "") +
+  geom_text(aes(x = x, y = y, label = label), data = label, vjust = "top", hjust = "right") +
+  scale_y_continuous(labels = percent)
+# Save to file
+ggsave(filename = "distribution_of_tree_variety.png", 
+       device = "png", path = "data/output-data/street-tree-analyses/plots/tree-variety")
+
+
+### Top tree genera...
+# across the city
+# in each NSA
+
+
+# View counts number of trees per genus citywide
+View(wk %>%
+       select(genus_clean) %>%
+       group_by(genus_clean) %>%
+       dplyr::summarize(count_in_genus = n()) %>%
+       arrange(desc(count_in_genus)))
+
+label <- tibble(
+  x = Inf,
+  y = Inf,
+  label = "For genera with 100 or more trees. \nPark trees were excluded from these calculations."
+)
+
+wk %>%
+  group_by(genus_clean) %>%
+  dplyr::summarize(count_in_genus = n()) %>%
+  filter(count_in_genus >= 100) %>%
+  ungroup() %>%
+  left_join(wk) %>%
+  mutate(genus_clean = fct_reorder(genus_clean, -count_in_genus)) %>%
+  ggplot(aes(x = genus_clean)) +
+  geom_bar() +
+  scale_y_continuous(breaks=seq(0, 25000, 1000)) +
+  labs(title = "Number of Trees in Each Genus Citywide",
+       x = "",
+       y = "") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  geom_text(aes(x = x, y = y, label = label), data = label, vjust = "top", hjust = "right")
+# Save to file
+ggsave(filename = "count_of_trees_per_genus.png", 
+       device = "png", path = "data/output-data/street-tree-analyses/plots/tree-variety")
+
+# View number of trees per genus for target NSAs only
+label <- tibble(
+  x = Inf,
+  y = Inf,
+  label = "For genera with 20 or more trees. \nPark trees were excluded from these calculations."
+)
+
+wk %>%
+  filter(is_target_nsa == T) %>%
+  group_by(genus_clean) %>%
+  dplyr::summarize(count_in_genus = n()) %>%
+  filter(count_in_genus >= 20) %>%
+  ungroup() %>%
+  left_join(wk %>% filter(is_target_nsa == T)) %>%
+  mutate(genus_clean = fct_reorder(genus_clean, -count_in_genus)) %>%
+  ggplot(aes(x = genus_clean)) +
+  geom_bar() +
+  scale_y_continuous(breaks=seq(0, 25000, 1000)) +
+  labs(title = "Number of Trees in Each Genus Within All Target Neighborhoods",
+       x = "",
+       y = "") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  geom_text(aes(x = x, y = y, label = label), data = label, vjust = "top", hjust = "right")
+# Save to file
+ggsave(filename = "count_of_trees_per_genus_targetnsas.png", 
+       device = "png", path = "data/output-data/street-tree-analyses/plots/tree-variety")
+
+# View counts number of trees per genus by NSA 
+View(wk %>%
+       select(nbrdesc, is_target_nsa, genus_clean) %>%
+       group_by(nbrdesc, is_target_nsa, genus_clean) %>%
+       dplyr::summarize(count_in_genus = n()) %>%
+       arrange(desc(count_in_genus)) %>%
+       arrange(nbrdesc))
+
+wk %>%
+  select(nbrdesc, is_target_nsa, genus_clean) %>%
+  filter(is_target_nsa == T) %>%
+  group_by(nbrdesc, is_target_nsa, genus_clean) %>%
+  dplyr::summarize(count_in_genus = n()) %>%
+  ungroup() %>%
+  left_join(wk) %>%
+  filter(count_in_genus >= 20) %>%
+  mutate(genus_clean = genus_clean) %>%
+  ggplot(aes(x = genus_clean)) +
+  geom_bar() +
+  facet_wrap(~nbrdesc, scales = "free", nrow = 3) +
+  labs(title = "Number of Trees in Each Genus Within Each Target Neighborhood",
+       x = "",
+       y = "") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) 
+# Save to file
+ggsave(filename = "count_of_trees_per_genus_by_nsa.png", 
+       device = "png", path = "data/output-data/street-tree-analyses/plots/tree-variety")
+
 
