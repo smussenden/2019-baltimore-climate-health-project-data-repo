@@ -179,7 +179,9 @@ _Click to enlarge_
   </tr>
 </table>
 
-## Tree Variety Across the City
+## Tree Variety 
+
+### Across the City
 
 The two most common types of trees in the city are maple and oak (genera acer and quercus). There are 22,627 maple trees and 8,700 oak, when not considering park trees. (When including park trees, there are 25,880 maple and considerably more oak, at 14,680.) 
 
@@ -187,11 +189,13 @@ Tilia — commonly known as linden, basswood or lime — comes in third at 6,896
 
 <img src="https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/data/output-data/street-tree-analyses/plots/tree-variety/count_of_trees_per_genus.png?raw=true" alt="" />
 
+### Within Target Neighborhoods
+
 Within the target neighborhoods, maple and oak are still the most common two genera (2195 and 717), but numbers three and four differ from the citywide average. Third is gleditsia — commonly known as honey or thorny locust — with 645, and prunus — which includes cherry trees — with 617.
 
 <img src="https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/data/output-data/street-tree-analyses/plots/tree-variety/count_of_trees_per_genus_targetnsas.png?raw=true" alt="" />
 
-Here is a closer look at the tree genera in each of our target NSAs, with two counterpoint neighborhoods included for comparison:
+Here is a closer look at the tree genera in each of our target NSAs, with three counterpoint neighborhoods included for comparison:
 
 <img src="https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/data/output-data/street-tree-analyses/plots/tree-variety/count_of_trees_per_genus_by_nsa.png?raw=true" alt="" />
 

@@ -1200,10 +1200,12 @@ wk %>%
        x = "",
        y = "",
        fill = "") +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-  scale_fill_manual(values=cbPalette)
+  scale_fill_manual(values=cbPalette) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        legend.position = "top") 
 # Save to file
 ggsave(filename = "count_of_trees_per_genus_by_nsa.png", 
-       device = "png", path = "data/output-data/street-tree-analyses/plots/tree-variety")
+       device = "png", path = "data/output-data/street-tree-analyses/plots/tree-variety",
+       width = 16, height = 9, units = "in")
 
 
