@@ -205,6 +205,8 @@ Here is a closer look at the tree genera in each of our target NSAs, with three 
 
 Experts have told us diversity of tree types is important for tree canopy resilience because it protects against mass dieoffs caused by disease or pests. This analysis shows the distribution of variety is not equally spread across the city.
 
+Most of our target NSAs have about 15 or about 25 types of trees compared to a smoother citywide distribution that leans closer to 30.
+
 <img src="https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/data/output-data/street-tree-analyses/plots/tree-variety/distribution_of_tree_variety.png?raw=true" alt="" />
 
 
