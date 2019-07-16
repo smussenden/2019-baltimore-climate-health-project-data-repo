@@ -183,5 +183,5 @@ _Click to enlarge_
 
 The two most common types of trees in the city are maple and oak (genera acer and quercus). When including park trees, there are 25,880 maple and 14,680 oak. When considering only street trees, there are 22,627 maple, but oak trees are significantly reduced at only 8,700. Tilia — commonly known as linden, basswood or lime — comes in at 6,896, sharing the 6k range with zelkova, at 6404.
 
-<img src="https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/data/output-data/street-tree-analyses/plots/tree-variety/count_of_trees_per_genus.png?raw=true" alt="" width="500"/>
+<img src="https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/data/output-data/street-tree-analyses/plots/tree-variety/count_of_trees_per_genus.png?raw=true" alt="" />
 
