@@ -188,3 +188,16 @@ cleanup()
 # new <- rcorr(block_tree_temp_demographics$temp_mean_am, block_tree_temp_demographics$temp_median_am, type="pearson")
 # rcorr(block_tree_temp_demographics$temp_mean_aft, block_tree_temp_demographics$walk_score)
 # baltzips <- c(21201,21202,21205,21206,21207,21208,21209,21210,21211,21212,21213,21214,21215,21216,21217,21218,21222,21223,21224,21225,21226,21227,21228,21229,21230,21231,21234,21236,21237,21239,21251)
+
+
+#################################################################
+######## Analysis ###############################################
+#################################################################
+
+block_tree_temp_demographics <- block_tree_temp_demographics %>% 
+  mutate(geoid10 = as.character(geoid10)) %>%
+  rename(block_id = geoid10)
+
+working <- block_tree_temp_demographics %>%
+  filter(aland10 != 0) %>%
+  filter(`15_lid_mean` <= .01)

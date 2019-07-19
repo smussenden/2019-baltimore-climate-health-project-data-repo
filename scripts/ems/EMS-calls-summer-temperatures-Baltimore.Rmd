@@ -279,29 +279,15 @@ temp_data <- temp_data %>%
 
 ```
 ## Filter Data Only for Summer Dates
-We only want to examine the last five summers in Baltimore (2014-2018), so we need to filter our full_data and temp_data sets. 
+We only want to examine last summer in Baltimore (2018), so we need to filter our full_data and temp_data sets. 
 
 ```{r}
-
-# Filter only for summer in our full data set
 full_data <- full_data %>%
-  # filter((datetime >= date("2018-06-21") & datetime <= ("2018-09-21")) 
-  #      | (datetime >= date("2017-06-21") & datetime <= ("2017-09-21")) 
-  #      | (datetime >= date("2016-06-21") & datetime <= ("2016-09-21")) 
-  #      | (datetime >= date("2015-06-21") & datetime <= ("2015-09-21")) 
-  #      | (datetime >= date("2014-06-21") & datetime <= ("2014-09-21"))
-  #       )
-  filter((datetime >= date("2018-07-01") & datetime <= ("2018-07-30"))) 
+filter(`datetime` >= date("2018-06-21") & `datetime` <= ("2018-09-21"))
 
-# Filter only for summer in our temperature data set
 temp_data <- temp_data %>%
-# filter((DATETIME >= date("2018-06-21") & DATETIME <= ("2018-09-21")) 
-#        | (DATETIME >= date("2017-06-21") & DATETIME <= ("2017-09-21")) 
-#        | (DATETIME >= date("2016-06-21") & DATETIME <= ("2016-09-21")) 
-#        | (DATETIME >= date("2015-06-21") & DATETIME <= ("2015-09-21")) 
-#        | (DATETIME >= date("2014-06-21") & DATETIME <= ("2014-09-21"))
-#         )
-  filter((DATETIME >= date("2018-07-01") & DATETIME <= ("2018-07-30"))) 
+filter(`DATETIME` >= date("2018-06-21") & `DATETIME` <= ("2018-09-21"))
+
 ```
 ## Account for rarity of very hot conditions
 Our goal is to determine whether the relative frequency of calls changes when the temperature goes over 103 degrees, the NWS "danger" benchmark.  We could simply count calls for each condition in each temperature bucket and compare them.  But the results would be very skewed, for this simple fact: it's much more likely to be under 80 degrees in Baltimore in the summer than it is over 103.  
@@ -337,14 +323,9 @@ call_heat_index_ratio_five_primary_impression_group <- full_data %>%
   spread(adjusted_heat_index_nws_five_scale_bucket, hours_per_call) %>%
   select(primary_impression_group, `not_unsafe_under_80`, `caution_80_89`, `extreme_caution_90_102`, `danger_103_124`)
 
+write_csv(call_heat_index_ratio_five_primary_impression_group, "hours_btwn_calls_heat_index.csv")
 
 ```
-
-heat_index_count_per_nws_five_scale_bucket_year <- temp_data %>%
-  filter(month(DATETIME) == 6) %>%
-  group_by(heat_index_nws_five_scale_bucket, year(DATETIME)) %>%
-  summarise(heat_index_count_per_nws_five_scale_bucket=n()) 
-  # filter(heat_index_nws_five_scale_bucket == 'danger_103_124')
 
 
 
