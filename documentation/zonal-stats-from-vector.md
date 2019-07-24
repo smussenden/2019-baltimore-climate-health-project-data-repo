@@ -1,6 +1,6 @@
 # Calculating Zonal Statistics Using LIDAR Vector Files
 
-*Purpose:* Given a vector file of tree cover and using QGIS, how to convert it to a black-and-white raster then calculate mean tree cover in geographic zones.
+*Purpose:* Given a vector file of tree cover and using QGIS, convert it to a black-and-white raster then calculate mean tree cover in geographic zones.
 
 *Global Notes:* 
 * Save layers created at each stage in case QGIS crashes.
