@@ -44,7 +44,7 @@
     * Checked layers will be exported even if they do not show because they are beneath other layers. This is useful for outputting multiple layers of a map at the same position and scale, rather than trying to line up individual files later. This convenience and precision should be balanced with filesize, as Illustrator will have to render all the exported layers.
     * The position on the canvas in the next step will not be exactly what it is in this display window and is easier to adjust precisely in Illustrator.
 2. _New Print Layout_ (top left, next to the save floppy-disk icon). Opens a new window. 
-    * ![New Print Layout](https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/documentation/qgis-directions/qgis-icon-new-print-layout?raw=true "New Print Layout")
+    * ![New Print Layout](https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/documentation/qgis-directions/qgis-icon-new-print-layout.png?raw=true "New Print Layout")
     * Leave the title box blank and click _OK_. Opens another new window.
 3. Set output image size and orientation: Right-click the canvas to choose _Page Properties_.
     * Under _Item Properties_, select a _Size_ and _Orientation_ appropriate to the project. ("A4" the default and is appropriate for many projects. Choose "portrait" or "landscape" depending on whether your project is tall or long.)
@@ -56,7 +56,7 @@
     * _Layout_: Check _Always export as vectors_.
     * _Properties_: Un-check _Background_.
 7. _Export as PDF_. (Illustrator can read vectors from PDF.) Opens a new window to set file name and location.
-    * ![Export as PDF](https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/documentation/qgis-directions/qgis-icon-new-print-layout?raw=true "Export as PDF")
+    * ![Export as PDF](https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/documentation/qgis-directions/qgis-icon-new-print-layout.png?raw=true "Export as PDF")
     * Choose a name and location for the file. Clicking _Save_ opens a new window with final setting options.
     * Verify _Always export as vectors_ is checked.
     * Check the box for _Disable tiled rater layer exports_. (This prevents some maps from importing into Illustrator as multiple pieces, instead stitching them together into a single image. It does not affect vectors.)
