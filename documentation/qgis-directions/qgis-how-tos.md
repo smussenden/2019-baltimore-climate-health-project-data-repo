@@ -149,3 +149,7 @@ Output: Columns added to the vector file's attribute table.
   * Output column prefix _(name matters for use in cleaning file)_: "[last-2-of-year]\_" (e.g. "07\_")
   * Statistics to calculate: mean
 * Export the new data (Right click vector -> Export -> Save features as -> format: CSV)
+
+## <a name="a">E. Joining Two Tables in Qgis</a>
+* Right-click a layer with geographies -> _Properties_ -> _Joins_
+* Click the plus icon and select key fields.
