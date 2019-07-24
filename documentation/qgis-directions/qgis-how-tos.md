@@ -1,6 +1,6 @@
 # Qgis Tutorials
 
-**An assortment of useful Qgis tutorials based on what was needed to complete my most recent project.**
+**An assortment of useful Qgis tutorials based on what was needed to complete this project.**
 
 ## Contents
 * [A. Importing XYZ Tiles and Outputting Them to Raster](#a)
