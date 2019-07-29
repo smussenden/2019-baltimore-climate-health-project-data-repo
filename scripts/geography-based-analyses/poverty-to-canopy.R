@@ -90,17 +90,37 @@ csa_tree_temp_demographics %>%
   ) +
   # This section for circling all sample neighborhood points
   geom_point(data = csa_tree_temp_demographics %>%
-               filter(csa2010 %in% callout_ls),
+               filter((csa2010 %in% callout_ls) 
+                      # Patterson Park must be included seperately because of its unique label positioning
+                      | (csa2010 == "Patterson Park North & East") 
+                      ),
              aes(color = `09-63_mean`),
              size=6, shape = 1) +
   # This section for labeling Canton, etc.
-  ggrepel::geom_label_repel(data = subset(csa_tree_temp_demographics, 
-                        csa2010 %in% callout_ls),
+  ggrepel::geom_label_repel(data = csa_tree_temp_demographics %>%
+                              filter(csa2010 %in% callout_ls) %>%
+                              mutate(csa2010 = case_when(
+                                csa2010 == "Greenmount East" ~ "Greenmount East \n(includes part of Broadway East)", 
+                                csa2010 == "Clifton-Berea" ~ "Clifton-Berea \n(includes part of Broadway East)",
+                                T ~ csa2010)),
             aes(label = csa2010),
             min.segment.length = .1,
             segment.alpha = .5,
+            alpha = .85,
             nudge_x = .05,
-            nudge_y = .05) +
+            nudge_y = .06) +
+  # This section for labeling Patterson Park (so it can be nudged)
+  ggrepel::geom_label_repel(data = csa_tree_temp_demographics %>%
+                              filter(csa2010 == "Patterson Park North & East") %>%
+                              mutate(csa2010 = case_when(
+                                csa2010 == "Patterson Park North & East" ~ "Patterson Park North & East \n(includes most of McElderry Park)",
+                                T ~ csa2010)),
+                            aes(label = csa2010),
+                            min.segment.length = .1,
+                            segment.alpha = .5,
+                            alpha = .85,
+                            nudge_x = -.06,
+                            nudge_y = .03) +
   # Colors and label formatting follow
   #coord_flip() +
   scale_colour_gradient(low = "#E0FEA9", high = "#144A11") +
