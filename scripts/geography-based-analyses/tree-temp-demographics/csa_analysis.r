@@ -4,13 +4,14 @@
 #################################################################
 ######## Install necessary packages and load libraries ##########
 #################################################################
-## install.packages('tidyverse')
-## install.packages("corrr")
-## install.packages("Hmisc")
+
+install.packages('tidyverse')
 library(tidyverse)
 library(corrr)
 library(Hmisc)
 library(magrittr)
+library(here)
+
 
 ### For debugging
 rm(list=ls())
