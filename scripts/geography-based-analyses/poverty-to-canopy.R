@@ -5,55 +5,14 @@
 ######## Install necessary packages and load libraries ##########
 #################################################################
 
-#install.packages('here', dependencies = T)
+# install.packages('RColorBrewer', dependencies = T)
 library(tidyverse)
 library(here) # A helpful package for file management
 library(viridis) # A pretty, colorblind-friendly set of palettes
+library(colorspace)
 
 # Turn off scientific notation
 options(scipen = 999)
-
-#######################################
-####### NOTES ON BEST PRACTICE ########
-#######################################
-
-# 1. Use Projects rather than including rm(list=ls()): 
-# * Why? 
-#   * rm() doesn't actually ensure a truly clean workspace due to hidden items.
-#   * Using a Project eliminates the need for local file directory paths, which will break on different computers.
-#   * Allows the use of the here() package and function which ensures better cross-system compatability.
-# * How?
-#   * When starting a new project, use File > New Project the first time you create a new file.
-#   * To ensure a clean workspace on startup, use RStudio > Preferences > General
-#     * Uncheck "Restore .RData..."
-#     * Set "Save Workspace to .RData on exit" to "never"
-#     * Uncheck "Always save history..."
-#   * Access Projects by doing any of the following:
-#     * opening them directly from the Finder
-#     * using File > Open Project
-#     * using the Project drop-down in the upper-right of RStudio.
-#
-# 2. Be intentional in making graphs colorblind-accessible:
-# * Why?
-#   * The default ggplot palette is not strongly differentiated in value
-#   * Non-colorblind-friendly palettes are not only inaccessible, but unclear when printed in black and white
-# * How?
-#   * Use premade palettes created with colorblindness in mind:
-#     * A particluarly good one is Viridis, found and explained here: https://cran.r-project.org/web/packages/viridis/vignettes/intro-to-viridis.html
-#     * Another option is to use the following:
-# Colorblind-friendly palette
-# cbPalette <- c("#999999", # Dark Gray
-#                "#E69F00", # Mustard Yellow
-#                "#56B4E9", # Sky Blue
-#                "#009E73", # Strong Green
-#                "#F0E442", # Lemon Yellow
-#                "#0072B2", # Denim Blue
-#                "#D55E00", # Rust Orange
-#                "#CC79A7") # Lavender
-# To use for fills, add
-# scale_fill_manual(values=cbPalette)
-# To use for line and point colors, add
-# scale_colour_manual(values=cbPalette)
 
 ###############################
 ####### LOAD DATA ########
@@ -87,7 +46,8 @@ csa_tree_temp_demographics %>%
                  color = `09-63_mean`),
              size=4) +
   coord_flip() +
-  scale_color_viridis(direction = -1) +
+  # scale_color_viridis(direction = -1) +
+  scale_colour_gradient(low = "#E0FEA9", high = "#144A11") +
   labs(title = "Median Income to Percent Tree Canopy",
        subtitle = "In thousands of dollars",
        x = "",
