@@ -140,5 +140,5 @@ csa_tree_temp_demographics %>%
 # Save to file
 ggsave(filename = "poverty-to-mean-tree-cover2.png",
        device = "png", path = here("data", "output-data", "income-to-treecover"),
-       width = 6, height = 6, units = "in")
+       width = 8, height = 8, units = "in")
 
