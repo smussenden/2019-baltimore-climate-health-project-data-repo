@@ -5,11 +5,11 @@
 ######## Install necessary packages and load libraries ##########
 #################################################################
 
-# install.packages('RColorBrewer', dependencies = T)
+# install.packages('colorspace', dependencies = T)
 library(tidyverse)
 library(here) # A helpful package for file management
-library(viridis) # A pretty, colorblind-friendly set of palettes
 library(colorspace)
+library(ggplot2)
 
 # Turn off scientific notation
 options(scipen = 999)
@@ -35,11 +35,14 @@ csa_tree_temp_demographics <- read_csv(here(
          matches("percent_of_family_households_living_below_the_poverty_line")) %>%
   mutate_at(vars(matches("percent")), round, 2)
 
+# CSAs to call out
+callout_ls <- c("Canton", "Clifton-Berea", "Greater Roland Park/Poplar Hill", "Greenmount East")
+
 ###############################
 ####### PLOTTING STUFF ########
 ###############################
 
-## First graph
+## INCOME TO TREE COVER
 # csa_tree_temp_demographics %>%
 #   ggplot() +
 #   geom_point(aes(x = median_household_income/1000,
@@ -48,8 +51,7 @@ csa_tree_temp_demographics <- read_csv(here(
 #              size=4) +
 #   # This section shows the trend line
 #   geom_smooth(aes(x = median_household_income/1000,
-#                   y = `09-63_mean`), se = FALSE) +
-#   coord_flip() +
+#                   y = `09-63_mean`), method = glm, se = FALSE) +
 #   scale_color_viridis(direction = -1) +
 #   labs(title = "Median Income to Percent Tree Canopy",
 #        subtitle = "In thousands of dollars",
@@ -69,11 +71,7 @@ csa_tree_temp_demographics <- read_csv(here(
 #        device = "png", path = here("data", "output-data", "income-to-treecover"),
 #        width = 6, height = 6, units = "in")
 
-
-# CSAs to call out
-callout_ls <- c("Canton", "Clifton-Berea", "Greater Roland Park/Poplar Hill", "Greenmount East")
-
-## Revised graph
+## POVERTY TO TREE COVER
 csa_tree_temp_demographics %>%
   # Start ggplot and set x and y for entire plot
   ggplot(aes(
@@ -83,11 +81,6 @@ csa_tree_temp_demographics %>%
   # This section for the basic scatterplot
   geom_point(aes(color = `09-63_mean`),
              size=4) +
-  # This section shows the trend line
-  geom_smooth(se = FALSE, # Removes gray banding
-              #method = loess, method.args = list(family = "symmetric"), # Reduces outlier effect
-              color = "black"
-  ) +
   # This section for circling all sample neighborhood points
   geom_point(data = csa_tree_temp_demographics %>%
                filter((csa2010 %in% callout_ls) 
@@ -96,6 +89,10 @@ csa_tree_temp_demographics %>%
                       ),
              aes(color = `09-63_mean`),
              size=6, shape = 1) +
+  # This section shows the trend line
+  geom_smooth(se = FALSE, # Removes gray banding
+              method = glm, 
+              color = "black") +
   # This section for labeling Canton, etc.
   ggrepel::geom_label_repel(data = csa_tree_temp_demographics %>%
                               filter(csa2010 %in% callout_ls) %>%
@@ -125,7 +122,7 @@ csa_tree_temp_demographics %>%
   #coord_flip() +
   scale_colour_gradient(low = "#E0FEA9", high = "#144A11") +
   labs(title = "Poverty to Tree Canopy",
-       subtitle = "Percent of households living below the poverty line \ncompared to the percent of tree cover",
+       subtitle = "Percent of households living below the poverty line \ncompared to the percent of tree cover in the neighborhood",
        x = "Percent of households living below the poverty line",
        y = "") +
   scale_x_continuous(label = scales::percent_format(accuracy = 1.0),
