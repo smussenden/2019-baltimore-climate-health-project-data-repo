@@ -24,7 +24,7 @@ csa_tree_temp_demographics <- read_csv(here(
   # FILE NAME
   "csa_lidartree_temp_demographics.csv")) %>%
   select(matches("csa2010"), 
-         matches("09-63_mean"),
+         matches("07_lid_mean"),
          matches("temp_mean_aft"),
          matches("median_household_income"), 
          matches("percent_of_households_earning_less_than_25_000"), 
@@ -46,12 +46,12 @@ callout_ls <- c("Canton", "Clifton-Berea", "Greater Roland Park/Poplar Hill", "G
 # csa_tree_temp_demographics %>%
 #   ggplot() +
 #   geom_point(aes(x = median_household_income/1000,
-#                  y = `09-63_mean`,
-#                  color = `09-63_mean`),
+#                  y = `07_lid_mean`,
+#                  color = `07_lid_mean`),
 #              size=4) +
 #   # This section shows the trend line
 #   geom_smooth(aes(x = median_household_income/1000,
-#                   y = `09-63_mean`), method = glm, se = FALSE) +
+#                   y = `07_lid_mean`), method = glm, se = FALSE) +
 #   scale_color_viridis(direction = -1) +
 #   labs(title = "Median Income to Percent Tree Canopy",
 #        subtitle = "In thousands of dollars",
@@ -76,10 +76,10 @@ csa_tree_temp_demographics %>%
   # Start ggplot and set x and y for entire plot
   ggplot(aes(
     x = percent_of_family_households_living_below_the_poverty_line/100, 
-    y = `09-63_mean`
+    y = `07_lid_mean`
     )) +
   # This section for the basic scatterplot
-  geom_point(aes(color = `09-63_mean`),
+  geom_point(aes(color = `07_lid_mean`),
              size=4) +
   # This section for circling all sample neighborhood points
   geom_point(data = csa_tree_temp_demographics %>%
@@ -87,7 +87,7 @@ csa_tree_temp_demographics %>%
                       # Patterson Park must be included seperately because of its unique label positioning
                       | (csa2010 == "Patterson Park North & East") 
                       ),
-             aes(color = `09-63_mean`),
+             aes(color = `07_lid_mean`),
              size=6, shape = 1) +
   # This section shows the trend line
   geom_smooth(se = FALSE, # Removes gray banding
@@ -122,9 +122,9 @@ csa_tree_temp_demographics %>%
   #coord_flip() +
   scale_colour_gradient(low = "#E0FEA9", high = "#144A11") +
   labs(title = "Poverty to Tree Canopy",
-       subtitle = "Percent of households living below the poverty line \ncompared to the percent of tree cover in the neighborhood",
+       subtitle = "Percent of households living below the poverty line \ncompared to the percent of tree cover in the area",
        x = "Percent of households living below the poverty line",
-       y = "") +
+       y = "Percent of land covered by trees") +
   scale_x_continuous(label = scales::percent_format(accuracy = 1.0),
                      breaks = seq(0, 1, .1)) + 
   scale_y_continuous(label = scales::percent_format(accuracy = 1.0),
@@ -139,3 +139,12 @@ ggsave(filename = "poverty-to-mean-tree-cover2.png",
        device = "png", path = here("data", "output-data", "income-to-treecover"),
        width = 8, height = 8, units = "in")
 
+
+# MISC
+nsa_tree_lidar <- read_csv(here("data", "btree_statistics_by_nsa_2007_lidar.csv")) %>%
+  left_join(read_csv(here("data", "btree_statistics_by_nsa_2015_lidar.csv"))) %>%
+  select(LABEL, `07_mean`, `15_mean` ) %>%
+  mutate(canopy_change = round((`15_mean` - `07_mean`), 4))
+write_csv(nsa_tree_lidar, here("data", "btree_statistics_by_nsa_2007_2015_lidar.csv"))
+
+nsa_tree_lidar_both <- read_csv(here("data", "btree_statistics_by_nsa_2007_2015_lidar.csv"))
