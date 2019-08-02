@@ -6,10 +6,6 @@ output: html_document
 ---
 
 #### TO DO 
---figure out whether we really just want to use last summer, which was pretty uniquely hot and a better look at our future. 
---Talk with Kathy about 5 year data
---Do analysis of last summer temp data
---Adjust ALL heat island data with heat index function using dew point from August 29, 2018
 
 ## Introduction
 
@@ -22,7 +18,7 @@ This R markdown document describes the methodology and results of a portion of t
 #######################
 #### Load Packages ####
 #######################
-
+rm(list=ls())
 library(tidyverse)
 library(stringr)
 library(lubridate)
@@ -246,30 +242,46 @@ The NWS heat index buckets are:
 # Create a NWS temperature bucket in our joined calls-temp data set with a five-part NWS temperature danger scale, and a column so we can sort nicely.
 full_data <- full_data %>%
   mutate(adjusted_heat_index_nws_five_scale_bucket = case_when(
-    adjusted_heat_index <= 79 ~ "Under_80",
-    adjusted_heat_index >= 80 & adjusted_heat_index <= 89 ~ "80_89",
-    adjusted_heat_index >= 90 & adjusted_heat_index <= 99 ~ "90_99",
-    adjusted_heat_index >= 100 & adjusted_heat_index <= 124 ~ "100_plus"
+    adjusted_heat_index <= 79 ~ "not_unsafe_under_79",
+    adjusted_heat_index >= 80 & adjusted_heat_index <= 90 ~ "caution_80_90",
+    adjusted_heat_index >= 91 & adjusted_heat_index <= 102 ~ "extreme_caution_91_102",
+    adjusted_heat_index >= 103 & adjusted_heat_index <= 124 ~ "danger_103_124"
   ), adjusted_heat_index_nws_five_scale_bucket_order = case_when(
-    adjusted_heat_index_nws_five_scale_bucket == "Under_80" ~ "A",
-    adjusted_heat_index_nws_five_scale_bucket == "80_89" ~ "B",
-    adjusted_heat_index_nws_five_scale_bucket == "90_99" ~ "C",
-    adjusted_heat_index_nws_five_scale_bucket == "100_plus" ~ "D"
+    adjusted_heat_index_nws_five_scale_bucket == "not_unsafe_under_79" ~ "A",
+    adjusted_heat_index_nws_five_scale_bucket == "caution_80_90" ~ "B",
+    adjusted_heat_index_nws_five_scale_bucket == "extreme_caution_91_102" ~ "C",
+    adjusted_heat_index_nws_five_scale_bucket == "danger_103_124" ~ "D"
+  ),
+  greater_100 = case_when(
+    adjusted_heat_index > 100 ~ "Yes",
+    adjusted_heat_index <= 100 ~ "No"
+  ),
+  greater_105 = case_when(
+    adjusted_heat_index > 105 ~ "Yes",
+    adjusted_heat_index <= 105 ~ "No"
   )
   )
 
 # For later calculations, we're also going to have to create these NWS temperature buckets in our temperature data set.  
 temp_data <- temp_data %>%
   mutate(heat_index_nws_five_scale_bucket = case_when(
-    HEAT_INDEX <= 79 ~ "Under_80",
-    HEAT_INDEX >= 80 & HEAT_INDEX <= 89 ~ "80_89",
-    HEAT_INDEX >= 90 & HEAT_INDEX <= 99 ~ "90_99",
-    HEAT_INDEX >= 100 & HEAT_INDEX <= 124 ~ "100_plus"
+    HEAT_INDEX <= 79 ~ "not_unsafe_under_79",
+    HEAT_INDEX >= 80 & HEAT_INDEX <= 90 ~ "caution_80_90",
+    HEAT_INDEX >= 91 & HEAT_INDEX <= 102 ~ "extreme_caution_91_102",
+    HEAT_INDEX >= 103 & HEAT_INDEX <= 124 ~ "danger_103_124"
   ), heat_index_nws_five_scale_bucket_order = case_when(
-    heat_index_nws_five_scale_bucket == "Under_80" ~ "A",
-    heat_index_nws_five_scale_bucket == "80_89" ~ "B",
-    heat_index_nws_five_scale_bucket == "90_99" ~ "C",
-    heat_index_nws_five_scale_bucket == "100_124" ~ "D"
+    heat_index_nws_five_scale_bucket == "not_unsafe_under_79" ~ "A",
+    heat_index_nws_five_scale_bucket == "caution_80_90" ~ "B",
+    heat_index_nws_five_scale_bucket == "extreme_caution_91_102" ~ "C",
+    heat_index_nws_five_scale_bucket == "danger_103_124" ~ "D"
+  ),
+  greater_100 = case_when(
+   HEAT_INDEX > 100 ~ "Yes",
+   HEAT_INDEX <= 100 ~ "No"
+  ),
+  greater_105 = case_when(
+    HEAT_INDEX > 105 ~ "Yes",
+    HEAT_INDEX <= 105 ~ "No"
   )
   )
 
@@ -317,11 +329,19 @@ call_heat_index_ratio_five_primary_impression_group <- full_data %>%
   mutate(hours_per_call = heat_index_count_per_nws_five_scale_bucket/condition_calls_count_per_bucket) %>%
   select(primary_impression_group, adjusted_heat_index_nws_five_scale_bucket, hours_per_call) %>%
   spread(adjusted_heat_index_nws_five_scale_bucket, hours_per_call) %>%
-  select(primary_impression_group, `Under_80`, `80_89`, `90_99`, `100_plus`)
+  select(primary_impression_group, `not_unsafe_under_79`,`caution_80_90`,`extreme_caution_91_102`,`danger_103_124`)
 
 write_csv(call_heat_index_ratio_five_primary_impression_group, "10_buckets_hours_btwn_calls_heat_index.csv")
 
 ```
 
+## Model increase in heat
+Calculate calls per hour
+
+```{r}
+test <- full_data %>%
+  filter(!is.na(`greater_100`)) %>%
+  group_by(primary_impression_group, `greater_100`)
 
 
+```
