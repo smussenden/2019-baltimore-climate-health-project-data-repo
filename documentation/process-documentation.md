@@ -11,6 +11,7 @@
   3. Neighborhood block groupings, courtesy of City of Baltimore Dept. of Planning
   4. Urban heat island temperature study, courtesy of the School of Urban Studies and Planning
   5. Baltimore tree inventory, courtesy of the Baltimore Department of Recreation and Parks, Urban Forestry Division
+  6. LIDAR data: https://portal.lternet.edu/nis/mapbrowse?packageid=knb-lter-bes.3210.110
 
 **B. Secondary data files**
   1. Thresholded raster TIFs of treecover calculated from files A.2 (at 63 and 127)

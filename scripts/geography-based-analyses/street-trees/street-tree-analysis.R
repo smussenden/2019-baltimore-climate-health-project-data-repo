@@ -4,15 +4,13 @@
 #################################################################
 ######## Install necessary packages and load libraries ##########
 #################################################################
-## install.packages('tidyverse')
-## install.packages("corrr")
-## install.packages("janitor")
-## install.packages("DescTools")
+## install.packages("janitor", dependencies = T)
 
 library(tidyverse)
 require(scales) # For percent labeling on distribution tables
 library(DescTools) # For %like% operator
-library(gridExtra) # For outputting tables to PDF
+library(here) # For cleaner file path writing
+#library(gridExtra) # For outputting tables to PDF
 #library(readxl)
 #library(janitor)
 #library(magrittr)
@@ -1207,5 +1205,32 @@ wk %>%
 ggsave(filename = "count_of_trees_per_genus_by_nsa.png", 
        device = "png", path = "data/output-data/street-tree-analyses/plots/tree-variety",
        width = 16, height = 9, units = "in")
+
+############################################
+### Analysis of small block group ##########
+############################################
+
+### Load, clean, calculate for each
+blocks_of_interest <- 
+  # Load in
+  read_csv(here("data", "output-data", "street-tree-analyses", "blocks-of-interest-treecover-lidar.csv")) %>%
+  # Standardize var name capitalization
+  rename_all(tolower) %>%
+  # Select only needed cols
+  select(geoid10, `07_mean`, `15_mean`) %>%
+  # Add col to calculate perc change
+  mutate(perc_change = 100*((`15_mean` - `07_mean`)/`07_mean`)) %>%
+  mutate(perc_point_change = 100*(`15_mean` - `07_mean`))
+
+### Calc for all
+blocks_of_interest %>%
+  select(`07_mean`, `15_mean`, perc_change, perc_point_change) %>%
+  dplyr::summarise(`07_mean` = mean(`07_mean`),
+                   `15_mean` = mean(`15_mean`),
+                   mean_perc_change = mean(perc_change),
+                   mean_perc_point_change = mean(perc_point_change))
+
+
+
 
 

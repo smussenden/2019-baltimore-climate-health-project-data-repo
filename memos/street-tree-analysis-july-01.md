@@ -1,7 +1,5 @@
 # Memo - NSA Street Tree Analysis - Week of July 1
 
-_INCOMPLETE_
-
 ## Definitions
 * **NSAs** (277): Neighborhood Statistical Areas
   * Citywide calculations are controled for neighborhoods with at least 50 trees (252 remaining).

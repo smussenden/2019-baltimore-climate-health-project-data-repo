@@ -40,8 +40,7 @@ c_to_f_convert <- function(x) (x * (9/5) + 32)
 #######################
 
 # Afternoon temperatures by Block
-temp_aft_block <- read_csv("urban_heat_island_temperature/temperature_values/afternoon/temp-by-block_af.csv")
-temp_aft_block <- temp_aft_block %>%
+temp_aft_block <- read_csv("urban_heat_island_temperature/temperature_values/afternoon/temp-by-block_af.csv") %>%
   filter(COUNTYFP10 == "510") %>%
   rename(temp_mean_aft = temp_mean,
          temp_median_aft = temp_median,
@@ -50,8 +49,7 @@ temp_aft_block <- temp_aft_block %>%
   mutate_at(vars(contains("temp")), c_to_f_convert)
 
 # Afternoon temperatures by ZCTA (ZIP Code Tabulation Area)
-temp_aft_zcta <- read_csv("urban_heat_island_temperature/temperature_values/afternoon/temp-by-zcta_af.csv") 
-temp_aft_zcta <- temp_aft_zcta %>%
+temp_aft_zcta <- read_csv("urban_heat_island_temperature/temperature_values/afternoon/temp-by-zcta_af.csv") %>%
   rename(temp_mean_aft = t_af_mean,
          temp_median_aft = t_af_median,
          temp_min_aft = t_af_min,
@@ -59,8 +57,7 @@ temp_aft_zcta <- temp_aft_zcta %>%
   mutate_at(vars(contains("temp")), c_to_f_convert)
 
 # Afternoon temperatures by Neighborhood Statistical Area (best representation of true city neighborhoods)
-temp_aft_nsa <- read_csv("urban_heat_island_temperature/temperature_values/afternoon/temp-by-nsa_af.csv")
-temp_aft_nsa <- temp_aft_nsa %>%
+temp_aft_nsa <- read_csv("urban_heat_island_temperature/temperature_values/afternoon/temp-by-nsa_af.csv") %>%
   rename(temp_mean_aft = temp_mean,
          temp_median_aft = temp_median,
          temp_min_aft = temp_min,
@@ -68,8 +65,7 @@ temp_aft_nsa <- temp_aft_nsa %>%
   mutate_at(vars(contains("temp")), c_to_f_convert)
 
 # Afternoon temperatures by Community Statistical Area (small groups of city neighborhoods)
-temp_aft_csa <- read_csv("urban_heat_island_temperature/temperature_values/afternoon/temp-by-csa_af.csv")
-temp_aft_csa <- temp_aft_csa %>%
+temp_aft_csa <- read_csv("urban_heat_island_temperature/temperature_values/afternoon/temp-by-csa_af.csv") %>%
   mutate(temp_median = temp_media) %>%
   select(OBJECTID, CSA2010, temp_mean, temp_median, temp_min, temp_max) %>%
   rename(temp_mean_aft = temp_mean,
@@ -83,8 +79,7 @@ temp_aft_csa <- temp_aft_csa %>%
 #######################
 
 # Morning temperatures by Block
-temp_am_block <- read_csv("urban_heat_island_temperature/temperature_values/morning/temp-by-block_am.csv")
-temp_am_block <- temp_am_block %>%
+temp_am_block <- read_csv("urban_heat_island_temperature/temperature_values/morning/temp-by-block_am.csv") %>%
   filter(COUNTYFP10 == "510") %>%
   rename(temp_mean_am = temp_mea_3,
          temp_median_am = temp_med_1,
@@ -93,8 +88,7 @@ temp_am_block <- temp_am_block %>%
   mutate_at(vars(contains("temp")), c_to_f_convert)
 
 # Morning temperatures by ZCTA (ZIP Code Tabulation Area)
-temp_am_zcta <- read_csv("urban_heat_island_temperature/temperature_values/morning/temp-by-zcta_am.csv") 
-temp_am_zcta <- temp_am_zcta %>%
+temp_am_zcta <- read_csv("urban_heat_island_temperature/temperature_values/morning/temp-by-zcta_am.csv") %>%
   rename(temp_mean_am = t_am_mean,
          temp_median_am = t_am_median,
          temp_min_am = t_am_min,
@@ -102,8 +96,7 @@ temp_am_zcta <- temp_am_zcta %>%
   mutate_at(vars(contains("temp")), c_to_f_convert)
 
 # Morning temperatures by Neighborhood Statistical Area (best representation of true city neighborhoods)
-temp_am_nsa <- read_csv("urban_heat_island_temperature/temperature_values/morning/temp-by-nsa_am.csv")
-temp_am_nsa <- temp_am_nsa %>%
+temp_am_nsa <- read_csv("urban_heat_island_temperature/temperature_values/morning/temp-by-nsa_am.csv") %>%
   rename(temp_mean_am = temp_mean,
          temp_median_am = temp_median,
          temp_min_am = temp_min,
@@ -111,8 +104,7 @@ temp_am_nsa <- temp_am_nsa %>%
   mutate_at(vars(contains("temp")), c_to_f_convert)
 
 # Morning temperatures by Community Statistical Area (small groups of city neighborhoods)
-temp_am_csa <- read_csv("urban_heat_island_temperature/temperature_values/morning/temp-by-csa_am.csv")
-temp_am_csa <- temp_am_csa %>%
+temp_am_csa <- read_csv("urban_heat_island_temperature/temperature_values/morning/temp-by-csa_am.csv") %>%
   mutate(temp_mean_am = temp_mea_2,
          temp_median_am = temp_med_2,
          temp_min_am = temp_min_2,
@@ -125,8 +117,7 @@ temp_am_csa <- temp_am_csa %>%
 #######################
 
 # Evening temperatures by Block
-temp_pm_block <- read_csv("urban_heat_island_temperature/temperature_values/evening/temp-by-block_pm.csv")
-temp_pm_block <- temp_pm_block %>%
+temp_pm_block <- read_csv("urban_heat_island_temperature/temperature_values/evening/temp-by-block_pm.csv") %>%
   filter(COUNTYFP10 == "510") %>%
   rename(temp_mean_pm = temp_mea_4,
          temp_median_pm = temp_med_2,
@@ -135,8 +126,7 @@ temp_pm_block <- temp_pm_block %>%
   mutate_at(vars(contains("temp")), c_to_f_convert)
 
 # Evening temperatures by ZCTA (ZIP Code Tabulation Area)
-temp_pm_zcta <- read_csv("urban_heat_island_temperature/temperature_values/evening/temp-by-zcta_pm.csv") 
-temp_pm_zcta <- temp_pm_zcta %>%
+temp_pm_zcta <- read_csv("urban_heat_island_temperature/temperature_values/evening/temp-by-zcta_pm.csv")  %>%
   rename(temp_mean_pm = t_pm_mean,
          temp_median_pm = t_pm_median,
          temp_min_pm = t_pm_min,
@@ -144,8 +134,7 @@ temp_pm_zcta <- temp_pm_zcta %>%
   mutate_at(vars(contains("temp")), c_to_f_convert)
 
 # Evening temperatures by Neighborhood Statistical Area (best representation of true city neighborhoods)
-temp_pm_nsa <- read_csv("urban_heat_island_temperature/temperature_values/evening/temp-by-nsa_pm.csv")
-temp_pm_nsa <- temp_pm_nsa %>%
+temp_pm_nsa <- read_csv("urban_heat_island_temperature/temperature_values/evening/temp-by-nsa_pm.csv") %>%
   rename(temp_mean_pm = temp_mean,
          temp_median_pm = temp_median,
          temp_min_pm = temp_min,
@@ -153,8 +142,7 @@ temp_pm_nsa <- temp_pm_nsa %>%
   mutate_at(vars(contains("temp")), c_to_f_convert)
 
 # Evening temperatures by Community Statistical Area (small groups of city neighborhoods)
-temp_pm_csa <- read_csv("urban_heat_island_temperature/temperature_values/evening/temp-by-csa_pm.csv")
-temp_pm_csa <- temp_pm_csa %>%
+temp_pm_csa <- read_csv("urban_heat_island_temperature/temperature_values/evening/temp-by-csa_pm.csv") %>%
   mutate(temp_mean_pm = temp_mea_1,
          temp_median_pm = temp_med_1,
          temp_min_pm = temp_min_1,

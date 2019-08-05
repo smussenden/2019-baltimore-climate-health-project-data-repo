@@ -1,0 +1,210 @@
+---
+title: "Code Red Data Cleaning"
+author: "Roxanne Ready, Sean Mussenden, Jake Gluck and Jane Gerard | Capital News Service and the Howard Center for Investigative Journalism"
+date: "8/5/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Introduction
+
+This R markdown document describes the methodology and results of the data cleaning portion of the data analysis we conducted in support of a reporting project examining tree canopy, heat and health inequity across the city of Baltimore, especially as it relates to climate change.
+
+## Setup
+
+```{r echo=TRUE, message=FALSE}
+#######################
+#### Load Packages ####
+#######################
+
+library(tidyverse)
+require(scales) # For percent labeling on distribution tables
+library(DescTools) # For %like% operator
+library(here) # For cleaner file path writing
+
+# Turn off scientific notation in RStudio (prevents coersion to character type)
+options(scipen = 999)
+
+```
+
+## Define Functions and Store Variables
+
+```{r echo=TRUE, message=FALSE}
+# Convert celcius values to fahrenheit
+c_to_f_convert <- function(x) (x * (9/5) + 32)
+
+# Common file path to raw data
+path_to_data <- "../data/input-data/urban_heat_island_temperature/temperature_values/"
+
+```
+
+## Load Temperature Data
+
+Temperature data provided by the School of Urban Studies and Planning from its Urban Heat Island Temperature study, which captured micro-level temperature variations for all of Baltimore City on August 29, 2018.
+* The data can be downloaded [here](https://osf.io/e63x9/).
+* Full methodology paper [here](https://osf.io/ur7my/).
+
+Temperature data was compiled in three batches for morning, afternoon and evening, in a raster image with one temperature (Celcius) per pixels.
+
+For each time period, CNS used the open-source mapping program [QGIS](https://qgis.org/en/site/) to calculate zonal statistics (mean, median, min and max) for the temperture in several geographic units. The geographic units are: 
+* U.S. Census block
+* ZCTAs - ZIP Code Tabulation Areas, a U.S. Census proxy for postal ZIP Code units
+* Neighborhood Statistical Areas - Areas created by Baltimore City to represent Baltimore neighborhoods, comprised of custom groupings of U.S. Census blocks. Considered by Baltimore City and this analysis as the best representation of true Baltimore neighborhoods.
+* Community Statistical Areas - Groupings of neighborhoods, created and used by the Baltimore Neighborhood Indicators Alliance. In some cases, it's one neighborhood per CSA; in others, it's multiple. Some demographic data is only available by CSA.
+
+After caclulating the zonal statistis, CNS exported the files from QGIS as CSV files and loaded them into R for further processing and analysis.
+
+```{r echo=TRUE, message=FALSE}
+#######################
+###### Afternoon ######
+#######################
+
+# Afternoon temperatures by Block
+temp_aft_block <- read_csv(paste0(path_to_data, "afternoon/temp-by-block_af.csv")) %>%
+  filter(COUNTYFP10 == "510") %>%
+  rename(temp_mean_aft = temp_mean,
+         temp_median_aft = temp_median,
+         temp_min_aft = temp_min,
+         temp_max_aft = temp_max) %>%
+  mutate_at(vars(contains("temp")), c_to_f_convert)
+
+# Afternoon temperatures by ZCTA (ZIP Code Tabulation Area)
+temp_aft_zcta <- read_csv(paste0(path_to_data, "afternoon/temp-by-zcta-not-clipped-to-balt-city-border_af.csv")) %>%
+  rename(temp_mean_aft = t_af_mean,
+         temp_median_aft = t_af_median,
+         temp_min_aft = t_af_min,
+         temp_max_aft = t_af_max) %>%
+  mutate_at(vars(contains("temp")), c_to_f_convert)
+
+# Afternoon temperatures by Neighborhood Statistical Area (best representation of true city neighborhoods)
+temp_aft_nsa <- read_csv(paste0(path_to_data, "afternoon/temp-by-nsa_af.csv")) %>%
+  rename(temp_mean_aft = temp_mean,
+         temp_median_aft = temp_median,
+         temp_min_aft = temp_min,
+         temp_max_aft = temp_max) %>%
+  mutate_at(vars(contains("temp")), c_to_f_convert)
+
+# Afternoon temperatures by Community Statistical Area (small groups of city neighborhoods)
+temp_aft_csa <- read_csv(paste0(path_to_data, "afternoon/temp-by-csa_af.csv")) %>%
+  mutate(temp_median = temp_media) %>%
+  select(OBJECTID, CSA2010, temp_mean, temp_median, temp_min, temp_max) %>%
+  rename(temp_mean_aft = temp_mean,
+         temp_median_aft = temp_median,
+         temp_min_aft = temp_min,
+         temp_max_aft = temp_max) %>%
+  mutate_at(vars(contains("temp")), c_to_f_convert)
+
+#######################
+###### Morning ########
+#######################
+
+# Morning temperatures by Block
+temp_am_block <- read_csv(paste0(path_to_data, "morning/temp-by-block_am.csv")) %>%
+  filter(COUNTYFP10 == "510") %>%
+  rename(temp_mean_am = temp_mea_3,
+         temp_median_am = temp_med_1,
+         temp_min_am = temp_min_1,
+         temp_max_am = temp_max_1) %>%
+  mutate_at(vars(contains("temp")), c_to_f_convert)
+
+# Morning temperatures by ZCTA (ZIP Code Tabulation Area)
+temp_am_zcta <- read_csv(paste0(path_to_data, "morning/temp-by-zcta-not-clipped-to-balt-city-border_am.csv")) %>%
+  rename(temp_mean_am = t_am_mean,
+         temp_median_am = t_am_median,
+         temp_min_am = t_am_min,
+         temp_max_am = t_am_max) %>%
+  mutate_at(vars(contains("temp")), c_to_f_convert)
+
+# Morning temperatures by Neighborhood Statistical Area (best representation of true city neighborhoods)
+temp_am_nsa <- read_csv(paste0(path_to_data, "morning/temp-by-nsa_am.csv")) %>%
+  rename(temp_mean_am = temp_mean,
+         temp_median_am = temp_median,
+         temp_min_am = temp_min,
+         temp_max_am = temp_max) %>%
+  mutate_at(vars(contains("temp")), c_to_f_convert)
+
+# Morning temperatures by Community Statistical Area (small groups of city neighborhoods)
+temp_am_csa <- read_csv(paste0(path_to_data, "morning/temp-by-csa_am.csv")) %>%
+  mutate(temp_mean_am = temp_mea_2,
+         temp_median_am = temp_med_2,
+         temp_min_am = temp_min_2,
+         temp_max_am = temp_max_2) %>%
+  select(OBJECTID, CSA2010, temp_mean_am, temp_median_am, temp_min_am, temp_max_am) %>%
+  mutate_at(vars(contains("temp")), c_to_f_convert)
+
+#######################
+###### Evening ########
+#######################
+
+# Evening temperatures by Block
+temp_pm_block <- read_csv(paste0(path_to_data, "evening/temp-by-block_pm.csv")) %>%
+  filter(COUNTYFP10 == "510") %>%
+  rename(temp_mean_pm = temp_mea_4,
+         temp_median_pm = temp_med_2,
+         temp_min_pm = temp_min_2,
+         temp_max_pm = temp_max_2) %>%
+  mutate_at(vars(contains("temp")), c_to_f_convert)
+
+# Evening temperatures by ZCTA (ZIP Code Tabulation Area)
+temp_pm_zcta <- read_csv(paste0(path_to_data, "evening/temp-by-zcta-not-clipped-to-balt-city-border_pm.csv"))  %>%
+  rename(temp_mean_pm = t_pm_mean,
+         temp_median_pm = t_pm_median,
+         temp_min_pm = t_pm_min,
+         temp_max_pm = t_pm_max) %>%
+  mutate_at(vars(contains("temp")), c_to_f_convert)
+
+# Evening temperatures by Neighborhood Statistical Area (best representation of true city neighborhoods)
+temp_pm_nsa <- read_csv(paste0(path_to_data, "evening/temp-by-nsa_pm.csv")) %>%
+  rename(temp_mean_pm = temp_mean,
+         temp_median_pm = temp_median,
+         temp_min_pm = temp_min,
+         temp_max_pm = temp_max) %>%
+  mutate_at(vars(contains("temp")), c_to_f_convert)
+
+# Evening temperatures by Community Statistical Area (small groups of city neighborhoods)
+temp_pm_csa <- read_csv(paste0(path_to_data, "evening/temp-by-csa_pm.csv")) %>%
+  mutate(temp_mean_pm = temp_mea_1,
+         temp_median_pm = temp_med_1,
+         temp_min_pm = temp_min_1,
+         temp_max_pm = temp_max_1) %>%
+  select(OBJECTID, CSA2010, temp_mean_pm, temp_median_pm, temp_min_pm, temp_max_pm) %>%
+  mutate_at(vars(contains("temp")), c_to_f_convert)
+
+######################################
+###### JOIN AM, AFTERNOON, PM ########
+######################################
+
+all_temp_block <- temp_am_block %>%
+  left_join(temp_aft_block) %>%
+  left_join(temp_pm_block) %>%
+  mutate_at(vars(matches("STATEFP10"), matches("GEOID10")), as.character) %>% # Recast non-calculable variables as characters
+  rename_all(tolower) %>% # Standardize variable naming capitalization
+  select(-statefp10, -countyfp10)
+
+all_temp_csa <- temp_am_csa %>%
+  left_join(temp_aft_csa) %>%
+  left_join(temp_pm_csa) %>%
+  mutate_at(vars(matches("OBJECTID")), as.character) %>% # Recast non-calculable variables as characters
+  rename_all(tolower) # Standardize variable naming capitalization
+
+all_temp_nsa <- temp_am_nsa %>%
+  left_join(temp_aft_nsa) %>%
+  left_join(temp_pm_nsa) %>%
+  rename_all(tolower) # Standardize variable naming capitalization
+
+all_temp_zcta <- temp_am_zcta %>%
+  left_join(temp_aft_zcta) %>%
+  left_join(temp_pm_zcta) %>%
+  mutate_at(vars(matches("ZCTA5CE10"), matches("GEOID10")), as.character) %>% # Recast non-calculable variables as characters
+  rename_all(tolower) # Standardize variable naming capitalization
+
+# Remove unneeded files
+rm(list=setdiff(ls(), c("all_temp_block", "all_temp_zcta", "all_temp_nsa", "all_temp_csa")))
+```
+
+
+
+
