@@ -107,7 +107,7 @@ Output: Raster file with default name "Result."
 Output: Raster file with default name "Calculated."
 * Processing -> Toolbox -> SAGA -> Raster calculus -> Raster calculator
 * Raster Calculator wizards settings: 
-  * Main input layer: 2nd raster ("Rasterized")
+  * Main input layer: 2nd raster ("Result")
   * Additional layers: _0 elements_
   * Formula: 0
   * Resampling method: [3] B-spline interpolation
