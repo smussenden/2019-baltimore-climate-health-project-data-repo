@@ -556,9 +556,10 @@ The following generated files are necessary for future portions of this analysis
 
 ``` {r echo=TRUE, message=FALSE}
 
-# Common save path
+#### Common save path ####
 save_path <- "../data/output-data/cleaned/"
 
+#### Write to CSV ####
 write_csv(blocks_tree_temp_population, paste0(save_path, "blocks_tree_temp_demographics.csv"))
 write_csv(csa_tree_temp_demographics, paste0(save_path, "csa_tree_temp_demographics.csv"))
 write_csv(nsa_tree_temp, paste0(save_path, "nsa_tree_temp.csv"))

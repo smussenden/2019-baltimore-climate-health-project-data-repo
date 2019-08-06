@@ -11,7 +11,7 @@ This R markdown document describes the methodology and results of a portion of t
 
 ## Setup
 
-```{r results='hide', echo=TRUE, message=FALSE}
+```{r echo=TRUE, message=FALSE}
 #######################
 #### Load Packages ####
 #######################
@@ -24,11 +24,50 @@ library(here) # For cleaner file path writing
 # Turn off scientific notation in RStudio (prevents coersion to character type)
 options(scipen = 999)
 
+#########################
+#### Store Variables ####
+#########################
+
+#### Common save path ####
+path_to_data <- "../data/output-data/cleaned/"
+
+###################
+#### Load Data ####
+###################
+
+blocks_tree_temp_demographics <- read_csv(paste0(path_to_data, "blocks_tree_temp_demographics.csv"))
+csa_tree_temp_demographics <- read_csv(paste0(path_to_data, "csa_tree_temp_demographics.csv"))
+nsa_tree_temp <- read_csv(paste0(path_to_data, "nsa_tree_temp.csv"))
+zcta_tree_temp_demographics <- read_csv(paste0(path_to_data, "zcta_tree_temp_demographics.csv"))
+street_trees_nsa_categorized <- read_csv(paste0(path_to_data, "street_trees_nsa_categorized.csv"))
+
 ```
 
-## Define Functions
+## Temperature Analysis
 
-```{r}
-# Create a function to convert celcius values to fahrenheit
-c_to_f_convert <- function(x) (x * (9/5) + 32)
+```{r echo=TRUE, message=FALSE}
+
+```
+
+## Tree Canopy Analysis
+
+```{r echo=TRUE, message=FALSE}
+
+```
+
+## Demographics Analysis
+
+```{r echo=TRUE, message=FALSE}
+
+```
+
+## Street Trees Analysis
+
+```{r echo=TRUE, message=FALSE}
+
+```
+
+## Plots and Graphs
+```{r echo=TRUE, message=FALSE}
+
 ```
