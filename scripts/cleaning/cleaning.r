@@ -316,7 +316,7 @@ demographics_csa <- read_csv("demographics/by_community_statistical_area/VS_Indi
   filter(csa2010 != "Baltimore City")
 
 ### NSA
-# No available demographic data, because these are shapefiles constructed by the city from census blocks, not an actual census product.  Block groups and tracts stretch across the boundaries.  Therefore, the only available valid data is from 2010 census.In a pinch, we can go back and use the 2010 stats, but that's pretty freaking old.
+# No available demographic data, because these are shapefiles constructed by the city from census blocks, not an actual census product.  Block groups and tracts stretch across the boundaries.  Therefore, the only available valid data is from 2010 census. In a pinch, we can go back and use the 2010 stats, but that's pretty freaking old.
 
 ### ZCTA
 # From American Community Survey, 5 year averages 2017.

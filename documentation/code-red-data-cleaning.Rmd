@@ -1,6 +1,6 @@
 ---
 title: "Code Red Data Cleaning"
-author: "Roxanne Ready, Sean Mussenden, Jake Gluck and Jane Gerard | Capital News Service and the Howard Center for Investigative Journalism"
+author: "Roxanne Ready, Sean Mussenden, Theresa Diffendal, Jake Gluck and Jane Gerard | Capital News Service and the Howard Center for Investigative Journalism"
 date: "8/5/2019"
 output: html_document
 ---
@@ -11,9 +11,20 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Introduction
 
-This R markdown document describes the methodology and results of the data cleaning portion of the data analysis we conducted in support of a reporting project examining tree canopy, heat and health inequity across the city of Baltimore, especially as it relates to climate change.
+This R markdown document describes the methodology and results of the data cleaning portion of the data analysis conducted in support of a reporting project examining tree canopy, heat and health inequity across the city of Baltimore, especially as it relates to climate change.
+
+### Definitions
+
+**Geographic Units**: Several geographic units are used throughout the analysis. The geographic units are: 
+
+* **U.S. Census block**: The smallest geographic area tracked by the U.S. government. Shapefiles downloaded from [Census.gov](https://www2.census.gov/geo/tiger/TIGER2018/TABBLOCK/).
+* **ZCTAs - ZIP Code Tabulation Areas**: A U.S. Census proxy for postal ZIP Code units. Shapefiles downloaded from [Census.gov](https://www2.census.gov/geo/tiger/TIGER2018/ZCTA5/).
+* **NSAs - Neighborhood Statistical Areas**: Areas created by Baltimore City to represent Baltimore neighborhoods, comprised of custom groupings of U.S. Census blocks. This grouping is considered by Baltimore City and this analysis as the best representation of true Baltimore neighborhoods. Shapefiles provided by the [Baltimore City Department of Planning](https://planning.baltimorecity.gov/maps-data/GIS).
+* **CSAs - Community Statistical Areas**: Groupings of neighborhoods, created and used by the Baltimore Neighborhood Indicators Alliance (BNIA). In some cases, there is one neighborhood per CSA; in others, it's multiple. Recent demographic data is only available by CSA. Shapefiles downloaded from the [Baltimore Neighborhood Indicators Alliance Vital Signs project](https://data-bniajfi.opendata.arcgis.com/datasets/794586676bcc4f5fb629c08c51474cf6_0).
 
 ## Setup
+
+Due to GitHub file upload limitations, input data is not included in this repo. When creating the file structure on a local machine, create a sub-folder called "input-data" within the existing "data" folder for maximum compatibility with the following code.
 
 ```{r echo=TRUE, message=FALSE}
 #######################
@@ -21,41 +32,39 @@ This R markdown document describes the methodology and results of the data clean
 #######################
 
 library(tidyverse)
-require(scales) # For percent labeling on distribution tables
-library(DescTools) # For %like% operator
-library(here) # For cleaner file path writing
+library(janitor) # For cleaning names
 
-# Turn off scientific notation in RStudio (prevents coersion to character type)
+# Turn off scientific notation in RStudio 
+# (prevents accidental coersion to character type on export)
 options(scipen = 999)
 
 ```
 
-## Define Functions and Store Variables
+## Load and Clean Temperature Data
 
-```{r echo=TRUE, message=FALSE}
-# Convert celcius values to fahrenheit
-c_to_f_convert <- function(x) (x * (9/5) + 32)
+The School of Urban Studies and Planning provided temperature data from its Urban Heat Island Temperature study, which captured micro-level temperature variations for all of Baltimore City on August 29, 2018.
 
-# Common file path to raw data
-path_to_data <- "../data/input-data/urban_heat_island_temperature/temperature_values/"
-
-```
-
-## Load Temperature Data
-
-Temperature data provided by the School of Urban Studies and Planning from its Urban Heat Island Temperature study, which captured micro-level temperature variations for all of Baltimore City on August 29, 2018.
 * The data can be downloaded [here](https://osf.io/e63x9/).
 * Full methodology paper [here](https://osf.io/ur7my/).
 
 Temperature data was compiled in three batches for morning, afternoon and evening, in a raster image with one temperature (Celcius) per pixels.
 
-For each time period, CNS used the open-source mapping program [QGIS](https://qgis.org/en/site/) to calculate zonal statistics (mean, median, min and max) for the temperture in several geographic units. The geographic units are: 
-* U.S. Census block
-* ZCTAs - ZIP Code Tabulation Areas, a U.S. Census proxy for postal ZIP Code units
-* Neighborhood Statistical Areas - Areas created by Baltimore City to represent Baltimore neighborhoods, comprised of custom groupings of U.S. Census blocks. Considered by Baltimore City and this analysis as the best representation of true Baltimore neighborhoods.
-* Community Statistical Areas - Groupings of neighborhoods, created and used by the Baltimore Neighborhood Indicators Alliance. In some cases, it's one neighborhood per CSA; in others, it's multiple. Some demographic data is only available by CSA.
+For each time period, reporters used the open-source mapping program [QGIS](https://qgis.org/en/site/) to calculate zonal statistics (mean, median, min and max) for the temperture in several geographic units. 
 
-After caclulating the zonal statistis, CNS exported the files from QGIS as CSV files and loaded them into R for further processing and analysis.
+After caclulating the zonal statistis, reporters exported the files from QGIS as CSV files, loaded them into R and joined them into master tables for further processing and analysis.
+
+### Define functions and store universal variables
+
+```{r echo=TRUE, message=FALSE}
+# Convert celcius values to fahrenheit
+c_to_f_convert <- function(x) (x * (9/5) + 32)
+
+# Common file path to raw temperature data
+path_to_data <- "../data/input-data/urban_heat_island_temperature/temperature_values/"
+
+```
+
+### Execute load-in and cleaning
 
 ```{r echo=TRUE, message=FALSE}
 #######################
@@ -72,7 +81,7 @@ temp_aft_block <- read_csv(paste0(path_to_data, "afternoon/temp-by-block_af.csv"
   mutate_at(vars(contains("temp")), c_to_f_convert)
 
 # Afternoon temperatures by ZCTA (ZIP Code Tabulation Area)
-temp_aft_zcta <- read_csv(paste0(path_to_data, "afternoon/temp-by-zcta-not-clipped-to-balt-city-border_af.csv")) %>%
+temp_aft_zcta <- read_csv(paste0(path_to_data, "afternoon/temp-by-zcta-clipped-to-balt-city-border_af.csv")) %>%
   rename(temp_mean_aft = t_af_mean,
          temp_median_aft = t_af_median,
          temp_min_aft = t_af_min,
@@ -111,7 +120,7 @@ temp_am_block <- read_csv(paste0(path_to_data, "morning/temp-by-block_am.csv")) 
   mutate_at(vars(contains("temp")), c_to_f_convert)
 
 # Morning temperatures by ZCTA (ZIP Code Tabulation Area)
-temp_am_zcta <- read_csv(paste0(path_to_data, "morning/temp-by-zcta-not-clipped-to-balt-city-border_am.csv")) %>%
+temp_am_zcta <- read_csv(paste0(path_to_data, "morning/temp-by-zcta-clipped-to-balt-city-border_am.csv")) %>%
   rename(temp_mean_am = t_am_mean,
          temp_median_am = t_am_median,
          temp_min_am = t_am_min,
@@ -149,9 +158,9 @@ temp_pm_block <- read_csv(paste0(path_to_data, "evening/temp-by-block_pm.csv")) 
   mutate_at(vars(contains("temp")), c_to_f_convert)
 
 # Evening temperatures by ZCTA (ZIP Code Tabulation Area)
-temp_pm_zcta <- read_csv(paste0(path_to_data, "evening/temp-by-zcta-not-clipped-to-balt-city-border_pm.csv"))  %>%
+temp_pm_zcta <- read_csv(paste0(path_to_data, "evening/temp-by-zcta-clipped-to-balt-city-border_pm.csv"))  %>%
   rename(temp_mean_pm = t_pm_mean,
-         temp_median_pm = t_pm_median,
+         temp_median_pm = t_pm_media,
          temp_min_pm = t_pm_min,
          temp_max_pm = t_pm_max) %>%
   mutate_at(vars(contains("temp")), c_to_f_convert)
@@ -201,10 +210,361 @@ all_temp_zcta <- temp_am_zcta %>%
   mutate_at(vars(matches("ZCTA5CE10"), matches("GEOID10")), as.character) %>% # Recast non-calculable variables as characters
   rename_all(tolower) # Standardize variable naming capitalization
 
-# Remove unneeded files
+#### Remove unneeded files ####
 rm(list=setdiff(ls(), c("all_temp_block", "all_temp_zcta", "all_temp_nsa", "all_temp_csa")))
+
+```
+
+## Load and Clean Tree Canopy LIDAR Data
+
+The BES-LTER Program and the Cary Institute of Ecosystem Studies provided a shapefile of tree canopy gain and loss data for 2007-2015 from LIDAR satellite imaging. (_Citation: O'Neil-Dunne J. 2017. GIS Shapefile, Tree Canopy Change 2007 - 2015 - Baltimore City. Environmental Data Initiative. https://doi.org/10.6073/pasta/79c1d2079271546e61823a98df2d2039_)
+
+The original shapefile data was presented in terms of "no change," "gain," and "loss" categories. To perform the following analysis, reporters restructured the data within Qgis to represent 2007 and 2015 canopy coverage and [calculated zonal statistics](https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/documentation/qgis-directions/qgis-how-tos.md#d) (mean and median) at each year. They then exported the data from QGIS into CSVs, loaded them into R and joined them into master tables for further processing and analysis.
+
+### Define functions and store universal variables
+
+```{r echo=TRUE, message=FALSE}
+
+# Common file path to raw canopy data
+path_to_data <- "../data/input-data/tree-canopy/post-qgis-processing/"
+
+```
+
+### Execute load-in and cleaning
+
+``` {r echo=TRUE, message=FALSE}
+
+#### Block ####
+# 2007
+tree_block_lidar_2007 <- read_csv(paste0(path_to_data, "by_block/btree_statistics_by_block_2007_lidar.csv")) %>%
+  rename_all(tolower)
+
+# 2015
+tree_block_lidar_2015 <- read_csv(paste0(path_to_data, "by_block/btree_statistics_by_block_2015_lidar.csv")) %>%
+  rename_all(tolower)
+
+# Join 2009 to 2015
+tree_block_lidar_2007_2015 <- tree_block_lidar_2007 %>%
+  left_join(tree_block_lidar_2015) %>%
+  mutate(
+    lid_change_percent = (`15_mean`-`07_mean`)/`07_mean`,
+    lid_change_percent_point = (`15_mean`-`07_mean`)
+  ) %>%
+  rename("07_lid_mean" = "07_mean",
+         "15_lid_mean" = "15_mean") %>%
+  # Recast non-calculable variables as characters
+  mutate_at(vars(matches("geoid10"), matches("statefp10"), 
+                 matches("countyfp10"), matches("blockce10")
+  ),
+  as.character)
+# How many times do blocks divide by zero to find the percent change? 793 compared to 12805 (12%)
+
+
+#### CSA ####
+
+# 2007
+tree_csa_lidar_2007 <- read_csv(paste0(path_to_data, "by_community_statistical_area/btree_statistics_by_csa_2007_lidar.csv"))
+
+# 2015
+tree_csa_lidar_2015 <- read_csv(paste0(path_to_data, "by_community_statistical_area/btree_statistics_by_csa_2015_lidar.csv"))
+
+# Join 2007 to 2015
+tree_csa_lidar_2007_2015 <- tree_csa_lidar_2007 %>%
+  left_join(tree_csa_lidar_2015) %>%
+  mutate(
+    lid_change_percent = (`15_mean`-`07_mean`)/`07_mean`,
+    lid_change_percent_point = (`15_mean`-`07_mean`)
+  ) %>%
+  rename_all(tolower) %>%
+  select(-matches("17\\-*")) %>%
+  rename("07_lid_mean" = "07_mean",
+         "15_lid_mean" = "15_mean") %>%
+  # Recast non-calculable variables as characters
+  mutate("objectid" = as.character(objectid)) 
+
+
+#### NSA ####
+
+# 2007
+tree_nsa_lidar_2007 <- read_csv(paste0(path_to_data, "by_neighborhood_statistical_area/btree_statistics_by_nsa_2007_lidar.csv"))
+
+# 2015
+tree_nsa_lidar_2015 <- read_csv(paste0(path_to_data, "by_neighborhood_statistical_area/btree_statistics_by_nsa_2015_lidar.csv"))
+
+# Join 2009 to 2015
+tree_nsa_lidar_2007_2015 <- tree_nsa_lidar_2007 %>%
+  left_join(tree_nsa_lidar_2015) %>%
+  mutate(
+    lid_change_percent = (`15_mean`-`07_mean`)/`07_mean`,
+    lid_change_percent_point = (`15_mean`-`07_mean`)
+  ) %>%
+  rename_all(tolower) %>%
+  rename("07_lid_mean" = "07_mean",
+         "15_lid_mean" = "15_mean") %>%
+  select(-matches("nbrdesc"), -matches("color_2")) %>%
+  # Recast non-calculable variables as characters
+  mutate("objectid" = as.character(objectid)) 
+
+
+#### ZCTA CLIPPED LIDAR ####
+
+# 2007
+tree_zcta_clipped_lidar_2007 <- read_csv(paste0(path_to_data, "by_zcta_clipped_at_balt_city_border/btree_statistics_by_zcta_2007_lidar.csv"))
+
+# 2015
+tree_zcta_clipped_lidar_2015 <- read_csv(paste0(path_to_data, "by_zcta_clipped_at_balt_city_border/btree_statistics_by_zcta_2015_lidar.csv"))
+
+# Join 2007 to 2015
+tree_zcta_clipped_lidar_2007_2015 <- tree_zcta_clipped_lidar_2007 %>%
+  left_join(tree_zcta_clipped_lidar_2015) %>%
+  mutate(
+    lid_change_percent = (`15_mean`-`07_mean`)/`07_mean`,
+    change_percent_point = (`15_mean`-`07_mean`)
+  ) %>%
+  rename_all(tolower) %>%
+  rename("07_lid_mean" = "07_mean",
+         "15_lid_mean" = "15_mean") %>%
+  select(-matches("nbrdesc"), -matches("color_2")) %>%
+  # Recast non-calculable variables as characters
+  mutate("zcta5ce10" = as.character(zcta5ce10),
+         "geoid10" = as.character(geoid10))
+
+#### Remove unneeded files ####
+rm(list=setdiff(ls(), c(
+  "tree_block_lidar_2007_2015", "tree_zcta_clipped_lidar_2007_2015", "tree_nsa_lidar_2007_2015", "tree_csa_lidar_2007_2015", 
+  "all_temp_block", "all_temp_zcta", "all_temp_nsa", "all_temp_csa")))
+```
+
+## Load and Clean Demographic Data
+
+The only recent demographic data available for neighborhood-sized areas is from the [Baltimore Neighborhood Indicators Alliance](https://bniajfi.org/vital_signs/data_downloads/), a **CSA-level** analysis from 2017. The U.S. federal government has not collected demographic information at most geographic levels since the 2010 Census, which this analysis determined is generally too old to be useful. The exception to this is the annual [American Community Survey](https://www.census.gov/acs/www/data/data-tables-and-tools/data-profiles/2017/), which uses a **ZCTA-level** geographic grouping. Additionally, this analysis used the 2010 population numbers at the **block** level to filter out low-population blocks. This analysis did not use demographic information at the **NSA** level.
+
+### Define functions and store universal variables
+
+```{r echo=TRUE, message=FALSE}
+
+# Common file path to raw demographics data
+path_to_data <- "../data/input-data/demographics/"
+
+```
+
+### Execute load-in and cleaning
+
+``` {r echo=TRUE, message=FALSE}
+#### Blocks #### 
+# Read in 2010 population data, SF1 U.S. Census data by block. Used only to filter out no population blocks before doing analysis. Otherwise, 2010 data is too old to use.
+demographics_block <- read_csv(paste0(path_to_data, "by_block/2010_SF1_Baltimore_City_Population_by_Block.csv")) %>%
+  rename_all(tolower) %>%
+  mutate("geoid10" = as.character(geoid10))
+
+#### CSA #### 
+# Data from BNIA, reading in 2017 values. https://bniajfi.org/vital_signs/data_downloads/.  
+# Clean column names and remove citywide values for Baltimore City so it joins correctly. 
+demographics_csa <- read_csv(paste0(path_to_data, "by_community_statistical_area/VS_Indicators_2017_Only_BNIA.csv")) %>%
+  clean_names() %>%
+  rename_all(tolower) %>%
+  filter(csa2010 != "Baltimore City")
+
+#### NSA #### 
+# No available demographic data, because these are shapefiles constructed by the city from census blocks, not an actual U.S. Census product.  Block groups and tracts stretch across the boundaries. Therefore, the only available valid data is from the 2010 Census.
+
+#### ZCTA #### 
+# From American Community Survey, 5 year averages 2017.
+demographics_zcta <- read_csv(paste0(path_to_data, "by_zcta/acs_2017_baltimore_zctas.csv")) %>%
+  rename_all(tolower) %>%
+  filter(zcta != "CITYWIDE")
+```
+
+## Combine Data for Each Geographic Area
+
+Once the individual component data frames have been created and cleaned, they can be merged and saved for use in the analysis.
+
+``` {r echo=TRUE, message=FALSE}
+#### Blocks #### 
+# Demographics at this level only used for removing low population blocks
+blocks_tree_temp_population <- all_temp_block %>%
+  rename_all(tolower) %>% 
+  left_join(tree_block_lidar_2007_2015) %>%
+  left_join(demographics_block) %>%
+  rename_all(tolower) %>%
+  select(-"countyfp10", -"statefp10", -"tractce10", -"blockce10", -"name10", -"mtfcc10", -"uace10", -"uatype", -"funcstat10", -"name", -"ur10") %>%
+  mutate(lid_change_percent = ifelse(is.infinite(lid_change_percent) | is.nan(lid_change_percent), NA, lid_change_percent)) %>%
+  select("geoid10", "population_2010", everything())
+# Merge check:  All three files have 13598 records, as does the merged file
+
+#### CSA ####
+csa_tree_temp_demographics <- all_temp_csa %>%
+  left_join(tree_csa_lidar_2007_2015) %>%
+  left_join(demographics_csa) %>%
+  rename_all(tolower) %>%
+  select(-"id") %>%
+  mutate_at(vars(csa2010), tolower)
+# Merge check: All three files have 55 records, as does joined file
+
+#### NSA ####
+# Note: no demographics for this
+nsa_tree_temp <- all_temp_nsa %>%
+  left_join(tree_nsa_lidar_2007_2015, by=c('nsa_name' = 'label')) %>%
+  rename_all(tolower) %>%
+  filter(nsa_name != "Unnamed") %>%
+  select(-matches("color_2")) %>%
+  select("objectid", everything()) %>%
+  mutate(lid_change_percent = ifelse(is.infinite(lid_change_percent) | is.nan(lid_change_percent), NA, lid_change_percent)) %>%
+  mutate_at(vars(nsa_name), tolower)
+# Merge check: the difference in the number of records between the temperature data frame (279) and the tree data frame (278) is because temp has an extra record for Unnamed areas, because of slight differences between the extent of the temperature raster and the NSA shapefile. Here, we drop the unnamed column on join.
+
+#### ZCTA ####
+zcta_tree_temp_demographics <- all_temp_zcta %>%
+  left_join(tree_zcta_clipped_lidar_2007_2015) %>%
+  right_join(demographics_zcta, by=c('zcta5ce10' = 'zcta')) %>%
+  rename_all(tolower) %>%
+  rename(zcta = 'zcta5ce10') %>%
+  select(-"geoid10", -"classfp10", -"mtfcc10", -"funcstat10") %>%
+  mutate(lid_change_percent = ifelse(is.infinite(lid_change_percent) | is.nan(lid_change_percent), NA, lid_change_percent))
+# Merge check: All tables have 55 records
+
+#### Remove unneeded files ####
+rm(list=setdiff(ls(), c("blocks_tree_temp_population", "zcta_tree_temp_demographics", "nsa_tree_temp", "csa_tree_temp_demographics")))
+
+```
+
+## Load and Clean Individual Tree Data
+
+The Baltimore City Department of Recreation and Parks tracks each tree and potential tree site across the city and provided this analysis with a database of those records and [accompanying documentation](https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/documentation/street-tree-inventory-spec-sheet.pdf). 
+
+The raw data arrived as a .shp file, which reporters joined together with the various core geographies and exported as a CSV for processing in R. The analysis focused on NSA-level geographies.
+
+### Define functions and store universal variables
+
+```{r echo=TRUE, message=FALSE}
+
+# List of NSAs of interest
+target_nsas <- c("Berea", "Broadway East", "Oliver", "Middle East", "Biddle Street","Milton-Montford", "Madison-Eastend", "CARE", "McElderry Park", "Ellwood Park/Monument", "Patterson Place", "Patterson Park Neighborhood", "Baltimore Highlands", "Highlandtown", "Upper Fells Point") %>%
+  lapply(tolower)
+
+# List of nearby NSAs to use as counterpoints
+counterpoint_nsas <- c("Butcher's Hill", "Canton", "Washington Hill") %>%
+  lapply(tolower)
+
+# Common file path to raw demographics data
+path_to_data <- "../data/input-data/street-trees/csv/"
+
+```
+
+### Execute load-in and cleaning
+
+```{r echo=TRUE, message=FALSE}
+
+##########################
+#### Load in the data ####
+##########################
+
+street_trees <- read_csv(paste0(path_to_data, "street_trees_nsa_join_table.csv")) %>%
+  select(-COLOR_2, -LABEL) %>%
+  rename_all(tolower) %>%
+  mutate_all(tolower) %>%
+  # Eliminate the "stump w" (typo), group "sprout" with "stump"
+  mutate(condition = ifelse((condition == "stump w")|(condition == "sprouts"), "stump", condition)) %>%
+  mutate(condition = ifelse(condition == "n/a", "unknown", condition)) %>%
+  # Make "condition" a factor so it can be ordered
+  mutate_at(vars(matches("condition")), 
+            as.factor) %>%
+  mutate(condition = fct_relevel(condition, 
+                                 c("absent",
+                                   "stump",
+                                   "dead",
+                                   "poor",
+                                   "fair",
+                                   "good",
+                                   "unknown")
+  )) %>%
+  mutate_at(vars(matches("tree_ht"), matches("dbh")), as.numeric)
+
+#############################################
+### Add categories of planting difficulty ###
+#############################################
+
+###############################################
+#### Levels of difficulty to plant ############
+###############################################
+# Live tree exists = NA = live tree           #
+# Absent and not potential = 1 = easy         #
+# Stump or dead = 2 = moderate                #
+# Absent and potential = 3 = hard             #
+# Absent and "not suitable" = 4 = unsuitable  #
+# All others = 0 = unknown                    #
+###############################################
+
+# Note on trees marked as "Not suitable" in 'spp' or 'common' colunms: 
+# "A space exists to plant but it may be too small or near a hazard or obstruction," 
+# per Nathan Randolph, GIS Analyst at Department of Recreation and Parks.
+
+### Add categories
+street_trees_categorized <- street_trees %>%
+  # Add col for top-level category
+  mutate(has_live_tree = ifelse(
+    (condition == "poor")|
+      (condition == "fair")|
+      (condition == "good"), 
+    T, F)) %>%
+  # Add col for second-level category as a number
+  mutate(difficulty_level_num = case_when(
+    # Difficulty of planting NA if tree already there.
+    has_live_tree == T ~ NA_integer_,
+    # Difficulty level 1 if...
+    condition == "absent" & # No tree,
+      !str_detect(space_type, "potential") & # Not marked "potential" aka doesn't require breaking concrete,
+      (!str_detect(spp, "not suit") | !str_detect(common, "not suit") # Not marked unsuitable.
+      ) ~ 1L,
+    # Difficulty level 2 if removal of dead tree required.
+    condition == "stump" | condition == "dead" ~ 2L,
+    # Difficulty level 3 if... 
+    condition == "absent" & # Marked absent (AND by elimination also marked potential),
+      (!str_detect(spp, "not suit") | !str_detect(common, "not suit") # Not marked unsuitable.
+      ) ~ 3L, 
+    # Difficulty level 4 if marked unsuitable
+    str_detect(spp, "not suit") ~ 4L,
+    # Catches all others at difficulty level 0 (9 erratta: "unknown")
+    TRUE ~ 0L
+  ) ) %>%
+  # Add col for second-level category as plain language
+  mutate(difficulty_level = case_when(
+    is.na(difficulty_level_num) ~ "has live tree",
+    difficulty_level_num == 1L ~ "easy",
+    difficulty_level_num == 2L ~ "moderate",
+    difficulty_level_num == 3L ~ "hard",
+    difficulty_level_num == 4L ~ "unsuitable",
+    TRUE ~ NA_character_
+  ) ) %>%
+  # Add col to denote target NSAs
+  mutate(is_target_nsa = case_when(
+    nbrdesc %in% target_nsas ~ T,
+    TRUE ~ F 
+  )) %>%
+  # Add col to denote counterpoint NSAs
+  mutate(is_counterpoint_nsa = case_when(
+    nbrdesc %in% counterpoint_nsas ~ T,
+    TRUE ~ F 
+  ))
+
 ```
 
 
+## Output All Cleaned Data to CSV Files
 
+The following generated files are necessary for future portions of this analysis.
 
+``` {r echo=TRUE, message=FALSE}
+
+# Common save path
+save_path <- "../data/output-data/cleaned/"
+
+write_csv(blocks_tree_temp_population, paste0(save_path, "blocks_tree_temp_demographics.csv"))
+write_csv(csa_tree_temp_demographics, paste0(save_path, "csa_tree_temp_demographics.csv"))
+write_csv(nsa_tree_temp, paste0(save_path, "nsa_tree_temp.csv"))
+write_csv(zcta_tree_temp_demographics, paste0(save_path, "zcta_tree_temp_demographics.csv"))
+write_csv(street_trees_categorized, paste0(save_path, "street_trees_nsa_categorized.csv"))
+
+#### Clean up the workspace ####
+rm(list=setdiff(ls(), c("blocks_tree_temp_population", "zcta_tree_temp_demographics", "nsa_tree_temp", "csa_tree_temp_demographics", "street_trees_categorized")))
+```

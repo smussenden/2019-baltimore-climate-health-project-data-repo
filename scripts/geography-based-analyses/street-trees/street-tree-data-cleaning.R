@@ -1,5 +1,5 @@
 ##### Baltimore Climate and Health Project #####
-##### By Sean Mussenden, Roxanne Ready, Jake Gluck and Jane Gerard #####
+##### By Sean Mussenden, Roxanne Ready #####
 
 #################################################################
 ######## Install necessary packages and load libraries ##########
@@ -54,7 +54,7 @@ cbPalette <- c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2",
 target_nsas <- c("Berea", "Broadway East", "Oliver", "Middle East", "Biddle Street","Milton-Montford", "Madison-Eastend", "CARE", "McElderry Park", "Ellwood Park/Monument", "Patterson Place", "Patterson Park Neighborhood", "Baltimore Highlands", "Highlandtown", "Upper Fells Point") %>%
   lapply(tolower)
 
-# List of nearby NSAs that are richer to use as counterpoints
+# List of nearby NSAs to use as counterpoints
 counterpoint_nsas <- c("Butcher's Hill", "Canton", "Washington Hill") %>%
   lapply(tolower)
 

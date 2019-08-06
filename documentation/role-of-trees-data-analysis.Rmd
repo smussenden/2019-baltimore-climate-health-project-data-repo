@@ -1,0 +1,34 @@
+---
+title: "Role of Trees Analysis"
+author: "Roxanne Ready | Howard Center for Investigative Journalism"
+date: "8/5/2019"
+output: html_document
+---
+
+## Introduction
+
+This R markdown document describes the methodology and results of a portion of the data analysis we conducted in support of a reporting project examining the effects of tree canopy inequity across the city of Baltimore, especially as it relates to climate change.
+
+## Setup
+
+```{r results='hide', echo=TRUE, message=FALSE}
+#######################
+#### Load Packages ####
+#######################
+
+library(tidyverse)
+require(scales) # For percent labeling on distribution tables
+library(DescTools) # For %like% operator
+library(here) # For cleaner file path writing
+
+# Turn off scientific notation in RStudio (prevents coersion to character type)
+options(scipen = 999)
+
+```
+
+## Define Functions
+
+```{r}
+# Create a function to convert celcius values to fahrenheit
+c_to_f_convert <- function(x) (x * (9/5) + 32)
+```
