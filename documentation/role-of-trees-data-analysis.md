@@ -5,6 +5,9 @@ date: "8/6/2019"
 output: 
   html_document: 
     keep_md: true
+    toc: true
+    toc_depth: 3
+    toc_float: true
 ---
 
 
@@ -654,6 +657,4 @@ csa_tree_temp_demographics %>%
 ## North Milton Street Trees
 
 
-
-## Plots and Graphs
 
