@@ -1,33 +1,41 @@
----
-title: "Code Red Data Cleaning"
-author: "Roxanne Ready, Sean Mussenden, Theresa Diffendal, Jake Gluck and Jane Gerard | Capital News Service and the Howard Center for Investigative Journalism"
-date: "8/5/2019"
-output: 
-  html_document: 
-    keep_md: true
----
+-   [Introduction](#introduction)
+    -   [Definitions](#definitions)
+-   [Setup](#setup)
+-   [Load and Clean Temperature Data](#load-and-clean-temperature-data)
+    -   [Define functions and store universal variables](#define-functions-and-store-universal-variables)
+    -   [Execute load-in and cleaning](#execute-load-in-and-cleaning)
+-   [Load and Clean Tree Canopy LIDAR Data](#load-and-clean-tree-canopy-lidar-data)
+    -   [Define functions and store universal variables](#define-functions-and-store-universal-variables-1)
+    -   [Execute load-in and cleaning](#execute-load-in-and-cleaning-1)
+-   [Load and Clean Demographic Data](#load-and-clean-demographic-data)
+    -   [Define functions and store universal variables](#define-functions-and-store-universal-variables-2)
+    -   [Execute load-in and cleaning](#execute-load-in-and-cleaning-2)
+-   [Combine Data for Each Geographic Area](#combine-data-for-each-geographic-area)
+-   [Load and Clean Individual Tree Data](#load-and-clean-individual-tree-data)
+    -   [Define functions and store universal variables](#define-functions-and-store-universal-variables-3)
+    -   [Execute load-in and cleaning](#execute-load-in-and-cleaning-3)
+-   [Output All Cleaned Data to CSV Files](#output-all-cleaned-data-to-csv-files)
 
-
-
-## Introduction
+Introduction
+------------
 
 This R markdown document describes the methodology and results of the data cleaning portion of the data analysis conducted in support of a reporting project examining tree canopy, heat and health inequity across the city of Baltimore, especially as it relates to climate change.
 
 ### Definitions
 
-**Geographic Units**: Several geographic units are used throughout the analysis. The geographic units are: 
+**Geographic Units**: Several geographic units are used throughout the analysis. The geographic units are:
 
-* **U.S. Census block**: The smallest geographic area tracked by the U.S. government. Shapefiles downloaded from [Census.gov](https://www2.census.gov/geo/tiger/TIGER2018/TABBLOCK/).
-* **ZCTAs - ZIP Code Tabulation Areas**: A U.S. Census proxy for postal ZIP Code units. Shapefiles downloaded from [Census.gov](https://www2.census.gov/geo/tiger/TIGER2018/ZCTA5/).
-* **NSAs - Neighborhood Statistical Areas**: Areas created by Baltimore City to represent Baltimore neighborhoods, comprised of custom groupings of U.S. Census blocks. This grouping is considered by Baltimore City and this analysis as the best representation of true Baltimore neighborhoods. Shapefiles provided by the [Baltimore City Department of Planning](https://planning.baltimorecity.gov/maps-data/GIS).
-* **CSAs - Community Statistical Areas**: Groupings of neighborhoods, created and used by the Baltimore Neighborhood Indicators Alliance (BNIA). In some cases, there is one neighborhood per CSA; in others, it's multiple. Recent demographic data is only available by CSA. Shapefiles downloaded from the [Baltimore Neighborhood Indicators Alliance Vital Signs project](https://data-bniajfi.opendata.arcgis.com/datasets/794586676bcc4f5fb629c08c51474cf6_0).
+-   **U.S. Census block**: The smallest geographic area tracked by the U.S. government. Shapefiles downloaded from [Census.gov](https://www2.census.gov/geo/tiger/TIGER2018/TABBLOCK/).
+-   **ZCTAs - ZIP Code Tabulation Areas**: A U.S. Census proxy for postal ZIP Code units. Shapefiles downloaded from [Census.gov](https://www2.census.gov/geo/tiger/TIGER2018/ZCTA5/).
+-   **NSAs - Neighborhood Statistical Areas**: Areas created by Baltimore City to represent Baltimore neighborhoods, comprised of custom groupings of U.S. Census blocks. This grouping is considered by Baltimore City and this analysis as the best representation of true Baltimore neighborhoods. Shapefiles provided by the [Baltimore City Department of Planning](https://planning.baltimorecity.gov/maps-data/GIS).
+-   **CSAs - Community Statistical Areas**: Groupings of neighborhoods, created and used by the Baltimore Neighborhood Indicators Alliance (BNIA). In some cases, there is one neighborhood per CSA; in others, it's multiple. Recent demographic data is only available by CSA. Shapefiles downloaded from the [Baltimore Neighborhood Indicators Alliance Vital Signs project](https://data-bniajfi.opendata.arcgis.com/datasets/794586676bcc4f5fb629c08c51474cf6_0).
 
-## Setup
+Setup
+-----
 
 Due to GitHub file upload limitations, input data is not included in this repo. When creating the file structure on a local machine, create a sub-folder called "input-data" within the existing "data" folder for maximum compatibility with the following code.
 
-
-```r
+``` r
 #######################
 #### Load Packages ####
 #######################
@@ -40,23 +48,23 @@ library(janitor) # For cleaning names
 options(scipen = 999)
 ```
 
-## Load and Clean Temperature Data
+Load and Clean Temperature Data
+-------------------------------
 
 The School of Urban Studies and Planning provided temperature data from its Urban Heat Island Temperature study, which captured micro-level temperature variations for all of Baltimore City on August 29, 2018.
 
-* The data can be downloaded [here](https://osf.io/e63x9/).
-* Full methodology paper [here](https://osf.io/ur7my/).
+-   The data can be downloaded [here](https://osf.io/e63x9/).
+-   Full methodology paper [here](https://osf.io/ur7my/).
 
 Temperature data was compiled in three batches for morning, afternoon and evening, in a raster image with one temperature (Celcius) per pixels.
 
-For each time period, reporters used the open-source mapping program [QGIS](https://qgis.org/en/site/) to calculate zonal statistics (mean, median, min and max) for the temperture in several geographic units. 
+For each time period, reporters used the open-source mapping program [QGIS](https://qgis.org/en/site/) to calculate zonal statistics (mean, median, min and max) for the temperture in several geographic units.
 
 After caclulating the zonal statistis, reporters exported the files from QGIS as CSV files, loaded them into R and joined them into master tables for further processing and analysis.
 
 ### Define functions and store universal variables
 
-
-```r
+``` r
 # Convert celcius values to fahrenheit
 c_to_f_convert <- function(x) (x * (9/5) + 32)
 
@@ -66,8 +74,7 @@ path_to_data <- "../data/input-data/urban_heat_island_temperature/temperature_va
 
 ### Execute load-in and cleaning
 
-
-```r
+``` r
 #######################
 ###### Afternoon ######
 #######################
@@ -215,24 +222,23 @@ all_temp_zcta <- temp_am_zcta %>%
 rm(list=setdiff(ls(), c("all_temp_block", "all_temp_zcta", "all_temp_nsa", "all_temp_csa")))
 ```
 
-## Load and Clean Tree Canopy LIDAR Data
+Load and Clean Tree Canopy LIDAR Data
+-------------------------------------
 
-The BES-LTER Program and the Cary Institute of Ecosystem Studies provided a shapefile of tree canopy gain and loss data for 2007-2015 from LIDAR satellite imaging. (_Citation: O'Neil-Dunne J. 2017. GIS Shapefile, Tree Canopy Change 2007 - 2015 - Baltimore City. Environmental Data Initiative. https://doi.org/10.6073/pasta/79c1d2079271546e61823a98df2d2039_)
+The BES-LTER Program and the Cary Institute of Ecosystem Studies provided a shapefile of tree canopy gain and loss data for 2007-2015 from LIDAR satellite imaging. (\_Citation: O'Neil-Dunne J. 2017. GIS Shapefile, Tree Canopy Change 2007 - 2015 - Baltimore City. Environmental Data Initiative. <https://doi.org/10.6073/pasta/79c1d2079271546e61823a98df2d2039_>)
 
 The original shapefile data was presented in terms of "no change," "gain," and "loss" categories. To perform the following analysis, reporters restructured the data within Qgis to represent 2007 and 2015 canopy coverage and [calculated zonal statistics](https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/documentation/qgis-directions/qgis-how-tos.md#d) (mean and median) at each year. They then exported the data from QGIS into CSVs, loaded them into R and joined them into master tables for further processing and analysis.
 
 ### Define functions and store universal variables
 
-
-```r
+``` r
 # Common file path to raw canopy data
 path_to_data <- "../data/input-data/tree-canopy/post-qgis-processing/"
 ```
 
 ### Execute load-in and cleaning
 
-
-```r
+``` r
 #### Block ####
 # 2007
 tree_block_lidar_2007 <- read_csv(paste0(path_to_data, "by_block/btree_statistics_by_block_2007_lidar.csv")) %>%
@@ -334,22 +340,21 @@ rm(list=setdiff(ls(), c(
   "all_temp_block", "all_temp_zcta", "all_temp_nsa", "all_temp_csa")))
 ```
 
-## Load and Clean Demographic Data
+Load and Clean Demographic Data
+-------------------------------
 
 The only recent demographic data available for neighborhood-sized areas is from the [Baltimore Neighborhood Indicators Alliance](https://bniajfi.org/vital_signs/data_downloads/), a **CSA-level** analysis from 2017. The U.S. federal government has not collected demographic information at most geographic levels since the 2010 Census, which this analysis determined is generally too old to be useful. The exception to this is the annual [American Community Survey](https://www.census.gov/acs/www/data/data-tables-and-tools/data-profiles/2017/), which uses a **ZCTA-level** geographic grouping. Additionally, this analysis used the 2010 population numbers at the **block** level to filter out low-population blocks. This analysis did not use demographic information at the **NSA** level.
 
 ### Define functions and store universal variables
 
-
-```r
+``` r
 # Common file path to raw demographics data
 path_to_data <- "../data/input-data/demographics/"
 ```
 
 ### Execute load-in and cleaning
 
-
-```r
+``` r
 #### Blocks #### 
 # Read in 2010 population data, SF1 U.S. Census data by block. Used only to filter out no population blocks before doing analysis. Otherwise, 2010 data is too old to use.
 demographics_block <- read_csv(paste0(path_to_data, "by_block/2010_SF1_Baltimore_City_Population_by_Block.csv")) %>%
@@ -374,12 +379,12 @@ demographics_zcta <- read_csv(paste0(path_to_data, "by_zcta/acs_2017_baltimore_z
   filter(zcta != "CITYWIDE")
 ```
 
-## Combine Data for Each Geographic Area
+Combine Data for Each Geographic Area
+-------------------------------------
 
 Once the individual component data frames have been created and cleaned, they can be merged and saved for use in the analysis.
 
-
-```r
+``` r
 #### Blocks #### 
 # Demographics at this level only used for removing low population blocks
 blocks_tree_temp_population <- all_temp_block %>%
@@ -427,16 +432,16 @@ zcta_tree_temp_demographics <- all_temp_zcta %>%
 rm(list=setdiff(ls(), c("blocks_tree_temp_population", "zcta_tree_temp_demographics", "nsa_tree_temp", "csa_tree_temp_demographics")))
 ```
 
-## Load and Clean Individual Tree Data
+Load and Clean Individual Tree Data
+-----------------------------------
 
-The Baltimore City Department of Recreation and Parks tracks each tree and potential tree site across the city and provided this analysis with a database of those records and [accompanying documentation](https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/documentation/street-tree-inventory-spec-sheet.pdf). 
+The Baltimore City Department of Recreation and Parks tracks each tree and potential tree site across the city and provided this analysis with a database of those records and [accompanying documentation](https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/documentation/street-tree-inventory-spec-sheet.pdf).
 
 The raw data arrived as a .shp file, which reporters joined together with the various core geographies and exported as a CSV for processing in R. The analysis focused on NSA-level geographies.
 
 ### Define functions and store universal variables
 
-
-```r
+``` r
 # List of NSAs of interest
 target_nsas <- c("Berea", "Broadway East", "Oliver", "Middle East", "Biddle Street","Milton-Montford", "Madison-Eastend", "CARE", "McElderry Park", "Ellwood Park/Monument", "Patterson Place", "Patterson Park Neighborhood", "Baltimore Highlands", "Highlandtown", "Upper Fells Point") %>%
   lapply(tolower)
@@ -451,8 +456,7 @@ path_to_data <- "../data/input-data/street-trees/csv/"
 
 ### Execute load-in and cleaning
 
-
-```r
+``` r
 ##########################
 #### Load in the data ####
 ##########################
@@ -546,13 +550,12 @@ street_trees_categorized <- street_trees %>%
   ))
 ```
 
-
-## Output All Cleaned Data to CSV Files
+Output All Cleaned Data to CSV Files
+------------------------------------
 
 The following generated files are necessary for future portions of this analysis.
 
-
-```r
+``` r
 #### Common save path ####
 save_path <- "../data/output-data/cleaned/"
 

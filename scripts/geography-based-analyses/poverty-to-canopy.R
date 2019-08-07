@@ -18,7 +18,7 @@ options(scipen = 999)
 ####### LOAD DATA ########
 ###############################
 
-csa_tree_temp_demographics <- read_csv(here(
+csa_tree_temp_demographics <- read_csv(here::here(
   # PATH
   "data", "output-data", "cleaned", "tree-temp-demographic-w-naip-lidar-use",
   # FILE NAME

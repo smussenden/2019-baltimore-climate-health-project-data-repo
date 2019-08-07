@@ -3,8 +3,10 @@ title: "Code Red Data Cleaning"
 author: "Roxanne Ready, Sean Mussenden, Theresa Diffendal, Jake Gluck and Jane Gerard | Capital News Service and the Howard Center for Investigative Journalism"
 date: "8/5/2019"
 output: 
-  html_document: 
-    keep_md: true
+  md_document:
+    variant: markdown_github
+    toc: true
+    toc_depth: 3
 ---
 
 ```{r setup, include=FALSE}
