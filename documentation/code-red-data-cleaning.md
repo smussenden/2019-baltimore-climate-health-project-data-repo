@@ -12,6 +12,8 @@ Introduction
 
 This R markdown document describes the methodology and results of the data cleaning portion of the data analysis conducted in support of a reporting project examining tree canopy, heat and health inequity across the city of Baltimore, especially as it relates to climate change.
 
+The analysis that uses the cleaned data output by this document is located in the [Role of Trees Data Analysis](https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/documentation/code-red-data-analysis.md).
+
 ### Definitions
 
 **Geographic Units**: Several geographic units are used throughout the analysis. The geographic units are:

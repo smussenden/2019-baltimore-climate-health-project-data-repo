@@ -7,7 +7,17 @@ output:
     variant: markdown_github
     toc: true
     toc_depth: 3
+  html_document:
+    toc: true
+    toc_depth: 3
+    toc_float: true
 ---
+
+```{r include=FALSE}
+# Save this file and run the following line from the Console to output both HTML and .md formats:
+# rmarkdown::render('documentation/role-of-trees-data-analysis.Rmd', output_format = 'all')
+```
+
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, message=FALSE)
@@ -460,7 +470,53 @@ csa_tree_temp_demographics %>%
 
 ### Tree canopy change over time
 
+Neighborhoods of interest:
 
+```{r}
+
+target_nsas <- c("Berea", "Broadway East", "Oliver", "Middle East", 
+                 "Biddle Street","Milton-Montford", "Madison-Eastend", 
+                 "CARE", "McElderry Park", "Ellwood Park/Monument", 
+                 "Patterson Place", "Patterson Park Neighborhood", 
+                 "Baltimore Highlands", "Highlandtown", 
+                 "Upper Fells Point") %>%
+  lapply(tolower)
+
+```
+
+_INCOMPLETE: START WORK HERE_
+
+All relevant data:
+
+```{r}
+
+w <- nsa_tree_temp %>%
+  select(nsa_name,
+         avg_canopy_2007 = `07_lid_mean`,
+         avg_canopy_2015 = `15_lid_mean`,
+         lid_change_percent,
+         lid_change_percent_point) %>%
+  mutate(is_target_nsa = case_when(
+    nsa_name %in% target_nsas ~ T,
+    TRUE ~ F 
+  ))
+  mutate(rank_canopy = rank(-avg_canopy_2015))
+  # filter(between(rank_canopy, 1L, 5L) |
+  #          between(rank_canopy, 51L, 55L)) %>%
+  # arrange(rank_canopy)
+
+```
+
+```{r}
+
+nsa_tree_temp %>%
+  dplyr::summarise(total_perc_change = sum(lid_change_percent, na.rm = TRUE), # Sum the percent change
+                   total_perc_point_change = sum(lid_change_percent_point, na.rm = TRUE), # Sum the percent point change
+                   avg_2007 = mean(`07_lid_mean`)*100, # Take the mean of the means for 07
+                   avg_2015 = mean(`15_lid_mean`)*100) %>% # Take the mean of the means for 15
+  mutate(diff_2007_2015 = avg_2015 - avg_2007) # Subtract 15 from 07 to find the difference
+
+```
 
 ## Street Trees Analysis
 

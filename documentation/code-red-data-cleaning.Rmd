@@ -7,7 +7,16 @@ output:
     variant: markdown_github
     toc: true
     toc_depth: 2
+  html_document:
+    toc: true
+    toc_depth: 2
+    toc_float: true
 ---
+
+```{r include=FALSE}
+# Save this file and run the following line from the Console to output both HTML and .md formats:
+# rmarkdown::render('documentation/code-red-data-cleaning.Rmd', output_format = 'all')
+```
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -16,6 +25,8 @@ knitr::opts_chunk$set(echo = TRUE)
 ## Introduction
 
 This R markdown document describes the methodology and results of the data cleaning portion of the data analysis conducted in support of a reporting project examining tree canopy, heat and health inequity across the city of Baltimore, especially as it relates to climate change.
+
+The analysis that uses the cleaned data output by this document is located in the [Role of Trees Data Analysis](https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/documentation/code-red-data-analysis.md).
 
 ### Definitions
 
