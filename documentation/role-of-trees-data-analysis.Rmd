@@ -499,7 +499,7 @@ w <- nsa_tree_temp %>%
   mutate(is_target_nsa = case_when(
     nsa_name %in% target_nsas ~ T,
     TRUE ~ F 
-  ))
+  )) %>%
   mutate(rank_canopy = rank(-avg_canopy_2015))
   # filter(between(rank_canopy, 1L, 5L) |
   #          between(rank_canopy, 51L, 55L)) %>%

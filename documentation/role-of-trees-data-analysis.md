@@ -487,7 +487,7 @@ csa_tree_temp_demographics %>%
         plot.subtitle = element_text(size = 12))
 ```
 
-![](role-of-trees-data-analysis_files/figure-markdown_github/unnamed-chunk-15-1.png)
+![](role-of-trees-data-analysis_files/figure-markdown_github/unnamed-chunk-48-1.png)
 
 There are some exceptions to this trend, such as Penn North/Reservoir Hill and Greater Rosemont, which both have relatively high rates of both poverty and tree canopy:
 
@@ -595,6 +595,53 @@ csa_tree_temp_demographics %>%
     ## 10 dickeyville/frankli…          90.5          0.732         55           1
 
 ### Tree canopy change over time
+
+Neighborhoods of interest:
+
+``` r
+target_nsas <- c("Berea", "Broadway East", "Oliver", "Middle East", 
+                 "Biddle Street","Milton-Montford", "Madison-Eastend", 
+                 "CARE", "McElderry Park", "Ellwood Park/Monument", 
+                 "Patterson Place", "Patterson Park Neighborhood", 
+                 "Baltimore Highlands", "Highlandtown", 
+                 "Upper Fells Point") %>%
+  lapply(tolower)
+```
+
+*INCOMPLETE: START WORK HERE*
+
+All relevant data:
+
+``` r
+w <- nsa_tree_temp %>%
+  select(nsa_name,
+         avg_canopy_2007 = `07_lid_mean`,
+         avg_canopy_2015 = `15_lid_mean`,
+         lid_change_percent,
+         lid_change_percent_point) %>%
+  mutate(is_target_nsa = case_when(
+    nsa_name %in% target_nsas ~ T,
+    TRUE ~ F 
+  )) %>%
+  mutate(rank_canopy = rank(-avg_canopy_2015))
+  # filter(between(rank_canopy, 1L, 5L) |
+  #          between(rank_canopy, 51L, 55L)) %>%
+  # arrange(rank_canopy)
+```
+
+``` r
+nsa_tree_temp %>%
+  dplyr::summarise(total_perc_change = sum(lid_change_percent, na.rm = TRUE), # Sum the percent change
+                   total_perc_point_change = sum(lid_change_percent_point, na.rm = TRUE), # Sum the percent point change
+                   avg_2007 = mean(`07_lid_mean`)*100, # Take the mean of the means for 07
+                   avg_2015 = mean(`15_lid_mean`)*100) %>% # Take the mean of the means for 15
+  mutate(diff_2007_2015 = avg_2015 - avg_2007) # Subtract 15 from 07 to find the difference
+```
+
+    ## # A tibble: 1 x 5
+    ##   total_perc_change total_perc_point_chan… avg_2007 avg_2015 diff_2007_2015
+    ##               <dbl>                  <dbl>    <dbl>    <dbl>          <dbl>
+    ## 1              9.54                  0.630     26.0     26.2          0.227
 
 Street Trees Analysis
 ---------------------
