@@ -2,12 +2,11 @@
 title: "Role of Trees Analysis"
 author: "Roxanne Ready, Sean Mussenden | Howard Center for Investigative Journalism"
 date: "8/6/2019"
+
+    
 output: 
-  html_document: 
-    keep_md: true
-    toc: true
-    toc_depth: 3
-    toc_float: true
+  md_document:
+  variant: markdown_github
 ---
 
 ```{r setup, include=FALSE}
