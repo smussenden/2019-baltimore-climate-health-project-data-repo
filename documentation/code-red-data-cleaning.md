@@ -7,9 +7,7 @@ output:
     keep_md: true
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
+
 
 ## Introduction
 
@@ -28,7 +26,8 @@ This R markdown document describes the methodology and results of the data clean
 
 Due to GitHub file upload limitations, input data is not included in this repo. When creating the file structure on a local machine, create a sub-folder called "input-data" within the existing "data" folder for maximum compatibility with the following code.
 
-```{r echo=TRUE, message=FALSE}
+
+```r
 #######################
 #### Load Packages ####
 #######################
@@ -39,7 +38,6 @@ library(janitor) # For cleaning names
 # Turn off scientific notation in RStudio 
 # (prevents accidental coersion to character type on export)
 options(scipen = 999)
-
 ```
 
 ## Load and Clean Temperature Data
@@ -57,18 +55,19 @@ After caclulating the zonal statistis, reporters exported the files from QGIS as
 
 ### Define functions and store universal variables
 
-```{r echo=TRUE, message=FALSE}
+
+```r
 # Convert celcius values to fahrenheit
 c_to_f_convert <- function(x) (x * (9/5) + 32)
 
 # Common file path to raw temperature data
 path_to_data <- "../data/input-data/urban_heat_island_temperature/temperature_values/"
-
 ```
 
 ### Execute load-in and cleaning
 
-```{r echo=TRUE, message=FALSE}
+
+```r
 #######################
 ###### Afternoon ######
 #######################
@@ -214,7 +213,6 @@ all_temp_zcta <- temp_am_zcta %>%
 
 #### Remove unneeded files ####
 rm(list=setdiff(ls(), c("all_temp_block", "all_temp_zcta", "all_temp_nsa", "all_temp_csa")))
-
 ```
 
 ## Load and Clean Tree Canopy LIDAR Data
@@ -225,17 +223,16 @@ The original shapefile data was presented in terms of "no change," "gain," and "
 
 ### Define functions and store universal variables
 
-```{r echo=TRUE, message=FALSE}
 
+```r
 # Common file path to raw canopy data
 path_to_data <- "../data/input-data/tree-canopy/post-qgis-processing/"
-
 ```
 
 ### Execute load-in and cleaning
 
-``` {r echo=TRUE, message=FALSE}
 
+```r
 #### Block ####
 # 2007
 tree_block_lidar_2007 <- read_csv(paste0(path_to_data, "by_block/btree_statistics_by_block_2007_lidar.csv")) %>%
@@ -343,16 +340,16 @@ The only recent demographic data available for neighborhood-sized areas is from 
 
 ### Define functions and store universal variables
 
-```{r echo=TRUE, message=FALSE}
 
+```r
 # Common file path to raw demographics data
 path_to_data <- "../data/input-data/demographics/"
-
 ```
 
 ### Execute load-in and cleaning
 
-``` {r echo=TRUE, message=FALSE}
+
+```r
 #### Blocks #### 
 # Read in 2010 population data, SF1 U.S. Census data by block. Used only to filter out no population blocks before doing analysis. Otherwise, 2010 data is too old to use.
 demographics_block <- read_csv(paste0(path_to_data, "by_block/2010_SF1_Baltimore_City_Population_by_Block.csv")) %>%
@@ -381,7 +378,8 @@ demographics_zcta <- read_csv(paste0(path_to_data, "by_zcta/acs_2017_baltimore_z
 
 Once the individual component data frames have been created and cleaned, they can be merged and saved for use in the analysis.
 
-``` {r echo=TRUE, message=FALSE}
+
+```r
 #### Blocks #### 
 # Demographics at this level only used for removing low population blocks
 blocks_tree_temp_population <- all_temp_block %>%
@@ -427,7 +425,6 @@ zcta_tree_temp_demographics <- all_temp_zcta %>%
 
 #### Remove unneeded files ####
 rm(list=setdiff(ls(), c("blocks_tree_temp_population", "zcta_tree_temp_demographics", "nsa_tree_temp", "csa_tree_temp_demographics")))
-
 ```
 
 ## Load and Clean Individual Tree Data
@@ -438,8 +435,8 @@ The raw data arrived as a .shp file, which reporters joined together with the va
 
 ### Define functions and store universal variables
 
-```{r echo=TRUE, message=FALSE}
 
+```r
 # List of NSAs of interest
 target_nsas <- c("Berea", "Broadway East", "Oliver", "Middle East", "Biddle Street","Milton-Montford", "Madison-Eastend", "CARE", "McElderry Park", "Ellwood Park/Monument", "Patterson Place", "Patterson Park Neighborhood", "Baltimore Highlands", "Highlandtown", "Upper Fells Point") %>%
   lapply(tolower)
@@ -450,13 +447,12 @@ counterpoint_nsas <- c("Butcher's Hill", "Canton", "Washington Hill") %>%
 
 # Common file path to raw demographics data
 path_to_data <- "../data/input-data/street-trees/csv/"
-
 ```
 
 ### Execute load-in and cleaning
 
-```{r echo=TRUE, message=FALSE}
 
+```r
 ##########################
 #### Load in the data ####
 ##########################
@@ -548,7 +544,6 @@ street_trees_categorized <- street_trees %>%
     nbrdesc %in% counterpoint_nsas ~ T,
     TRUE ~ F 
   ))
-
 ```
 
 
@@ -556,8 +551,8 @@ street_trees_categorized <- street_trees %>%
 
 The following generated files are necessary for future portions of this analysis.
 
-``` {r echo=TRUE, message=FALSE}
 
+```r
 #### Common save path ####
 save_path <- "../data/output-data/cleaned/"
 
