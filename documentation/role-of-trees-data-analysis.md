@@ -1,14 +1,22 @@
+-   [Introduction](#introduction)
+-   [Setup](#setup)
+-   [Temperature Analysis](#temperature-analysis)
+    -   [Blocks by temperature](#blocks-by-temperature)
+    -   [Neighborhood Statistical Areas by temperature](#neighborhood-statistical-areas-by-temperature)
+-   [Demographics Analysis](#demographics-analysis)
+-   [Tree Canopy Analysis](#tree-canopy-analysis)
+    -   [Poverty compared to tree canopy](#poverty-compared-to-tree-canopy)
+    -   [Temperature compared to tree canopy](#temperature-compared-to-tree-canopy)
+    -   [Tree canopy change over time](#tree-canopy-change-over-time)
+-   [Street Trees Analysis](#street-trees-analysis)
+-   [North Milton Street Trees](#north-milton-street-trees)
+
 Introduction
 ------------
 
-This R markdown document describes the methodology and results of a
-portion of the data analysis we conducted in support of a reporting
-project examining the effects of tree canopy inequity across the city of
-Baltimore, especially as it relates to climate change.
+This R markdown document describes the methodology and results of a portion of the data analysis we conducted in support of a reporting project examining the effects of tree canopy inequity across the city of Baltimore, especially as it relates to climate change.
 
-In general, this document is arranged into analyses of the following
-categories, though there are some cases where one statistic depends on
-multiple categories (e.g. the canopy cover in a hot neighborhood):
+In general, this document is arranged into analyses of the following categories, though there are some cases where one statistic depends on multiple categories (e.g. the canopy cover in a hot neighborhood):
 
 -   Temperature
 -   Demographics
@@ -18,76 +26,72 @@ multiple categories (e.g. the canopy cover in a hot neighborhood):
 Setup
 -----
 
-Before running this file, **please view and run the [Code Red Data
-Cleaning
-document](https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/documentation/code-red-data-cleaning.md)**
-for this project. As well as outputting necessary cleaned data for the
-following ananlysis, that document also includes the following items
-necessary to understand this analysis:
+Before running this file, **please view and run the [Code Red Data Cleaning document](https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/documentation/code-red-data-cleaning.md)** for this project. As well as outputting necessary cleaned data for the following ananlysis, that document also includes the following items necessary to understand this analysis:
 
 -   definitions
 -   source data citation and information
 -   cleaning methodology
 -   software tools used
 
-<!-- -->
+``` r
+#######################
+#### Load Packages ####
+#######################
 
-    #######################
-    #### Load Packages ####
-    #######################
+library(tidyverse)
+library(DescTools) # For %like% operator
+library(corrr) # For correlation matrices
+library(colorspace) # For improved color palettes
+library(ggplot2) # For graphing
+library(ggrepel) # For graph labeling
+require(scales) # For percent labeling on distribution tables
+#library(here) # For cleaner file path writing
 
-    library(tidyverse)
-    library(DescTools) # For %like% operator
-    library(corrr) # For correlation matrices
-    library(colorspace) # For improved color palettes
-    library(ggplot2) # For graphing
-    library(ggrepel) # For graph labeling
-    require(scales) # For percent labeling on distribution tables
-    #library(here) # For cleaner file path writing
+# Turn off scientific notation in RStudio (prevents coersion to character type)
+options(scipen = 999)
 
-    # Turn off scientific notation in RStudio (prevents coersion to character type)
-    options(scipen = 999)
+#########################
+#### Store Variables ####
+#########################
 
-    #########################
-    #### Store Variables ####
-    #########################
+#### Common save path ####
+path_to_data <- "../data/output-data/cleaned/"
 
-    #### Common save path ####
-    path_to_data <- "../data/output-data/cleaned/"
+###################
+#### Load Data ####
+###################
 
-    ###################
-    #### Load Data ####
-    ###################
+blocks_tree_temp_demographics <- 
+  read_csv(paste0(path_to_data, "blocks_tree_temp_demographics.csv")) %>%
+  mutate_at(vars(matches("geoid10")), as.character) # Recast non-calculable variables as characters
 
-    blocks_tree_temp_demographics <- 
-      read_csv(paste0(path_to_data, "blocks_tree_temp_demographics.csv")) %>%
-      mutate_at(vars(matches("geoid10")), as.character) # Recast non-calculable variables as characters
+csa_tree_temp_demographics <- 
+  read_csv(paste0(path_to_data, "csa_tree_temp_demographics.csv"))
 
-    csa_tree_temp_demographics <- 
-      read_csv(paste0(path_to_data, "csa_tree_temp_demographics.csv"))
+nsa_tree_temp <- 
+  read_csv(paste0(path_to_data, "nsa_tree_temp.csv"))
 
-    nsa_tree_temp <- 
-      read_csv(paste0(path_to_data, "nsa_tree_temp.csv"))
+zcta_tree_temp_demographics <- 
+  read_csv(paste0(path_to_data, "zcta_tree_temp_demographics.csv")) %>%
+  mutate_at(vars(matches("zcta")), as.character) # Recast non-calculable variables as characters
 
-    zcta_tree_temp_demographics <- 
-      read_csv(paste0(path_to_data, "zcta_tree_temp_demographics.csv")) %>%
-      mutate_at(vars(matches("zcta")), as.character) # Recast non-calculable variables as characters
-
-    street_trees_nsa_categorized <- 
-      read_csv(paste0(path_to_data, "street_trees_nsa_categorized.csv"))
+street_trees_nsa_categorized <- 
+  read_csv(paste0(path_to_data, "street_trees_nsa_categorized.csv"))
+```
 
 Temperature Analysis
 --------------------
 
 ### Blocks by temperature
 
-The following arranges and ranks blocks across the city by temperature
-in the afternoon of August 29, 2018:
+The following arranges and ranks blocks across the city by temperature in the afternoon of August 29, 2018:
 
-    blocks_tree_temp_demographics %>%
-      select(geoid10, temp_mean_aft) %>%
-      mutate(rank = rank(-temp_mean_aft)) %>%
-      arrange(rank)
+``` r
+blocks_tree_temp_demographics %>%
+  select(geoid10, temp_mean_aft) %>%
+  mutate(rank = rank(-temp_mean_aft)) %>%
+  arrange(rank)
+```
 
     ## # A tibble: 13,598 x 3
     ##    geoid10         temp_mean_aft  rank
@@ -104,22 +108,19 @@ in the afternoon of August 29, 2018:
     ## 10 245100702004007          100.    10
     ## # … with 13,588 more rows
 
-Below, we see the block on N. Milton Avenue between Oliver and Federal
-is one of the city's hottest, ranking at 236 out of 13,598 blocks. The
-block GEOID for this block was pulled from QGIS and breaks down into the
-following codes:
+Below, we see the block on N. Milton Avenue between Oliver and Federal is one of the city's hottest, ranking at 236 out of 13,598 blocks. The block GEOID for this block was pulled from QGIS and breaks down into the following codes:
 
 -   State: 24
 -   County: 510
 -   Tract: 080301
 -   Block: 1000
 
-<!-- -->
-
-    blocks_tree_temp_demographics %>%
-      select(geoid10, temp_mean_aft) %>%
-      mutate(rank = rank(-temp_mean_aft)) %>%
-      filter(geoid10 == "245100803011000")
+``` r
+blocks_tree_temp_demographics %>%
+  select(geoid10, temp_mean_aft) %>%
+  mutate(rank = rank(-temp_mean_aft)) %>%
+  filter(geoid10 == "245100803011000")
+```
 
     ## # A tibble: 1 x 3
     ##   geoid10         temp_mean_aft  rank
@@ -128,17 +129,17 @@ following codes:
 
 ### Neighborhood Statistical Areas by temperature
 
-The following arranges and ranks NSAs across the city by temperature in
-the afternoon of August 29, 2018.
+The following arranges and ranks NSAs across the city by temperature in the afternoon of August 29, 2018.
 
-First, we can see that all of the top 10 hottest NSAs are located in the
-south of the city, and many are in the south-east.
+First, we can see that all of the top 10 hottest NSAs are located in the south of the city, and many are in the south-east.
 
-    # Top 10 hottest neighborhoods
-    nsa_tree_temp %>%
-      select(nsa_name, temp_mean_aft) %>%
-      mutate(rank = rank(-temp_mean_aft)) %>%
-      arrange(rank)
+``` r
+# Top 10 hottest neighborhoods
+nsa_tree_temp %>%
+  select(nsa_name, temp_mean_aft) %>%
+  mutate(rank = rank(-temp_mean_aft)) %>%
+  arrange(rank)
+```
 
     ## # A tibble: 278 x 3
     ##    nsa_name              temp_mean_aft  rank
@@ -155,14 +156,15 @@ south of the city, and many are in the south-east.
     ## 10 biddle street                  97.9    10
     ## # … with 268 more rows
 
-Looking at the 10 coolest NSAs, we see it is generally true that they
-are located far to the west and north, on the outskirts of Baltimore.
+Looking at the 10 coolest NSAs, we see it is generally true that they are located far to the west and north, on the outskirts of Baltimore.
 
-    # Top 10 coolest neighborhoods
-    nsa_tree_temp %>%
-      select(nsa_name, temp_mean_aft) %>%
-      mutate(rank = rank(-temp_mean_aft)) %>%
-      arrange(desc(rank))
+``` r
+# Top 10 coolest neighborhoods
+nsa_tree_temp %>%
+  select(nsa_name, temp_mean_aft) %>%
+  mutate(rank = rank(-temp_mean_aft)) %>%
+  arrange(desc(rank))
+```
 
     ## # A tibble: 278 x 3
     ##    nsa_name                 temp_mean_aft  rank
@@ -182,15 +184,14 @@ are located far to the west and north, on the outskirts of Baltimore.
 Below we see:
 
 -   McElderry Park was the hottest, at 99.4 degrees Fahrenheit.
--   Gwynns Falls/Leakin Park was the coolest, at 90.8 degrees
-    Fahrenheit.
+-   Gwynns Falls/Leakin Park was the coolest, at 90.8 degrees Fahrenheit.
 
-<!-- -->
-
-    nsa_tree_temp %>%
-      select(nsa_name, temp_mean_aft) %>%
-      filter((temp_mean_aft == min(temp_mean_aft)) | (temp_mean_aft == max(temp_mean_aft))) %>%
-      arrange(desc(temp_mean_aft))
+``` r
+nsa_tree_temp %>%
+  select(nsa_name, temp_mean_aft) %>%
+  filter((temp_mean_aft == min(temp_mean_aft)) | (temp_mean_aft == max(temp_mean_aft))) %>%
+  arrange(desc(temp_mean_aft))
+```
 
     ## # A tibble: 2 x 2
     ##   nsa_name                 temp_mean_aft
@@ -198,18 +199,17 @@ Below we see:
     ## 1 mcelderry park                    99.4
     ## 2 gwynns falls/leakin park          90.7
 
-The difference in temperatures between the city's hottest and coolest
-neighborhoods is -8.65 degrees Fahrenheit.
+The difference in temperatures between the city's hottest and coolest neighborhoods is -8.65 degrees Fahrenheit.
 
-Below, we see the relative ranks of the Broadway East and Roland Park
-neighborhoods, placing Roland Park at 263 out of 278 neighborhoods,
-while Roland Park is ranked at 16.
+Below, we see the relative ranks of the Broadway East and Roland Park neighborhoods, placing Roland Park at 263 out of 278 neighborhoods, while Roland Park is ranked at 16.
 
-    nsa_tree_temp %>%
-      select(nsa_name, temp_mean_aft) %>%
-      mutate(rank = rank(-temp_mean_aft)) %>%
-      arrange(rank) %>%
-      filter((nsa_name %like% "roland park") | nsa_name %like% ("broadway east"))
+``` r
+nsa_tree_temp %>%
+  select(nsa_name, temp_mean_aft) %>%
+  mutate(rank = rank(-temp_mean_aft)) %>%
+  arrange(rank) %>%
+  filter((nsa_name %like% "roland park") | nsa_name %like% ("broadway east"))
+```
 
     ## # A tibble: 2 x 3
     ##   nsa_name      temp_mean_aft  rank
@@ -217,28 +217,25 @@ while Roland Park is ranked at 16.
     ## 1 broadway east          97.4    16
     ## 2 roland park            93.3   263
 
-These data are visualized in the following choropleth map, which was
-exported from QGIS and prettified slightly in Illustrator:
+These data are visualized in the following choropleth map, which was exported from QGIS and prettified slightly in Illustrator:
 
 <img src="../documentation/choropleth-temperature-full-withlines-01.png" width="400" alt="Choropleth map of temperatures across Baltimore NSAs" />
 
 Demographics Analysis
 ---------------------
 
-For the demographic anaylsis, we used CSA rather than NSA geographic
-segments, for reasons explained in the [Code Red Data Cleaning
-document](https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/documentation/code-red-data-cleaning.md).
-The CSAs and NSAs do not allign completely.
+For the demographic anaylsis, we used CSA rather than NSA geographic segments, for reasons explained in the [Code Red Data Cleaning document](https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/documentation/code-red-data-cleaning.md). The CSAs and NSAs do not allign completely.
 
-First, the top 10 CSAs ranked by percent of families living below the
-poverty line:
+First, the top 10 CSAs ranked by percent of families living below the poverty line:
 
-    csa_tree_temp_demographics %>%
-      select(csa2010, 
-             avg_household_income = median_household_income, 
-             perc_below_poverty = percent_of_family_households_living_below_the_poverty_line) %>%
-      mutate(rank = rank(-perc_below_poverty)) %>%
-      arrange(rank)
+``` r
+csa_tree_temp_demographics %>%
+  select(csa2010, 
+         avg_household_income = median_household_income, 
+         perc_below_poverty = percent_of_family_households_living_below_the_poverty_line) %>%
+  mutate(rank = rank(-perc_below_poverty)) %>%
+  arrange(rank)
+```
 
     ## # A tibble: 55 x 4
     ##    csa2010                      avg_household_inco… perc_below_pover…  rank
@@ -255,44 +252,32 @@ poverty line:
     ## 10 clifton-berea                             32289.              27.6    10
     ## # … with 45 more rows
 
-Next, we see only the CSAs containing the NSAs mentioned in the story,
-ranked by percent of families living below the poverty line (out of 55
-ranks).
+Next, we see only the CSAs containing the NSAs mentioned in the story, ranked by percent of families living below the poverty line (out of 55 ranks).
 
--   The **Broadway East** NSA is split vertically down the middle
-    between the **Clifton-Berea** and **Greenmount East** CSAs, which
-    also include large portions of the surrounding NSAs. It also
-    includes an insignificant sliver of Oldtown/Middle East, which was
-    disregarded in this analysis.
--   The **McElderry Park** NSA is split horizontally across the middle
-    between **Madison/East End** and **Patterson Park North & East**,
-    both of which contain large portions of surrounding NSAs.
--   The **Roland Park** NSA is almost completely contained within the
-    **Greater Roland Park/Poplar Hill** CSA. A small southern slice
-    extends into the Medfield/Hampden/Woodberry/Remington CSA, but that
-    CSA extends so far south as to be non-representative of most of
-    Roland Park and was disregarded in this analysis.
+-   The **Broadway East** NSA is split vertically down the middle between the **Clifton-Berea** and **Greenmount East** CSAs, which also include large portions of the surrounding NSAs. It also includes an insignificant sliver of Oldtown/Middle East, which was disregarded in this analysis.
+-   The **McElderry Park** NSA is split horizontally across the middle between **Madison/East End** and **Patterson Park North & East**, both of which contain large portions of surrounding NSAs.
+-   The **Roland Park** NSA is almost completely contained within the **Greater Roland Park/Poplar Hill** CSA. A small southern slice extends into the Medfield/Hampden/Woodberry/Remington CSA, but that CSA extends so far south as to be non-representative of most of Roland Park and was disregarded in this analysis.
 
-<!-- -->
-
-    csa_tree_temp_demographics %>%
-      mutate(rank = rank(-percent_of_family_households_living_below_the_poverty_line)) %>%
-      arrange(rank) %>%
-      mutate(associated_nsa = case_when(
-        (csa2010 %like% "%clifton%") | (csa2010 %like% "%greenmount%") ~ "broadway east",
-        (csa2010 %like% "%madison%") | (csa2010 %like% "%park north%") ~ "mcelderry park",
-        (csa2010 %like% "%poplar%") ~ "roland park",
-        T ~ NA_character_
-      )) %>%
-      select(csa2010, associated_nsa, 
-             avg_household_income = median_household_income, 
-             perc_below_poverty = percent_of_family_households_living_below_the_poverty_line, 
-             rank) %>%
-      filter((csa2010 %like% "%clifton%") | 
-               (csa2010 %like% "%greenmount%") |
-               (csa2010 %like% "%madison%") |
-               (csa2010 %like% "%park north%") |
-               (csa2010 %like% "%poplar%"))
+``` r
+csa_tree_temp_demographics %>%
+  mutate(rank = rank(-percent_of_family_households_living_below_the_poverty_line)) %>%
+  arrange(rank) %>%
+  mutate(associated_nsa = case_when(
+    (csa2010 %like% "%clifton%") | (csa2010 %like% "%greenmount%") ~ "broadway east",
+    (csa2010 %like% "%madison%") | (csa2010 %like% "%park north%") ~ "mcelderry park",
+    (csa2010 %like% "%poplar%") ~ "roland park",
+    T ~ NA_character_
+  )) %>%
+  select(csa2010, associated_nsa, 
+         avg_household_income = median_household_income, 
+         perc_below_poverty = percent_of_family_households_living_below_the_poverty_line, 
+         rank) %>%
+  filter((csa2010 %like% "%clifton%") | 
+           (csa2010 %like% "%greenmount%") |
+           (csa2010 %like% "%madison%") |
+           (csa2010 %like% "%park north%") |
+           (csa2010 %like% "%poplar%"))
+```
 
     ## # A tibble: 5 x 5
     ##   csa2010          associated_nsa avg_household_inc… perc_below_pove…  rank
@@ -303,36 +288,34 @@ ranks).
     ## 4 patterson park … mcelderry park             69760.            21.7     20
     ## 5 greater roland … roland park               113496.             2.15    53
 
-Broadway East, as a combination of Clifton-Berea and Greenmount East,
-has a total percent of family households living below the poverty line
-of 25.93 according to:
+Broadway East, as a combination of Clifton-Berea and Greenmount East, has a total percent of family households living below the poverty line of 25.93 according to:
 
-    (csa_tree_temp_demographics$percent_of_family_households_living_below_the_poverty_line[csa_tree_temp_demographics$csa2010 %like% "%greenmount%"] +
-    csa_tree_temp_demographics$percent_of_family_households_living_below_the_poverty_line[csa_tree_temp_demographics$csa2010 %like% "%clifton%"]) / 2
+``` r
+(csa_tree_temp_demographics$percent_of_family_households_living_below_the_poverty_line[csa_tree_temp_demographics$csa2010 %like% "%greenmount%"] +
+csa_tree_temp_demographics$percent_of_family_households_living_below_the_poverty_line[csa_tree_temp_demographics$csa2010 %like% "%clifton%"]) / 2
+```
 
     ## [1] 25.92508
 
 Tree Canopy Analysis
 --------------------
 
-As further explained in the [Code Red Data Cleaning
-document](https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/documentation/code-red-data-cleaning.md),
-the following tree canopy data is based on LIDAR data from 2015.
+As further explained in the [Code Red Data Cleaning document](https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/documentation/code-red-data-cleaning.md), the following tree canopy data is based on LIDAR data from 2015.
 
 ### Poverty compared to tree canopy
 
-A correlation matrix of poverty and canopy cover shows a weak negative
-correlation of -.34. In other words, places with a high poverty rate
-will have fewer trees, in general.
+A correlation matrix of poverty and canopy cover shows a weak negative correlation of -.34. In other words, places with a high poverty rate will have fewer trees, in general.
 
-    #### Build correlation matrix ####
-    csa_tree_temp_demographics %>%
-      select(perc_below_poverty = percent_of_family_households_living_below_the_poverty_line,
-             avg_canopy_2015 = `15_lid_mean`) %>%
-      as.matrix() %>%
-      correlate() %>%
-      mutate(variable=rowname) %>%
-      select(variable, everything(), -rowname)
+``` r
+#### Build correlation matrix ####
+csa_tree_temp_demographics %>%
+  select(perc_below_poverty = percent_of_family_households_living_below_the_poverty_line,
+         avg_canopy_2015 = `15_lid_mean`) %>%
+  as.matrix() %>%
+  correlate() %>%
+  mutate(variable=rowname) %>%
+  select(variable, everything(), -rowname)
+```
 
     ## # A tibble: 2 x 3
     ##   variable           perc_below_poverty avg_canopy_2015
@@ -340,19 +323,20 @@ will have fewer trees, in general.
     ## 1 perc_below_poverty             NA              -0.340
     ## 2 avg_canopy_2015                -0.340          NA
 
-Here are the data related to poverty, income and canopy at the top and
-bottom five CSAs when ranked for poverty:
+Here are the data related to poverty, income and canopy at the top and bottom five CSAs when ranked for poverty:
 
-    csa_tree_temp_demographics %>%
-      select(csa2010, 
-             avg_household_income = median_household_income, 
-             perc_below_poverty = percent_of_family_households_living_below_the_poverty_line,
-             avg_canopy_2015 = `15_lid_mean`) %>%
-      mutate(rank_poverty = rank(-perc_below_poverty),
-             rank_canopy = rank(-avg_canopy_2015)) %>%
-      filter(between(rank_poverty, 1L, 5L) |
-               between(rank_poverty, 51L, 55L)) %>%
-      arrange(rank_poverty)
+``` r
+csa_tree_temp_demographics %>%
+  select(csa2010, 
+         avg_household_income = median_household_income, 
+         perc_below_poverty = percent_of_family_households_living_below_the_poverty_line,
+         avg_canopy_2015 = `15_lid_mean`) %>%
+  mutate(rank_poverty = rank(-perc_below_poverty),
+         rank_canopy = rank(-avg_canopy_2015)) %>%
+  filter(between(rank_poverty, 1L, 5L) |
+           between(rank_poverty, 51L, 55L)) %>%
+  arrange(rank_poverty)
+```
 
     ## # A tibble: 10 x 6
     ##    csa2010 avg_household_i… perc_below_pove… avg_canopy_2015 rank_poverty
@@ -371,27 +355,29 @@ bottom five CSAs when ranked for poverty:
 
 Looking again at only the NSAs of interest in the story:
 
-    csa_tree_temp_demographics %>%
-      mutate(rank_perc_poverty = rank(-percent_of_family_households_living_below_the_poverty_line),
-             rank_perc_canopy = rank(-`15_lid_mean`)) %>%
-      arrange(rank_perc_canopy) %>%
-      mutate(associated_nsa = case_when(
-        (csa2010 %like% "%clifton%") | (csa2010 %like% "%greenmount%") ~ "broadway east",
-        (csa2010 %like% "%madison%") | (csa2010 %like% "%park north%") ~ "mcelderry park",
-        (csa2010 %like% "%poplar%") ~ "roland park",
-        T ~ NA_character_
-      )) %>%
-      select(csa2010, associated_nsa, 
-             avg_household_income = median_household_income, 
-             perc_below_poverty = percent_of_family_households_living_below_the_poverty_line, 
-             perc_canopy = `15_lid_mean`,
-             rank_perc_poverty,
-             rank_perc_canopy) %>%
-      filter((csa2010 %like% "%clifton%") | 
-               (csa2010 %like% "%greenmount%") |
-               (csa2010 %like% "%madison%") |
-               (csa2010 %like% "%park north%") |
-               (csa2010 %like% "%poplar%"))
+``` r
+csa_tree_temp_demographics %>%
+  mutate(rank_perc_poverty = rank(-percent_of_family_households_living_below_the_poverty_line),
+         rank_perc_canopy = rank(-`15_lid_mean`)) %>%
+  arrange(rank_perc_canopy) %>%
+  mutate(associated_nsa = case_when(
+    (csa2010 %like% "%clifton%") | (csa2010 %like% "%greenmount%") ~ "broadway east",
+    (csa2010 %like% "%madison%") | (csa2010 %like% "%park north%") ~ "mcelderry park",
+    (csa2010 %like% "%poplar%") ~ "roland park",
+    T ~ NA_character_
+  )) %>%
+  select(csa2010, associated_nsa, 
+         avg_household_income = median_household_income, 
+         perc_below_poverty = percent_of_family_households_living_below_the_poverty_line, 
+         perc_canopy = `15_lid_mean`,
+         rank_perc_poverty,
+         rank_perc_canopy) %>%
+  filter((csa2010 %like% "%clifton%") | 
+           (csa2010 %like% "%greenmount%") |
+           (csa2010 %like% "%madison%") |
+           (csa2010 %like% "%park north%") |
+           (csa2010 %like% "%poplar%"))
+```
 
     ## # A tibble: 5 x 7
     ##   csa2010 associated_nsa avg_household_i… perc_below_pove… perc_canopy
@@ -403,22 +389,23 @@ Looking again at only the NSAs of interest in the story:
     ## 5 madiso… mcelderry park           29976.            33.7       0.0660
     ## # … with 2 more variables: rank_perc_poverty <dbl>, rank_perc_canopy <dbl>
 
-If we build a correlation matrix only looking at certain neighborhoods
-of interest, the pattern is even more pronounced:
+If we build a correlation matrix only looking at certain neighborhoods of interest, the pattern is even more pronounced:
 
-    # List of NSAs of interest
-    target_csas <- c("Greater Roland Park/Poplar Hill", "Canton", "Patterson Park North & East", "Greenmount East", "Clifton-Berea") %>%
-      lapply(tolower)
+``` r
+# List of NSAs of interest
+target_csas <- c("Greater Roland Park/Poplar Hill", "Canton", "Patterson Park North & East", "Greenmount East", "Clifton-Berea") %>%
+  lapply(tolower)
 
-    #### Build correlation matrix ####
-    csa_tree_temp_demographics %>%
-      filter(csa2010 %in% target_csas) %>%
-      select(perc_below_poverty = percent_of_family_households_living_below_the_poverty_line,
-             avg_canopy_2015 = `15_lid_mean`) %>%
-      as.matrix() %>%
-      correlate() %>%
-      mutate(variable=rowname) %>%
-      select(variable, everything(), -rowname)
+#### Build correlation matrix ####
+csa_tree_temp_demographics %>%
+  filter(csa2010 %in% target_csas) %>%
+  select(perc_below_poverty = percent_of_family_households_living_below_the_poverty_line,
+         avg_canopy_2015 = `15_lid_mean`) %>%
+  as.matrix() %>%
+  correlate() %>%
+  mutate(variable=rowname) %>%
+  select(variable, everything(), -rowname)
+```
 
     ## # A tibble: 2 x 3
     ##   variable           perc_below_poverty avg_canopy_2015
@@ -428,90 +415,92 @@ of interest, the pattern is even more pronounced:
 
 Below is the trend viewed graphically:
 
-    # CSAs to call out
-    callout_ls <- c("Canton", "Clifton-Berea", "Greater Roland Park/Poplar Hill", "Greenmount East")
+``` r
+# CSAs to call out
+callout_ls <- c("Canton", "Clifton-Berea", "Greater Roland Park/Poplar Hill", "Greenmount East")
 
-    ## POVERTY TO TREE COVER
-    csa_tree_temp_demographics %>%
-      mutate_at(vars("csa2010"), str_to_title) %>%
-      # Start ggplot and set x and y for entire plot
-      ggplot(aes(
-        x = percent_of_family_households_living_below_the_poverty_line/100, 
-        y = `07_lid_mean`
-        )) +
-      # This section for the basic scatterplot
-      geom_point(aes(color = `07_lid_mean`),
-                 size=4) +
-      # This section for circling all sample neighborhood points
-      geom_point(data = csa_tree_temp_demographics %>%
-                   mutate_at(vars("csa2010"), str_to_title) %>%
-                   filter((csa2010 %in% callout_ls) 
-                          # Patterson Park must be included seperately because of its unique label positioning
-                          | (csa2010 == "Patterson Park North & East") 
-                          ),
-                 aes(color = `07_lid_mean`),
-                 size=6, shape = 1) +
-      # This section shows the trend line
-      geom_smooth(se = FALSE, # Removes gray banding
-                  method = glm, 
-                  color = "black") +
-      # This section for labeling Canton, etc.
-      ggrepel::geom_label_repel(data = csa_tree_temp_demographics %>%
-                                  mutate_at(vars("csa2010"), str_to_title) %>%
-                                  filter(csa2010 %in% callout_ls) %>%
-                                  mutate(csa2010 = case_when(
-                                    csa2010 == "Greenmount East" ~ "Greenmount East \n(includes part of Broadway East)", 
-                                    csa2010 == "Clifton-Berea" ~ "Clifton-Berea \n(includes part of Broadway East)",
-                                    T ~ csa2010)),
-                aes(label = csa2010),
-                min.segment.length = .1,
-                segment.alpha = .5,
-                alpha = .85,
-                nudge_x = .05,
-                nudge_y = .06) +
-      # This section for labeling Patterson Park (so its label can be nudged)
-      ggrepel::geom_label_repel(data = csa_tree_temp_demographics %>%
-                                  mutate_at(vars("csa2010"), str_to_title) %>%
-                                  filter(csa2010 == "Patterson Park North & East") %>%
-                                  mutate(csa2010 = case_when(
-                                    csa2010 == "Patterson Park North & East" ~ "Patterson Park North & East \n(includes most of McElderry Park)",
-                                    T ~ csa2010)),
-                                aes(label = csa2010),
-                                min.segment.length = .1,
-                                segment.alpha = .5,
-                                alpha = .85,
-                                nudge_x = -.06,
-                                nudge_y = .03) +
-      # Colors and label formatting follow
-      #coord_flip() +
-      scale_colour_gradient(low = "#E0FEA9", high = "#144A11") +
-      labs(title = "Poverty to Tree Canopy",
-           subtitle = "Percent of households living below the poverty line \ncompared to the percent of tree cover in the area",
-           x = "Percent of households living below the poverty line",
-           y = "Percent of land covered by trees") +
-      scale_x_continuous(label = scales::percent_format(accuracy = 1.0),
-                         breaks = seq(0, 1, .1)) + 
-      scale_y_continuous(label = scales::percent_format(accuracy = 1.0),
-                         breaks = seq(0, 1, .1)) + 
-      theme_bw() +
-      theme(legend.position = "none",
-            plot.title = element_text(size = 20),
-            plot.subtitle = element_text(size = 12))
+## POVERTY TO TREE COVER
+csa_tree_temp_demographics %>%
+  mutate_at(vars("csa2010"), str_to_title) %>%
+  # Start ggplot and set x and y for entire plot
+  ggplot(aes(
+    x = percent_of_family_households_living_below_the_poverty_line/100, 
+    y = `07_lid_mean`
+    )) +
+  # This section for the basic scatterplot
+  geom_point(aes(color = `07_lid_mean`),
+             size=4) +
+  # This section for circling all sample neighborhood points
+  geom_point(data = csa_tree_temp_demographics %>%
+               mutate_at(vars("csa2010"), str_to_title) %>%
+               filter((csa2010 %in% callout_ls) 
+                      # Patterson Park must be included seperately because of its unique label positioning
+                      | (csa2010 == "Patterson Park North & East") 
+                      ),
+             aes(color = `07_lid_mean`),
+             size=6, shape = 1) +
+  # This section shows the trend line
+  geom_smooth(se = FALSE, # Removes gray banding
+              method = glm, 
+              color = "black") +
+  # This section for labeling Canton, etc.
+  ggrepel::geom_label_repel(data = csa_tree_temp_demographics %>%
+                              mutate_at(vars("csa2010"), str_to_title) %>%
+                              filter(csa2010 %in% callout_ls) %>%
+                              mutate(csa2010 = case_when(
+                                csa2010 == "Greenmount East" ~ "Greenmount East \n(includes part of Broadway East)", 
+                                csa2010 == "Clifton-Berea" ~ "Clifton-Berea \n(includes part of Broadway East)",
+                                T ~ csa2010)),
+            aes(label = csa2010),
+            min.segment.length = .1,
+            segment.alpha = .5,
+            alpha = .85,
+            nudge_x = .05,
+            nudge_y = .06) +
+  # This section for labeling Patterson Park (so its label can be nudged)
+  ggrepel::geom_label_repel(data = csa_tree_temp_demographics %>%
+                              mutate_at(vars("csa2010"), str_to_title) %>%
+                              filter(csa2010 == "Patterson Park North & East") %>%
+                              mutate(csa2010 = case_when(
+                                csa2010 == "Patterson Park North & East" ~ "Patterson Park North & East \n(includes most of McElderry Park)",
+                                T ~ csa2010)),
+                            aes(label = csa2010),
+                            min.segment.length = .1,
+                            segment.alpha = .5,
+                            alpha = .85,
+                            nudge_x = -.06,
+                            nudge_y = .03) +
+  # Colors and label formatting follow
+  #coord_flip() +
+  scale_colour_gradient(low = "#E0FEA9", high = "#144A11") +
+  labs(title = "Poverty to Tree Canopy",
+       subtitle = "Percent of households living below the poverty line \ncompared to the percent of tree cover in the area",
+       x = "Percent of households living below the poverty line",
+       y = "Percent of land covered by trees") +
+  scale_x_continuous(label = scales::percent_format(accuracy = 1.0),
+                     breaks = seq(0, 1, .1)) + 
+  scale_y_continuous(label = scales::percent_format(accuracy = 1.0),
+                     breaks = seq(0, 1, .1)) + 
+  theme_bw() +
+  theme(legend.position = "none",
+        plot.title = element_text(size = 20),
+        plot.subtitle = element_text(size = 12))
+```
 
-![](role-of-trees-data-analysis_files/figure-markdown_strict/unnamed-chunk-15-1.png)
+![](role-of-trees-data-analysis_files/figure-markdown_github/unnamed-chunk-15-1.png)
 
-There are some exceptions to this trend, such as Penn North/Reservoir
-Hill and Greater Rosemont, which both have relatively high rates of both
-poverty and tree canopy:
+There are some exceptions to this trend, such as Penn North/Reservoir Hill and Greater Rosemont, which both have relatively high rates of both poverty and tree canopy:
 
-    csa_tree_temp_demographics %>%
-      select(csa2010, 
-             perc_below_poverty = percent_of_family_households_living_below_the_poverty_line,
-             avg_canopy_2015 = `15_lid_mean`) %>%
-      mutate(rank_perc_poverty = rank(-perc_below_poverty),
-             rank_perc_canopy = rank(-avg_canopy_2015)) %>%
-      arrange(rank_perc_canopy) %>%
-      filter((csa2010 %like% "%penn north%") | (csa2010 %like% "%rosemont%"))
+``` r
+csa_tree_temp_demographics %>%
+  select(csa2010, 
+         perc_below_poverty = percent_of_family_households_living_below_the_poverty_line,
+         avg_canopy_2015 = `15_lid_mean`) %>%
+  mutate(rank_perc_poverty = rank(-perc_below_poverty),
+         rank_perc_canopy = rank(-avg_canopy_2015)) %>%
+  arrange(rank_perc_canopy) %>%
+  filter((csa2010 %like% "%penn north%") | (csa2010 %like% "%rosemont%"))
+```
 
     ## # A tibble: 2 x 5
     ##   csa2010 perc_below_pove… avg_canopy_2015 rank_perc_pover…
@@ -522,18 +511,18 @@ poverty and tree canopy:
 
 ### Temperature compared to tree canopy
 
-When comparing temperature to tree canopy, we see a strong correllation
-of -.89. In other words, places with high temperatures tend to have
-fewer trees.
+When comparing temperature to tree canopy, we see a strong correllation of -.89. In other words, places with high temperatures tend to have fewer trees.
 
-    #### Build correlation matrix ####
-    csa_tree_temp_demographics %>%
-      select(temp_mean_aft,
-             avg_canopy_2015 = `15_lid_mean`) %>%
-      as.matrix() %>%
-      correlate() %>%
-      mutate(variable=rowname) %>%
-      select(variable, everything(), -rowname)
+``` r
+#### Build correlation matrix ####
+csa_tree_temp_demographics %>%
+  select(temp_mean_aft,
+         avg_canopy_2015 = `15_lid_mean`) %>%
+  as.matrix() %>%
+  correlate() %>%
+  mutate(variable=rowname) %>%
+  select(variable, everything(), -rowname)
+```
 
     ## # A tibble: 2 x 3
     ##   variable        temp_mean_aft avg_canopy_2015
@@ -543,13 +532,15 @@ fewer trees.
 
 We can also view the data ranked by temperature:
 
-    csa_tree_temp_demographics %>%
-      select(csa2010, 
-             temp_mean_aft,
-             avg_canopy_2015 = `15_lid_mean`) %>%
-      mutate(rank_temp = rank(-temp_mean_aft),
-             rank_canopy = rank(-avg_canopy_2015)) %>%
-      arrange(temp_mean_aft)
+``` r
+csa_tree_temp_demographics %>%
+  select(csa2010, 
+         temp_mean_aft,
+         avg_canopy_2015 = `15_lid_mean`) %>%
+  mutate(rank_temp = rank(-temp_mean_aft),
+         rank_canopy = rank(-avg_canopy_2015)) %>%
+  arrange(temp_mean_aft)
+```
 
     ## # A tibble: 55 x 5
     ##    csa2010              temp_mean_aft avg_canopy_2015 rank_temp rank_canopy
@@ -568,23 +559,26 @@ We can also view the data ranked by temperature:
 
 The coolest CSA has 11 times as much canopy cover as the hottest:
 
-    (csa_tree_temp_demographics$`15_lid_mean`[(csa_tree_temp_demographics$temp_mean_aft == min(csa_tree_temp_demographics$temp_mean_aft))]) / 
-      (csa_tree_temp_demographics$`15_lid_mean`[(csa_tree_temp_demographics$temp_mean_aft == max(csa_tree_temp_demographics$temp_mean_aft))])
+``` r
+(csa_tree_temp_demographics$`15_lid_mean`[(csa_tree_temp_demographics$temp_mean_aft == min(csa_tree_temp_demographics$temp_mean_aft))]) / 
+  (csa_tree_temp_demographics$`15_lid_mean`[(csa_tree_temp_demographics$temp_mean_aft == max(csa_tree_temp_demographics$temp_mean_aft))])
+```
 
     ## [1] 11.09265
 
-This order of magnitude jump holds true for the second-hottest CSA, but
-ends at the third.
+This order of magnitude jump holds true for the second-hottest CSA, but ends at the third.
 
-    csa_tree_temp_demographics %>%
-      select(csa2010, 
-             temp_mean_aft,
-             avg_canopy_2015 = `15_lid_mean`) %>%
-      mutate(rank_temp = rank(-temp_mean_aft),
-             rank_canopy = rank(-avg_canopy_2015)) %>%
-      filter(between(rank_temp, 1L, 5L) |
-               between(rank_temp, 51L, 55L)) %>%
-      arrange(rank_temp)
+``` r
+csa_tree_temp_demographics %>%
+  select(csa2010, 
+         temp_mean_aft,
+         avg_canopy_2015 = `15_lid_mean`) %>%
+  mutate(rank_temp = rank(-temp_mean_aft),
+         rank_canopy = rank(-avg_canopy_2015)) %>%
+  filter(between(rank_temp, 1L, 5L) |
+           between(rank_temp, 51L, 55L)) %>%
+  arrange(rank_temp)
+```
 
     ## # A tibble: 10 x 5
     ##    csa2010              temp_mean_aft avg_canopy_2015 rank_temp rank_canopy
