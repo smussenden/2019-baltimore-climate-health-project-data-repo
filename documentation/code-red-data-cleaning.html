@@ -690,9 +690,10 @@ street_trees_categorized &lt;- street_trees %&gt;%
 <div id="output-all-cleaned-data-to-csv-files" class="section level2">
 <h2>Output All Cleaned Data to CSV Files</h2>
 <p>The following generated files are necessary for future portions of this analysis.</p>
-<pre class="r"><code># Common save path
+<pre class="r"><code>#### Common save path ####
 save_path &lt;- &quot;../data/output-data/cleaned/&quot;
 
+#### Write to CSV ####
 write_csv(blocks_tree_temp_population, paste0(save_path, &quot;blocks_tree_temp_demographics.csv&quot;))
 write_csv(csa_tree_temp_demographics, paste0(save_path, &quot;csa_tree_temp_demographics.csv&quot;))
 write_csv(nsa_tree_temp, paste0(save_path, &quot;nsa_tree_temp.csv&quot;))
