@@ -13,11 +13,11 @@ This R markdown document describes the methodology and results of a portion of t
 
 ## Setup
 
-Before running this file, **please view and run the [cleaning script](https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/documentation/code-red-data-cleaning.Rmd)** for this project. As well as outputting necessary cleaned data for the following ananlysis, that document also includes the following items necessary to understand this analysis: 
+Before running this file, **please view and run the [cleaning script](https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/documentation/code-red-data-cleaning.md)** for this project. As well as outputting necessary cleaned data for the following ananlysis, that document also includes the following items necessary to understand this analysis: 
 
 * definitions
 * information about the source data 
-* methodology 
+* cleaning methodology 
 * software tools
 
 
