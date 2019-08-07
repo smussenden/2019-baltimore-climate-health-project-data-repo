@@ -13,7 +13,12 @@ This R markdown document describes the methodology and results of a portion of t
 
 ## Setup
 
-Before running this file, **please view and run the [cleaning script](https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/documentation/code-red-data-cleaning.Rmd)** for this project. As well as outputting necessary cleaned data for the following ananlysis, that document also includes **definitions**, **information about the source data**, **methodology** and **software tools** necessary to understand the following analysis.
+Before running this file, **please view and run the [cleaning script](https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/documentation/code-red-data-cleaning.Rmd)** for this project. As well as outputting necessary cleaned data for the following ananlysis, that document also includes the following items necessary to understand this analysis: 
+
+* definitions
+* information about the source data 
+* methodology 
+* software tools
 
 
 ```r
@@ -40,13 +45,22 @@ path_to_data <- "../data/output-data/cleaned/"
 #### Load Data ####
 ###################
 
-blocks_tree_temp_demographics <- read_csv(paste0(path_to_data, "blocks_tree_temp_demographics.csv")) %>%
+blocks_tree_temp_demographics <- 
+  read_csv(paste0(path_to_data, "blocks_tree_temp_demographics.csv")) %>%
   mutate_at(vars(matches("geoid10")), as.character) # Recast non-calculable variables as characters
-csa_tree_temp_demographics <- read_csv(paste0(path_to_data, "csa_tree_temp_demographics.csv"))
-nsa_tree_temp <- read_csv(paste0(path_to_data, "nsa_tree_temp.csv"))
-zcta_tree_temp_demographics <- read_csv(paste0(path_to_data, "zcta_tree_temp_demographics.csv")) %>%
+
+csa_tree_temp_demographics <- 
+  read_csv(paste0(path_to_data, "csa_tree_temp_demographics.csv"))
+
+nsa_tree_temp <- 
+  read_csv(paste0(path_to_data, "nsa_tree_temp.csv"))
+
+zcta_tree_temp_demographics <- 
+  read_csv(paste0(path_to_data, "zcta_tree_temp_demographics.csv")) %>%
   mutate_at(vars(matches("zcta")), as.character) # Recast non-calculable variables as characters
-street_trees_nsa_categorized <- read_csv(paste0(path_to_data, "street_trees_nsa_categorized.csv"))
+
+street_trees_nsa_categorized <- 
+  read_csv(paste0(path_to_data, "street_trees_nsa_categorized.csv"))
 ```
 
 ## Temperature Analysis

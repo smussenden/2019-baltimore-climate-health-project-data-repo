@@ -191,7 +191,13 @@ summary {
 </div>
 <div id="setup" class="section level2">
 <h2>Setup</h2>
-<p>Before running this file, <strong>please view and run the <a href="https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/documentation/code-red-data-cleaning.Rmd">cleaning script</a></strong> for this project. As well as outputting necessary cleaned data for the following ananlysis, that document also includes <strong>definitions</strong>, <strong>information about the source data</strong>, <strong>methodology</strong> and <strong>software tools</strong> necessary to understand the following analysis.</p>
+<p>Before running this file, <strong>please view and run the <a href="https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/documentation/code-red-data-cleaning.Rmd">cleaning script</a></strong> for this project. As well as outputting necessary cleaned data for the following ananlysis, that document also includes the following items necessary to understand this analysis:</p>
+<ul>
+<li>definitions</li>
+<li>information about the source data</li>
+<li>methodology</li>
+<li>software tools</li>
+</ul>
 <pre class="r"><code>#######################
 #### Load Packages ####
 #######################
@@ -215,13 +221,22 @@ path_to_data &lt;- &quot;../data/output-data/cleaned/&quot;
 #### Load Data ####
 ###################
 
-blocks_tree_temp_demographics &lt;- read_csv(paste0(path_to_data, &quot;blocks_tree_temp_demographics.csv&quot;)) %&gt;%
+blocks_tree_temp_demographics &lt;- 
+  read_csv(paste0(path_to_data, &quot;blocks_tree_temp_demographics.csv&quot;)) %&gt;%
   mutate_at(vars(matches(&quot;geoid10&quot;)), as.character) # Recast non-calculable variables as characters
-csa_tree_temp_demographics &lt;- read_csv(paste0(path_to_data, &quot;csa_tree_temp_demographics.csv&quot;))
-nsa_tree_temp &lt;- read_csv(paste0(path_to_data, &quot;nsa_tree_temp.csv&quot;))
-zcta_tree_temp_demographics &lt;- read_csv(paste0(path_to_data, &quot;zcta_tree_temp_demographics.csv&quot;)) %&gt;%
+
+csa_tree_temp_demographics &lt;- 
+  read_csv(paste0(path_to_data, &quot;csa_tree_temp_demographics.csv&quot;))
+
+nsa_tree_temp &lt;- 
+  read_csv(paste0(path_to_data, &quot;nsa_tree_temp.csv&quot;))
+
+zcta_tree_temp_demographics &lt;- 
+  read_csv(paste0(path_to_data, &quot;zcta_tree_temp_demographics.csv&quot;)) %&gt;%
   mutate_at(vars(matches(&quot;zcta&quot;)), as.character) # Recast non-calculable variables as characters
-street_trees_nsa_categorized &lt;- read_csv(paste0(path_to_data, &quot;street_trees_nsa_categorized.csv&quot;))</code></pre>
+
+street_trees_nsa_categorized &lt;- 
+  read_csv(paste0(path_to_data, &quot;street_trees_nsa_categorized.csv&quot;))</code></pre>
 </div>
 <div id="temperature-analysis" class="section level2">
 <h2>Temperature Analysis</h2>
