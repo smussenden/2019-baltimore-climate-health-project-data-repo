@@ -36,6 +36,7 @@ The analysis that uses the cleaned data output by this document is located in th
 * **ZCTAs - ZIP Code Tabulation Areas**: A U.S. Census proxy for postal ZIP Code units. Shapefiles downloaded from [Census.gov](https://www2.census.gov/geo/tiger/TIGER2018/ZCTA5/).
 * **NSAs - Neighborhood Statistical Areas**: Areas created by Baltimore City to represent Baltimore neighborhoods, comprised of custom groupings of U.S. Census blocks. This grouping is considered by Baltimore City and this analysis as the best representation of true Baltimore neighborhoods. Shapefiles provided by the [Baltimore City Department of Planning](https://planning.baltimorecity.gov/maps-data/GIS).
 * **CSAs - Community Statistical Areas**: Groupings of neighborhoods, created and used by the Baltimore Neighborhood Indicators Alliance (BNIA). In some cases, there is one neighborhood per CSA; in others, it's multiple. Recent demographic data is only available by CSA. Shapefiles downloaded from the [Baltimore Neighborhood Indicators Alliance Vital Signs project](https://data-bniajfi.opendata.arcgis.com/datasets/794586676bcc4f5fb629c08c51474cf6_0).
+* **Redlined geographic units**: Between 1935 and 1940, local real estate lenders, developers and real estate appraisers assigned grades to residential neighborhoods based on the perceived risk for banks to grant loans. This process was based in part on the race of residents and is known today as "redlining." The ["Mapping Inequality"](https://dsl.richmond.edu/panorama/redlining/#loc=5/39.1/-94.58&text=intro) project, conducted by [teams at four different universites](https://dsl.richmond.edu/panorama/redlining/#loc=12/39.293/-76.679&text=about), generated interactive maps of cities across the U.S., including Baltimore, and made their [shapefiles available by city](https://dsl.richmond.edu/panorama/redlining/#loc=11/39.3/-76.673&text=downloads).
 
 ## Setup
 
@@ -564,6 +565,38 @@ street_trees_categorized <- street_trees %>%
 
 ```
 
+## Load and Clean Redlining Data
+
+This analysis used QGIS to compute tree canopy for geographies based on redlining shapefiles downloaded from the [Mapping Inequality project](https://dsl.richmond.edu/panorama/redlining/#loc=11/39.3/-76.673&text=downloads).
+
+### Define Functions and store universal variables
+
+```{r echo=TRUE, message=FALSE}
+
+# Common file path to raw redlining data
+path_to_data <- "../data/input-data/redlining-data/"
+
+```
+
+### Execute load in and cleaning
+
+``` {r}
+
+redlining_tree <- read_csv(paste0(path_to_data, "HOLC_Redlining_2015_tree_canopy.csv")) %>%
+  select(-matches("name"), -matches("area_descr")) %>%
+  mutate(grade_descr = case_when(
+    holc_grade == "A" ~ "best",
+    holc_grade == "B" ~ "still desirable",
+    holc_grade == "C" ~ "definitely declining",
+    holc_grade == "D" ~ "hazardous",
+    T ~ NA_character_
+  )) %>%
+  select(holc_id, holc_grade, grade_descr, 
+         count_all_pix_15 = `15_count`, 
+         sum_canopy_pix_15 = `15_sum`, 
+         mean_pix_15 = `15_mean`)
+
+```
 
 ## Output All Cleaned Data to CSV Files
 
@@ -580,7 +613,8 @@ write_csv(csa_tree_temp_demographics, paste0(save_path, "csa_tree_temp_demograph
 write_csv(nsa_tree_temp, paste0(save_path, "nsa_tree_temp.csv"))
 write_csv(zcta_tree_temp_demographics, paste0(save_path, "zcta_tree_temp_demographics.csv"))
 write_csv(street_trees_categorized, paste0(save_path, "street_trees_nsa_categorized.csv"))
+write_csv(redlining_tree, paste0(save_path, "redlining_tree.csv"))
 
 #### Clean up the workspace ####
-rm(list=setdiff(ls(), c("blocks_tree_temp_population", "zcta_tree_temp_demographics", "nsa_tree_temp", "csa_tree_temp_demographics", "street_trees_categorized")))
+rm(list=setdiff(ls(), c("blocks_tree_temp_population", "zcta_tree_temp_demographics", "nsa_tree_temp", "csa_tree_temp_demographics", "street_trees_categorized", "redlining_tree")))
 ```

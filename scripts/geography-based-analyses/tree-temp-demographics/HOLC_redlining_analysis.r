@@ -18,7 +18,7 @@ rm(list=ls())
 ######## Load Data Produced in Cleaning.r Script File ###########
 #################################################################
 
-redlining_tree <- read_csv("data/output-data/cleaned/tree-temp-demographic-w-naip-lidar-use/HOLC_redlining_2015_tree_canopy.csv")
+redlining_tree <- read_csv("../data/output-data/cleaned/tree-temp-demographic-w-naip-lidar-use/HOLC_redlining_2015_tree_canopy.csv")
 
 #################################################################
 ########## Analysis #############################################

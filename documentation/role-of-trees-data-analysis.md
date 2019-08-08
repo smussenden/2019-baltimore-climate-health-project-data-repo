@@ -1,5 +1,7 @@
 -   [Introduction](#introduction)
 -   [Setup](#setup)
+    -   [Load packages](#load-packages)
+    -   [Load variables and data](#load-variables-and-data)
 -   [Temperature Analysis](#temperature-analysis)
     -   [Blocks by temperature](#blocks-by-temperature)
     -   [Neighborhood Statistical Areas by temperature](#neighborhood-statistical-areas-by-temperature)
@@ -8,6 +10,7 @@
     -   [Poverty compared to tree canopy](#poverty-compared-to-tree-canopy)
     -   [Temperature compared to tree canopy](#temperature-compared-to-tree-canopy)
     -   [Tree canopy change over time](#tree-canopy-change-over-time)
+    -   [Tree cover in redlined areas](#tree-cover-in-redlined-areas)
 -   [Street Trees Analysis](#street-trees-analysis)
 -   [North Milton Street Trees](#north-milton-street-trees)
 
@@ -33,6 +36,8 @@ Before running this file, **please view and run the [Code Red Data Cleaning docu
 -   cleaning methodology
 -   software tools used
 
+### Load packages
+
 ``` r
 #######################
 #### Load Packages ####
@@ -49,13 +54,30 @@ require(scales) # For percent labeling on distribution tables
 
 # Turn off scientific notation in RStudio (prevents coersion to character type)
 options(scipen = 999)
+```
 
+### Load variables and data
+
+``` r
 #########################
 #### Store Variables ####
 #########################
 
-#### Common save path ####
+#### Common path to data ####
 path_to_data <- "../data/output-data/cleaned/"
+
+#### NSAs of interest ####
+target_nsas <- c("Berea", "Broadway East", "Oliver", "Middle East", 
+                 "Biddle Street","Milton-Montford", "Madison-Eastend", 
+                 "CARE", "McElderry Park", "Ellwood Park/Monument", 
+                 "Patterson Place", "Patterson Park Neighborhood", 
+                 "Baltimore Highlands", "Highlandtown", 
+                 "Upper Fells Point") %>%
+  lapply(tolower)
+
+#### CSAs of interest ####
+target_csas <- c("Greater Roland Park/Poplar Hill", "Canton", "Patterson Park North & East", "Greenmount East", "Clifton-Berea") %>%
+  lapply(tolower)
 
 ###################
 #### Load Data ####
@@ -74,6 +96,8 @@ nsa_tree_temp <-
 zcta_tree_temp_demographics <- 
   read_csv(paste0(path_to_data, "zcta_tree_temp_demographics.csv")) %>%
   mutate_at(vars(matches("zcta")), as.character) # Recast non-calculable variables as characters
+
+redlining_tree <- read_csv(paste0(path_to_data, "redlining_tree.csv"))
 
 street_trees_nsa_categorized <- 
   read_csv(paste0(path_to_data, "street_trees_nsa_categorized.csv"))
@@ -392,10 +416,6 @@ csa_tree_temp_demographics %>%
 If we build a correlation matrix only looking at certain neighborhoods of interest, the pattern is even more pronounced:
 
 ``` r
-# List of NSAs of interest
-target_csas <- c("Greater Roland Park/Poplar Hill", "Canton", "Patterson Park North & East", "Greenmount East", "Clifton-Berea") %>%
-  lapply(tolower)
-
 #### Build correlation matrix ####
 csa_tree_temp_demographics %>%
   filter(csa2010 %in% target_csas) %>%
@@ -487,7 +507,7 @@ csa_tree_temp_demographics %>%
         plot.subtitle = element_text(size = 12))
 ```
 
-![](role-of-trees-data-analysis_files/figure-markdown_github/unnamed-chunk-48-1.png)
+![](role-of-trees-data-analysis_files/figure-markdown_github/unnamed-chunk-17-1.png)
 
 There are some exceptions to this trend, such as Penn North/Reservoir Hill and Greater Rosemont, which both have relatively high rates of both poverty and tree canopy:
 
@@ -596,18 +616,6 @@ csa_tree_temp_demographics %>%
 
 ### Tree canopy change over time
 
-Neighborhoods of interest:
-
-``` r
-target_nsas <- c("Berea", "Broadway East", "Oliver", "Middle East", 
-                 "Biddle Street","Milton-Montford", "Madison-Eastend", 
-                 "CARE", "McElderry Park", "Ellwood Park/Monument", 
-                 "Patterson Place", "Patterson Park Neighborhood", 
-                 "Baltimore Highlands", "Highlandtown", 
-                 "Upper Fells Point") %>%
-  lapply(tolower)
-```
-
 *INCOMPLETE: START WORK HERE*
 
 All relevant data:
@@ -629,19 +637,78 @@ w <- nsa_tree_temp %>%
   # arrange(rank_canopy)
 ```
 
+What were the citywide gains and losses?
+
 ``` r
-nsa_tree_temp %>%
-  dplyr::summarise(total_perc_change = sum(lid_change_percent, na.rm = TRUE), # Sum the percent change
-                   total_perc_point_change = sum(lid_change_percent_point, na.rm = TRUE), # Sum the percent point change
-                   avg_2007 = mean(`07_lid_mean`)*100, # Take the mean of the means for 07
-                   avg_2015 = mean(`15_lid_mean`)*100) %>% # Take the mean of the means for 15
-  mutate(diff_2007_2015 = avg_2015 - avg_2007) # Subtract 15 from 07 to find the difference
+#### USE QGIS TO DO THIS CONFIRMATION ####
 ```
 
-    ## # A tibble: 1 x 5
-    ##   total_perc_change total_perc_point_chan… avg_2007 avg_2015 diff_2007_2015
-    ##               <dbl>                  <dbl>    <dbl>    <dbl>          <dbl>
-    ## 1              9.54                  0.630     26.0     26.2          0.227
+How many geograplhies gained and lost tree cover?
+
+``` r
+#### NSAs ####
+as.data.frame(table(sign(nsa_tree_temp$lid_change_percent))) %>%
+  mutate(total = sum(Freq),
+         perc = round(100*(Freq/total), 2))
+```
+
+    ##   Var1 Freq total  perc
+    ## 1   -1  112   277 40.43
+    ## 2    1  165   277 59.57
+
+``` r
+#### Blocks ####
+as.data.frame(table(sign(blocks_tree_temp_demographics$lid_change_percent))) %>%
+  mutate(total = sum(Freq),
+         perc = round(100*(Freq/total), 2))
+```
+
+    ##   Var1 Freq total  perc
+    ## 1   -1 4627 12300 37.62
+    ## 2    0  112 12300  0.91
+    ## 3    1 7561 12300 61.47
+
+By how many percentage points did each NSA of interest gain or lose?
+
+``` r
+nsa_tree_temp %>%
+  select(nsa_name, `07_lid_mean`, `15_lid_mean`, lid_change_percent_point) %>%
+  filter((nsa_name %in% target_nsas) | (nsa_name %like% "%roland%")) %>%
+  mutate(lid_change_percent_point = round(lid_change_percent_point*100, 2),
+         `07_lid_mean` = round(`07_lid_mean`*100, 2),
+         `15_lid_mean` = round(`15_lid_mean`*100, 2))
+```
+
+    ## # A tibble: 17 x 4
+    ##    nsa_name               `07_lid_mean` `15_lid_mean` lid_change_percent_p…
+    ##    <chr>                          <dbl>         <dbl>                 <dbl>
+    ##  1 baltimore highlands             6.1           7.86                  1.76
+    ##  2 berea                           5.55          5.97                  0.43
+    ##  3 biddle street                  12.0          12.7                   0.64
+    ##  4 broadway east                   9.03         10.6                   1.59
+    ##  5 care                            8.64          7.49                 -1.14
+    ##  6 ellwood park/monument           5.43          6.45                  1.02
+    ##  7 highlandtown                    2.98          4.26                  1.28
+    ##  8 madison-eastend                 6.79          7.71                  0.92
+    ##  9 mcelderry park                  4.51          6.14                  1.63
+    ## 10 middle east                     7.37          6.76                 -0.62
+    ## 11 milton-montford                 5.36          6.41                  1.05
+    ## 12 north roland park/pop…         65.1          64.5                  -0.59
+    ## 13 oliver                         14.4          13.9                  -0.43
+    ## 14 patterson park neighb…          2.91          4.19                  1.28
+    ## 15 patterson place                 5.93          7.46                  1.53
+    ## 16 roland park                    62.4          64.5                   2.09
+    ## 17 upper fells point               8.49         11.2                   2.68
+
+### Tree cover in redlined areas
+
+``` r
+redlining_tree_summary_table <- redlining_tree %>%
+  group_by(holc_grade, grade_descr) %>%
+  summarise(total_area_pixels = sum(`count_all_pix_15`),
+            total_canopy_pixels = sum(`sum_canopy_pix_15`)) %>%
+  mutate(avg_canopy_perc = round(100*(total_canopy_pixels/total_area_pixels), 2))
+```
 
 Street Trees Analysis
 ---------------------

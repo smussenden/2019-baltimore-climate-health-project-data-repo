@@ -267,6 +267,7 @@ div.tocify {
 <li><strong>ZCTAs - ZIP Code Tabulation Areas</strong>: A U.S. Census proxy for postal ZIP Code units. Shapefiles downloaded from <a href="https://www2.census.gov/geo/tiger/TIGER2018/ZCTA5/">Census.gov</a>.</li>
 <li><strong>NSAs - Neighborhood Statistical Areas</strong>: Areas created by Baltimore City to represent Baltimore neighborhoods, comprised of custom groupings of U.S. Census blocks. This grouping is considered by Baltimore City and this analysis as the best representation of true Baltimore neighborhoods. Shapefiles provided by the <a href="https://planning.baltimorecity.gov/maps-data/GIS">Baltimore City Department of Planning</a>.</li>
 <li><strong>CSAs - Community Statistical Areas</strong>: Groupings of neighborhoods, created and used by the Baltimore Neighborhood Indicators Alliance (BNIA). In some cases, there is one neighborhood per CSA; in others, it’s multiple. Recent demographic data is only available by CSA. Shapefiles downloaded from the <a href="https://data-bniajfi.opendata.arcgis.com/datasets/794586676bcc4f5fb629c08c51474cf6_0">Baltimore Neighborhood Indicators Alliance Vital Signs project</a>.</li>
+<li><strong>Redlined geographic units</strong>: Between 1935 and 1940, local real estate lenders, developers and real estate appraisers assigned grades to residential neighborhoods based on the perceived risk for banks to grant loans. This process was based in part on the race of residents and is known today as “redlining.” The <a href="https://dsl.richmond.edu/panorama/redlining/#loc=5/39.1/-94.58&amp;text=intro">“Mapping Inequality”</a> project, conducted by <a href="https://dsl.richmond.edu/panorama/redlining/#loc=12/39.293/-76.679&amp;text=about">teams at four different universites</a>, generated interactive maps of cities across the U.S., including Baltimore, and made their <a href="https://dsl.richmond.edu/panorama/redlining/#loc=11/39.3/-76.673&amp;text=downloads">shapefiles available by city</a>.</li>
 </ul>
 </div>
 </div>
@@ -758,6 +759,41 @@ street_trees_categorized &lt;- street_trees %&gt;%
   ))</code></pre>
 </div>
 </div>
+<div id="load-and-clean-redlining-data" class="section level2">
+<h2>Load and Clean Redlining Data</h2>
+<p>This analysis used QGIS to compute tree canopy for geographies based on redlining shapefiles downloaded from the <a href="https://dsl.richmond.edu/panorama/redlining/#loc=11/39.3/-76.673&amp;text=downloads">Mapping Inequality project</a>.</p>
+<div id="define-functions-and-store-universal-variables-4" class="section level3">
+<h3>Define Functions and store universal variables</h3>
+<pre class="r"><code># Common file path to raw redlining data
+path_to_data &lt;- &quot;../data/input-data/redlining-data/&quot;</code></pre>
+</div>
+<div id="execute-load-in-and-cleaning-4" class="section level3">
+<h3>Execute load in and cleaning</h3>
+<pre class="r"><code>redlining_tree &lt;- read_csv(paste0(path_to_data, &quot;HOLC_Redlining_2015_tree_canopy.csv&quot;)) %&gt;%
+  select(-matches(&quot;name&quot;), -matches(&quot;area_descr&quot;)) %&gt;%
+  mutate(grade_descr = case_when(
+    holc_grade == &quot;A&quot; ~ &quot;best&quot;,
+    holc_grade == &quot;B&quot; ~ &quot;still desirable&quot;,
+    holc_grade == &quot;C&quot; ~ &quot;definitely declining&quot;,
+    holc_grade == &quot;D&quot; ~ &quot;hazardous&quot;,
+    T ~ NA_character_
+  )) %&gt;%
+  select(holc_id, holc_grade, grade_descr, 
+         count_all_pix_15 = `15_count`, 
+         sum_canopy_pix_15 = `15_sum`, 
+         mean_pix_15 = `15_mean`)</code></pre>
+<pre><code>## Parsed with column specification:
+## cols(
+##   name = col_logical(),
+##   holc_id = col_character(),
+##   holc_grade = col_character(),
+##   area_descr = col_character(),
+##   `15_count` = col_double(),
+##   `15_sum` = col_double(),
+##   `15_mean` = col_double()
+## )</code></pre>
+</div>
+</div>
 <div id="output-all-cleaned-data-to-csv-files" class="section level2">
 <h2>Output All Cleaned Data to CSV Files</h2>
 <p>The following generated files are necessary for future portions of this analysis.</p>
@@ -770,9 +806,10 @@ write_csv(csa_tree_temp_demographics, paste0(save_path, &quot;csa_tree_temp_demo
 write_csv(nsa_tree_temp, paste0(save_path, &quot;nsa_tree_temp.csv&quot;))
 write_csv(zcta_tree_temp_demographics, paste0(save_path, &quot;zcta_tree_temp_demographics.csv&quot;))
 write_csv(street_trees_categorized, paste0(save_path, &quot;street_trees_nsa_categorized.csv&quot;))
+write_csv(redlining_tree, paste0(save_path, &quot;redlining_tree.csv&quot;))
 
 #### Clean up the workspace ####
-rm(list=setdiff(ls(), c(&quot;blocks_tree_temp_population&quot;, &quot;zcta_tree_temp_demographics&quot;, &quot;nsa_tree_temp&quot;, &quot;csa_tree_temp_demographics&quot;, &quot;street_trees_categorized&quot;)))</code></pre>
+rm(list=setdiff(ls(), c(&quot;blocks_tree_temp_population&quot;, &quot;zcta_tree_temp_demographics&quot;, &quot;nsa_tree_temp&quot;, &quot;csa_tree_temp_demographics&quot;, &quot;street_trees_categorized&quot;, &quot;redlining_tree&quot;)))</code></pre>
 </div>
 
 
