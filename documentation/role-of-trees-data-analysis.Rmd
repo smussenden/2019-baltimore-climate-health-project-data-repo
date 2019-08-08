@@ -609,7 +609,7 @@ street_trees_nsa_summarized %>%
 
 ```
 
-``` {r, out.width='100%'}
+``` {r, out.width='1000px'}
 
 # Plot HEIGHT by nsa for ALL nsas using controled averages
 ggplot(filter(street_trees_nsa_summarized, !is.na(avg_ht_controled)), 
@@ -652,9 +652,129 @@ street_trees_nsa_categorized %>%
 
 ```
 
-### Condition
+### Difficulty of planting
+
+In addition to tracking each tree, the City of Baltimore also tracks spaces where trees could potentiall by planted. This, along with methodology for determining ease-of-planting classifications, is further explained in the [Code Red Data Cleaning document](https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/documentation/code-red-data-cleaning.md#load-and-clean-individual-tree-data).
+
+``` {r, rows.print=19}
+
+#### Relevant info from table ####
+street_trees_nsa_summarized %>%
+  select(1:33) %>%
+  filter((nbrdesc %in% target_nsas) | (nbrdesc %in% counterpoint_nsas))
+  
+```
+
+Not only are there more trees in Roland Park than Broadway East, but the untreed spaces are considerably easier to plant.
+
+``` {r, rows.print=19}
+
+#### Summarize planting difficulty in Broadway East and Roland Park ####
+street_trees_nsa_categorized %>%
+  select(nbrdesc, difficulty_level_num, difficulty_level) %>%
+  filter((nbrdesc %like% "broadway%") | (nbrdesc %like% "roland%")) %>%
+  group_by(nbrdesc, difficulty_level_num, difficulty_level) %>%
+  summarize(count_spaces = n())
+  
+```
+
+Broadway East has 1140 spaces that are available for planting, 1025 of which are not considered "unsuitable." 96 percent of these are hard to plant (require breaking concrete). 
+
+```{r}
+
+#### Find percent of suitable spaces at each difficulty level for... ####
+
+# ...Broadway East
+street_trees_nsa_categorized %>%
+  # Count the spaces at each level
+  select(nbrdesc, difficulty_level_num, difficulty_level) %>%
+  filter((nbrdesc %like% "broadway%") & (difficulty_level != "has live tree")) %>%
+  group_by(nbrdesc, difficulty_level_num, difficulty_level) %>%
+  summarize(count_spaces = n()) %>%
+  ungroup() %>%
+  mutate(total_vacant_spaces = sum(count_spaces)) %>%
+  # Count the suitable spaces in Broadway East
+  left_join(
+    street_trees_nsa_categorized %>%
+      select(nbrdesc, difficulty_level_num, difficulty_level) %>%
+      filter((nbrdesc %like% "broadway%") & (difficulty_level != "has live tree") & (difficulty_level != "unsuitable")) %>%
+      group_by(nbrdesc, difficulty_level_num, difficulty_level) %>%
+      summarize(count_suitable = n()) %>%
+      ungroup() %>%
+      mutate(total_suitable = sum(count_suitable)) %>%
+      select(-count_suitable)
+  ) %>%
+  # Calculate the percent of suitable spaces at each difficulty
+  mutate(perc_at_difficulty = round(100*(count_spaces/total_suitable), 2))
 
 
+# ...Roland Park
+street_trees_nsa_categorized %>%
+  # Count the spaces at each level
+  select(nbrdesc, difficulty_level_num, difficulty_level) %>%
+  filter((nbrdesc %like% "roland%") & (difficulty_level != "has live tree")) %>%
+  group_by(nbrdesc, difficulty_level_num, difficulty_level) %>%
+  summarize(count_spaces = n()) %>%
+  ungroup() %>%
+  mutate(total_vacant_spaces = sum(count_spaces)) %>%
+  # Count the suitable spaces in Broadway East
+  left_join(
+    street_trees_nsa_categorized %>%
+      select(nbrdesc, difficulty_level_num, difficulty_level) %>%
+      filter((nbrdesc %like% "roland%") & (difficulty_level != "has live tree") & (difficulty_level != "unsuitable")) %>%
+      group_by(nbrdesc, difficulty_level_num, difficulty_level) %>%
+      summarize(count_suitable = n()) %>%
+      ungroup() %>%
+      mutate(total_suitable = sum(count_suitable)) %>%
+      select(-count_suitable)
+  ) %>%
+  # Calculate the percent of suitable spaces at each difficulty
+  mutate(perc_at_difficulty = round(100*(count_spaces/total_suitable), 2))
+
+
+
+
+```
+
+### Condition of trees
+
+Larger (and therefore older) trees in the south-eastern neighborhoods tend to be less healthy than those in the northwest. 
+
+``` {r}
+
+#### Relevant info from table ####
+street_trees_nsa_categorized %>%
+  select(nbrdesc, diameter = dbh, condition, is_target_nsa)
+
+```
+
+When looking at larger trees, Roland Park is ranked 28th in for percent in good condition. Broadway East, by contrast, is ranked 227th of 277 NSAs.
+
+``` {r, rows.print = 19}
+
+#### Find counts of each tree condition in NSAs of interest, and calculate the percentage that are in good condition ####
+street_trees_nsa_categorized %>%
+  select(nbrdesc, diameter = dbh, condition) %>%
+  # Filter for only trees with diameter larger than 6 inches
+  filter(diameter > 6) %>%
+  group_by(nbrdesc, condition) %>%
+  summarize(count_at_condition = n()) %>%
+  spread(condition, count_at_condition) %>%
+  # Drop non-live trees
+  select(-absent, -unknown, -dead, -stump) %>%
+  # Arrange in sensible order
+  select(poor, fair, good) %>%
+  ungroup() %>%
+  # Find percent
+  mutate(total_live_trees = rowSums(.[2:4]),
+         perc_good = round(100*(good/total_live_trees), 2)) %>%
+  arrange(desc(perc_good)) %>%
+  # Rank by percent
+  mutate(rank_by_perc_good = rank(-perc_good)) %>%
+  # Filter for NSAs of interest
+  filter((nbrdesc %in% target_nsas) | (nbrdesc %in% counterpoint_nsas))
+
+```
 
 ### Individual street trees
 

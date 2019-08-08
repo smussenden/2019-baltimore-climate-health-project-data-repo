@@ -13,7 +13,8 @@
     -   [Tree cover in redlined areas](#tree-cover-in-redlined-areas)
 -   [Street Trees Analysis](#street-trees-analysis)
     -   [Height](#height)
-    -   [Condition](#condition)
+    -   [Difficulty of planting](#difficulty-of-planting)
+    -   [Condition of trees](#condition-of-trees)
     -   [Individual street trees](#individual-street-trees)
 
 Introduction
@@ -812,7 +813,7 @@ ggplot(filter(street_trees_nsa_summarized, !is.na(avg_ht_controled)),
         axis.text.x = element_text(angle = 90, hjust = 1, size = 5))
 ```
 
-<img src="role-of-trees-data-analysis_files/figure-markdown_github/unnamed-chunk-30-1.png" width="100%" />
+<img src="role-of-trees-data-analysis_files/figure-markdown_github/unnamed-chunk-30-1.png" width="1000px" />
 
 It is clear that taller trees are more common in wealthier NSAs compared to poorer ones such as Broadway East.
 
@@ -857,6 +858,226 @@ street_trees_nsa_categorized %>%
     ## 18 upper fells point   20.7          908               200            22.0 
     ## 19 washington hill     15.8         1020               157            15.4
 
-### Condition
+### Difficulty of planting
+
+In addition to tracking each tree, the City of Baltimore also tracks spaces where trees could potentiall by planted. This, along with methodology for determining ease-of-planting classifications, is further explained in the [Code Red Data Cleaning document](https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/documentation/code-red-data-cleaning.md#load-and-clean-individual-tree-data).
+
+``` r
+#### Relevant info from table ####
+street_trees_nsa_summarized %>%
+  select(1:33) %>%
+  filter((nbrdesc %in% target_nsas) | (nbrdesc %in% counterpoint_nsas))
+```
+
+    ## # A tibble: 19 x 33
+    ##    nbrdesc all_tracked_spa… rank_all_tracke… spaces_with_liv…
+    ##    <chr>              <dbl>            <dbl>            <dbl>
+    ##  1 baltim…              597              117              411
+    ##  2 berea                937               68              623
+    ##  3 biddle…              368              181              272
+    ##  4 broadw…             1526               28              386
+    ##  5 butche…              628              106              586
+    ##  6 canton              4132                1             2809
+    ##  7 care                 544              132              398
+    ##  8 ellwoo…             1067               47              860
+    ##  9 highla…              955               64              656
+    ## 10 madiso…              559              127              451
+    ## 11 mcelde…              942               66              751
+    ## 12 middle…              990               59              615
+    ## 13 milton…              391              177              289
+    ## 14 oliver              1526               29              945
+    ## 15 patter…             1319               36             1099
+    ## 16 patter…              274              212              240
+    ## 17 roland…             3382                4             2910
+    ## 18 upper …              908               69              710
+    ## 19 washin…             1020               56              643
+    ## # … with 29 more variables: rank_spaces_with_live_trees <dbl>,
+    ## #   unsuitable_without_tree <dbl>, suitable_without_tree <dbl>,
+    ## #   spaces_without_live_trees <dbl>, rank_unsuitable_without_tree <dbl>,
+    ## #   rank_suitable_without_tree <dbl>,
+    ## #   rank_spaces_without_live_trees <dbl>, perc_spaces_treed <dbl>,
+    ## #   perc_spaces_nontreed <dbl>, perc_of_nontreed_are_suitable <dbl>,
+    ## #   rank_perc_spaces_treed <dbl>, rank_perc_spaces_nontreed <dbl>,
+    ## #   rank_perc_of_nontreed_are_suitable <dbl>,
+    ## #   num_spaces_with_live_trees <dbl>, num_spaces_without_live_trees <dbl>,
+    ## #   num_easy <dbl>, num_moderate <dbl>, num_hard <dbl>,
+    ## #   num_not_suitable <dbl>, perc_of_nontreed_easy <dbl>,
+    ## #   perc_of_nontreed_moderate <dbl>, perc_of_nontreed_hard <dbl>,
+    ## #   perc_of_nontreed_unsuitable <dbl>, poor_count <dbl>, fair_count <dbl>,
+    ## #   good_count <dbl>, poor_perc_of_live <dbl>, fair_perc_of_live <dbl>,
+    ## #   good_perc_of_live <dbl>
+
+Not only are there more trees in Roland Park than Broadway East, but the untreed spaces are considerably easier to plant.
+
+``` r
+#### Summarize planting difficulty in Broadway East and Roland Park ####
+street_trees_nsa_categorized %>%
+  select(nbrdesc, difficulty_level_num, difficulty_level) %>%
+  filter((nbrdesc %like% "broadway%") | (nbrdesc %like% "roland%")) %>%
+  group_by(nbrdesc, difficulty_level_num, difficulty_level) %>%
+  summarize(count_spaces = n())
+```
+
+    ## # A tibble: 11 x 4
+    ## # Groups:   nbrdesc, difficulty_level_num [11]
+    ##    nbrdesc       difficulty_level_num difficulty_level count_spaces
+    ##    <chr>                        <dbl> <chr>                   <int>
+    ##  1 broadway east                    1 easy                        6
+    ##  2 broadway east                    2 moderate                   35
+    ##  3 broadway east                    3 hard                      984
+    ##  4 broadway east                    4 unsuitable                115
+    ##  5 broadway east                   NA has live tree             386
+    ##  6 roland park                      0 <NA>                        2
+    ##  7 roland park                      1 easy                      234
+    ##  8 roland park                      2 moderate                  221
+    ##  9 roland park                      3 hard                       13
+    ## 10 roland park                      4 unsuitable                  2
+    ## 11 roland park                     NA has live tree            2910
+
+Broadway East has 1140 spaces that are available for planting, 1025 of which are not considered "unsuitable." 96 percent of these are hard to plant (require breaking concrete).
+
+``` r
+#### Find percent of suitable spaces at each difficulty level for... ####
+
+# ...Broadway East
+street_trees_nsa_categorized %>%
+  # Count the spaces at each level
+  select(nbrdesc, difficulty_level_num, difficulty_level) %>%
+  filter((nbrdesc %like% "broadway%") & (difficulty_level != "has live tree")) %>%
+  group_by(nbrdesc, difficulty_level_num, difficulty_level) %>%
+  summarize(count_spaces = n()) %>%
+  ungroup() %>%
+  mutate(total_vacant_spaces = sum(count_spaces)) %>%
+  # Count the suitable spaces in Broadway East
+  left_join(
+    street_trees_nsa_categorized %>%
+      select(nbrdesc, difficulty_level_num, difficulty_level) %>%
+      filter((nbrdesc %like% "broadway%") & (difficulty_level != "has live tree") & (difficulty_level != "unsuitable")) %>%
+      group_by(nbrdesc, difficulty_level_num, difficulty_level) %>%
+      summarize(count_suitable = n()) %>%
+      ungroup() %>%
+      mutate(total_suitable = sum(count_suitable)) %>%
+      select(-count_suitable)
+  ) %>%
+  # Calculate the percent of suitable spaces at each difficulty
+  mutate(perc_at_difficulty = round(100*(count_spaces/total_suitable), 2))
+```
+
+    ## # A tibble: 4 x 7
+    ##   nbrdesc difficulty_leve… difficulty_level count_spaces total_vacant_sp…
+    ##   <chr>              <dbl> <chr>                   <int>            <int>
+    ## 1 broadw…                1 easy                        6             1140
+    ## 2 broadw…                2 moderate                   35             1140
+    ## 3 broadw…                3 hard                      984             1140
+    ## 4 broadw…                4 unsuitable                115             1140
+    ## # … with 2 more variables: total_suitable <int>, perc_at_difficulty <dbl>
+
+``` r
+# ...Roland Park
+street_trees_nsa_categorized %>%
+  # Count the spaces at each level
+  select(nbrdesc, difficulty_level_num, difficulty_level) %>%
+  filter((nbrdesc %like% "roland%") & (difficulty_level != "has live tree")) %>%
+  group_by(nbrdesc, difficulty_level_num, difficulty_level) %>%
+  summarize(count_spaces = n()) %>%
+  ungroup() %>%
+  mutate(total_vacant_spaces = sum(count_spaces)) %>%
+  # Count the suitable spaces in Broadway East
+  left_join(
+    street_trees_nsa_categorized %>%
+      select(nbrdesc, difficulty_level_num, difficulty_level) %>%
+      filter((nbrdesc %like% "roland%") & (difficulty_level != "has live tree") & (difficulty_level != "unsuitable")) %>%
+      group_by(nbrdesc, difficulty_level_num, difficulty_level) %>%
+      summarize(count_suitable = n()) %>%
+      ungroup() %>%
+      mutate(total_suitable = sum(count_suitable)) %>%
+      select(-count_suitable)
+  ) %>%
+  # Calculate the percent of suitable spaces at each difficulty
+  mutate(perc_at_difficulty = round(100*(count_spaces/total_suitable), 2))
+```
+
+    ## # A tibble: 4 x 7
+    ##   nbrdesc difficulty_leve… difficulty_level count_spaces total_vacant_sp…
+    ##   <chr>              <dbl> <chr>                   <int>            <int>
+    ## 1 roland…                1 easy                      234              470
+    ## 2 roland…                2 moderate                  221              470
+    ## 3 roland…                3 hard                       13              470
+    ## 4 roland…                4 unsuitable                  2              470
+    ## # … with 2 more variables: total_suitable <int>, perc_at_difficulty <dbl>
+
+### Condition of trees
+
+Larger (and therefore older) trees in the south-eastern neighborhoods tend to be less healthy than those in the northwest.
+
+``` r
+#### Relevant info from table ####
+street_trees_nsa_categorized %>%
+  select(nbrdesc, diameter = dbh, condition, is_target_nsa)
+```
+
+    ## # A tibble: 192,670 x 4
+    ##    nbrdesc diameter condition is_target_nsa
+    ##    <chr>      <dbl> <chr>     <lgl>        
+    ##  1 abell       20.4 poor      FALSE        
+    ##  2 abell       16   fair      FALSE        
+    ##  3 abell        5.9 good      FALSE        
+    ##  4 abell        0   absent    FALSE        
+    ##  5 abell        9.2 fair      FALSE        
+    ##  6 abell        1.4 fair      FALSE        
+    ##  7 abell       16.9 fair      FALSE        
+    ##  8 abell        3.3 fair      FALSE        
+    ##  9 abell        4.5 stump     FALSE        
+    ## 10 abell       14.5 good      FALSE        
+    ## # … with 192,660 more rows
+
+When looking at larger trees, Roland Park is ranked 28th in for percent in good condition. Broadway East, by contrast, is ranked 227th of 277 NSAs.
+
+``` r
+#### Find counts of each tree condition in NSAs of interest, and calculate the percentage that are in good condition ####
+street_trees_nsa_categorized %>%
+  select(nbrdesc, diameter = dbh, condition) %>%
+  # Filter for only trees with diameter larger than 6 inches
+  filter(diameter > 6) %>%
+  group_by(nbrdesc, condition) %>%
+  summarize(count_at_condition = n()) %>%
+  spread(condition, count_at_condition) %>%
+  # Drop non-live trees
+  select(-absent, -unknown, -dead, -stump) %>%
+  # Arrange in sensible order
+  select(poor, fair, good) %>%
+  ungroup() %>%
+  # Find percent
+  mutate(total_live_trees = rowSums(.[2:4]),
+         perc_good = round(100*(good/total_live_trees), 2)) %>%
+  arrange(desc(perc_good)) %>%
+  # Rank by percent
+  mutate(rank_by_perc_good = rank(-perc_good)) %>%
+  # Filter for NSAs of interest
+  filter((nbrdesc %in% target_nsas) | (nbrdesc %in% counterpoint_nsas))
+```
+
+    ## # A tibble: 19 x 7
+    ##    nbrdesc     poor  fair  good total_live_trees perc_good rank_by_perc_go…
+    ##    <chr>      <int> <int> <int>            <dbl>     <dbl>            <dbl>
+    ##  1 upper fel…    22   101   355              478      74.3               26
+    ##  2 roland pa…   120   481  1666             2267      73.5               28
+    ##  3 butcher's…    17    90   256              363      70.5               45
+    ##  4 patterson…    20   111   255              386      66.1               62
+    ##  5 highlandt…    18    76   125              219      57.1              124
+    ##  6 biddle st…     5    42    59              106      55.7              133
+    ##  7 middle ea…    12    53    81              146      55.5              135
+    ##  8 washingto…    28   166   237              431      55.0              137
+    ##  9 patterson…    12    39    61              112      54.5              140
+    ## 10 canton       156   673   955             1784      53.5              147
+    ## 11 milton-mo…     3    24    29               56      51.8              165
+    ## 12 mcelderry…    25    84   111              220      50.4              170
+    ## 13 madison-e…    14    30    41               85      48.2              182
+    ## 14 berea         14    72    75              161      46.6              190
+    ## 15 care          19    40    47              106      44.3              205
+    ## 16 oliver        63   181   178              422      42.2              213
+    ## 17 baltimore…    19    43    43              105      41.0              217
+    ## 18 ellwood p…    33    78    70              181      38.7              224
+    ## 19 broadway …    45   103    91              239      38.1              227
 
 ### Individual street trees
