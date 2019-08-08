@@ -545,6 +545,261 @@ street_trees_categorized <- street_trees %>%
   ))
 ```
 
+### Create building block tables
+
+``` r
+######################################################
+### Basic count tables, required for later queries ###
+######################################################
+
+# Count total spaces that are tracked, both with and without trees
+spaces_count_by_nsa <- street_trees_categorized %>%
+  group_by(nbrdesc) %>%
+  dplyr::summarize(all_tracked_spaces = n()) %>%
+  # Add ranking so we can say NSA is #x citywide
+  arrange(nbrdesc, all_tracked_spaces) %>%
+  mutate(rank_all_tracked_spaces = rank(desc(all_tracked_spaces), na.last = "keep", ties.method = "first"))
+
+# Count total spaces with live trees (later we want to know the percent *of existing trees* at each condition)
+live_count_by_nsa <- street_trees_categorized %>% 
+  filter(has_live_tree == T) %>%
+  group_by(nbrdesc) %>%
+  dplyr::summarize(spaces_with_live_trees = n()) %>%
+  # Add ranking so we can say NSA is #x citywide
+  arrange(nbrdesc, spaces_with_live_trees) %>%
+  mutate(rank_spaces_with_live_trees = rank(desc(spaces_with_live_trees), na.last = "keep", ties.method = "first"))
+
+# Count total spaces without live trees (includes dead trees and stumps)
+empty_spaces_count_by_nsa <- street_trees_categorized %>% 
+  # Only spaces without a live tree
+  filter(has_live_tree == F) %>%
+  # Use difficulty level to categorize by suitable/unsuitable
+  mutate(is_suitable = case_when(
+    difficulty_level_num == 4 ~ F,
+    TRUE ~ T
+  )) %>%
+  group_by(nbrdesc, is_suitable) %>%
+  dplyr::summarize(count_spaces = n()) %>%
+  spread(is_suitable, count_spaces) %>%
+  dplyr::rename(
+    suitable_without_tree = "TRUE",
+    unsuitable_without_tree = "FALSE"
+  ) %>%
+  # Include the total (KI: Should just be a rowsum but can't get that to work.)
+  left_join(street_trees_categorized %>% 
+              filter(has_live_tree == F) %>%
+              group_by(nbrdesc) %>%
+              dplyr::summarize(spaces_without_live_trees = n())) %>%
+  # Add ranking for each category so can say NSA is #x in terms of each category citywide
+  dplyr::arrange(nbrdesc, unsuitable_without_tree) %>%
+  mutate(rank_unsuitable_without_tree = rank(desc(unsuitable_without_tree), na.last = "keep", ties.method = "first")) %>%
+  dplyr::arrange(nbrdesc, suitable_without_tree) %>%
+  mutate(rank_suitable_without_tree = rank(desc(suitable_without_tree), na.last = "keep", ties.method = "first")) %>%
+  dplyr::arrange(nbrdesc, spaces_without_live_trees) %>%
+  mutate(rank_spaces_without_live_trees = rank(desc(spaces_without_live_trees), na.last = "keep", ties.method = "first"))
+```
+
+    ## Joining, by = "nbrdesc"
+
+``` r
+# Combine all counts into single table of COUNT of LIVE/EMPTY/(SUITABLE/UNSUITABLE)/ALL
+spaces_count_by_nsa_all <- spaces_count_by_nsa %>%
+  left_join(live_count_by_nsa) %>%
+  left_join(empty_spaces_count_by_nsa)
+```
+
+    ## Joining, by = "nbrdesc"
+    ## Joining, by = "nbrdesc"
+
+``` r
+# Find PERCENTs of trees/spaces/suitable/nonsuitable:
+tree_as_percent_of_spaces_by_nsa <- spaces_count_by_nsa_all %>%
+  # 1. percent of trees compared to total spaces
+  mutate(perc_spaces_treed = round(100*(spaces_with_live_trees / all_tracked_spaces), 2)) %>%
+  # 2. percent of non-tree'ed spaces compared to total spaces
+  mutate(perc_spaces_nontreed = round(100*(spaces_without_live_trees / all_tracked_spaces), 2)) %>%
+  # 3. percent of non-tree'ed spaces are suitable non-tree'ed spaces
+  mutate(perc_of_nontreed_are_suitable = round(100*(suitable_without_tree / spaces_without_live_trees), 2)) %>%
+  # Add ranking for each category so can say NSA is #x in terms of each category citywide
+  dplyr::arrange(nbrdesc, perc_spaces_treed) %>%
+  mutate(rank_perc_spaces_treed = rank(desc(perc_spaces_treed), na.last = "keep", ties.method = "first")) %>%
+  dplyr::arrange(nbrdesc, perc_spaces_nontreed) %>%
+  mutate(rank_perc_spaces_nontreed = rank(desc(perc_spaces_nontreed), na.last = "keep", ties.method = "first")) %>%
+  dplyr::arrange(nbrdesc, perc_of_nontreed_are_suitable) %>%
+  mutate(rank_perc_of_nontreed_are_suitable = rank(desc(perc_of_nontreed_are_suitable), na.last = "keep", ties.method = "first"))
+```
+
+``` r
+###################################
+### Difficulty of planting ########
+###################################
+
+# COUNT spaces AT EACH DIFFICULTY in each nsa
+empty_spaces_by_diff_by_nsa_count <- street_trees_categorized %>% 
+  group_by(nbrdesc, difficulty_level_num) %>%
+  dplyr::summarize(num = n()) %>%
+  spread(difficulty_level_num, num) %>%
+  dplyr::rename(
+    num_unknown = "0",
+    num_easy = "1",
+    num_moderate = "2",
+    num_hard = "3",
+    num_not_suitable = "4",
+    num_spaces_with_live_trees = "<NA>"
+  ) %>%
+  select(-num_unknown)
+
+# PERCENT of total empty spots AT EACH DIFFICULTY in each nsa
+empty_spaces_by_diff_by_nsa_perc <- street_trees_categorized %>% 
+  group_by(nbrdesc, difficulty_level_num) %>%
+  dplyr::summarize(num = n()) %>%
+  # Join totals for perc calc
+  left_join(tree_as_percent_of_spaces_by_nsa %>% select(nbrdesc , spaces_without_live_trees)) %>%
+  mutate(perc_difflvl_to_empty_spaces = round(100*(num/spaces_without_live_trees), 2)) %>%
+  select(-num) %>%
+  spread(difficulty_level_num, perc_difflvl_to_empty_spaces) %>%
+  select(-"<NA>") %>%
+  dplyr::rename(
+    perc_of_nontreed_unknown = "0",
+    perc_of_nontreed_easy = "1",
+    perc_of_nontreed_moderate = "2",
+    perc_of_nontreed_hard = "3",
+    perc_of_nontreed_unsuitable = "4",
+    num_spaces_without_live_trees = "spaces_without_live_trees"
+  ) %>%
+  select(-perc_of_nontreed_unknown)
+```
+
+    ## Joining, by = "nbrdesc"
+
+``` r
+# Join into master DIFFICULTY table
+empty_spaces_by_diff_by_nsa <- empty_spaces_by_diff_by_nsa_count %>%
+  left_join(empty_spaces_by_diff_by_nsa_perc) %>%
+  # Rearange for readability
+  select(1, 6:7, 2:5, 8:11)
+```
+
+    ## Joining, by = "nbrdesc"
+
+``` r
+######################################
+### Tree condition by nsa ############
+######################################
+
+# Tree condition by neighborhood starting table
+tree_condition_by_nsa_long <- street_trees_categorized %>% 
+  # Filter for tree-able spaces with live trees, because we want to know the percent *of existing trees* at each condition
+  filter(has_live_tree == T) %>%
+  group_by(nbrdesc, condition) %>%
+  dplyr::summarize(num_trees = n()) %>%
+  # Find percent of live trees are in each condition?
+  # Join table to get total number of live trees
+  left_join(tree_as_percent_of_spaces_by_nsa) %>%
+  mutate(perc_condition_to_live_trees = round(100*(num_trees/spaces_with_live_trees), 2))
+```
+
+    ## Joining, by = "nbrdesc"
+
+``` r
+# Tree condition percent by nsa
+tree_condition_perc_by_nsa_wide <- tree_condition_by_nsa_long %>%
+  # Select cols to spread
+  select(nbrdesc, condition, perc_condition_to_live_trees) %>%
+  spread(condition, perc_condition_to_live_trees) %>%
+  dplyr::rename(
+    poor_perc_of_live = poor,
+    fair_perc_of_live = fair,
+    good_perc_of_live = good
+  ) 
+
+# Tree condition count by nsa
+tree_condition_count_by_nsa_wide <- tree_condition_by_nsa_long %>%
+  # Select cols to spread
+  select(nbrdesc, condition, num_trees) %>%
+  spread(condition, num_trees) %>%
+  dplyr::rename(
+    poor_count = poor,
+    fair_count = fair,
+    good_count = good
+  )
+
+# Join condition info tables into final
+tree_condition_by_nsa <- tree_condition_perc_by_nsa_wide %>%
+  left_join(tree_condition_count_by_nsa_wide) %>%
+  left_join(tree_as_percent_of_spaces_by_nsa %>% select(nbrdesc, spaces_with_live_trees)) %>%
+  # Rearange for readability
+  select(
+    1, 8, 5:7, 2:4
+  )
+```
+
+    ## Joining, by = "nbrdesc"
+    ## Joining, by = "nbrdesc"
+
+``` r
+############################################
+### Tree height/diameter by neighborhood ###
+############################################
+
+# Tree height/diameter
+tree_height_diam_by_nsa <- street_trees_categorized %>%
+  filter(has_live_tree == T) %>%
+  group_by(nbrdesc) %>%
+  dplyr::summarize(combined_ht = sum(tree_ht),
+                   avg_ht = round(mean(tree_ht), 2),
+                   combined_diam = sum(dbh),
+                   avg_diam = round(mean(dbh), 2)
+  )
+
+# Add to tree_condition_by_nsa
+tree_condition_by_nsa <- tree_condition_by_nsa %>%
+  left_join(tree_height_diam_by_nsa) %>%
+  # Drop combined totals cols
+  select(-contains("combined")) %>%
+  # If fewer than 50 trees, make a new cols for height and diameter, replace number with NA
+  mutate(avg_ht_controled = ifelse(
+    spaces_with_live_trees < 50, NA_real_, avg_ht),
+    avg_diam_controled = ifelse(
+      spaces_with_live_trees < 50, NA_real_, avg_diam)
+  ) %>%
+  # Add ranking for each category so can say NSA is #x in terms of each category citywide
+  dplyr::arrange(nbrdesc, avg_ht_controled) %>%
+  mutate(rank_avg_ht = rank(desc(avg_ht_controled), na.last = "keep", ties.method = "first")) %>%
+  dplyr::arrange(nbrdesc, avg_diam_controled) %>%
+  mutate(rank_avg_diam = rank(desc(avg_diam_controled), na.last = "keep", ties.method = "first"))
+```
+
+    ## Joining, by = "nbrdesc"
+
+### Join all into master summary table
+
+``` r
+master_by_nsa <- tree_as_percent_of_spaces_by_nsa %>%
+  left_join(empty_spaces_by_diff_by_nsa) %>%
+  left_join(tree_condition_by_nsa) %>%
+  # Add ranking for perc good
+  arrange(nbrdesc, good_perc_of_live) %>%
+  mutate(rank_good_perc_of_live = rank(desc(good_perc_of_live), na.last = "keep", ties.method = "first")) %>%
+  # Add ranking for perc poor
+  arrange(nbrdesc, poor_perc_of_live) %>%
+  mutate(rank_poor_perc_of_live = rank(desc(poor_perc_of_live), na.last = "keep", ties.method = "first")) %>%
+  # Add col for is/isn't NSA of interest
+  mutate(is_target_nsa = case_when(
+    nbrdesc %in% target_nsas ~ T,
+    TRUE ~ F 
+  ))
+```
+
+    ## Joining, by = "nbrdesc"
+
+    ## Joining, by = c("nbrdesc", "spaces_with_live_trees")
+
+``` r
+#### Remove unneeded files ####
+rm(list=setdiff(ls(), c("blocks_tree_temp_population", "zcta_tree_temp_demographics", "nsa_tree_temp", "csa_tree_temp_demographics", "street_trees_categorized", "redlining_tree", "master_by_nsa")))
+```
+
 Load and Clean Redlining Data
 -----------------------------
 
@@ -601,6 +856,7 @@ write_csv(csa_tree_temp_demographics, paste0(save_path, "csa_tree_temp_demograph
 write_csv(nsa_tree_temp, paste0(save_path, "nsa_tree_temp.csv"))
 write_csv(zcta_tree_temp_demographics, paste0(save_path, "zcta_tree_temp_demographics.csv"))
 write_csv(street_trees_categorized, paste0(save_path, "street_trees_nsa_categorized.csv"))
+write_csv(master_by_nsa,  paste0(save_path, "street_trees_nsa_summarized.csv"))
 write_csv(redlining_tree, paste0(save_path, "redlining_tree.csv"))
 
 #### Clean up the workspace ####

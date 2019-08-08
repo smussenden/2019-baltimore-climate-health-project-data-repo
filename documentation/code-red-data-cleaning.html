@@ -758,6 +758,224 @@ street_trees_categorized &lt;- street_trees %&gt;%
     TRUE ~ F 
   ))</code></pre>
 </div>
+<div id="create-building-block-tables" class="section level3">
+<h3>Create building block tables</h3>
+<pre class="r"><code>######################################################
+### Basic count tables, required for later queries ###
+######################################################
+
+# Count total spaces that are tracked, both with and without trees
+spaces_count_by_nsa &lt;- street_trees_categorized %&gt;%
+  group_by(nbrdesc) %&gt;%
+  dplyr::summarize(all_tracked_spaces = n()) %&gt;%
+  # Add ranking so we can say NSA is #x citywide
+  arrange(nbrdesc, all_tracked_spaces) %&gt;%
+  mutate(rank_all_tracked_spaces = rank(desc(all_tracked_spaces), na.last = &quot;keep&quot;, ties.method = &quot;first&quot;))
+
+# Count total spaces with live trees (later we want to know the percent *of existing trees* at each condition)
+live_count_by_nsa &lt;- street_trees_categorized %&gt;% 
+  filter(has_live_tree == T) %&gt;%
+  group_by(nbrdesc) %&gt;%
+  dplyr::summarize(spaces_with_live_trees = n()) %&gt;%
+  # Add ranking so we can say NSA is #x citywide
+  arrange(nbrdesc, spaces_with_live_trees) %&gt;%
+  mutate(rank_spaces_with_live_trees = rank(desc(spaces_with_live_trees), na.last = &quot;keep&quot;, ties.method = &quot;first&quot;))
+
+# Count total spaces without live trees (includes dead trees and stumps)
+empty_spaces_count_by_nsa &lt;- street_trees_categorized %&gt;% 
+  # Only spaces without a live tree
+  filter(has_live_tree == F) %&gt;%
+  # Use difficulty level to categorize by suitable/unsuitable
+  mutate(is_suitable = case_when(
+    difficulty_level_num == 4 ~ F,
+    TRUE ~ T
+  )) %&gt;%
+  group_by(nbrdesc, is_suitable) %&gt;%
+  dplyr::summarize(count_spaces = n()) %&gt;%
+  spread(is_suitable, count_spaces) %&gt;%
+  dplyr::rename(
+    suitable_without_tree = &quot;TRUE&quot;,
+    unsuitable_without_tree = &quot;FALSE&quot;
+  ) %&gt;%
+  # Include the total (KI: Should just be a rowsum but can't get that to work.)
+  left_join(street_trees_categorized %&gt;% 
+              filter(has_live_tree == F) %&gt;%
+              group_by(nbrdesc) %&gt;%
+              dplyr::summarize(spaces_without_live_trees = n())) %&gt;%
+  # Add ranking for each category so can say NSA is #x in terms of each category citywide
+  dplyr::arrange(nbrdesc, unsuitable_without_tree) %&gt;%
+  mutate(rank_unsuitable_without_tree = rank(desc(unsuitable_without_tree), na.last = &quot;keep&quot;, ties.method = &quot;first&quot;)) %&gt;%
+  dplyr::arrange(nbrdesc, suitable_without_tree) %&gt;%
+  mutate(rank_suitable_without_tree = rank(desc(suitable_without_tree), na.last = &quot;keep&quot;, ties.method = &quot;first&quot;)) %&gt;%
+  dplyr::arrange(nbrdesc, spaces_without_live_trees) %&gt;%
+  mutate(rank_spaces_without_live_trees = rank(desc(spaces_without_live_trees), na.last = &quot;keep&quot;, ties.method = &quot;first&quot;))</code></pre>
+<pre><code>## Joining, by = &quot;nbrdesc&quot;</code></pre>
+<pre class="r"><code># Combine all counts into single table of COUNT of LIVE/EMPTY/(SUITABLE/UNSUITABLE)/ALL
+spaces_count_by_nsa_all &lt;- spaces_count_by_nsa %&gt;%
+  left_join(live_count_by_nsa) %&gt;%
+  left_join(empty_spaces_count_by_nsa)</code></pre>
+<pre><code>## Joining, by = &quot;nbrdesc&quot;
+## Joining, by = &quot;nbrdesc&quot;</code></pre>
+<pre class="r"><code># Find PERCENTs of trees/spaces/suitable/nonsuitable:
+tree_as_percent_of_spaces_by_nsa &lt;- spaces_count_by_nsa_all %&gt;%
+  # 1. percent of trees compared to total spaces
+  mutate(perc_spaces_treed = round(100*(spaces_with_live_trees / all_tracked_spaces), 2)) %&gt;%
+  # 2. percent of non-tree'ed spaces compared to total spaces
+  mutate(perc_spaces_nontreed = round(100*(spaces_without_live_trees / all_tracked_spaces), 2)) %&gt;%
+  # 3. percent of non-tree'ed spaces are suitable non-tree'ed spaces
+  mutate(perc_of_nontreed_are_suitable = round(100*(suitable_without_tree / spaces_without_live_trees), 2)) %&gt;%
+  # Add ranking for each category so can say NSA is #x in terms of each category citywide
+  dplyr::arrange(nbrdesc, perc_spaces_treed) %&gt;%
+  mutate(rank_perc_spaces_treed = rank(desc(perc_spaces_treed), na.last = &quot;keep&quot;, ties.method = &quot;first&quot;)) %&gt;%
+  dplyr::arrange(nbrdesc, perc_spaces_nontreed) %&gt;%
+  mutate(rank_perc_spaces_nontreed = rank(desc(perc_spaces_nontreed), na.last = &quot;keep&quot;, ties.method = &quot;first&quot;)) %&gt;%
+  dplyr::arrange(nbrdesc, perc_of_nontreed_are_suitable) %&gt;%
+  mutate(rank_perc_of_nontreed_are_suitable = rank(desc(perc_of_nontreed_are_suitable), na.last = &quot;keep&quot;, ties.method = &quot;first&quot;))</code></pre>
+<pre class="r"><code>###################################
+### Difficulty of planting ########
+###################################
+
+# COUNT spaces AT EACH DIFFICULTY in each nsa
+empty_spaces_by_diff_by_nsa_count &lt;- street_trees_categorized %&gt;% 
+  group_by(nbrdesc, difficulty_level_num) %&gt;%
+  dplyr::summarize(num = n()) %&gt;%
+  spread(difficulty_level_num, num) %&gt;%
+  dplyr::rename(
+    num_unknown = &quot;0&quot;,
+    num_easy = &quot;1&quot;,
+    num_moderate = &quot;2&quot;,
+    num_hard = &quot;3&quot;,
+    num_not_suitable = &quot;4&quot;,
+    num_spaces_with_live_trees = &quot;&lt;NA&gt;&quot;
+  ) %&gt;%
+  select(-num_unknown)
+
+# PERCENT of total empty spots AT EACH DIFFICULTY in each nsa
+empty_spaces_by_diff_by_nsa_perc &lt;- street_trees_categorized %&gt;% 
+  group_by(nbrdesc, difficulty_level_num) %&gt;%
+  dplyr::summarize(num = n()) %&gt;%
+  # Join totals for perc calc
+  left_join(tree_as_percent_of_spaces_by_nsa %&gt;% select(nbrdesc , spaces_without_live_trees)) %&gt;%
+  mutate(perc_difflvl_to_empty_spaces = round(100*(num/spaces_without_live_trees), 2)) %&gt;%
+  select(-num) %&gt;%
+  spread(difficulty_level_num, perc_difflvl_to_empty_spaces) %&gt;%
+  select(-&quot;&lt;NA&gt;&quot;) %&gt;%
+  dplyr::rename(
+    perc_of_nontreed_unknown = &quot;0&quot;,
+    perc_of_nontreed_easy = &quot;1&quot;,
+    perc_of_nontreed_moderate = &quot;2&quot;,
+    perc_of_nontreed_hard = &quot;3&quot;,
+    perc_of_nontreed_unsuitable = &quot;4&quot;,
+    num_spaces_without_live_trees = &quot;spaces_without_live_trees&quot;
+  ) %&gt;%
+  select(-perc_of_nontreed_unknown)</code></pre>
+<pre><code>## Joining, by = &quot;nbrdesc&quot;</code></pre>
+<pre class="r"><code># Join into master DIFFICULTY table
+empty_spaces_by_diff_by_nsa &lt;- empty_spaces_by_diff_by_nsa_count %&gt;%
+  left_join(empty_spaces_by_diff_by_nsa_perc) %&gt;%
+  # Rearange for readability
+  select(1, 6:7, 2:5, 8:11)</code></pre>
+<pre><code>## Joining, by = &quot;nbrdesc&quot;</code></pre>
+<pre class="r"><code>######################################
+### Tree condition by nsa ############
+######################################
+
+# Tree condition by neighborhood starting table
+tree_condition_by_nsa_long &lt;- street_trees_categorized %&gt;% 
+  # Filter for tree-able spaces with live trees, because we want to know the percent *of existing trees* at each condition
+  filter(has_live_tree == T) %&gt;%
+  group_by(nbrdesc, condition) %&gt;%
+  dplyr::summarize(num_trees = n()) %&gt;%
+  # Find percent of live trees are in each condition?
+  # Join table to get total number of live trees
+  left_join(tree_as_percent_of_spaces_by_nsa) %&gt;%
+  mutate(perc_condition_to_live_trees = round(100*(num_trees/spaces_with_live_trees), 2))</code></pre>
+<pre><code>## Joining, by = &quot;nbrdesc&quot;</code></pre>
+<pre class="r"><code># Tree condition percent by nsa
+tree_condition_perc_by_nsa_wide &lt;- tree_condition_by_nsa_long %&gt;%
+  # Select cols to spread
+  select(nbrdesc, condition, perc_condition_to_live_trees) %&gt;%
+  spread(condition, perc_condition_to_live_trees) %&gt;%
+  dplyr::rename(
+    poor_perc_of_live = poor,
+    fair_perc_of_live = fair,
+    good_perc_of_live = good
+  ) 
+
+# Tree condition count by nsa
+tree_condition_count_by_nsa_wide &lt;- tree_condition_by_nsa_long %&gt;%
+  # Select cols to spread
+  select(nbrdesc, condition, num_trees) %&gt;%
+  spread(condition, num_trees) %&gt;%
+  dplyr::rename(
+    poor_count = poor,
+    fair_count = fair,
+    good_count = good
+  )
+
+# Join condition info tables into final
+tree_condition_by_nsa &lt;- tree_condition_perc_by_nsa_wide %&gt;%
+  left_join(tree_condition_count_by_nsa_wide) %&gt;%
+  left_join(tree_as_percent_of_spaces_by_nsa %&gt;% select(nbrdesc, spaces_with_live_trees)) %&gt;%
+  # Rearange for readability
+  select(
+    1, 8, 5:7, 2:4
+  )</code></pre>
+<pre><code>## Joining, by = &quot;nbrdesc&quot;
+## Joining, by = &quot;nbrdesc&quot;</code></pre>
+<pre class="r"><code>############################################
+### Tree height/diameter by neighborhood ###
+############################################
+
+# Tree height/diameter
+tree_height_diam_by_nsa &lt;- street_trees_categorized %&gt;%
+  filter(has_live_tree == T) %&gt;%
+  group_by(nbrdesc) %&gt;%
+  dplyr::summarize(combined_ht = sum(tree_ht),
+                   avg_ht = round(mean(tree_ht), 2),
+                   combined_diam = sum(dbh),
+                   avg_diam = round(mean(dbh), 2)
+  )
+
+# Add to tree_condition_by_nsa
+tree_condition_by_nsa &lt;- tree_condition_by_nsa %&gt;%
+  left_join(tree_height_diam_by_nsa) %&gt;%
+  # Drop combined totals cols
+  select(-contains(&quot;combined&quot;)) %&gt;%
+  # If fewer than 50 trees, make a new cols for height and diameter, replace number with NA
+  mutate(avg_ht_controled = ifelse(
+    spaces_with_live_trees &lt; 50, NA_real_, avg_ht),
+    avg_diam_controled = ifelse(
+      spaces_with_live_trees &lt; 50, NA_real_, avg_diam)
+  ) %&gt;%
+  # Add ranking for each category so can say NSA is #x in terms of each category citywide
+  dplyr::arrange(nbrdesc, avg_ht_controled) %&gt;%
+  mutate(rank_avg_ht = rank(desc(avg_ht_controled), na.last = &quot;keep&quot;, ties.method = &quot;first&quot;)) %&gt;%
+  dplyr::arrange(nbrdesc, avg_diam_controled) %&gt;%
+  mutate(rank_avg_diam = rank(desc(avg_diam_controled), na.last = &quot;keep&quot;, ties.method = &quot;first&quot;))</code></pre>
+<pre><code>## Joining, by = &quot;nbrdesc&quot;</code></pre>
+</div>
+<div id="join-all-into-master-summary-table" class="section level3">
+<h3>Join all into master summary table</h3>
+<pre class="r"><code>master_by_nsa &lt;- tree_as_percent_of_spaces_by_nsa %&gt;%
+  left_join(empty_spaces_by_diff_by_nsa) %&gt;%
+  left_join(tree_condition_by_nsa) %&gt;%
+  # Add ranking for perc good
+  arrange(nbrdesc, good_perc_of_live) %&gt;%
+  mutate(rank_good_perc_of_live = rank(desc(good_perc_of_live), na.last = &quot;keep&quot;, ties.method = &quot;first&quot;)) %&gt;%
+  # Add ranking for perc poor
+  arrange(nbrdesc, poor_perc_of_live) %&gt;%
+  mutate(rank_poor_perc_of_live = rank(desc(poor_perc_of_live), na.last = &quot;keep&quot;, ties.method = &quot;first&quot;)) %&gt;%
+  # Add col for is/isn't NSA of interest
+  mutate(is_target_nsa = case_when(
+    nbrdesc %in% target_nsas ~ T,
+    TRUE ~ F 
+  ))</code></pre>
+<pre><code>## Joining, by = &quot;nbrdesc&quot;</code></pre>
+<pre><code>## Joining, by = c(&quot;nbrdesc&quot;, &quot;spaces_with_live_trees&quot;)</code></pre>
+<pre class="r"><code>#### Remove unneeded files ####
+rm(list=setdiff(ls(), c(&quot;blocks_tree_temp_population&quot;, &quot;zcta_tree_temp_demographics&quot;, &quot;nsa_tree_temp&quot;, &quot;csa_tree_temp_demographics&quot;, &quot;street_trees_categorized&quot;, &quot;redlining_tree&quot;, &quot;master_by_nsa&quot;)))</code></pre>
+</div>
 </div>
 <div id="load-and-clean-redlining-data" class="section level2">
 <h2>Load and Clean Redlining Data</h2>
@@ -806,6 +1024,7 @@ write_csv(csa_tree_temp_demographics, paste0(save_path, &quot;csa_tree_temp_demo
 write_csv(nsa_tree_temp, paste0(save_path, &quot;nsa_tree_temp.csv&quot;))
 write_csv(zcta_tree_temp_demographics, paste0(save_path, &quot;zcta_tree_temp_demographics.csv&quot;))
 write_csv(street_trees_categorized, paste0(save_path, &quot;street_trees_nsa_categorized.csv&quot;))
+write_csv(master_by_nsa,  paste0(save_path, &quot;street_trees_nsa_summarized.csv&quot;))
 write_csv(redlining_tree, paste0(save_path, &quot;redlining_tree.csv&quot;))
 
 #### Clean up the workspace ####

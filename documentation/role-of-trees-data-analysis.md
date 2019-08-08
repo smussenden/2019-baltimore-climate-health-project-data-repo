@@ -12,7 +12,9 @@
     -   [Tree canopy change over time](#tree-canopy-change-over-time)
     -   [Tree cover in redlined areas](#tree-cover-in-redlined-areas)
 -   [Street Trees Analysis](#street-trees-analysis)
--   [North Milton Street Trees](#north-milton-street-trees)
+    -   [Height](#height)
+    -   [Condition](#condition)
+    -   [Individual street trees](#individual-street-trees)
 
 Introduction
 ------------
@@ -75,6 +77,9 @@ target_nsas <- c("Berea", "Broadway East", "Oliver", "Middle East",
                  "Upper Fells Point") %>%
   lapply(tolower)
 
+counterpoint_nsas <- c("Butcher's Hill", "Canton", "Washington Hill", "Roland Park") %>%
+  lapply(tolower)
+
 #### CSAs of interest ####
 target_csas <- c("Greater Roland Park/Poplar Hill", "Canton", "Patterson Park North & East", "Greenmount East", "Clifton-Berea") %>%
   lapply(tolower)
@@ -101,6 +106,9 @@ redlining_tree <- read_csv(paste0(path_to_data, "redlining_tree.csv"))
 
 street_trees_nsa_categorized <- 
   read_csv(paste0(path_to_data, "street_trees_nsa_categorized.csv"))
+
+street_trees_nsa_summarized <- 
+  read_csv(paste0(path_to_data, "street_trees_nsa_summarized.csv"))
 ```
 
 Temperature Analysis
@@ -108,7 +116,7 @@ Temperature Analysis
 
 ### Blocks by temperature
 
-The following arranges and ranks blocks across the city by temperature in the afternoon of August 29, 2018:
+The following arranges and ranks blocks across the city by temperature in the afternoon of August 29, 2018, as explained in the [Code Red Data Cleaning document](https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/documentation/code-red-data-cleaning.md#load-and-clean-temperature-data).
 
 ``` r
 blocks_tree_temp_demographics %>%
@@ -248,7 +256,7 @@ These data are visualized in the following choropleth map, which was exported fr
 Demographics Analysis
 ---------------------
 
-For the demographic anaylsis, we used CSA rather than NSA geographic segments, for reasons explained in the [Code Red Data Cleaning document](https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/documentation/code-red-data-cleaning.md). The CSAs and NSAs do not allign completely.
+For the demographic anaylsis, we used CSA rather than NSA geographic segments, for reasons explained in the [Code Red Data Cleaning document](https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/documentation/code-red-data-cleaning.md). The CSAs and NSAs do not allign completely. The demographic information is primarily from the Baltimore Neighborhood Indicators Alliance. Further explanations about the source data are in the [Code Red Data Cleaning document](https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/documentation/code-red-data-cleaning.md#load-and-clean-demographic-data).
 
 First, the top 10 CSAs ranked by percent of families living below the poverty line:
 
@@ -324,7 +332,7 @@ csa_tree_temp_demographics$percent_of_family_households_living_below_the_poverty
 Tree Canopy Analysis
 --------------------
 
-As further explained in the [Code Red Data Cleaning document](https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/documentation/code-red-data-cleaning.md), the following tree canopy data is based on LIDAR data from 2015.
+The following tree canopy data is based on LIDAR data from 2015, as explained in the [Code Red Data Cleaning document](https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/documentation/code-red-data-cleaning.md#load-and-clean-tree-canopy-lidar-data).
 
 ### Poverty compared to tree canopy
 
@@ -743,5 +751,112 @@ redlining_tree %>%
 Street Trees Analysis
 ---------------------
 
-North Milton Street Trees
--------------------------
+The following data is originally sourced from the Baltimore City Department of Recreation and Parks, as explained in the [Code Red Data Cleaning document](https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/documentation/code-red-data-cleaning.md#load-and-clean-individual-tree-data).
+
+``` r
+# Colorblind-friendly palette
+cbPalette <- c("#999999", # Dark Gray
+               "#E69F00", # Mustard Yellow
+               "#56B4E9", # Sky Blue
+               "#009E73", # Strong Green
+               "#F0E442", # Lemon Yellow
+               "#0072B2", # Denim Blue
+               "#D55E00", # Rust Orange
+               "#CC79A7") # Lavender
+```
+
+### Height
+
+``` r
+############################################
+### Tree HEIGHT by neighborhood ############
+############################################
+
+# Plot HEIGHT by nsa for TARGET nsas using controled averages
+street_trees_nsa_summarized %>%
+  filter((nbrdesc %in% target_nsas) | (nbrdesc %in% counterpoint_nsas)) %>%
+  ggplot(aes(x = reorder(nbrdesc, avg_ht_controled), 
+           y = avg_ht_controled, 
+           fill = factor(is_target_nsa, 
+                         # Rename fill levels in legend
+                         labels=c("Counterpoint NSA"," Target NSA"))
+           )) +
+  geom_col() +
+  coord_flip() +
+  labs(title = "Average Tree Height of Target NSAs",
+       x = "",
+       y = "",
+       fill = "") +
+  scale_fill_manual(values=cbPalette) +
+  theme(legend.position = "bottom")
+```
+
+![](role-of-trees-data-analysis_files/figure-markdown_github/unnamed-chunk-29-1.png)
+
+``` r
+# Plot HEIGHT by nsa for ALL nsas using controled averages
+ggplot(filter(street_trees_nsa_summarized, !is.na(avg_ht_controled)), 
+       aes(x = reorder(nbrdesc, avg_ht_controled), 
+           y = avg_ht_controled, 
+           fill = factor(is_target_nsa, 
+                         # Rename fill levels in legend
+                         labels=c("Not Target NSA", "Target NSA"))
+           )) +
+  geom_col() +
+  labs(title = "Average Tree Height of NSAs",
+       x = "",
+       y = "",
+       fill = "") +
+  scale_fill_manual(values=cbPalette) +
+  theme(legend.position = "top", 
+        axis.text.x = element_text(angle = 90, hjust = 1, size = 5))
+```
+
+<img src="role-of-trees-data-analysis_files/figure-markdown_github/unnamed-chunk-30-1.png" width="100%" />
+
+It is clear that taller trees are more common in wealthier NSAs compared to poorer ones such as Broadway East.
+
+``` r
+street_trees_nsa_categorized %>%
+  select(nbrdesc, tree_ht) %>%
+  filter((nbrdesc %in% target_nsas) | (nbrdesc %in% counterpoint_nsas)) %>%
+  group_by(nbrdesc) %>%
+  summarize(avg_ht = mean(tree_ht),
+            total_trees = n()) %>%
+  left_join(
+    street_trees_nsa_categorized %>%
+    select(nbrdesc, tree_ht) %>%
+    filter((nbrdesc %in% target_nsas) | (nbrdesc %in% counterpoint_nsas)) %>%
+    group_by(nbrdesc) %>%
+    filter(tree_ht >= 35) %>%
+    summarize(count_35_or_taller = n())
+  ) %>%
+  mutate(perc_35_or_taller = round(100*(count_35_or_taller/total_trees), 2))
+```
+
+    ## # A tibble: 19 x 5
+    ##    nbrdesc            avg_ht total_trees count_35_or_tall… perc_35_or_tall…
+    ##    <chr>               <dbl>       <int>             <int>            <dbl>
+    ##  1 baltimore highlan…  10.1          597                17             2.85
+    ##  2 berea               10.7          937                89             9.5 
+    ##  3 biddle street       16.1          368                80            21.7 
+    ##  4 broadway east        5.75        1526                80             5.24
+    ##  5 butcher's hill      23.8          628               142            22.6 
+    ##  6 canton              15.0         4132               560            13.6 
+    ##  7 care                13.4          544                30             5.51
+    ##  8 ellwood park/monu…  13.1         1067                51             4.78
+    ##  9 highlandtown        11.6          955                43             4.5 
+    ## 10 madison-eastend     11.6          559                47             8.41
+    ## 11 mcelderry park      14.6          942                46             4.88
+    ## 12 middle east         10.9          990                52             5.25
+    ## 13 milton-montford     11.4          391                22             5.63
+    ## 14 oliver              12.1         1526               162            10.6 
+    ## 15 patterson park ne…  13.7         1319                39             2.96
+    ## 16 patterson place     17.4          274                20             7.3 
+    ## 17 roland park         30.9         3382              1449            42.8 
+    ## 18 upper fells point   20.7          908               200            22.0 
+    ## 19 washington hill     15.8         1020               157            15.4
+
+### Condition
+
+### Individual street trees
