@@ -787,7 +787,7 @@ The story references a number of trees in Broadway East along N. Milton Avenue a
 
 street_trees_nsa_categorized %>%
   filter((nbrdesc %like% "broadway%") & ((street %like% "n milton%") | (street %like% "%lanvale%"))) %>%
-  select(nbrdesc, address, street, genus_clean, common, dbh, condition) %>%
+  select(nbrdesc, address, street, genus_clean, common, dbh, condition, date_inspected = inspect_dt) %>%
   arrange(street, address)
 
 ```

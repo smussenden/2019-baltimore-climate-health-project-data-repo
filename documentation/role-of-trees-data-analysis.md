@@ -516,7 +516,7 @@ csa_tree_temp_demographics %>%
         plot.subtitle = element_text(size = 12))
 ```
 
-![](role-of-trees-data-analysis_files/figure-markdown_github/unnamed-chunk-17-1.png)
+![](role-of-trees-data-analysis_files/figure-markdown_github/unnamed-chunk-18-1.png)
 
 There are some exceptions to this trend, such as Penn North/Reservoir Hill and Greater Rosemont, which both have relatively high rates of both poverty and tree canopy:
 
@@ -792,7 +792,7 @@ street_trees_nsa_summarized %>%
   theme(legend.position = "bottom")
 ```
 
-![](role-of-trees-data-analysis_files/figure-markdown_github/unnamed-chunk-29-1.png)
+![](role-of-trees-data-analysis_files/figure-markdown_github/unnamed-chunk-30-1.png)
 
 ``` r
 # Plot HEIGHT by nsa for ALL nsas using controled averages
@@ -813,7 +813,7 @@ ggplot(filter(street_trees_nsa_summarized, !is.na(avg_ht_controled)),
         axis.text.x = element_text(angle = 90, hjust = 1, size = 5))
 ```
 
-<img src="role-of-trees-data-analysis_files/figure-markdown_github/unnamed-chunk-30-1.png" width="1000px" />
+<img src="role-of-trees-data-analysis_files/figure-markdown_github/unnamed-chunk-31-1.png" width="1000px" />
 
 It is clear that taller trees are more common in wealthier NSAs compared to poorer ones such as Broadway East.
 
@@ -1087,21 +1087,21 @@ The story references a number of trees in Broadway East along N. Milton Avenue a
 ``` r
 street_trees_nsa_categorized %>%
   filter((nbrdesc %like% "broadway%") & ((street %like% "n milton%") | (street %like% "%lanvale%"))) %>%
-  select(nbrdesc, address, street, genus_clean, common, dbh, condition) %>%
+  select(nbrdesc, address, street, genus_clean, common, dbh, condition, date_inspected = inspect_dt) %>%
   arrange(street, address)
 ```
 
-    ## # A tibble: 98 x 7
-    ##    nbrdesc     address street    genus_clean  common          dbh condition
-    ##    <chr>         <dbl> <chr>     <chr>        <chr>         <dbl> <chr>    
-    ##  1 broadway e…    1705 e lanval… vacant       vacant poten…   0   absent   
-    ##  2 broadway e…    1708 e lanval… vacant       vacant poten…   0   absent   
-    ##  3 broadway e…    1711 e lanval… vacant       vacant poten…   0   absent   
-    ##  4 broadway e…    1714 e lanval… vacant       vacant poten…   0   absent   
-    ##  5 broadway e…    1720 e lanval… vacant       vacant poten…   0   absent   
-    ##  6 broadway e…    1728 e lanval… vacant       vacant poten…   0   absent   
-    ##  7 broadway e…    1738 e lanval… vacant       vacant poten…   0   absent   
-    ##  8 broadway e…    1746 e lanval… vacant       vacant poten…   0   absent   
-    ##  9 broadway e…    1746 e lanval… vacant       vacant poten…   0   absent   
-    ## 10 broadway e…    1808 e lanval… styphnolobi… japanese pag…  11.9 fair     
+    ## # A tibble: 98 x 8
+    ##    nbrdesc address street genus_clean common   dbh condition date_inspected
+    ##    <chr>     <dbl> <chr>  <chr>       <chr>  <dbl> <chr>     <date>        
+    ##  1 broadw…    1705 e lan… vacant      vacan…   0   absent    2018-04-27    
+    ##  2 broadw…    1708 e lan… vacant      vacan…   0   absent    2018-04-27    
+    ##  3 broadw…    1711 e lan… vacant      vacan…   0   absent    2018-04-27    
+    ##  4 broadw…    1714 e lan… vacant      vacan…   0   absent    2018-04-27    
+    ##  5 broadw…    1720 e lan… vacant      vacan…   0   absent    2018-04-27    
+    ##  6 broadw…    1728 e lan… vacant      vacan…   0   absent    2018-04-27    
+    ##  7 broadw…    1738 e lan… vacant      vacan…   0   absent    2018-04-27    
+    ##  8 broadw…    1746 e lan… vacant      vacan…   0   absent    2018-04-27    
+    ##  9 broadw…    1746 e lan… vacant      vacan…   0   absent    2018-04-27    
+    ## 10 broadw…    1808 e lan… styphnolob… japan…  11.9 fair      2018-05-02    
     ## # … with 88 more rows
