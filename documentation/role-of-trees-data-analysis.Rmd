@@ -781,7 +781,14 @@ street_trees_nsa_categorized %>%
 
 ### Individual street trees
 
-```{r}
+The story references a number of trees in Broadway East along N. Milton Avenue and E. Lanvale Street. All trees and potential tree locations along those stretches of road are referenced below:
+
+```{r, rows.print = 25}
+
+street_trees_nsa_categorized %>%
+  filter((nbrdesc %like% "broadway%") & ((street %like% "n milton%") | (street %like% "%lanvale%"))) %>%
+  select(nbrdesc, address, street, genus_clean, common, dbh, condition) %>%
+  arrange(street, address)
 
 ```
 
