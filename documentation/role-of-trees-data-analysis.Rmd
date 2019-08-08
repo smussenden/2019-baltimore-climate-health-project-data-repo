@@ -129,8 +129,7 @@ The following arranges and ranks blocks across the city by temperature in the af
 blocks_tree_temp_demographics %>%
   select(geoid10, temp_mean_aft) %>%
   mutate(rank = rank(-temp_mean_aft)) %>%
-  arrange(rank) %>%
-  slice(1:100)
+  arrange(rank)
 
 ```
 
@@ -748,8 +747,7 @@ Larger (and therefore older) trees in the south-eastern neighborhoods tend to be
 
 #### Relevant info from table ####
 street_trees_nsa_categorized %>%
-  select(nbrdesc, diameter = dbh, condition, is_target_nsa) %>%
-  slice(1:100)
+  select(nbrdesc, diameter = dbh, condition, is_target_nsa)
 
 ```
 

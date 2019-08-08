@@ -123,11 +123,10 @@ The following arranges and ranks blocks across the city by temperature in the af
 blocks_tree_temp_demographics %>%
   select(geoid10, temp_mean_aft) %>%
   mutate(rank = rank(-temp_mean_aft)) %>%
-  arrange(rank) %>%
-  slice(1:100)
+  arrange(rank)
 ```
 
-    ## # A tibble: 100 x 3
+    ## # A tibble: 13,598 x 3
     ##    geoid10         temp_mean_aft  rank
     ##    <chr>                   <dbl> <dbl>
     ##  1 245100602005002          101.     1
@@ -140,7 +139,7 @@ blocks_tree_temp_demographics %>%
     ##  8 245100603001013          100.     8
     ##  9 245100401002000          100.     9
     ## 10 245100702004007          100.    10
-    ## # … with 90 more rows
+    ## # … with 13,588 more rows
 
 Below, we see the block on N. Milton Avenue between Oliver and Federal is one of the city's hottest, ranking at 236 out of 13,598 blocks. The block GEOID for this block was pulled from QGIS and breaks down into the following codes:
 
@@ -517,7 +516,7 @@ csa_tree_temp_demographics %>%
         plot.subtitle = element_text(size = 12))
 ```
 
-![](role-of-trees-data-analysis_files/figure-markdown_github/unnamed-chunk-17-1.png)
+![](role-of-trees-data-analysis_files/figure-markdown_github/unnamed-chunk-18-1.png)
 
 There are some exceptions to this trend, such as Penn North/Reservoir Hill and Greater Rosemont, which both have relatively high rates of both poverty and tree canopy:
 
@@ -793,7 +792,7 @@ street_trees_nsa_summarized %>%
   theme(legend.position = "bottom")
 ```
 
-![](role-of-trees-data-analysis_files/figure-markdown_github/unnamed-chunk-29-1.png)
+![](role-of-trees-data-analysis_files/figure-markdown_github/unnamed-chunk-30-1.png)
 
 ``` r
 # Plot HEIGHT by nsa for ALL nsas using controled averages
@@ -814,7 +813,7 @@ ggplot(filter(street_trees_nsa_summarized, !is.na(avg_ht_controled)),
         axis.text.x = element_text(angle = 90, hjust = 1, size = 5))
 ```
 
-<img src="role-of-trees-data-analysis_files/figure-markdown_github/unnamed-chunk-30-1.png" width="1000px" />
+<img src="role-of-trees-data-analysis_files/figure-markdown_github/unnamed-chunk-31-1.png" width="1000px" />
 
 It is clear that taller trees are more common in wealthier NSAs compared to poorer ones such as Broadway East.
 
@@ -1014,11 +1013,10 @@ Larger (and therefore older) trees in the south-eastern neighborhoods tend to be
 ``` r
 #### Relevant info from table ####
 street_trees_nsa_categorized %>%
-  select(nbrdesc, diameter = dbh, condition, is_target_nsa) %>%
-  slice(1:100)
+  select(nbrdesc, diameter = dbh, condition, is_target_nsa)
 ```
 
-    ## # A tibble: 100 x 4
+    ## # A tibble: 192,670 x 4
     ##    nbrdesc diameter condition is_target_nsa
     ##    <chr>      <dbl> <chr>     <lgl>        
     ##  1 abell       20.4 poor      FALSE        
@@ -1031,7 +1029,7 @@ street_trees_nsa_categorized %>%
     ##  8 abell        3.3 fair      FALSE        
     ##  9 abell        4.5 stump     FALSE        
     ## 10 abell       14.5 good      FALSE        
-    ## # … with 90 more rows
+    ## # … with 192,660 more rows
 
 When looking at larger trees, Roland Park is ranked 28th in for percent in good condition. Broadway East, by contrast, is ranked 227th of 277 NSAs.
 
