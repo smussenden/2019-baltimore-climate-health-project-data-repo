@@ -529,6 +529,10 @@ csa_tree_temp_demographics %>%
     ## 2 greate…             23.6           0.269               16
     ## # … with 1 more variable: rank_perc_canopy <dbl>
 
+Average canopy cover by NSA is visualized in the following choropleth map, which was exported from QGIS and prettified slightly in Illustrator:
+
+<img src="../documentation/choropleth-canopy-full-withlines-01.png" width="400" alt="Choropleth map of temperatures across Baltimore NSAs" />
+
 ### Temperature compared to tree canopy
 
 When comparing temperature to tree canopy, we see a strong correllation of -.89. In other words, places with high temperatures tend to have fewer trees.
