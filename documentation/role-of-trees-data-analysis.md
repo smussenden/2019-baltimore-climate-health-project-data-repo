@@ -982,7 +982,7 @@ street_trees_nsa_categorized %>%
   summarize(count_spaces = n()) %>%
   ungroup() %>%
   mutate(total_vacant_spaces = sum(count_spaces)) %>%
-  # Count the suitable spaces in Broadway East
+  # Count the suitable spaces in Roland Park
   left_join(
     street_trees_nsa_categorized %>%
       select(nbrdesc, difficulty_level_num, difficulty_level) %>%

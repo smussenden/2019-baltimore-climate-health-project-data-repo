@@ -304,7 +304,7 @@ csa_tree_temp_demographics %>%
 
 Looking again at only the NSAs of interest in the story:
 
-```{r}
+```{r, columns.print=7}
 
 csa_tree_temp_demographics %>%
   mutate(rank_perc_poverty = rank(-percent_of_family_households_living_below_the_poverty_line),
@@ -424,7 +424,7 @@ csa_tree_temp_demographics %>%
 
 There are some exceptions to this trend, such as Penn North/Reservoir Hill and Greater Rosemont, which both have relatively high rates of both poverty and tree canopy:
 
-``` {r}
+``` {r, columns.print=5}
 
 csa_tree_temp_demographics %>%
   select(csa2010, 
@@ -499,7 +499,7 @@ csa_tree_temp_demographics %>%
 
 All relevant data:
 
-```{r}
+```{r, columns.print=7}
 
 nsa_tree_temp %>%
   select(nsa_name,
@@ -680,7 +680,7 @@ street_trees_nsa_categorized %>%
 
 Broadway East has 1140 spaces that are available for planting, 1025 of which are not considered "unsuitable." 96 percent of these are hard to plant (require breaking concrete). 
 
-```{r}
+```{r, columns.print=7}
 
 #### Find percent of suitable spaces at each difficulty level for... ####
 
@@ -717,7 +717,7 @@ street_trees_nsa_categorized %>%
   summarize(count_spaces = n()) %>%
   ungroup() %>%
   mutate(total_vacant_spaces = sum(count_spaces)) %>%
-  # Count the suitable spaces in Broadway East
+  # Count the suitable spaces in Roland Park
   left_join(
     street_trees_nsa_categorized %>%
       select(nbrdesc, difficulty_level_num, difficulty_level) %>%
