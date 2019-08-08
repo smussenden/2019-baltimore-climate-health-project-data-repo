@@ -487,13 +487,11 @@ csa_tree_temp_demographics %>%
 
 ### Tree canopy change over time
 
-_INCOMPLETE: START WORK HERE_
-
 All relevant data:
 
 ```{r}
 
-w <- nsa_tree_temp %>%
+nsa_tree_temp %>%
   select(nsa_name,
          avg_canopy_2007 = `07_lid_mean`,
          avg_canopy_2015 = `15_lid_mean`,
@@ -514,11 +512,11 @@ What were the citywide gains and losses?
 
 ```{r}
 
-#### USE QGIS TO DO THIS CONFIRMATION ####
+#### INCOMPLETE: WILL USE QGIS TO DO THIS CONFIRMATION ####
 
 ```
 
-How many geograplhies gained and lost tree cover?
+How many geographies gained and lost tree cover?
 
 ```{r}
 
@@ -550,7 +548,7 @@ nsa_tree_temp %>%
 ### Tree cover in redlined areas 
 
 ``` {r}
-redlining_tree_summary_table <- redlining_tree %>%
+redlining_tree %>%
   group_by(holc_grade, grade_descr) %>%
   summarise(total_area_pixels = sum(`count_all_pix_15`),
             total_canopy_pixels = sum(`sum_canopy_pix_15`)) %>%

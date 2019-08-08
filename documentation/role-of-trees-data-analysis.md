@@ -616,12 +616,10 @@ csa_tree_temp_demographics %>%
 
 ### Tree canopy change over time
 
-*INCOMPLETE: START WORK HERE*
-
 All relevant data:
 
 ``` r
-w <- nsa_tree_temp %>%
+nsa_tree_temp %>%
   select(nsa_name,
          avg_canopy_2007 = `07_lid_mean`,
          avg_canopy_2015 = `15_lid_mean`,
@@ -632,6 +630,25 @@ w <- nsa_tree_temp %>%
     TRUE ~ F 
   )) %>%
   mutate(rank_canopy = rank(-avg_canopy_2015))
+```
+
+    ## # A tibble: 278 x 7
+    ##    nsa_name avg_canopy_2007 avg_canopy_2015 lid_change_perc…
+    ##    <chr>              <dbl>           <dbl>            <dbl>
+    ##  1 abell             0.191           0.191          0.000147
+    ##  2 allenda…          0.190           0.188         -0.0101  
+    ##  3 arcadia           0.256           0.260          0.0177  
+    ##  4 arlingt…          0.250           0.255          0.0199  
+    ##  5 armiste…          0.381           0.404          0.0612  
+    ##  6 ashburt…          0.340           0.334         -0.0182  
+    ##  7 baltimo…          0.0610          0.0786         0.288   
+    ##  8 barclay           0.128           0.125         -0.0233  
+    ##  9 barre c…          0.228           0.263          0.153   
+    ## 10 bayview           0.0446          0.0483         0.0847  
+    ## # … with 268 more rows, and 3 more variables:
+    ## #   lid_change_percent_point <dbl>, is_target_nsa <lgl>, rank_canopy <dbl>
+
+``` r
   # filter(between(rank_canopy, 1L, 5L) |
   #          between(rank_canopy, 51L, 55L)) %>%
   # arrange(rank_canopy)
@@ -640,10 +657,10 @@ w <- nsa_tree_temp %>%
 What were the citywide gains and losses?
 
 ``` r
-#### USE QGIS TO DO THIS CONFIRMATION ####
+#### INCOMPLETE: WILL USE QGIS TO DO THIS CONFIRMATION ####
 ```
 
-How many geograplhies gained and lost tree cover?
+How many geographies gained and lost tree cover?
 
 ``` r
 #### NSAs ####
@@ -703,12 +720,21 @@ nsa_tree_temp %>%
 ### Tree cover in redlined areas
 
 ``` r
-redlining_tree_summary_table <- redlining_tree %>%
+redlining_tree %>%
   group_by(holc_grade, grade_descr) %>%
   summarise(total_area_pixels = sum(`count_all_pix_15`),
             total_canopy_pixels = sum(`sum_canopy_pix_15`)) %>%
   mutate(avg_canopy_perc = round(100*(total_canopy_pixels/total_area_pixels), 2))
 ```
+
+    ## # A tibble: 4 x 5
+    ## # Groups:   holc_grade [4]
+    ##   holc_grade grade_descr  total_area_pixe… total_canopy_pi… avg_canopy_perc
+    ##   <chr>      <chr>                   <dbl>            <dbl>           <dbl>
+    ## 1 A          best                105616661         47482092            45.0
+    ## 2 B          still desir…        478996371        176083758            36.8
+    ## 3 C          definitely …        305953084         62659386            20.5
+    ## 4 D          hazardous           220227837         25042255            11.4
 
 Street Trees Analysis
 ---------------------
