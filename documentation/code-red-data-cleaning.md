@@ -542,6 +542,26 @@ street_trees_categorized <- street_trees %>%
   mutate(is_counterpoint_nsa = case_when(
     nbrdesc %in% counterpoint_nsas ~ T,
     TRUE ~ F 
+  )) %>%
+  # Lightly clean the genus field
+  mutate(genus_clean = if_else(is.na(genus) | str_detect(genus, pattern = "\\.|,"), word(spp,1), genus)) %>%
+  mutate(genus_clean = case_when(
+    genus_clean == "horsechestnut" ~ "aesculus",
+    genus_clean == "goldenraintree" ~ "koelreuteria",
+    genus_clean == "honeylocust" ~ "gleditsia",
+    genus_clean == "japanese pagodatree" ~ "styphnolobium",
+    genus_clean == "mimosa" ~ "albizia",
+    genus_clean == "royal paulownia" ~ "paulownia tomentosa",
+    genus_clean == "tuliptree" ~ "liriodendron",
+    genus_clean == "tree of heaven" ~ "ailanthus",
+    genus_clean == "yellowwood" ~ "cladrastis",
+    genus_clean == "blackgum" ~ "nyssa",
+    genus_clean == "boxelder" ~ "acer",
+    genus_clean == "douglas-fir" ~ "pseudotsuga",
+    genus_clean == "katsuratree" ~ "cercidiphyllum",
+    genus_clean == "kentucky coffeetree" ~ "gymnocladus",
+    genus_clean == "persian parrotia" ~ "parrotia",
+    TRUE ~ genus_clean
   ))
 ```
 

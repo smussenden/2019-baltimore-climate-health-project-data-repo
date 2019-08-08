@@ -756,6 +756,26 @@ street_trees_categorized &lt;- street_trees %&gt;%
   mutate(is_counterpoint_nsa = case_when(
     nbrdesc %in% counterpoint_nsas ~ T,
     TRUE ~ F 
+  )) %&gt;%
+  # Lightly clean the genus field
+  mutate(genus_clean = if_else(is.na(genus) | str_detect(genus, pattern = &quot;\\.|,&quot;), word(spp,1), genus)) %&gt;%
+  mutate(genus_clean = case_when(
+    genus_clean == &quot;horsechestnut&quot; ~ &quot;aesculus&quot;,
+    genus_clean == &quot;goldenraintree&quot; ~ &quot;koelreuteria&quot;,
+    genus_clean == &quot;honeylocust&quot; ~ &quot;gleditsia&quot;,
+    genus_clean == &quot;japanese pagodatree&quot; ~ &quot;styphnolobium&quot;,
+    genus_clean == &quot;mimosa&quot; ~ &quot;albizia&quot;,
+    genus_clean == &quot;royal paulownia&quot; ~ &quot;paulownia tomentosa&quot;,
+    genus_clean == &quot;tuliptree&quot; ~ &quot;liriodendron&quot;,
+    genus_clean == &quot;tree of heaven&quot; ~ &quot;ailanthus&quot;,
+    genus_clean == &quot;yellowwood&quot; ~ &quot;cladrastis&quot;,
+    genus_clean == &quot;blackgum&quot; ~ &quot;nyssa&quot;,
+    genus_clean == &quot;boxelder&quot; ~ &quot;acer&quot;,
+    genus_clean == &quot;douglas-fir&quot; ~ &quot;pseudotsuga&quot;,
+    genus_clean == &quot;katsuratree&quot; ~ &quot;cercidiphyllum&quot;,
+    genus_clean == &quot;kentucky coffeetree&quot; ~ &quot;gymnocladus&quot;,
+    genus_clean == &quot;persian parrotia&quot; ~ &quot;parrotia&quot;,
+    TRUE ~ genus_clean
   ))</code></pre>
 </div>
 <div id="create-building-block-tables" class="section level3">
