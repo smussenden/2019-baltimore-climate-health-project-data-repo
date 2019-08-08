@@ -15,7 +15,7 @@
 ### 1. Load in the XYZ Tile
 * From the file _Browser_ window to the left, right-click _XYZ Tiles_
 * Select _New Connection_. Opens a new window.
-* In the _Connection Details_ window, paste in a _URL_ of the format "http://example.com/{z}/{x}/{y}.png". You can find XYZ tiles of Google Maps by searching "Google Maps XYZ tiles."
+* In the _Connection Details_ window, paste in a _URL_ of the format "http://example.com/{z}/{x}/{y}.png". You can find XYZ tiles of Google Maps by searching the web for "Google Maps XYZ tiles."
 * Click _OK_.
 * Verify the XYZ tile has been added to the _Layers_ window (double click it from the file _Browser_ if not). You should see it in the display window.
 
@@ -56,7 +56,7 @@
     * _Layout_: Check _Always export as vectors_.
     * _Properties_: Un-check _Background_.
 7. _Export as PDF_. (Illustrator can read vectors from PDF.) Opens a new window to set file name and location.
-    * ![Export as PDF](https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/documentation/qgis-directions/qgis-icon-new-print-layout.png?raw=true "Export as PDF")
+    * ![Export as PDF](https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/documentation/qgis-directions/qgis-icon-export-as-pdf.png?raw=true "Export as PDF")
     * Choose a name and location for the file. Clicking _Save_ opens a new window with final setting options.
     * Verify _Always export as vectors_ is checked.
     * Check the box for _Disable tiled rater layer exports_. (This prevents some maps from importing into Illustrator as multiple pieces, instead stitching them together into a single image. It does not affect vectors.)
