@@ -130,7 +130,8 @@ The following arranges and ranks blocks across the city by temperature in the af
 blocks_tree_temp_demographics %>%
   select(geoid10, temp_mean_aft) %>%
   mutate(rank = rank(-temp_mean_aft)) %>%
-  arrange(rank)
+  arrange(rank) %>%
+  slice(1:100)
 
 ```
 
@@ -162,7 +163,8 @@ First, we can see that all of the top 10 hottest NSAs are located in the south o
 nsa_tree_temp %>%
   select(nsa_name, temp_mean_aft) %>%
   mutate(rank = rank(-temp_mean_aft)) %>%
-  arrange(rank)
+  arrange(rank) %>%
+  slice(1:10)
 
 ```
 
@@ -174,7 +176,8 @@ Looking at the 10 coolest NSAs, we see it is generally true that they are locate
 nsa_tree_temp %>%
   select(nsa_name, temp_mean_aft) %>%
   mutate(rank = rank(-temp_mean_aft)) %>%
-  arrange(desc(rank))
+  arrange(desc(rank)) %>%
+  slice(1:10)
 
 ```
 
@@ -546,7 +549,7 @@ as.data.frame(table(sign(blocks_tree_temp_demographics$lid_change_percent))) %>%
 
 By how many percentage points did each NSA of interest gain or lose?
 
-```{r rows.print=16}
+```{r rows.print=17}
 
 nsa_tree_temp %>%
   select(nsa_name, `07_lid_mean`, `15_lid_mean`, lid_change_percent_point) %>%
@@ -669,7 +672,7 @@ street_trees_nsa_summarized %>%
 
 Not only are there more trees in Roland Park than Broadway East, but the untreed spaces are considerably easier to plant.
 
-``` {r, rows.print=19}
+``` {r, rows.print=11}
 
 #### Summarize planting difficulty in Broadway East and Roland Park ####
 street_trees_nsa_categorized %>%
@@ -746,7 +749,8 @@ Larger (and therefore older) trees in the south-eastern neighborhoods tend to be
 
 #### Relevant info from table ####
 street_trees_nsa_categorized %>%
-  select(nbrdesc, diameter = dbh, condition, is_target_nsa)
+  select(nbrdesc, diameter = dbh, condition, is_target_nsa) %>%
+  slice(1:100)
 
 ```
 
