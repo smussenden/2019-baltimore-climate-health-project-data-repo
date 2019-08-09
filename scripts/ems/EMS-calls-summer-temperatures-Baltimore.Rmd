@@ -53,7 +53,7 @@ EMS_all <- bind_rows(EMS_2014, EMS_2015, EMS_2016, EMS_2017, EMS_2018_partial)
 
 # Remove all dataframes from our environment but EMS_all, to save space, I supppose
 
-rm(list=setdiff(ls(), "EMS_all"))
+# rm(list=setdiff(ls(), "EMS_all"))
 
 #################################
 #### Clean EMS Data #############
@@ -174,7 +174,7 @@ In order to determine the temperature at the Inner Harbor at the time of each ca
 
 # Merge data
 # Note, of the 581,530 observations in EMS ALL, ~10K failed to join in the merge because we are missing temperature values for those times.  In some cases entire days are missing, in some cases it's a few hours.  Rather than introduce new errors by imputing temperature values, we're going to leave these out.  They are mostly wintertime temps, which are less important for our analysis.
-full_data <- inner_join(EMS_all, temp_data, by=c("temp_time"))
+full_data <- inner_join(EMS_all, dmh, by=c("date", "hour"))
 ```
 
 ## Adjust for Urban Heat Island and Calculate Adjusted Heat Index

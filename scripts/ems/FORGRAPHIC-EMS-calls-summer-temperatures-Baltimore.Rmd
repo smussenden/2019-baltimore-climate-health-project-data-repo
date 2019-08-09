@@ -336,12 +336,94 @@ write_csv(call_heat_index_ratio_five_primary_impression_group, "10_buckets_hours
 ```
 
 ## Model increase in heat
-Calculate calls per hour
+
+
+
+
+* OR determine calls per day when heat index is over 105 AT ANY point in day........And calls per day when heat index is under 105 at any point in day. Calculate extra calls per day.
+
+
+``` {r}
+
+temp_data_working <- temp_data %>%
+  mutate(date = date(DATETIME))
+
+max_heat_index_day <- temp_data_working %>%
+  group_by(date) %>%
+  summarise(max=max(HEAT_INDEX))
+
+temp_data_working <- inner_join(temp_data_working, max_heat_index_day) %>%
+  mutate(daily_max = max) %>%
+  select(-max)
+
+full_data_working <- inner_join(EMS_all, temp_data_working, by=c("temp_time"))
+
+full_data_working <- full_data_working %>%
+  mutate(temp_bucket= case_when(
+    daily_max > 100 ~ 'over_100',
+    daily_max <= 100 ~ 'under_100'
+  )
+)
+
+days_temp_bucket <- full_data_working %>%
+  select(incident_date, temp_bucket) %>%
+  distinct() %>%
+  group_by(temp_bucket) %>%
+  summarise(days_temp_bucket=n())
+
+condition_count_bucket <- full_data_working %>%
+  select(temp_bucket, primary_impression_group) %>%
+  group_by(temp_bucket, primary_impression_group) %>%
+  summarise(condition_calls_in_bucket=n())
+
+condition_count_bucket <- inner_join(days_temp_bucket, condition_count_bucket)
+
+condition_count_bucket <- condition_count_bucket %>%
+  mutate(calls_per_day_per_bucket = condition_calls_in_bucket/days_temp_bucket) %>%
+  select(temp_bucket, primary_impression_group, calls_per_day_per_bucket) %>%
+  spread(temp_bucket, calls_per_day_per_bucket) %>%
+  mutate(`additional_calls_per_day_over_100`=`over_100`-`under_100`) %>%
+  select(primary_impression_group, `additional_calls_per_day_over_100`) %>%
+  mutate(`additional_calls_in_summer_2018_over_100` = `additional_calls_per_day_over_100`*18) %>%
+  filter(`additional_calls_in_summer_2018_over_100` > 0) %>%
+  mutate(`additional_calls_in_2050_over_100` = `additional_calls_in_summer_2018_over_100`*6)
+
+
+```
+
+
+
+* For each temp bucket, calculate calls per hour when it's over 105.  i.e. .5 asthma calls per hour
+* For each temp bucket, calculate calls per hour when it's under 105. i.e. .25 asthma calls per hour
+* For each temp bucket, calculate difference between them to get "additional calls per hour when it's over 105" (i.e. additional .25 calls per hour when it's over 105)
+* Determine total number of over 105 hours in 2018
+* Determine total number of over 105 hours in 2037 (use multiplier from ucc study)
+
+
+
+# Total 2018 calls
+* Calculate total calls for each condition in each temperature bucket for 2018 summer
+
+# Hot hours
+* Figure out how many hours in 2018 summer above 105
+* Figure out how many hours there will be at midcentury using the multiplier from ucc study to get number of hot hours 
+* Subtract midcentury to get additional hot hours. 
+
+Multiply that there will be at midcentury by using the multiplier from ucc study to get number of hours at midcentury. 
+Multiply difference in calls per hour BY number of hours at midcentury
+
+
+
+First, calculate hours between calls when it's over 105.
+And calculate hours between calls when it's under 105. 
+Calculate difference between them to figure out how many more additional calls per hour when it's over 105. 
+Use a multiplier to calculate difference
 
 ```{r}
 test <- full_data %>%
   filter(!is.na(`greater_100`)) %>%
-  group_by(primary_impression_group, `greater_100`)
+  group_by(primary_impression_group, `greater_100`) %>%
+  summarise(count=n())
 
 
 ```

@@ -15,7 +15,7 @@ output:
 
 ```{r include=FALSE}
 # Save this file and run the following line from the Console to output both HTML and .md formats:
-# rmarkdown::render('documentation/code-red-data-cleaning.Rmd', output_format = 'all')
+# rmarkdown::render('documentation/health-data-cleaning-sm.Rmd', output_format = 'all')
 ```
 
 ```{r setup, include=FALSE}
@@ -47,10 +47,8 @@ Due to GitHub file upload limitations, input data is not included in this repo. 
 #### Load Packages ####
 #######################
 
-library(lubridate)
 library(tidyverse)
 library(janitor) # For cleaning names
-library(weathermetrics) # For calculating heat index
 
 # Turn off scientific notation in RStudio 
 # (prevents accidental coersion to character type on export)
@@ -58,7 +56,112 @@ options(scipen = 999)
 
 ```
 
+
 ## Load and Clean Temperature Data
+```{r echo=TRUE, message=FALSE}
+
+###########################################
+#### Load and Clean EMS Data ##############
+###########################################
+
+# Common file path to raw EMS data
+path_to_data <- "../data/input-data/baltimore-ems/raw-data/ems-data/csv/"
+
+# Load in five CSVs, one for each year
+EMS_2014 <- read.csv(paste0(path_to_data, "2014.csv"))
+EMS_2015 <- read.csv(paste0(path_to_data, "2015.csv"))
+EMS_2016 <- read.csv(paste0(path_to_data, "2016.csv"))
+EMS_2017 <- read.csv(paste0(path_to_data, "2017.csv"))
+EMS_2018_partial <- read.csv(paste0(path_to_data, "2018-1.1-11.30.csv"))
+
+# Bind together into one dataframe
+
+EMS_all <- bind_rows(EMS_2014, EMS_2015, EMS_2016, EMS_2017, EMS_2018_partial)
+
+# Remove all dataframes from our environment but EMS_all
+
+rm(list=setdiff(ls(), "EMS_all"))
+
+###############################
+#### Clean EMS Data #############
+#################################
+
+# Rename columns to get rid of funky codes
+
+EMS_all <- EMS_all %>%
+  rename(incident_date = Incident.Date,
+         incident_number = Incident.Number,
+         primary_impression =  Primary.Impression,
+         arrived_on_scene_time = Times...Arrived.on.Scene.Time,
+         zipcode = Incident.Postal.Code..E8.15.,
+         destination_patient_disposition = Destination.Patient.Disposition..E20.10.,
+         destination_code = Destination.Code..E20.2.
+  )
+
+# Filter EMS_all to remove the dispositions we don't want.
+
+EMS_all <- EMS_all %>%
+  filter(destination_patient_disposition != "" &
+           destination_patient_disposition != "No Patient Found" &
+           destination_patient_disposition != "Cancelled en Route/On Arrival" &
+           destination_patient_disposition != "Cancelled Prior to Response" &
+           destination_patient_disposition != "Provided ALS personnel to scene, no transport" &
+           destination_patient_disposition != "Standby Only - No Patient Contacts" &
+           destination_patient_disposition != "Cancelled On Arrival" &
+           destination_patient_disposition != "Operational Support Provided Only")
+
+# Remove N/A and blank values
+EMS_all <- EMS_all[-which(EMS_all$arrived_on_scene_time=="" | is.na( EMS_all$incident_date) | EMS_all$incident_number=="" | EMS_all$primary_impression=="" | EMS_all$zipcode=="" | EMS_all$destination_patient_disposition==""), ]
+
+# remove all characters from ZIP code field
+v1 <- c("1", "2", "3", "4", "5", "6", "7", "8", "9", "0")
+EMS_all$zipcode <- gsub(paste0("[^", paste(v1, collapse=""), "]+"), "", EMS_all$zipcode)
+
+# Create an array of Baltimore ZIP codes used in our analysis
+balt_zips <- c("21201","21202","21205","21206","21207","21208","21209","21210","21211","21212","21213","21214", "21215","21216","21217","21218","21222","21223","21224","21225","21226","21227","21228","21229", "21230","21231","21234","21236","21237","21239","21251")
+
+# Filter out handful of unneeded ZIPs
+EMS_all <- subset(EMS_all, zipcode %in% balt_zips )
+
+# Create full datetime object of arrival time
+EMS_all <- EMS_all %>%
+  mutate(arrive_time = as.POSIXct(paste(incident_date, arrived_on_scene_time), format="%m/%d/%y %H:%M:%S")) %>%
+  select(incident_date, arrived_on_scene_time, arrive_time, everything())
+
+# Add temperature time object that will merge nicely with our temperature data (which is all captured at the 54th minute of every hour) by changing minute to 54, but keeping everything else constant. 
+EMS_all <- EMS_all  %>%
+  mutate(temp_time = update(arrive_time, minutes = 54, seconds = 0)) %>%
+  select(incident_date, arrived_on_scene_time, arrive_time, temp_time, everything())
+
+# Remove seconds from temperature time
+EMS_all$temp_time <- format(as.POSIXct(EMS_all$temp_time), "%m-%d-%Y %H:%M")
+
+# Working from the original primary impression field, crated a new field called primary impression group that keeps the names of things we care to examine, and lump everything else into "other" category.  Also create a higher level primary impression category that groups like conditions together.
+EMS_all <- EMS_all %>%
+  mutate(primary_impression_group = if_else(primary_impression %in% c("Pain", "Other", "Abdominal Pain/Problems", "Weakness", "Other Illness/Injury", "Nausea/Vomiting (Unknown Etiology)", "General Malaise/Sick", "Back Pain (Non-Traumatic)", "Headache", "OB/Gyn - Vaginal Hemorrhage", "Fever", "Unknown Problem", "Poisoning", "Drowning/Near Drowning", "Electrocution", "Inhalation Injury (Toxic Gas)", "Lightening Strike", "Depressurization/Scuba", "SIDS (Sudden Infant Death Syndrome)", "Traumatic Injury", "OB/Gyn - Other", "OB/Gyn - OB/Delivery", "Sepsis",  "Other CNS Problem", "Migraine", "Allergic Reaction", "Abuse / Neglect", "Stings/Venomous Bites", "Airway Obstruction", "Anaphylaxis", "Hypovolemia/Shock", "Overpressurization", "Hazmat Exposure - Chem, Bio, Rad", "Inhalation - Smoke", "Sexual Assault/Rape", "Other Endocrine/Metabolic Problem", "Bowel Obstruction", "Apparent Life-Threatening Event", "Diarrhea", "Burn", "Pregnancy/OB Delivery", "G.I. Bleed", "Other GU Problems", "Patient Assist Only", "Not Applicable", "Other Abdominal/GI Problem", "No Apparent Illness/Injury"), "Other", primary_impression),
+         primary_impression_category = case_when(
+           primary_impression_group %in% c("ETOH Abuse", "Withdrawal/Overdose ETOH", "Withdrawal/Overdose Drugs", "Altered Level of Consciousness", "Substance/Drug Abuse") ~ "Substance abuse",
+           primary_impression_group %in% c("Cardiac Arrest", "Cardiac Rhythm Disturbance", "Hypotension", "Hypertension", "CHF (Congestive Heart Failure)", "Chest Pain/Discomfort", "Chest Pain - STEMI", "Other Cardiovascular Problem", "Abdominal Aortic Aneurysm" ) ~ "Heart/circulatory",
+           primary_impression_group %in% c("Heat Exhaustion/Heat Stroke", "Hyperthermia" ) ~ "Acute heat conditions",
+           primary_impression_group %in% c("Diabetic Hypoglycemia", "Diabetic Hyperglycemia") ~ "Diabetes complication",
+           primary_impression_group %in% c("COPD (Emphysema/Chronic Bronchitis)", "Asthma", "Respiratory Distress", "Respiratory Arrest", "Croup") ~ "Respiratory",
+           primary_impression_group %in% c("Stroke/CVA", "TIA (Transient Ischemic Attack)") ~ "Stroke",
+           TRUE ~ primary_impression_group
+         ))
+
+
+
+```
+
+
+
+
+
+
+
+
+
+
 
 The School of Urban Studies and Planning provided temperature data from its Urban Heat Island Temperature study, which captured micro-level temperature variations for all of Baltimore City on August 29, 2018.
 
@@ -251,6 +354,7 @@ path_to_data <- "../data/input-data/tree-canopy/post-qgis-processing/"
 ### Execute load-in and cleaning
 
 ``` {r echo=TRUE, message=FALSE}
+
 #### Block ####
 # 2007
 tree_block_lidar_2007 <- read_csv(paste0(path_to_data, "by_block/btree_statistics_by_block_2007_lidar.csv")) %>%
@@ -562,26 +666,6 @@ street_trees_categorized <- street_trees %>%
   mutate(is_counterpoint_nsa = case_when(
     nbrdesc %in% counterpoint_nsas ~ T,
     TRUE ~ F 
-  )) %>%
-  # Lightly clean the genus field
-  mutate(genus_clean = if_else(is.na(genus) | str_detect(genus, pattern = "\\.|,"), word(spp,1), genus)) %>%
-  mutate(genus_clean = case_when(
-    genus_clean == "horsechestnut" ~ "aesculus",
-    genus_clean == "goldenraintree" ~ "koelreuteria",
-    genus_clean == "honeylocust" ~ "gleditsia",
-    genus_clean == "japanese pagodatree" ~ "styphnolobium",
-    genus_clean == "mimosa" ~ "albizia",
-    genus_clean == "royal paulownia" ~ "paulownia tomentosa",
-    genus_clean == "tuliptree" ~ "liriodendron",
-    genus_clean == "tree of heaven" ~ "ailanthus",
-    genus_clean == "yellowwood" ~ "cladrastis",
-    genus_clean == "blackgum" ~ "nyssa",
-    genus_clean == "boxelder" ~ "acer",
-    genus_clean == "douglas-fir" ~ "pseudotsuga",
-    genus_clean == "katsuratree" ~ "cercidiphyllum",
-    genus_clean == "kentucky coffeetree" ~ "gymnocladus",
-    genus_clean == "persian parrotia" ~ "parrotia",
-    TRUE ~ genus_clean
   ))
 
 ```
@@ -846,374 +930,6 @@ redlining_tree <- read_csv(paste0(path_to_data, "HOLC_Redlining_2015_tree_canopy
          mean_pix_15 = `15_mean`)
 
 ```
-
-## Load and Clean Hourly Temperature Data at BWI and Inner Harbor (DMH)
-
-Description here
-https://mesonet.agron.iastate.edu/request/download.phtml?network=MD_ASOS
-DMH - May 1, 1998 through current date (recently August 9). Set TZ to EST/EDT, Comma delimited no debug headers, no lat and long. Select air temp, dew point and relative humidity. Missing data use M. Save file to computer. 
-BWI - Same as above, 1945-01-01 through current date
-
-### Store universal variables
-
-```{r echo=TRUE, message=FALSE}
-
-# Common file path to raw EMS data
-path_to_data <- "../data/input-data/baltimore-weather-stations/"
-
-```
-
-### Execute load-in and cleaning
-
-```{r echo=TRUE, message=FALSE}
-
-# Load BWI and DMH data 
-bwi <- read_csv(paste0(path_to_data, "BWI-1-1-45-current.txt"))
-dmh <- read_csv(paste0(path_to_data, "DMH-5-1-98-current.txt"))
-
-# Clean BWI data 
-bwi <- bwi  %>%
-  select(-relh) %>%
-  filter(tmpf != 'M', dwpf != 'M') %>%
-  mutate(tmpf = as.numeric(tmpf),
-         dwpf = as.numeric(dwpf)) %>%
-  mutate(date = as.Date(valid, format="%Y-%m-%d")) %>%
-  mutate(year=year(valid)) %>%
-  mutate(month=month(valid)) %>%
-  mutate(day=day(valid)) %>%
-  mutate(hour=hour(valid)) %>%
-  distinct(valid, .keep_all = TRUE) %>%
-  mutate(heat_index = heat.index(t=tmpf, dp=dwpf, temperature.metric = "fahrenheit", round=0)) %>%
-  mutate(relative_humidity = dewpoint.to.humidity(dp = dwpf, t = tmpf, temperature.metric = "fahrenheit")) %>%
-  select(date, year, month, day, hour, tmpf, dwpf, relative_humidity, heat_index) %>%
-  group_by(date, year, month, day, hour) %>%
-  summarise(avg_hourly_temperature_bwi = mean(tmpf),
-            avg_hourly_dewpoint_bwi = mean(dwpf),
-            avg_hourly_relative_humidity_bwi = mean(relative_humidity),
-            avg_hourly_heat_index_bwi = mean(heat_index)
-  ) %>%
-  distinct()
-
-# Clean DMH data 
-dmh <- dmh  %>%
-  select(-relh) %>%
-  filter(tmpf != 'M', dwpf != 'M') %>%
-  mutate(tmpf = as.numeric(tmpf),
-         dwpf = as.numeric(dwpf)) %>%
-  mutate(date = as.Date(valid, format="%Y-%m-%d")) %>%
-  mutate(year=year(valid)) %>%
-  mutate(month=month(valid)) %>%
-  mutate(day=day(valid)) %>%
-  mutate(hour=hour(valid)) %>%
-  distinct(valid, .keep_all = TRUE) %>%
-  mutate(heat_index = heat.index(t=tmpf, dp=dwpf, temperature.metric = "fahrenheit", round=0)) %>%
-  mutate(relative_humidity = dewpoint.to.humidity(dp = dwpf, t = tmpf, temperature.metric = "fahrenheit")) %>%
-  select(date, year, month, day, hour, tmpf, dwpf, relative_humidity, heat_index) %>%
-  group_by(date, year, month, day, hour) %>%
-  summarise(avg_hourly_temperature_dmh = mean(tmpf),
-            avg_hourly_dewpoint_dmh = mean(dwpf),
-            avg_hourly_relative_humidity_dmh = mean(relative_humidity),
-            avg_hourly_heat_index_dmh = mean(heat_index)
-  ) %>%
-  distinct()
-
-
-#######################################################################
-###### Adjust Inner Harbor Temperatures to Account for Heat Island ####
-#######################################################################
-
-# We have 75 years of dew point and temperature data for BWI, which allows us to calculate heat index
-# We have 20 years of dew point and temperature data for DMH (Inner Harbor), which allows us to calculate heat index. 
-# I talked with Dan Li, a climate researcher at Boston University who has studied variation in urban heat island temperatures between suburbs in different seasons and different hours of the day, who said a pretty good way to calculate the difference would be this:
-# 1. Join the 20 years of DMH data to the 20 years of BWI data.  Join on date and hour, so we end up with a data frame of values for both DMH and BWI for each date and hour in our data set.  Do an inner join, so that if for some reason DMH is missing an hour from its data set (or vice versa), it doesn't mess up our averages. Calculate new columns with difference in temperature, dew point, relative humidity and heat index between BWI and DMH.  Since in almost all cases BWI will be colder than DMH, make it so the difference is positive if DMH is greater than BWI.
-
-dmh_bwi <- bwi %>%
-  inner_join(dmh, by = c("date", "hour")) %>%
-  rename(year = year.x, month = month.x, day = day.x) %>%
-  select(-year.y, -month.y, -day.y) %>%
-  mutate(temperature_difference = avg_hourly_temperature_dmh - avg_hourly_temperature_bwi,
-         dew_point_difference = avg_hourly_dewpoint_dmh - avg_hourly_dewpoint_bwi,
-         relative_humidity_difference = avg_hourly_relative_humidity_dmh - avg_hourly_relative_humidity_bwi,
-         heat_index_difference = avg_hourly_heat_index_dmh - avg_hourly_heat_index_bwi) 
-
-# 4. Group by month and hour and calculate the AVERAGE difference in temperature, dew point, relative humidity and heat index. 
-dmh_bwi_monthly_by_hour <- dmh_bwi %>%
-  group_by(month, hour) %>%
-  summarize(avg_temperature_difference = mean(temperature_difference),
-         avg_dew_point_difference = mean(dew_point_difference),
-         avg_relative_humidity_difference = mean(relative_humidity_difference),
-         avg_heat_index_difference = mean(heat_index_difference))
-  
-# 5. Go back to the original 75 years of BWI data (after it's been cleaned, not on raw import).  Write case when function adjusting the temperature and dew point values based on table created in step 4. Create two new columns to recalculate heat index and relative humidity (see cleaning function above, weathermetrics package has a nice way of doing this). Call them adjusted_heat_index, adjusted_relative_humidity 
-
-estimated_historical_dmh <- bwi %>%
-  inner_join(dmh_bwi_monthly_by_hour, by = c("month", "hour")) %>%
-  mutate(projected_temperature_dmh = avg_hourly_temperature_bwi + avg_temperature_difference,
-         projected_dew_point_dmh = avg_hourly_dewpoint_bwi +  avg_dew_point_difference,
-         projected_heat_index_dmh = heat.index(t=projected_temperature_dmh, dp=projected_dew_point_dmh, temperature.metric = "fahrenheit", round=0),
-         projected_relative_humidity_dmh = dewpoint.to.humidity(dp = projected_dew_point_dmh, t = projected_temperature_dmh, temperature.metric = "fahrenheit")) %>%
-         select(-matches("bwi"), -matches("avg"))
-
-```
-
-# Load Baltimore Inner Harbor Temperature Data
-temp_data <- read_excel("../../data/input-data/baltimore-inner-harbor-temperature/DMH.xlsx")
-
-##########################
-# Clean Temperature Data #
-##########################
-
-# Build a datetime object from DATE and TIME
-temp_data  <- temp_data  %>%
-  mutate(temp_time = as.POSIXct(DATETIME, format="%Y-%m-%d %H:%M"))
-
-# Remove seconds from datettime object
-temp_data$temp_time <- format(as.POSIXct(temp_data$temp_time), "%m-%d-%Y %H:%M")
-
-# Filter out missing values for temp and humidity and convert to numeric
-temp_data <- temp_data %>%
-  filter(DEW_POINT != 'M', TEMPERATURE != 'M') %>%
-  mutate(DEW_POINT = as.numeric(DEW_POINT),
-         TEMPERATURE = as.numeric(TEMPERATURE))
-
-# Calculate Heat Index values  
-temp_data <- temp_data %>%
-  mutate(HEAT_INDEX = heat.index(t=TEMPERATURE, dp=DEW_POINT, temperature.metric = "fahrenheit", output.metric = "fahrenheit"))
-
-# Round temperature
-temp_data <- temp_data %>%
-   mutate(TEMPERATURE = round(as.numeric(TEMPERATURE),0))
-
-# Take out handful of inconsistent values that don't match our 54 method, which is to say they were captured at 54 minutes. 
-temp_data <- temp_data %>%
-  filter(str_detect(temp_time, ":54")) %>%
-  filter(TEMPERATURE != 1) %>%
-  distinct()
-
-
-## Load and Clean EMS data 
-
-Description of Baltimore City EMS Data Here
-
-
-### Store universal variables
-
-```{r echo=TRUE, message=FALSE}
-
-# Common file path to raw EMS data
-path_to_data <- "../data/input-data/baltimore-ems/raw-data/ems-data/csv/"
-
-```
-
-### Execute load-in and cleaning
-
-```{r echo=TRUE, message=FALSE}
-
-# Load in five CSVs, one for each year
-EMS_2014 <- read.csv(paste0(path_to_data, "2014.csv"))
-EMS_2015 <- read.csv(paste0(path_to_data, "2015.csv"))
-EMS_2016 <- read.csv(paste0(path_to_data, "2016.csv"))
-EMS_2017 <- read.csv(paste0(path_to_data, "2017.csv"))
-EMS_2018_partial <- read.csv(paste0(path_to_data, "2018-1.1-11.30.csv"))
-
-# Bind together into one dataframe
-
-EMS_all <- bind_rows(EMS_2014, EMS_2015, EMS_2016, EMS_2017, EMS_2018_partial)
-
-# Remove all dataframes from our environment but EMS_all
-
-# rm(list=setdiff(ls(), "EMS_all"))
-
-#################################
-#### Clean EMS Data #############
-#################################
-
-# Rename columns to get rid of funky codes
-
-EMS_all <- EMS_all %>%
-  rename(incident_date = Incident.Date,
-         incident_number = Incident.Number,
-         primary_impression =  Primary.Impression,
-         arrived_on_scene_time = Times...Arrived.on.Scene.Time,
-         zipcode = Incident.Postal.Code..E8.15.,
-         destination_patient_disposition = Destination.Patient.Disposition..E20.10.,
-         destination_code = Destination.Code..E20.2.
-  )
-
-# Filter EMS_all to remove the dispositions we don't want.
-
-EMS_all <- EMS_all %>%
-  filter(destination_patient_disposition != "" &
-           destination_patient_disposition != "No Patient Found" &
-           destination_patient_disposition != "Cancelled en Route/On Arrival" &
-           destination_patient_disposition != "Cancelled Prior to Response" &
-           destination_patient_disposition != "Provided ALS personnel to scene, no transport" &
-           destination_patient_disposition != "Standby Only - No Patient Contacts" &
-           destination_patient_disposition != "Cancelled On Arrival" &
-           destination_patient_disposition != "Operational Support Provided Only")
-
-# Remove N/A and blank values
-EMS_all <- EMS_all[-which(EMS_all$arrived_on_scene_time=="" | is.na( EMS_all$incident_date) | EMS_all$incident_number=="" | EMS_all$primary_impression=="" | EMS_all$zipcode=="" | EMS_all$destination_patient_disposition==""), ]
-
-# remove all characters from ZIP code field
-v1 <- c("1", "2", "3", "4", "5", "6", "7", "8", "9", "0")
-EMS_all$zipcode <- gsub(paste0("[^", paste(v1, collapse=""), "]+"), "", EMS_all$zipcode)
-
-# Create an array of Baltimore ZIP codes used in our analysis
-balt_zips <- c("21201","21202","21205","21206","21207","21208","21209","21210","21211","21212","21213","21214", "21215","21216","21217","21218","21222","21223","21224","21225","21226","21227","21228","21229", "21230","21231","21234","21236","21237","21239","21251")
-
-# Filter out handful of unneeded ZIPs
-EMS_all <- subset(EMS_all, zipcode %in% balt_zips )
-
-# Create full datetime object of arrival time
-EMS_all <- EMS_all %>%
-  mutate(arrive_time = as.POSIXct(paste(incident_date, arrived_on_scene_time), format="%m/%d/%y %H:%M:%S")) %>%
-  # mutate(date = as.Date(arrive_time, format="%y-%m-%d" tz="")) %>%
-  mutate(year=year(arrive_time)) %>%
-  mutate(month=month(arrive_time)) %>%
-  mutate(day=day(arrive_time)) %>%
-  mutate(hour=hour(arrive_time)) %>%
-  mutate(date = make_date(year = year, month = month, day= day)) %>%
-  select(date, year, month, day, hour, arrived_on_scene_time, zipcode, primary_impression)
-
-# Working from the original primary impression field, crated a new field called primary impression group that keeps the names of things we care to examine, and lump everything else into "other" category.  Also create a higher level primary impression category that groups like conditions together.
-EMS_all <- EMS_all %>%
-  mutate(primary_impression_group = if_else(primary_impression %in% c("Pain", "Other", "Abdominal Pain/Problems", "Weakness", "Other Illness/Injury", "Nausea/Vomiting (Unknown Etiology)", "General Malaise/Sick", "Back Pain (Non-Traumatic)", "Headache", "OB/Gyn - Vaginal Hemorrhage", "Fever", "Unknown Problem", "Poisoning", "Drowning/Near Drowning", "Electrocution", "Inhalation Injury (Toxic Gas)", "Lightening Strike", "Depressurization/Scuba", "SIDS (Sudden Infant Death Syndrome)", "Traumatic Injury", "OB/Gyn - Other", "OB/Gyn - OB/Delivery", "Sepsis",  "Other CNS Problem", "Migraine", "Allergic Reaction", "Abuse / Neglect", "Stings/Venomous Bites", "Airway Obstruction", "Anaphylaxis", "Hypovolemia/Shock", "Overpressurization", "Hazmat Exposure - Chem, Bio, Rad", "Inhalation - Smoke", "Sexual Assault/Rape", "Other Endocrine/Metabolic Problem", "Bowel Obstruction", "Apparent Life-Threatening Event", "Diarrhea", "Burn", "Pregnancy/OB Delivery", "G.I. Bleed", "Other GU Problems", "Patient Assist Only", "Not Applicable", "Other Abdominal/GI Problem", "No Apparent Illness/Injury"), "Other", primary_impression),
-         primary_impression_category = case_when(
-           primary_impression_group %in% c("ETOH Abuse", "Withdrawal/Overdose ETOH", "Withdrawal/Overdose Drugs", "Altered Level of Consciousness", "Substance/Drug Abuse") ~ "Substance abuse",
-           primary_impression_group %in% c("Cardiac Arrest", "Cardiac Rhythm Disturbance", "Hypotension", "Hypertension", "CHF (Congestive Heart Failure)", "Chest Pain/Discomfort", "Chest Pain - STEMI", "Other Cardiovascular Problem", "Abdominal Aortic Aneurysm" ) ~ "Heart/circulatory",
-           primary_impression_group %in% c("Heat Exhaustion/Heat Stroke", "Hyperthermia" ) ~ "Acute heat conditions",
-           primary_impression_group %in% c("Diabetic Hypoglycemia", "Diabetic Hyperglycemia") ~ "Diabetes complication",
-           primary_impression_group %in% c("COPD (Emphysema/Chronic Bronchitis)", "Asthma", "Respiratory Distress", "Respiratory Arrest", "Croup") ~ "Respiratory",
-           primary_impression_group %in% c("Stroke/CVA", "TIA (Transient Ischemic Attack)") ~ "Stroke",
-           TRUE ~ primary_impression_group
-         ))
-
-# Join to temperature data
-
-EMS_all <- inner_join(EMS_all, dmh, by=c("date","hour"))
-
-## Adjust for Urban Heat Island and Calculate Adjusted Heat Index
-# For each call, we now have the temperature and heat index value as recorded at the Inner Harbor station at the date and time of the call.  But we have not yet accounted for the fact that, in Baltimore City, temperatures can vary greatly between the Inner Harbor and other parts of the city.  We obtained urban heat island raster images, showing block-by-block temperature variations in Baltimore calculated using mobile temperature sensors and satellite data on August 29, 2018. (Citation: Shandas, V.; Voelkel, J.; Williams, J.; Hoffman, J. Integrating Satellite and Ground Measurements for Predicting Locations of Extreme Urban Heat. Climate 2019, 7, 5.  https://osf.io/e63x9/) and processed them in QGIS to obtain median afternoon temperatures for each ZIP code in our analysis.  We then adjusted each call's Inner Harbor temperature to account for the delta between the Inner Harbor monitoring station's ZIP code (21230) temperature in the urban heat island study and each call's ZIP code temperature in the urban heat island study.  Using the adjusted temperature, we recalculated the heat index using the dew point reading captured at the Inner Harbor.   
-
-##########################################################
-# Adjust for Urban Heat Island and Calculate Heat Index ##
-##########################################################
-
-# Load urban heat island data with morning, aft and night median temperature.
-
-all_temp_zcta_ems <- all_temp_zcta %>%
-  select(geoid10, temp_median_am, temp_median_aft, temp_median_pm) %>%
-  mutate(zipcode = geoid10)
-
-# Calculate difference between Inner Harbor (KDMH) station temperature. A positive value in difference columns means warmer than inner harbor KDMH weather station at Science Center. A negative value means cooler.
-all_temp_zcta_ems <- all_temp_zcta_ems %>%
-  mutate(temp_median_am_kdmh_zip = 79.6,
-         temp_median_aft_kdmh_zip = 95.3,
-         temp_median_pm_kdmh_zip = 89.8,
-         am_difference = temp_median_am - temp_median_am_kdmh_zip,
-         aft_difference = temp_median_aft - temp_median_aft_kdmh_zip,
-         pm_difference = temp_median_pm - temp_median_pm_kdmh_zip,
-         zipcode = as.character(zipcode)
-         ) %>%
-  select(zipcode, matches("difference"))
-
-# Join urban_heat_zcta to EMS_all
-EMS_all <- EMS_all %>%
-  inner_join(all_temp_zcta_ems, by=c("zipcode"))
-
-# Create columns with adjusted temperature
-EMS_all <- EMS_all %>%
-  mutate(adjusted_temperature =
-           case_when(hour >= 20 ~ as.character(avg_hourly_temperature_dmh + pm_difference),
-                     hour >= 12 ~ as.character(avg_hourly_temperature_dmh + aft_difference),
-                     hour >= 4 ~ as.character(avg_hourly_temperature_dmh + am_difference),
-                     hour >= 0 ~ as.character(avg_hourly_temperature_dmh + pm_difference)
-                     ),
-         adjusted_temperature = round(as.numeric(adjusted_temperature), 0)
-      )
-
-# Now that we've adjusted temperature, calculate the adjusted heat index
-EMS_all <- EMS_all %>%
-  mutate(adjusted_heat_index = heat.index(t=adjusted_temperature, dp=avg_hourly_dewpoint_dmh, temperature.metric = "fahrenheit", output.metric = "fahrenheit"))
-
-## Create Heat Index Buckets
-
-#In order to examine the impact of extreme temperatures on EMS calls, we need to assign each call's adjusted heat index value to one of four temperature buckets we've created to align with the National Weather Service's heat index safety threshold table. https://www.weather.gov/safety/heat-index. 
-
-#The NWS heat index formula assumes conditions of light wind and shade, noting that exposure to full sun can increase heat index values by up to 15 degrees. We didn't feel comfortable adjusting heat index values to account for this, so this is where we are.  We were also unable to obtain the necessary data to calculate "wet bulb globe temperature", which the NWS says can be a better measure of heat stress in full sunlight. 
-
-#The NWS heat index buckets are:
-#* < 80 = not unsafe temperatures for heat
-#* 80-89 = caution
-#* 90-102 = extreme caution
-#* 103-124 = danger
-#* Approximately 125+ = extreme danger 
-
-# Create a NWS temperature bucket in our joined calls-temp data set with a five-part NWS temperature danger scale.
-EMS_all <- EMS_all %>%
-  mutate(adjusted_heat_index_nws_five_scale_bucket = case_when(
-    adjusted_heat_index <= 79 ~ "not_unsafe_under_80",
-    adjusted_heat_index >= 80 & adjusted_heat_index <= 89 ~ "caution_80_89",
-    adjusted_heat_index >= 90 & adjusted_heat_index <= 102 ~ "extreme_caution_90_102",
-    adjusted_heat_index >= 103 & adjusted_heat_index <= 124 ~ "danger_103_124",
-    adjusted_heat_index >= 125 ~ "extreme_danger_125_plus"
-  )
-  )
-
-# For later calculations, we're also going to have to create these NWS temperature buckets in our temperature data set.  
-
-dmh_ems <- dmh %>%
-  mutate(heat_index_nws_five_scale_bucket = case_when(
-    avg_hourly_heat_index_dmh <= 79 ~ "not_unsafe_under_80",
-    avg_hourly_heat_index_dmh >= 80 & avg_hourly_heat_index_dmh <= 89 ~ "caution_80_89",
-    avg_hourly_heat_index_dmh >= 90 & avg_hourly_heat_index_dmh <= 102 ~ "extreme_caution_90_102",
-    avg_hourly_heat_index_dmh >= 103 & avg_hourly_heat_index_dmh <= 124 ~ "danger_103_124",
-    avg_hourly_heat_index_dmh >= 125 ~ "extreme_danger_125_plus"
-  ))
-  
-
-## Filter Data Only for Summer Dates
-# We only want to examine last summer in Baltimore (2018), so we need to filter our full_data and temp_data sets. 
-
-EMS_all <- EMS_all %>%
-filter(`date` >= date("2018-06-21") & `date` <= ("2018-09-21"))
-
-dmh_ems <- dmh_ems %>%
-filter(`date` >= date("2018-06-21") & `date` <= ("2018-09-21"))
-
-
-heat_index_count_per_nws_five_scale_bucket <- dmh_ems %>%
-  select(heat_index_nws_five_scale_bucket) %>%
-  group_by(heat_index_nws_five_scale_bucket) %>%
-  summarise(heat_index_count_per_nws_five_scale_bucket=n()) %>%
-  arrange(heat_index_nws_five_scale_bucket)
-
-########### Five NWS Buckets #################
-#### Table 1 | Primary Impression Group | Ratio Condition Calls v Heat Index | five NWS Buckets #####
-# Ratio of number of calls for each condition type in each heat index bucket to total number of hours in each given temperature bucket. A lower number indicates a higher number of calls for each condition adjusted for the fact that some temperatures are simply more common than other others. It's 70 degrees for many more hours in a year than it is 110.  
-
-call_heat_index_ratio_five_primary_impression_group <- EMS_all %>%
-  filter(primary_impression_group != "Other") %>%
-  group_by(primary_impression_group, adjusted_heat_index_nws_five_scale_bucket) %>%
-  summarise(condition_calls_count_per_bucket=n()) %>%
-  inner_join(heat_index_count_per_nws_five_scale_bucket, by = c("adjusted_heat_index_nws_five_scale_bucket" = "heat_index_nws_five_scale_bucket")) %>%
-  mutate(hours_per_call = heat_index_count_per_nws_five_scale_bucket/condition_calls_count_per_bucket) %>%
-  select(primary_impression_group, adjusted_heat_index_nws_five_scale_bucket, hours_per_call) %>%
-  spread(adjusted_heat_index_nws_five_scale_bucket, hours_per_call) %>%
-  select(primary_impression_group, `not_unsafe_under_80`, `caution_80_89`, `extreme_caution_90_102`, `danger_103_124`)
-
-xy <- call_heat_index_ratio_five_primary_impression_group
-
-```
-
-
-```
-
-
-```
-
-
 
 ## Output All Cleaned Data to CSV Files
 
