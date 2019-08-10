@@ -129,38 +129,62 @@ We obtained hour-by-hour Baltimore City temperature data from the National Weath
 #########################
 
 # Load Baltimore Inner Harbor Temperature Data
-temp_data <- read_excel("../../data/input-data/baltimore-inner-harbor-temperature/DMH.xlsx")
+# temp_data <- read_excel("../../data/input-data/baltimore-inner-harbor-temperature/DMH.xlsx")
+temp_data <- read_csv("../../data/input-data/baltimore-weather-stations/DMH-5-1-98-current.txt")
+
 
 ##########################
 # Clean Temperature Data #
 ##########################
 
 # Build a datetime object from DATE and TIME
+# temp_data  <- temp_data  %>%
+#  mutate(temp_time = as.POSIXct(DATETIME, format="%Y-%m-%d %H:%M"))
+
 temp_data  <- temp_data  %>%
-  mutate(temp_time = as.POSIXct(DATETIME, format="%Y-%m-%d %H:%M"))
+  mutate(temp_time = as.POSIXct(valid, format="%Y-%m-%d %H:%M"))
+
 
 # Remove seconds from datettime object
 temp_data$temp_time <- format(as.POSIXct(temp_data$temp_time), "%m-%d-%Y %H:%M")
 
 # Filter out missing values for temp and humidity and convert to numeric
+# temp_data <- temp_data %>%
+#  filter(DEW_POINT != 'M', TEMPERATURE != 'M') %>%
+#  mutate(DEW_POINT = as.numeric(DEW_POINT),
+#         TEMPERATURE = as.numeric(TEMPERATURE))
+
 temp_data <- temp_data %>%
-  filter(DEW_POINT != 'M', TEMPERATURE != 'M') %>%
-  mutate(DEW_POINT = as.numeric(DEW_POINT),
-         TEMPERATURE = as.numeric(TEMPERATURE))
+ filter(dwpf != 'M', tmpf != 'M') %>%
+  mutate(dwpf = as.numeric(dwpf),
+         tmpf = as.numeric(tmpf))
+
 
 # Calculate Heat Index values  
+# temp_data <- temp_data %>%
+#  mutate(HEAT_INDEX = heat.index(t=TEMPERATURE, dp=DEW_POINT, temperature.metric = "fahrenheit", output.metric = "fahrenheit"))
+
 temp_data <- temp_data %>%
-  mutate(HEAT_INDEX = heat.index(t=TEMPERATURE, dp=DEW_POINT, temperature.metric = "fahrenheit", output.metric = "fahrenheit"))
+  mutate(HEAT_INDEX = heat.index(t=tmpf, dp=dwpf, temperature.metric = "fahrenheit", output.metric = "fahrenheit"))
 
 # Round temperature
+# temp_data <- temp_data %>%
+#   mutate(TEMPERATURE = round(as.numeric(TEMPERATURE),0))
+
 temp_data <- temp_data %>%
-   mutate(TEMPERATURE = round(as.numeric(TEMPERATURE),0))
+   mutate(tmpf = round(as.numeric(tmpf),0))
 
 # Take out handful of inconsistent values that don't match our 54 method, which is to say they were captured at 54 minutes. 
+# temp_data <- temp_data %>%
+#  filter(str_detect(temp_time, ":54")) %>%
+#  filter(TEMPERATURE != 1) %>%
+#  distinct()
+
 temp_data <- temp_data %>%
   filter(str_detect(temp_time, ":54")) %>%
-  filter(TEMPERATURE != 1) %>%
+  filter(tmpf != 1) %>%
   distinct()
+
 
 ```
 ## Merge Temperature/Heat Index Data and EMS Data
@@ -209,7 +233,9 @@ full_data <- full_data %>%
 
 # Create columns with adjusted temperature
 full_data <- full_data %>%
-  mutate(hour = hour(datetime)) %>%
+  # mutate(hour = hour(datetime)) %>%
+  mutate(hour = hour(valid)) %>%
+  mutate(temperature = tmpf) %>%
   mutate(adjusted_temperature =
            case_when(hour >= 20 ~ as.character(temperature + pm_difference),
                      hour >= 12 ~ as.character(temperature + aft_difference),
@@ -221,7 +247,9 @@ full_data <- full_data %>%
 
 # Now that we've adjusted temperature, calculate the adjusted heat index
 full_data <- full_data %>%
-  mutate(adjusted_heat_index = heat.index(t=adjusted_temperature, dp=dew_point, temperature.metric = "fahrenheit", output.metric = "fahrenheit"))
+# mutate(adjusted_heat_index = heat.index(t=adjusted_temperature, dp=dew_point, temperature.metric = "fahrenheit", output.metric = "fahrenheit"))
+  mutate(adjusted_heat_index = heat.index(t=adjusted_temperature, dp=dwpf, temperature.metric = "fahrenheit", output.metric = "fahrenheit"))
+
 
 ```
 ## Create Heat Index Buckets
@@ -290,11 +318,18 @@ temp_data <- temp_data %>%
 We only want to examine last summer in Baltimore (2018), so we need to filter our full_data and temp_data sets. 
 
 ```{r}
+# full_data <- full_data %>%
+# filter(`datetime` >= date("2018-06-21") & `datetime` <= ("2018-09-21"))
+
 full_data <- full_data %>%
-filter(`datetime` >= date("2018-06-21") & `datetime` <= ("2018-09-21"))
+ filter(`valid` >= date("2018-06-21") & `valid` <= ("2018-09-21"))
+
+# temp_data <- temp_data %>%
+# filter(`DATETIME` >= date("2018-06-21") & `DATETIME` <= ("2018-09-21"))
 
 temp_data <- temp_data %>%
-filter(`DATETIME` >= date("2018-06-21") & `DATETIME` <= ("2018-09-21"))
+filter(`valid` >= date("2018-06-21") & `valid` <= ("2018-09-21"))
+
 
 ```
 ## Account for rarity of very hot conditions

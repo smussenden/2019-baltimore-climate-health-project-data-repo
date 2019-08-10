@@ -37,6 +37,7 @@ The analysis that uses the cleaned data output by this document is located in th
 * **NSAs - Neighborhood Statistical Areas**: Areas created by Baltimore City to represent Baltimore neighborhoods, comprised of custom groupings of U.S. Census blocks. This grouping is considered by Baltimore City and this analysis as the best representation of true Baltimore neighborhoods. Shapefiles provided by the [Baltimore City Department of Planning](https://planning.baltimorecity.gov/maps-data/GIS).
 * **CSAs - Community Statistical Areas**: Groupings of neighborhoods, created and used by the Baltimore Neighborhood Indicators Alliance (BNIA). In some cases, there is one neighborhood per CSA; in others, it's multiple. Recent demographic data is only available by CSA. Shapefiles downloaded from the [Baltimore Neighborhood Indicators Alliance Vital Signs project](https://data-bniajfi.opendata.arcgis.com/datasets/794586676bcc4f5fb629c08c51474cf6_0).
 * **Redlined geographic units**: Between 1935 and 1940, local real estate lenders, developers and real estate appraisers assigned grades to residential neighborhoods based on the perceived risk for banks to grant loans. This process was based in part on the race of residents and is known today as "redlining." The ["Mapping Inequality"](https://dsl.richmond.edu/panorama/redlining/#loc=5/39.1/-94.58&text=intro) project, conducted by [teams at four different universites](https://dsl.richmond.edu/panorama/redlining/#loc=12/39.293/-76.679&text=about), generated interactive maps of cities across the U.S., including Baltimore, and made their [shapefiles available by city](https://dsl.richmond.edu/panorama/redlining/#loc=11/39.3/-76.673&text=downloads).
+** EMS Data Description**
 
 ## Setup
 
@@ -251,6 +252,7 @@ path_to_data <- "../data/input-data/tree-canopy/post-qgis-processing/"
 ### Execute load-in and cleaning
 
 ``` {r echo=TRUE, message=FALSE}
+
 #### Block ####
 # 2007
 tree_block_lidar_2007 <- read_csv(paste0(path_to_data, "by_block/btree_statistics_by_block_2007_lidar.csv")) %>%
@@ -350,6 +352,7 @@ tree_zcta_clipped_lidar_2007_2015 <- tree_zcta_clipped_lidar_2007 %>%
 rm(list=setdiff(ls(), c(
   "tree_block_lidar_2007_2015", "tree_zcta_clipped_lidar_2007_2015", "tree_nsa_lidar_2007_2015", "tree_csa_lidar_2007_2015", 
   "all_temp_block", "all_temp_zcta", "all_temp_nsa", "all_temp_csa")))
+
 ```
 
 ## Load and Clean Demographic Data
@@ -956,43 +959,6 @@ estimated_historical_dmh <- bwi %>%
 
 ```
 
-# Load Baltimore Inner Harbor Temperature Data
-temp_data <- read_excel("../../data/input-data/baltimore-inner-harbor-temperature/DMH.xlsx")
-
-##########################
-# Clean Temperature Data #
-##########################
-
-# Build a datetime object from DATE and TIME
-temp_data  <- temp_data  %>%
-  mutate(temp_time = as.POSIXct(DATETIME, format="%Y-%m-%d %H:%M"))
-
-# Remove seconds from datettime object
-temp_data$temp_time <- format(as.POSIXct(temp_data$temp_time), "%m-%d-%Y %H:%M")
-
-# Filter out missing values for temp and humidity and convert to numeric
-temp_data <- temp_data %>%
-  filter(DEW_POINT != 'M', TEMPERATURE != 'M') %>%
-  mutate(DEW_POINT = as.numeric(DEW_POINT),
-         TEMPERATURE = as.numeric(TEMPERATURE))
-
-# Calculate Heat Index values  
-temp_data <- temp_data %>%
-  mutate(HEAT_INDEX = heat.index(t=TEMPERATURE, dp=DEW_POINT, temperature.metric = "fahrenheit", output.metric = "fahrenheit"))
-
-# Round temperature
-temp_data <- temp_data %>%
-   mutate(TEMPERATURE = round(as.numeric(TEMPERATURE),0))
-
-# Take out handful of inconsistent values that don't match our 54 method, which is to say they were captured at 54 minutes. 
-temp_data <- temp_data %>%
-  filter(str_detect(temp_time, ":54")) %>%
-  filter(TEMPERATURE != 1) %>%
-  distinct()
-
-
-## Load and Clean EMS data 
-
 Description of Baltimore City EMS Data Here
 
 
@@ -1102,9 +1068,9 @@ EMS_all <- inner_join(EMS_all, dmh, by=c("date","hour"))
 
 # Load urban heat island data with morning, aft and night median temperature.
 
-all_temp_zcta_ems <- all_temp_zcta %>%
-  select(geoid10, temp_median_am, temp_median_aft, temp_median_pm) %>%
-  mutate(zipcode = geoid10)
+all_temp_zcta_ems <- zcta_tree_temp_demographics %>%
+  select(zcta, temp_median_am, temp_median_aft, temp_median_pm) %>%
+  mutate(zipcode = zcta)
 
 # Calculate difference between Inner Harbor (KDMH) station temperature. A positive value in difference columns means warmer than inner harbor KDMH weather station at Science Center. A negative value means cooler.
 all_temp_zcta_ems <- all_temp_zcta_ems %>%
@@ -1182,33 +1148,12 @@ filter(`date` >= date("2018-06-21") & `date` <= ("2018-09-21"))
 dmh_ems <- dmh_ems %>%
 filter(`date` >= date("2018-06-21") & `date` <= ("2018-09-21"))
 
-
-heat_index_count_per_nws_five_scale_bucket <- dmh_ems %>%
-  select(heat_index_nws_five_scale_bucket) %>%
-  group_by(heat_index_nws_five_scale_bucket) %>%
-  summarise(heat_index_count_per_nws_five_scale_bucket=n()) %>%
-  arrange(heat_index_nws_five_scale_bucket)
-
-########### Five NWS Buckets #################
-#### Table 1 | Primary Impression Group | Ratio Condition Calls v Heat Index | five NWS Buckets #####
-# Ratio of number of calls for each condition type in each heat index bucket to total number of hours in each given temperature bucket. A lower number indicates a higher number of calls for each condition adjusted for the fact that some temperatures are simply more common than other others. It's 70 degrees for many more hours in a year than it is 110.  
-
-call_heat_index_ratio_five_primary_impression_group <- EMS_all %>%
-  filter(primary_impression_group != "Other") %>%
-  group_by(primary_impression_group, adjusted_heat_index_nws_five_scale_bucket) %>%
-  summarise(condition_calls_count_per_bucket=n()) %>%
-  inner_join(heat_index_count_per_nws_five_scale_bucket, by = c("adjusted_heat_index_nws_five_scale_bucket" = "heat_index_nws_five_scale_bucket")) %>%
-  mutate(hours_per_call = heat_index_count_per_nws_five_scale_bucket/condition_calls_count_per_bucket) %>%
-  select(primary_impression_group, adjusted_heat_index_nws_five_scale_bucket, hours_per_call) %>%
-  spread(adjusted_heat_index_nws_five_scale_bucket, hours_per_call) %>%
-  select(primary_impression_group, `not_unsafe_under_80`, `caution_80_89`, `extreme_caution_90_102`, `danger_103_124`)
-
-xy <- call_heat_index_ratio_five_primary_impression_group
-
 ```
 
 
-```
+## Load and Clean Sensor Data
+
+``` {r}
 
 
 ```
@@ -1232,6 +1177,13 @@ write_csv(zcta_tree_temp_demographics, paste0(save_path, "zcta_tree_temp_demogra
 write_csv(street_trees_categorized, paste0(save_path, "street_trees_nsa_categorized.csv"))
 write_csv(master_by_nsa,  paste0(save_path, "street_trees_nsa_summarized.csv"))
 write_csv(redlining_tree, paste0(save_path, "redlining_tree.csv"))
+write_csv(EMS_all, paste0(save_path, "EMS_all.csv"))
+write_csv(dmh_ems, paste0(save_path, "dmh_ems.csv"))
+write_csv(estimated_historical_dmh, paste0(save_path, "estimated_historical_dmh.csv"))
+write_csv(dmh, paste0(save_path, "dmh.csv"))
+write_csv(bwi, paste0(save_path, "bwi.csv"))
+
+
 
 #### Clean up the workspace ####
 rm(list=setdiff(ls(), c("blocks_tree_temp_population", "zcta_tree_temp_demographics", "nsa_tree_temp", "csa_tree_temp_demographics", "street_trees_categorized", "redlining_tree")))
