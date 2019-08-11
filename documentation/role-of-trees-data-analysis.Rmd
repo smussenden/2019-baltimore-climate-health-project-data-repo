@@ -81,7 +81,7 @@ target_nsas <- c("Berea", "Broadway East", "Oliver", "Middle East",
                  "Patterson Place", "Patterson Park Neighborhood", 
                  "Baltimore Highlands", "Highlandtown", 
                  "Upper Fells Point") %>%
-  lapply(tolower)
+                lapply(tolower)
 
 counterpoint_nsas <- c("Butcher's Hill", "Canton", "Washington Hill", "Roland Park") %>%
   lapply(tolower)

@@ -1153,12 +1153,99 @@ filter(`date` >= date("2018-06-21") & `date` <= ("2018-09-21"))
 
 ## Load and Clean Sensor Data
 
+DESCRIPTION
+
 ``` {r}
 
 
 ```
 
+### Store universal variables
 
+```{r echo=TRUE, message=FALSE}
+
+# Common file path to raw EMS data
+path_to_data <- "../data/input-data/temperature-sensors/"
+
+### Define column headers for sensor readings data ###
+sensor_col_names <- c("sensor_id", "unix_time", "datetime", "temperature", "relative_humidity", "battery_life")
+
+#######################################
+##### Sensor Processing Function ######
+#######################################
+
+process_sensor_data <- function(person_location) {
+  # parse date objects and remove unneeded columns
+  temp <- person_location %>%  
+    mutate(date = date(datetime)) %>%
+    mutate(year = year(datetime)) %>%
+    mutate(month = month(datetime)) %>%
+    mutate(day = day(datetime)) %>%
+    mutate(hour = hour(datetime)) %>%
+    mutate(minute = minute(datetime)) %>%
+    select(datetime, date, year, month, day, hour, minute, temperature, relative_humidity) %>%
+    mutate(heat_index = heat.index(t=temperature, rh=relative_humidity, temperature.metric = "fahrenheit")) %>%
+    left_join(dmh, by = c("year", "month", "day", "hour")) %>%
+    select(-contains(".y"), -contains("dew")) %>%
+    rename(date = `date.x`) %>%
+    mutate(indoor_temperature_difference = temperature - avg_hourly_temperature_dmh,
+           indoor_heat_index_difference = heat_index - avg_hourly_heat_index_dmh)
+  # calculate average temperature by day for the sensor, and store it as temporary object 
+  temp_humidity_heat_index_day <- temp %>%
+    group_by(date) %>%
+    summarise(mean_indoor_temperature = round(mean(temperature),1),
+              mean_indoor_heat_index = round(mean(heat_index),1),
+              mean_outdoor_temperature = round(mean(avg_hourly_temperature_dmh),1),
+              mean_outdoor_heat_index = round(mean(avg_hourly_heat_index_dmh),1),
+              indoor_temperature_difference = mean_indoor_temperature - mean_outdoor_temperature,
+              indoor_heat_index_difference = mean_indoor_heat_index - mean_outdoor_heat_index)
+    table_name <- paste0(deparse(substitute(person_location)), "_day_averages")
+    assign(table_name, temp_humidity_heat_index_day, envir = parent.frame())
+    # calculate average temperature by day and hour for the sensor, and store it as temporary object 
+    temp_humidity_heat_index_day_hour <- temp %>%
+      mutate(date_hour = make_datetime(year = year, month = month, day = day, hour = hour)) %>%
+      group_by(date_hour) %>%
+      summarise(mean_indoor_temperature = round(mean(temperature),1),
+                mean_indoor_heat_index = round(mean(heat_index),1),
+                mean_outdoor_temperature = round(mean(avg_hourly_temperature_dmh),1),
+                mean_outdoor_heat_index = round(mean(avg_hourly_heat_index_dmh),1),
+                indoor_temperature_difference = mean_indoor_temperature - mean_outdoor_temperature,
+                indoor_heat_index_difference = mean_indoor_heat_index - mean_outdoor_heat_index)
+      table_name <- paste0(deparse(substitute(person_location)), "_day_hourly_averages")
+      assign(table_name, temp_humidity_heat_index_day_hour, envir = parent.frame())
+    # calculate average temperature by minute for the sensor, and store it as temporary object
+    # Note: because temperature collection is done at intervals that are sometimes greater than a minute, won't have exactly one value per minute.
+    temp_humidity_heat_index_day_minute <- temp %>%
+    mutate(date_hour_minute = make_datetime(year = year, month = month, day = day, hour = hour, min = minute)) %>%
+    group_by(date_hour_minute) %>%
+    summarise(mean_indoor_temperature = round(mean(temperature),1),
+                mean_indoor_heat_index = round(mean(heat_index),1),
+                mean_outdoor_temperature = round(mean(avg_hourly_temperature_dmh),1),
+                mean_outdoor_heat_index = round(mean(avg_hourly_heat_index_dmh),1),
+                indoor_temperature_difference = mean_indoor_temperature - mean_outdoor_temperature,
+                indoor_heat_index_difference = mean_indoor_heat_index - mean_outdoor_heat_index)
+      table_name <- paste0(deparse(substitute(person_location)), "_day_minute_averages")
+      assign(table_name, temp_humidity_heat_index_day_minute, envir = parent.frame())
+}  
+
+```
+
+### Execute load-in and cleaning
+```{r}
+
+#### Read in Data ####
+# Stephanie Pingley bedroom
+stephanie <- read_csv(paste0(path_to_data,"stephanie/stephanie.TXT"), col_names = sensor_col_names)
+# Michael and Alberta 
+michael <- read_csv(paste0(path_to_data,"michael/michael.TXT"), col_names = sensor_col_names)
+# Tammy first floor
+tammy <- read_csv(paste0(path_to_data,"tammy/tammy-first-floor.TXT"), col_names = sensor_col_names)
+
+process_sensor_data(stephanie)
+process_sensor_data(michael)
+process_sensor_data(tammy)
+
+```
 
 ## Output All Cleaned Data to CSV Files
 
@@ -1182,6 +1269,15 @@ write_csv(dmh_ems, paste0(save_path, "dmh_ems.csv"))
 write_csv(estimated_historical_dmh, paste0(save_path, "estimated_historical_dmh.csv"))
 write_csv(dmh, paste0(save_path, "dmh.csv"))
 write_csv(bwi, paste0(save_path, "bwi.csv"))
+write_csv(stephanie_day_averages, paste0(save_path, "stephanie_day_averages.csv"))
+write_csv(stephanie_day_hourly_averages, paste0(save_path, "stephanie_day_hourly_averages.csv"))
+write_csv(stephanie_day_minute_averages, paste0(save_path, "stephanie_day_minute_averages.csv"))
+write_csv(tammy_day_averages, paste0(save_path, "tammy_day_averages.csv"))
+write_csv(tammy_day_hourly_averages, paste0(save_path, "tammy_day_hourly_averages.csv"))
+write_csv(tammy_day_minute_averages, paste0(save_path, "tammy_day_minute_averages.csv"))
+write_csv(michael_day_averages, paste0(save_path, "michael_day_averages.csv"))
+write_csv(michael_day_hourly_averages, paste0(save_path, "michael_day_hourly_averages.csv"))
+write_csv(michael_day_minute_averages, paste0(save_path, "michael_day_minute_averages.csv"))
 
 
 

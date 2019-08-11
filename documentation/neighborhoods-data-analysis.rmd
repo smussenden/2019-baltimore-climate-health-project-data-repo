@@ -82,6 +82,17 @@ path_to_data <- "../data/output-data/cleaned/"
 dmh <- read_csv(paste0(path_to_data, "dmh.csv"))
 EMS_all <- read_csv(paste0(path_to_data, "EMS_all.csv"))
 dmh_ems <- read_csv(paste0(path_to_data, "dmh_ems.csv"))
+stephanie_day_averages<- read_csv(paste0(path_to_data, "stephanie_day_averages.csv"))
+stephanie_day_hourly_averages <- read_csv(paste0(path_to_data, "stephanie_day_hourly_averages.csv"))
+stephanie_day_minute_averages <- read_csv(paste0(path_to_data, "stephanie_day_minute_averages.csv"))
+tammy_day_averages <- read_csv(paste0(path_to_data, "tammy_day_averages.csv"))
+tammy_day_hourly_averages <- read_csv(paste0(path_to_data, "tammy_day_hourly_averages.csv"))
+tammy_day_minute_averages <- read_csv(paste0(path_to_data, "tammy_day_minute_averages.csv"))
+michael_day_averages<- read_csv(paste0(path_to_data, "michael_day_averages.csv"))
+michael_day_hourly_averages <- read_csv(paste0(path_to_data, "michael_day_hourly_averages.csv"))
+michael_day_minute_averages <- read_csv(paste0(path_to_data, "michael_day_minute_averages.csv"))
+nsa_tree_temp <- read_csv(paste0(path_to_data,"nsa_tree_temp.csv"))
+blocks_tree_temp_demographics <- read_csv(paste0(path_to_data, "blocks_tree_temp_demographics.csv"))
 
 ####################################
 ######## Define Functions ##########
@@ -483,12 +494,157 @@ csa_tree_temp_demographics %>%
 ```
 
 
-Reporters from the University of Maryland’s Howard Center for Investigative Journalism and Capital News Service placed sensors that record heat and humidity inside several homes in McElderry Park (BG 8/8/19) and nearby neighborhoods. Those sensors recorded temperatures that reached as high as 97 degrees and heat index values of 119 degrees.  
+Reporters from the University of Maryland’s Howard Center for Investigative Journalism and Capital News Service placed sensors that record heat and humidity inside several homes in McElderry Park (BG 8/8/19) and nearby neighborhoods. 
+
+Those sensors recorded temperatures that reached as high as 97 degrees and heat index values of 119 degrees.  
+CORRECT
+``` {r}
+
+all_sensors_day_minute_averages <- bind_rows(michael_day_minute_averages, tammy_day_minute_averages, stephanie_day_minute_averages) 
+
+all_sensors_day_minute_averages %>%
+  filter(mean_indoor_temperature == max(mean_indoor_temperature)) 
+
+all_sensors_day_minute_averages %>%
+  filter(mean_indoor_heat_index == max(mean_indoor_heat_index)) 
+
+
+```
+
+On the first floor of Wilson Jackson’s two-story rowhouse, the heat index registered 94 degrees at 10 p.m. on Sunday, July 21. Outside, the heat index was 9 degrees lower, 84 degrees. 
+NOTE: SHOULD BE 93 DEGREES.
+
+``` {r}
+tammy_day_hourly_averages %>%
+  mutate(date = date(date_hour)) %>%
+  mutate(hour = hour(date_hour)) %>%
+  filter(date == "2019-07-21") %>%
+  filter(hour == 22)
+
+tammy_day_minute_averages %>%
+  mutate(date = date(date_hour_minute)) %>%
+  mutate(hour = hour(date_hour_minute)) %>%
+  mutate(minute = minute(date_hour_minute)) %>%
+  filter(date == "2019-07-21") %>%
+  filter(hour == 22) %>%
+  filter(minute == 0)
 
 
 
 
-Hourly average temperature 
+```
+
+At 7 p.m. Friday, the heat index in Baltimore hit 107 degrees in the Inner Harbor.  Inside Stephanie Pingley’s house, it was 9 degrees hotter, with a heat index of 116 degrees.
+DIFFERENT VALUES, FIX THESE.
+
+``` {r}
+
+stephanie_day_hourly_averages %>%
+  mutate(date = date(date_hour)) %>%
+  mutate(hour = hour(date_hour)) %>%
+  filter(date == "2019-07-19") %>%
+  filter(hour == 19)
+
+stephanie_day_minute_averages %>%
+  mutate(date = date(date_hour_minute)) %>%
+  mutate(hour = hour(date_hour_minute)) %>%
+  mutate(minute = minute(date_hour_minute)) %>%
+  filter(date == "2019-07-19") %>%
+  filter(hour == 19) %>%
+  filter(minute == 0)
+
+
+```
+
+By Saturday, the temperature inside the second-floor apartment of Michael Thomas and Alberta Wilkerson hit 96 degrees. 
+YES, BUT the heat index hit 112!
+
+``` {r}
+
+michael_day_hourly_averages %>%
+  mutate(date = date(date_hour)) %>%
+  mutate(hour = hour(date_hour)) %>%
+  filter(date == "2019-07-20") %>%
+  arrange(desc(mean_indoor_temperature))
+
+michael_day_hourly_averages %>%
+  mutate(date = date(date_hour)) %>%
+  mutate(hour = hour(date_hour)) %>%
+  filter(date == "2019-07-20") %>%
+  arrange(desc(mean_indoor_heat_index))
+
+
+```
+
+A sensor inside a bedroom showed that the heat index during the heat wave was consistently higher inside than outside Pingley’s house. 
+
+``` {r}
+
+stephanie_day_hourly_averages %>%
+  mutate(hourly_mean_group = "hourly_mean_group") %>%
+  group_by(hourly_mean_group) %>%
+  summarise(mean_indoor_heat_index_differnence = mean(indoor_heat_index_difference))
+  
+stephanie_day_hourly_averages_heat_wave <- stephanie_day_hourly_averages %>%
+  mutate(date = date(date_hour)) %>%
+  filter(date >= "2019-07-14") %>%
+  filter(date <= "2019-07-23")
+  
+chart_title <- "hourly averages"
+  temp_hourly_graph <- ggplot() +
+    geom_line(data = stephanie_day_hourly_averages_heat_wave, aes(x = date_hour, y = mean_indoor_heat_index, colour="indoor heat index (f)")) +
+    geom_line(data = stephanie_day_hourly_averages_heat_wave, aes(x = date_hour, y = mean_outdoor_heat_index, colour="outdoor heat index (f)")) +
+    scale_color_manual(
+      values = c('indoor heat index (f)' = 'red',
+                 'outdoor heat index (f)' = 'purple')
+    ) +
+    ggtitle(chart_title) +  
+    xlab("day (hours)") +
+    ylab("degrees (f)") +
+    scale_x_datetime(date_breaks = "1 day") +
+    theme(axis.text.x = element_text(angle=50,hjust=1))
+  plot(temp_hourly_graph)
+
+```
+
+But citywide, the tree canopy is just 27%, up from 26% X years before. Washington’s is XX%. 
+
+``` {r}
+TBD
+```
+And in 2015, many East Baltimore neighborhoods had a tree canopy of about 10%, according to a Howard Center analysis of tree canopy data gathered by researchers at the U.S. Forest Service and the University of Vermont.  
+MORE ACCURATE TO SAY IN EAST BALTIMORE, MOST HAD LESS THAN 10 percent.
+
+``` {r}
+
+east_baltimore_nsas <- c("Berea", "Broadway East", "Oliver", "Middle East", 
+                 "Biddle Street","Milton-Montford", "Madison-Eastend", 
+                 "CARE", "McElderry Park", "Ellwood Park/Monument", 
+                 "Patterson Place", "Patterson Park Neighborhood", 
+                 "Baltimore Highlands", "Highlandtown", 
+                 "Upper Fells Point") %>%
+  lapply(tolower)
+
+nsa_tree_temp %>%
+  filter(nsa_name %in% east_baltimore_nsas) %>%
+  select(nsa_name, `15_lid_mean`) %>%
+  arrange(`15_lid_mean`)
+  
+```
+
+Some blocks have no trees at all. 
+ALSO TRUE FROM OBSERVATIONS
+
+``` {r}
+blocks_tree_temp_demographics %>%
+  filter(`15_lid_mean` == 0) %>%
+  filter(population_2010 >0) %>%
+  filter(aland10 > 0) %>%
+  select(geoid10, population_2010, `15_lid_mean`)
+```
+
+As temperatures at Baltimore’s Inner Harbor reached 100 on July 20, most everyone around 
+
 
 ## Temperature Analysis
 
