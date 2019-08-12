@@ -44,6 +44,7 @@ Last summer in Baltimore, when the heat index hit 103 degrees, EMS calls increas
 
 For the last five years in Baltimore, low-income people in the hottest parts of the city have visited the hospital at higher rates for those same conditions, when compared to low-income people in the cooler parts of town.
 
+
 ###################################################################
 ######## Load in unclipped tree heat temp demographic info ########
 ###################################################################
