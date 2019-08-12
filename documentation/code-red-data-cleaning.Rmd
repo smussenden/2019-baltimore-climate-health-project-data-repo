@@ -1240,11 +1240,13 @@ stephanie <- read_csv(paste0(path_to_data,"stephanie/stephanie.TXT"), col_names 
 michael <- read_csv(paste0(path_to_data,"michael/michael.TXT"), col_names = sensor_col_names)
 # Tammy first floor
 tammy <- read_csv(paste0(path_to_data,"tammy/tammy-first-floor.TXT"), col_names = sensor_col_names)
+# Audrey unknown location
+audrey <- read_csv(paste0(path_to_data,"audrey/audrey.TXT"), col_names = sensor_col_names)
 
 process_sensor_data(stephanie)
 process_sensor_data(michael)
 process_sensor_data(tammy)
-
+process_sensor_data(audrey)
 ```
 
 ## Output All Cleaned Data to CSV Files
@@ -1278,6 +1280,9 @@ write_csv(tammy_day_minute_averages, paste0(save_path, "tammy_day_minute_average
 write_csv(michael_day_averages, paste0(save_path, "michael_day_averages.csv"))
 write_csv(michael_day_hourly_averages, paste0(save_path, "michael_day_hourly_averages.csv"))
 write_csv(michael_day_minute_averages, paste0(save_path, "michael_day_minute_averages.csv"))
+write_csv(audrey_day_averages, paste0(save_path, "audrey_day_averages.csv"))
+write_csv(audrey_day_hourly_averages, paste0(save_path, "audrey_day_hourly_averages.csv"))
+write_csv(audrey_day_minute_averages, paste0(save_path, "audrey_day_minute_averages.csv"))
 
 
 
