@@ -52,6 +52,7 @@ library(lubridate)
 library(tidyverse)
 library(janitor) # For cleaning names
 library(weathermetrics) # For calculating heat index
+library(readxl) # For reading in Excel files
 
 # Turn off scientific notation in RStudio 
 # (prevents accidental coersion to character type on export)
@@ -1249,6 +1250,23 @@ process_sensor_data(tammy)
 process_sensor_data(audrey)
 ```
 
+## Load and Clean CCTV Data
+
+```{r echo=TRUE, message=FALSE}
+
+# Common file path to raw temperature data
+path_to_data <- "../data/input-data/street-trees/"
+
+```
+
+``` {r}
+
+#### Load in CCTV and tree trimming data
+cctv_cameras_street_trees <- read_excel(paste0(path_to_data, "Violence_Reduction_Locations.xls")) %>%
+  mutate_all(tolower)
+
+```
+
 ## Output All Cleaned Data to CSV Files
 
 The following generated files are necessary for future portions of this analysis.
@@ -1283,6 +1301,7 @@ write_csv(michael_day_minute_averages, paste0(save_path, "michael_day_minute_ave
 write_csv(audrey_day_averages, paste0(save_path, "audrey_day_averages.csv"))
 write_csv(audrey_day_hourly_averages, paste0(save_path, "audrey_day_hourly_averages.csv"))
 write_csv(audrey_day_minute_averages, paste0(save_path, "audrey_day_minute_averages.csv"))
+write_csv(cctv_cameras_street_trees, paste0(save_path, "cctv_cameras_street_trees.csv"))
 
 
 

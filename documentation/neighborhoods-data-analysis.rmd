@@ -59,7 +59,6 @@ library(colorspace) # For improved color palettes
 library(ggplot2) # For graphing
 library(ggrepel) # For graph labeling
 require(scales) # For percent labeling on distribution tables
-#library(here) # For cleaner file path writing
 
 # Turn off scientific notation in RStudio (prevents coersion to character type)
 options(scipen = 999)
@@ -92,6 +91,7 @@ michael_day_averages<- read_csv(paste0(path_to_data, "michael_day_averages.csv")
 michael_day_hourly_averages <- read_csv(paste0(path_to_data, "michael_day_hourly_averages.csv"))
 michael_day_minute_averages <- read_csv(paste0(path_to_data, "michael_day_minute_averages.csv"))
 nsa_tree_temp <- read_csv(paste0(path_to_data,"nsa_tree_temp.csv"))
+csa_tree_temp_demographics <- read_csv(paste0(path_to_data,"csa_tree_temp_demographics.csv"))
 blocks_tree_temp_demographics <- read_csv(paste0(path_to_data, "blocks_tree_temp_demographics.csv"))
 
 ####################################
@@ -646,4 +646,138 @@ blocks_tree_temp_demographics %>%
 As temperatures at Baltimore’s Inner Harbor reached 100 on July 20, most everyone around 
 * Will have to do this by official records, not our data. Put in link here. 
 
+### GRAPHICS
 
+``` {r}
+
+w <- csa_tree_temp_demographics %>%
+  select(matches("csa2010"), matches("temp_mean_aft"),
+         perc_below_poverty = matches("percent_of_family_households_living_below_the_poverty_line"),
+         matches("violent_crime_rate_per_1_000_residents"), matches("life_expectancy"),
+         matches("unemployment_rate"))
+
+```
+
+#### Temperature v. Poverty
+
+``` {r}
+
+#### Data used ####
+csa_tree_temp_demographics %>%
+  select(matches("csa2010"), matches("temp_mean_aft"),
+         perc_below_poverty = matches("percent_of_family_households_living_below_the_poverty_line"))
+
+#### Build correlation matrix ####
+wk_corr <- csa_tree_temp_demographics %>%
+  select(temp_mean_aft, 
+         perc_below_poverty = percent_of_family_households_living_below_the_poverty_line) %>%
+  as.matrix() %>%
+  correlate() %>%
+  mutate(variable=rowname) %>%
+  select(variable, everything(), -rowname)
+wk_corr
+
+#### Scatterplot ####
+csa_tree_temp_demographics %>%
+  select(temp_mean_aft, 
+         perc_below_poverty = percent_of_family_households_living_below_the_poverty_line) %>%
+  ggplot(aes(x = temp_mean_aft, y = perc_below_poverty)) +
+  geom_point()
+  
+```
+
+There is a `round(wk_corr[[2, 2]], 2)` correlation between temperature and poverty.
+
+#### Temperature v. Crime
+
+``` {r}
+
+#### Data used ####
+csa_tree_temp_demographics %>%
+  select(matches("csa2010"), matches("temp_mean_aft"),
+         matches("violent_crime_rate_per_1_000_residents"), matches("life_expectancy"))
+
+#### Build correlation matrix ####
+wk_corr <- csa_tree_temp_demographics %>%
+  select(temp_mean_aft, 
+         violent_crime_rate_per_1_000_residents) %>%
+  as.matrix() %>%
+  correlate() %>%
+  mutate(variable=rowname) %>%
+  select(variable, everything(), -rowname)
+wk_corr
+
+#### Scatterplot ####
+csa_tree_temp_demographics %>%
+  select(temp_mean_aft, 
+         violent_crime_rate_per_1_000_residents) %>%
+  ggplot(aes(x = temp_mean_aft, y = violent_crime_rate_per_1_000_residents)) +
+  geom_point()
+  
+```
+
+There is a `round(wk_corr[[2, 2]], 2)` correlation between temperature and crime.
+
+#### Temperature v. life expectancy
+
+``` {r}
+
+#### Data used ####
+csa_tree_temp_demographics %>%
+  select(matches("csa2010"), matches("temp_mean_aft"),
+         matches("life_expectancy"))
+
+#### Build correlation matrix ####
+wk_corr <- csa_tree_temp_demographics %>%
+  select(temp_mean_aft, 
+         life_expectancy) %>%
+  as.matrix() %>%
+  correlate() %>%
+  mutate(variable=rowname) %>%
+  select(variable, everything(), -rowname)
+wk_corr
+
+#### Scatterplot ####
+csa_tree_temp_demographics %>%
+  select(temp_mean_aft, 
+         life_expectancy) %>%
+  ggplot(aes(x = temp_mean_aft, y = life_expectancy)) +
+  geom_point()
+  
+```
+
+There is a `round(wk_corr[[2, 2]], 2)` correlation between temperature and life expectancy.
+
+#### Temperature v. unemployment rate
+
+``` {r}
+
+#### Data used ####
+csa_tree_temp_demographics %>%
+  select(matches("csa2010"), matches("temp_mean_aft"),
+         matches("unemployment_rate"))
+
+#### Build correlation matrix ####
+wk_corr <- csa_tree_temp_demographics %>%
+  select(temp_mean_aft, 
+         unemployment_rate) %>%
+  as.matrix() %>%
+  correlate() %>%
+  mutate(variable=rowname) %>%
+  select(variable, everything(), -rowname)
+wk_corr
+
+#### Scatterplot ####
+csa_tree_temp_demographics %>%
+  select(temp_mean_aft, 
+         unemployment_rate) %>%
+  ggplot(aes(x = temp_mean_aft, y = unemployment_rate)) +
+  geom_point()
+  
+```
+
+There is a `round(wk_corr[[2, 2]], 2)` correlation between temperature and unemployment rate.
+
+``` {r include=FALSE}
+rm(wk_corr)
+```

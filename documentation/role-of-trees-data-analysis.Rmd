@@ -58,7 +58,6 @@ library(colorspace) # For improved color palettes
 library(ggplot2) # For graphing
 library(ggrepel) # For graph labeling
 require(scales) # For percent labeling on distribution tables
-#library(here) # For cleaner file path writing
 
 # Turn off scientific notation in RStudio (prevents coersion to character type)
 options(scipen = 999)
