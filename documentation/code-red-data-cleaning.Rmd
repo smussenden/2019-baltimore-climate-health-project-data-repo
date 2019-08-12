@@ -19,7 +19,7 @@ output:
 ```
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, message=FALSE)
 ```
 
 ## Introduction
@@ -39,11 +39,26 @@ The analysis that uses the cleaned data output by this document is located in th
 * **Redlined geographic units**: Between 1935 and 1940, local real estate lenders, developers and real estate appraisers assigned grades to residential neighborhoods based on the perceived risk for banks to grant loans. This process was based in part on the race of residents and is known today as "redlining." The ["Mapping Inequality"](https://dsl.richmond.edu/panorama/redlining/#loc=5/39.1/-94.58&text=intro) project, conducted by [teams at four different universites](https://dsl.richmond.edu/panorama/redlining/#loc=12/39.293/-76.679&text=about), generated interactive maps of cities across the U.S., including Baltimore, and made their [shapefiles available by city](https://dsl.richmond.edu/panorama/redlining/#loc=11/39.3/-76.673&text=downloads).
 ** EMS Data Description**
 
+**A Note About ZCTAs**: 
+    * There are some differences in the exact boundaries between ZCTA shapefiles pulled from Census.gov when pulled county-by-county and for MD as a whole. All ZCTA groups are from the state-level ZCTA files.
+    * The Mid-Atlantic Terminal at Dundalk (sometimes included as part of the 21222 ZCTA) is not included.
+    * All calculations for included ZCTAs are done over the entire ZCTA, even when the ZCTA expands past the city boundary, with one exception. 21226 is cut off at the city boundary due to limitations the in treecover and heat maps. In addition, a small peninsula in that same ZCTA was removed for ease in computing.
+    * 4 ZCTAs ('21208', '21228', '21234', '21236') encroach slightly into Baltimore City, but were not included due to limitiations in treecover and heat maps. 
+    * 3 included ZCTAs ('21227', '21222', '21237') only encroach slightly into Baltimore City but were included because the treecover and heat maps encompass them.
+    * An insignificant portion of the north end of 21237 is not included on the treecover map and is therefore missing from calculations made for that ZCTA.
+    * ZCTA lists for reference:
+      * Complete list of Baltimore ZCTAs: '21201', '21202', '21205', '21206', '21207', '21208', '21209', '21210', '21211', '21212', '21213', '21214', '21215', '21216', '21217', '21218', '21222', '21223', '21224', '21225', '21226', '21227', '21228', '21229', '21230', '21231', '21234', '21236', '21237', '21239', '21251'
+      * ZCTAs removed from list (for untrimmed): '21208', '21228', '21234', '21236'
+      * Complete list of ZCTAs used (for untrimmed): '21201', '21202', '21205', '21206', '21207', '21209', '21210', '21211', '21212', '21213', '21214', '21215', '21216', '21217', '21218', '21222', '21223', '21224', '21225', '21226', '21227', '21229', '21230', '21231', '21237', '21239', '21251'
+      
+![Removed ZCTAs](https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/documentation/zcta_trim_map.png?raw=true "Removed ZCTAs")
+
+
 ## Setup
 
 Due to GitHub file upload limitations, input data is not included in this repo. When creating the file structure on a local machine, create a sub-folder called "input-data" within the existing "data" folder for maximum compatibility with the following code.
 
-```{r echo=TRUE, message=FALSE}
+```{r}
 #######################
 #### Load Packages ####
 #######################
@@ -75,7 +90,7 @@ After caclulating the zonal statistis, reporters exported the files from QGIS as
 
 ### Define functions and store universal variables
 
-```{r echo=TRUE, message=FALSE}
+```{r}
 # Convert celcius values to fahrenheit
 c_to_f_convert <- function(x) (x * (9/5) + 32)
 
@@ -86,7 +101,7 @@ path_to_data <- "../data/input-data/urban_heat_island_temperature/temperature_va
 
 ### Execute load-in and cleaning
 
-```{r echo=TRUE, message=FALSE}
+```{r}
 #######################
 ###### Afternoon ######
 #######################
@@ -101,7 +116,7 @@ temp_aft_block <- read_csv(paste0(path_to_data, "afternoon/temp-by-block_af.csv"
   mutate_at(vars(contains("temp")), c_to_f_convert)
 
 # Afternoon temperatures by ZCTA (ZIP Code Tabulation Area)
-temp_aft_zcta <- read_csv(paste0(path_to_data, "afternoon/temp-by-zcta-clipped-to-balt-city-border_af.csv")) %>%
+temp_aft_zcta <- read_csv(paste0(path_to_data, "afternoon/temp-by-zcta-not-clipped-to-balt-city-border_af.csv")) %>%
   rename(temp_mean_aft = t_af_mean,
          temp_median_aft = t_af_median,
          temp_min_aft = t_af_min,
@@ -140,7 +155,7 @@ temp_am_block <- read_csv(paste0(path_to_data, "morning/temp-by-block_am.csv")) 
   mutate_at(vars(contains("temp")), c_to_f_convert)
 
 # Morning temperatures by ZCTA (ZIP Code Tabulation Area)
-temp_am_zcta <- read_csv(paste0(path_to_data, "morning/temp-by-zcta-clipped-to-balt-city-border_am.csv")) %>%
+temp_am_zcta <- read_csv(paste0(path_to_data, "morning/temp-by-zcta-not-clipped-to-balt-city-border_am.csv")) %>%
   rename(temp_mean_am = t_am_mean,
          temp_median_am = t_am_median,
          temp_min_am = t_am_min,
@@ -178,9 +193,9 @@ temp_pm_block <- read_csv(paste0(path_to_data, "evening/temp-by-block_pm.csv")) 
   mutate_at(vars(contains("temp")), c_to_f_convert)
 
 # Evening temperatures by ZCTA (ZIP Code Tabulation Area)
-temp_pm_zcta <- read_csv(paste0(path_to_data, "evening/temp-by-zcta-clipped-to-balt-city-border_pm.csv"))  %>%
+temp_pm_zcta <- read_csv(paste0(path_to_data, "evening/temp-by-zcta-not-clipped-to-balt-city-border_pm.csv"))  %>%
   rename(temp_mean_pm = t_pm_mean,
-         temp_median_pm = t_pm_media,
+         temp_median_pm = t_pm_median,
          temp_min_pm = t_pm_min,
          temp_max_pm = t_pm_max) %>%
   mutate_at(vars(contains("temp")), c_to_f_convert)
@@ -243,7 +258,7 @@ The original shapefile data was presented in terms of "no change," "gain," and "
 
 ### Define functions and store universal variables
 
-```{r echo=TRUE, message=FALSE}
+```{r}
 
 # Common file path to raw canopy data
 path_to_data <- "../data/input-data/tree-canopy/post-qgis-processing/"
@@ -252,7 +267,7 @@ path_to_data <- "../data/input-data/tree-canopy/post-qgis-processing/"
 
 ### Execute load-in and cleaning
 
-``` {r echo=TRUE, message=FALSE}
+``` {r}
 
 #### Block ####
 # 2007
@@ -324,31 +339,9 @@ tree_nsa_lidar_2007_2015 <- tree_nsa_lidar_2007 %>%
   select(-matches("nbrdesc"), -matches("color_2")) %>%
   # Recast non-calculable variables as characters
   mutate("objectid" = as.character(objectid)) 
+```
 
-
-#### ZCTA CLIPPED LIDAR ####
-
-# 2007
-tree_zcta_clipped_lidar_2007 <- read_csv(paste0(path_to_data, "by_zcta_clipped_at_balt_city_border/btree_statistics_by_zcta_2007_lidar.csv"))
-
-# 2015
-tree_zcta_clipped_lidar_2015 <- read_csv(paste0(path_to_data, "by_zcta_clipped_at_balt_city_border/btree_statistics_by_zcta_2015_lidar.csv"))
-
-# Join 2007 to 2015
-tree_zcta_clipped_lidar_2007_2015 <- tree_zcta_clipped_lidar_2007 %>%
-  left_join(tree_zcta_clipped_lidar_2015) %>%
-  mutate(
-    lid_change_percent = (`15_mean`-`07_mean`)/`07_mean`,
-    change_percent_point = (`15_mean`-`07_mean`)
-  ) %>%
-  rename_all(tolower) %>%
-  rename("07_lid_mean" = "07_mean",
-         "15_lid_mean" = "15_mean") %>%
-  select(-matches("nbrdesc"), -matches("color_2")) %>%
-  # Recast non-calculable variables as characters
-  mutate("zcta5ce10" = as.character(zcta5ce10),
-         "geoid10" = as.character(geoid10))
-
+```{r}
 #### Remove unneeded files ####
 rm(list=setdiff(ls(), c(
   "tree_block_lidar_2007_2015", "tree_zcta_clipped_lidar_2007_2015", "tree_nsa_lidar_2007_2015", "tree_csa_lidar_2007_2015", 
@@ -362,7 +355,7 @@ The only recent demographic data available for neighborhood-sized areas is from 
 
 ### Define functions and store universal variables
 
-```{r echo=TRUE, message=FALSE}
+```{r}
 
 # Common file path to raw demographics data
 path_to_data <- "../data/input-data/demographics/"
@@ -371,7 +364,7 @@ path_to_data <- "../data/input-data/demographics/"
 
 ### Execute load-in and cleaning
 
-``` {r echo=TRUE, message=FALSE}
+``` {r}
 #### Blocks #### 
 # Read in 2010 population data, SF1 U.S. Census data by block. Used only to filter out no population blocks before doing analysis. Otherwise, 2010 data is too old to use.
 demographics_block <- read_csv(paste0(path_to_data, "by_block/2010_SF1_Baltimore_City_Population_by_Block.csv")) %>%
@@ -400,7 +393,7 @@ demographics_zcta <- read_csv(paste0(path_to_data, "by_zcta/acs_2017_baltimore_z
 
 Once the individual component data frames have been created and cleaned, they can be merged and saved for use in the analysis.
 
-``` {r echo=TRUE, message=FALSE}
+``` {r}
 #### Blocks #### 
 # Demographics at this level only used for removing low population blocks
 blocks_tree_temp_population <- all_temp_block %>%
@@ -435,17 +428,15 @@ nsa_tree_temp <- all_temp_nsa %>%
 # Merge check: the difference in the number of records between the temperature data frame (279) and the tree data frame (278) is because temp has an extra record for Unnamed areas, because of slight differences between the extent of the temperature raster and the NSA shapefile. Here, we drop the unnamed column on join.
 
 #### ZCTA ####
-zcta_tree_temp_demographics <- all_temp_zcta %>%
-  left_join(tree_zcta_clipped_lidar_2007_2015) %>%
+zcta_temp_demographics <- all_temp_zcta %>%
   right_join(demographics_zcta, by=c('zcta5ce10' = 'zcta')) %>%
   rename_all(tolower) %>%
   rename(zcta = 'zcta5ce10') %>%
-  select(-"geoid10", -"classfp10", -"mtfcc10", -"funcstat10") %>%
-  mutate(lid_change_percent = ifelse(is.infinite(lid_change_percent) | is.nan(lid_change_percent), NA, lid_change_percent))
+  select(-"geoid10", -"classfp10", -"mtfcc10", -"funcstat10")
 # Merge check: All tables have 55 records
 
 #### Remove unneeded files ####
-rm(list=setdiff(ls(), c("blocks_tree_temp_population", "zcta_tree_temp_demographics", "nsa_tree_temp", "csa_tree_temp_demographics")))
+rm(list=setdiff(ls(), c("blocks_tree_temp_population", "zcta_temp_demographics", "nsa_tree_temp", "csa_tree_temp_demographics")))
 
 ```
 
@@ -457,7 +448,7 @@ The raw data arrived as a .shp file, which reporters joined together with the va
 
 ### Define functions and store universal variables
 
-```{r echo=TRUE, message=FALSE}
+```{r}
 
 # List of NSAs of interest
 target_nsas <- c("Berea", "Broadway East", "Oliver", "Middle East", "Biddle Street","Milton-Montford", "Madison-Eastend", "CARE", "McElderry Park", "Ellwood Park/Monument", "Patterson Place", "Patterson Park Neighborhood", "Baltimore Highlands", "Highlandtown", "Upper Fells Point") %>%
@@ -474,7 +465,7 @@ path_to_data <- "../data/input-data/street-trees/csv/"
 
 ### Execute load-in and cleaning
 
-```{r echo=TRUE, message=FALSE}
+```{r}
 
 ##########################
 #### Load in the data ####
@@ -815,7 +806,7 @@ master_by_nsa <- tree_as_percent_of_spaces_by_nsa %>%
   ))
 
 #### Remove unneeded files ####
-rm(list=setdiff(ls(), c("blocks_tree_temp_population", "zcta_tree_temp_demographics", "nsa_tree_temp", "csa_tree_temp_demographics", "street_trees_categorized", "redlining_tree", "master_by_nsa")))
+rm(list=setdiff(ls(), c("blocks_tree_temp_population", "zcta_temp_demographics", "nsa_tree_temp", "csa_tree_temp_demographics", "street_trees_categorized", "redlining_tree", "master_by_nsa")))
 ```
 
 ## Load and Clean Redlining Data
@@ -824,7 +815,7 @@ This analysis used QGIS to compute tree canopy for geographies based on redlinin
 
 ### Define Functions and store universal variables
 
-```{r echo=TRUE, message=FALSE}
+```{r}
 
 # Common file path to raw redlining data
 path_to_data <- "../data/input-data/redlining-data/"
@@ -860,7 +851,7 @@ BWI - Same as above, 1945-01-01 through current date
 
 ### Store universal variables
 
-```{r echo=TRUE, message=FALSE}
+```{r}
 
 # Common file path to raw EMS data
 path_to_data <- "../data/input-data/baltimore-weather-stations/"
@@ -869,7 +860,7 @@ path_to_data <- "../data/input-data/baltimore-weather-stations/"
 
 ### Execute load-in and cleaning
 
-```{r echo=TRUE, message=FALSE}
+```{r}
 
 # Load BWI and DMH data 
 bwi <- read_csv(paste0(path_to_data, "BWI-1-1-45-current.txt"))
@@ -965,7 +956,7 @@ Description of Baltimore City EMS Data Here
 
 ### Store universal variables
 
-```{r echo=TRUE, message=FALSE}
+```{r}
 
 # Common file path to raw EMS data
 path_to_data <- "../data/input-data/baltimore-ems/raw-data/ems-data/csv/"
@@ -974,7 +965,7 @@ path_to_data <- "../data/input-data/baltimore-ems/raw-data/ems-data/csv/"
 
 ### Execute load-in and cleaning
 
-```{r echo=TRUE, message=FALSE}
+```{r}
 
 # Load in five CSVs, one for each year
 EMS_2014 <- read.csv(paste0(path_to_data, "2014.csv"))
@@ -1069,7 +1060,7 @@ EMS_all <- inner_join(EMS_all, dmh, by=c("date","hour"))
 
 # Load urban heat island data with morning, aft and night median temperature.
 
-all_temp_zcta_ems <- zcta_tree_temp_demographics %>%
+all_temp_zcta_ems <- zcta_temp_demographics %>%
   select(zcta, temp_median_am, temp_median_aft, temp_median_pm) %>%
   mutate(zipcode = zcta)
 
@@ -1226,7 +1217,7 @@ DESCRIPTION
 
 ### Store universal variables
 
-```{r echo=TRUE, message=FALSE}
+```{r}
 
 # Common file path to raw EMS data
 path_to_data <- "../data/input-data/temperature-sensors/"
@@ -1315,7 +1306,9 @@ process_sensor_data(audrey)
 
 ## Load and Clean CCTV Data
 
-```{r echo=TRUE, message=FALSE}
+The following data is a sample of tree trimming and removal requests the Baltimore Police Department made to the Baltimore City Recreation & Parks Urban Forestry Division going back to roughly January 2018. This is not a complete list of all requests.
+
+```{r}
 
 # Common file path to raw temperature data
 path_to_data <- "../data/input-data/street-trees/"
@@ -1334,7 +1327,7 @@ cctv_cameras_street_trees <- read_excel(paste0(path_to_data, "Violence_Reduction
 
 The following generated files are necessary for future portions of this analysis.
 
-``` {r echo=TRUE, message=FALSE}
+``` {r}
 
 #### Common save path ####
 save_path <- "../data/output-data/cleaned/"
@@ -1343,7 +1336,7 @@ save_path <- "../data/output-data/cleaned/"
 write_csv(blocks_tree_temp_population, paste0(save_path, "blocks_tree_temp_demographics.csv"))
 write_csv(csa_tree_temp_demographics, paste0(save_path, "csa_tree_temp_demographics.csv"))
 write_csv(nsa_tree_temp, paste0(save_path, "nsa_tree_temp.csv"))
-write_csv(zcta_tree_temp_demographics, paste0(save_path, "zcta_tree_temp_demographics.csv"))
+write_csv(zcta_temp_demographics, paste0(save_path, "zcta_temp_demographics.csv"))
 write_csv(street_trees_categorized, paste0(save_path, "street_trees_nsa_categorized.csv"))
 write_csv(master_by_nsa,  paste0(save_path, "street_trees_nsa_summarized.csv"))
 write_csv(redlining_tree, paste0(save_path, "redlining_tree.csv"))
@@ -1369,5 +1362,5 @@ write_csv(cctv_cameras_street_trees, paste0(save_path, "cctv_cameras_street_tree
 
 
 #### Clean up the workspace ####
-rm(list=setdiff(ls(), c("blocks_tree_temp_population", "zcta_tree_temp_demographics", "nsa_tree_temp", "csa_tree_temp_demographics", "street_trees_categorized", "redlining_tree")))
+rm(list=setdiff(ls(), c("blocks_tree_temp_population", "zcta_temp_demographics", "nsa_tree_temp", "csa_tree_temp_demographics", "street_trees_categorized", "redlining_tree")))
 ```
