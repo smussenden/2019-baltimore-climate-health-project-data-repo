@@ -1151,6 +1151,69 @@ filter(`date` >= date("2018-06-21") & `date` <= ("2018-09-21"))
 
 ```
 
+## Load and Clean Hospital Admissions Data 
+
+DESCRIPTION 
+
+### Store universal variables
+
+``` {r}
+# Common file path to raw EMS data
+path_to_data <- "../data/input-data/hscrc-hospital-data/"
+```
+
+### Execute Load in and Cleaning
+
+``` {r}
+# Load inpatient hospital admissions percentage by zipcode 
+ip_full_zip <- read_csv(paste0(path_to_data, "ip/ip_full_zip.csv"))
+ip_full_zip <- ip_full_zip %>%
+  filter(ZIPCODE != "CITYWIDE") %>%
+  select(ZIPCODE, matches("asthma"), matches("kidney"), matches("diabetes"), matches("copd"), matches("heart"), matches("angina"), matches("artery"), -matches("count"), -matches("percap"), -matches("population") )
+
+# Load inpatient hospital admissions percentage by zipcode, broken down by medicaid status
+ip_full_zip_medicaid <- read_csv(paste0(path_to_data, "ip/ip_full_medicaid.csv"))
+ip_full_zip_medicaid <- ip_full_zip_medicaid %>%
+  filter(ZIPCODE != "CITYWIDE") %>%
+  select(ZIPCODE, matches("asthma"), matches("kidney"), matches("diabetes"), matches("copd"), matches("heart"), matches("angina"), matches("artery"), -matches("count"), -matches("percap"), -matches("population"), -matches("not"), -matches("commercial")) %>%
+  select(ZIPCODE, matches("medicaid"))
+
+# Load ER hospital admissions percentage by zipcode 
+op_er_full_zip <- read_csv(paste0(path_to_data, "op_er/op_er_full_zip.csv"))
+op_er_full_zip <- op_er_full_zip %>%
+  filter(ZIPCODE != "CITYWIDE") %>%
+  select(ZIPCODE, matches("asthma"), matches("kidney"), matches("diabetes"), matches("copd"), matches("heart"), matches("angina"), matches("artery"), -matches("count"), -matches("percap"), -matches("population") )
+
+# Load ER hospital admissions percentage by zipcode, broken down by medicaid status
+op_er_full_zip_medicaid <- read_csv(paste0(path_to_data, "op_er/op_er_full_medicaid.csv"))
+op_er_full_zip_medicaid <- op_er_full_zip_medicaid %>%
+  filter(ZIPCODE != "CITYWIDE") %>%
+  select(ZIPCODE, matches("asthma"), matches("kidney"), matches("diabetes"), matches("copd"), matches("heart"), matches("angina"), matches("artery"), -matches("count"), -matches("percap"), -matches("population"), -matches("not"), -matches("commercial")) %>%
+  select(ZIPCODE, matches("medicaid"))
+
+
+
+```
+
+
+
+
+
+Last summer in Baltimore, when the heat index hit 103 degrees, EMS calls increased citywide for asthma, COPD and cardiovascular conditions.
+
+
+
+For the last five years in Baltimore, low-income people in the hottest parts of the city have visited the hospital at higher rates for those same conditions, when compared to low-income people in the cooler parts of town.
+
+ER VISITS
+
+ASTHMA
+COPD
+HEART DISEASE
+DIABETES
+KIDNEY DISEASE
+
+
 
 ## Load and Clean Sensor Data
 
