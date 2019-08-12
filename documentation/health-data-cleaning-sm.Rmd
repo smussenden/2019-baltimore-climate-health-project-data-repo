@@ -57,6 +57,48 @@ options(scipen = 999)
 ```
 
 
+### Load and clean hospital data
+
+``` {r}
+# Common file path to raw EMS data
+path_to_data <- "../data/input-data/hscrc-hospital-data/"
+
+```
+
+# Load in inpatient hospital admissions 
+ip_full_zip <- read_csv("ip/ip_full_zip_demographics.csv")
+ip_full_zip_medicaid <- read_csv("ip/ip_full_medicaid_demographics_heat.csv")
+
+# Load in outpatient hospital admissions
+op_er_full_zip <- read_csv("op_er/op_er_full_zip_demographics_heat.csv")
+op_er_full_zip_medicaid <- read_csv("data/output-data/hscrc-hospital-data/data_by_zip/op_er/op_er_full_medicaid_demographics_heat.csv")
+
+ER VISITS
+
+ASTHMA
+COPD
+HEART DISEASE
+DIABETES
+KIDNEY DISEASE
+
+Last summer in Baltimore, when the heat index hit 103 degrees, EMS calls increased citywide for asthma, COPD and cardiovascular conditions.
+
+
+
+For the last five years in Baltimore, low-income people in the hottest parts of the city have visited the hospital at higher rates for those same conditions, when compared to low-income people in the cooler parts of town.
+
+
+
+
+
+
+
+
+
+
+
+
+
 ## Load and Clean Temperature Data
 ```{r echo=TRUE, message=FALSE}
 
