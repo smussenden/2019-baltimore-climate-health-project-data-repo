@@ -29,6 +29,22 @@ op_er_full_zip_qtr <- read_csv("data/output-data/hscrc-hospital-data/data_by_zip
 op_er_full_zip_race <- read_csv("data/output-data/hscrc-hospital-data/data_by_zip/op_er/op_er_full_race_demographics_heat.csv")
 op_er_full_zip_age <- read_csv("data/output-data/hscrc-hospital-data/data_by_zip/op_er/op_er_full_age_demographics_heat.csv")
 
+
+ER VISITS
+
+ASTHMA
+COPD
+HEART DISEASE
+DIABETES
+KIDNEY DISEASE
+
+Last summer in Baltimore, when the heat index hit 103 degrees, EMS calls increased citywide for asthma, COPD and cardiovascular conditions.
+
+
+
+For the last five years in Baltimore, low-income people in the hottest parts of the city have visited the hospital at higher rates for those same conditions, when compared to low-income people in the cooler parts of town.
+
+
 ###################################################################
 ######## Load in unclipped tree heat temp demographic info ########
 ###################################################################

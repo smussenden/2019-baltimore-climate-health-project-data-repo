@@ -65,7 +65,7 @@ options(scipen = 999)
 
 ### Load variables and data
 
-``` {r}
+```{r}
 #########################
 #### Store Variables ####
 #########################
@@ -274,7 +274,7 @@ The following tree canopy data is based on LIDAR data from 2015, as explained in
 
 A correlation matrix of poverty and canopy cover shows a weak negative correlation of -.34. In other words, places with a high poverty rate will have fewer trees, in general.
 
-``` {r}
+```{r}
 
 #### Build correlation matrix ####
 csa_tree_temp_demographics %>%
@@ -334,7 +334,7 @@ csa_tree_temp_demographics %>%
 
 If we build a correlation matrix only looking at certain neighborhoods of interest, the pattern is even more pronounced:
 
-``` {r}
+```{r}
 
 #### Build correlation matrix ####
 csa_tree_temp_demographics %>%
@@ -350,7 +350,7 @@ csa_tree_temp_demographics %>%
 
 Below is the trend viewed graphically:
 
-``` {r}
+```{r}
 
 # CSAs to call out
 callout_ls <- c("Canton", "Clifton-Berea", "Greater Roland Park/Poplar Hill", "Greenmount East")
@@ -426,7 +426,7 @@ csa_tree_temp_demographics %>%
 
 There are some exceptions to this trend, such as Penn North/Reservoir Hill and Greater Rosemont, which both have relatively high rates of both poverty and tree canopy:
 
-``` {r, columns.print=5}
+```{r, columns.print=5}
 
 csa_tree_temp_demographics %>%
   select(csa2010, 
@@ -447,7 +447,7 @@ Average canopy cover by NSA is visualized in the following choropleth map, which
 
 When comparing temperature to tree canopy, we see a strong correllation of -.89. In other words, places with high temperatures tend to have fewer trees.
 
-``` {r}
+```{r}
 
 #### Build correlation matrix ####
 csa_tree_temp_demographics %>%
@@ -524,11 +524,17 @@ What were the citywide gains and losses?
 
 ```{r}
 
-#### INCOMPLETE: WILL USE QGIS TO DO THIS CONFIRMATION ####
+read_csv(paste0(path_to_data, "citywide_2007_2015_lidar.csv")) %>%
+  rename_all(tolower) %>%
+  mutate_if(is.character, tolower) %>%
+  select(county, `07_mean`, `15_mean`) %>%
+  mutate(real_change = `15_mean` - `07_mean`,
+         perc_change = round(100*((`15_mean` - `07_mean`)/`07_mean`), 2)
+         )
 
 ```
 
-How many geographies gained and lost tree cover?
+How many neighborhoods and blocks gained and lost tree cover?
 
 ```{r}
 
@@ -559,7 +565,7 @@ nsa_tree_temp %>%
 
 ### Tree cover in redlined areas 
 
-``` {r}
+```{r}
 redlining_tree %>%
   group_by(holc_grade, grade_descr) %>%
   summarise(total_area_pixels = sum(`count_all_pix_15`),
@@ -571,7 +577,7 @@ redlining_tree %>%
 
 The following data is originally sourced from the Baltimore City Department of Recreation and Parks, as explained in the [Code Red Data Cleaning document](https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/documentation/code-red-data-cleaning.md#load-and-clean-individual-tree-data).
 
-``` {r}
+```{r}
 # Colorblind-friendly palette
 cbPalette <- c("#999999", # Dark Gray
                "#E69F00", # Mustard Yellow
@@ -611,7 +617,7 @@ street_trees_nsa_summarized %>%
 
 ```
 
-``` {r, out.width='1000px'}
+```{r, out.width='1000px'}
 
 # Plot HEIGHT by nsa for ALL nsas using controled averages
 ggplot(filter(street_trees_nsa_summarized, !is.na(avg_ht_controled)), 
@@ -634,7 +640,7 @@ ggplot(filter(street_trees_nsa_summarized, !is.na(avg_ht_controled)),
 
 It is clear that taller trees are more common in wealthier NSAs compared to poorer ones such as Broadway East.
 
-``` {r, rows.print=19}
+```{r, rows.print=19}
 
 street_trees_nsa_categorized %>%
   select(nbrdesc, tree_ht) %>%
@@ -658,7 +664,7 @@ street_trees_nsa_categorized %>%
 
 In addition to tracking each tree, the City of Baltimore also tracks spaces where trees could potentiall by planted. This, along with methodology for determining ease-of-planting classifications, is further explained in the [Code Red Data Cleaning document](https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/documentation/code-red-data-cleaning.md#load-and-clean-individual-tree-data).
 
-``` {r, rows.print=19}
+```{r, rows.print=19}
 
 #### Relevant info from table ####
 street_trees_nsa_summarized %>%
@@ -669,7 +675,7 @@ street_trees_nsa_summarized %>%
 
 Not only are there more trees in Roland Park than Broadway East, but the untreed spaces are considerably easier to plant.
 
-``` {r, rows.print=11}
+```{r, rows.print=11}
 
 #### Summarize planting difficulty in Broadway East and Roland Park ####
 street_trees_nsa_categorized %>%
@@ -742,7 +748,7 @@ street_trees_nsa_categorized %>%
 
 Larger (and therefore older) trees in the south-eastern neighborhoods tend to be less healthy than those in the northwest. 
 
-``` {r}
+```{r}
 
 #### Relevant info from table ####
 street_trees_nsa_categorized %>%
@@ -752,7 +758,7 @@ street_trees_nsa_categorized %>%
 
 When looking at larger trees, Roland Park is ranked 28th in for percent in good condition. Broadway East, by contrast, is ranked 227th of 277 NSAs.
 
-``` {r, rows.print = 19}
+```{r, rows.print = 19}
 
 #### Find counts of each tree condition in NSAs of interest, and calculate the percentage that are in good condition ####
 street_trees_nsa_categorized %>%
@@ -777,6 +783,18 @@ street_trees_nsa_categorized %>%
   filter((nbrdesc %in% target_nsas) | (nbrdesc %in% counterpoint_nsas))
 
 ```
+
+
+### CCTV tree trimming data
+
+```{r, rows.print = 15}
+
+cctv_cameras_street_trees <- read_csv(paste0(path_to_data, "cctv_cameras_street_trees.csv"))
+cctv_cameras_street_trees
+
+```
+
+There are `r nrow(cctv_cameras_street_trees)` trees that have been marked for trimming or removal in this table.
 
 ### Individual street trees
 

@@ -15,6 +15,7 @@
     -   [Height](#height)
     -   [Difficulty of planting](#difficulty-of-planting)
     -   [Condition of trees](#condition-of-trees)
+    -   [CCTV tree trimming data](#cctv-tree-trimming-data)
     -   [Individual street trees](#individual-street-trees)
 
 Introduction
@@ -53,7 +54,6 @@ library(colorspace) # For improved color palettes
 library(ggplot2) # For graphing
 library(ggrepel) # For graph labeling
 require(scales) # For percent labeling on distribution tables
-#library(here) # For cleaner file path writing
 
 # Turn off scientific notation in RStudio (prevents coersion to character type)
 options(scipen = 999)
@@ -76,7 +76,7 @@ target_nsas <- c("Berea", "Broadway East", "Oliver", "Middle East",
                  "Patterson Place", "Patterson Park Neighborhood", 
                  "Baltimore Highlands", "Highlandtown", 
                  "Upper Fells Point") %>%
-  lapply(tolower)
+                lapply(tolower)
 
 counterpoint_nsas <- c("Butcher's Hill", "Canton", "Washington Hill", "Roland Park") %>%
   lapply(tolower)
@@ -516,7 +516,7 @@ csa_tree_temp_demographics %>%
         plot.subtitle = element_text(size = 12))
 ```
 
-![](role-of-trees-data-analysis_files/figure-markdown_github/unnamed-chunk-18-1.png)
+![](role-of-trees-data-analysis_files/figure-markdown_github/unnamed-chunk-17-1.png)
 
 There are some exceptions to this trend, such as Penn North/Reservoir Hill and Greater Rosemont, which both have relatively high rates of both poverty and tree canopy:
 
@@ -670,10 +670,21 @@ nsa_tree_temp %>%
 What were the citywide gains and losses?
 
 ``` r
-#### INCOMPLETE: WILL USE QGIS TO DO THIS CONFIRMATION ####
+read_csv(paste0(path_to_data, "citywide_2007_2015_lidar.csv")) %>%
+  rename_all(tolower) %>%
+  mutate_if(is.character, tolower) %>%
+  select(county, `07_mean`, `15_mean`) %>%
+  mutate(real_change = `15_mean` - `07_mean`,
+         perc_change = round(100*((`15_mean` - `07_mean`)/`07_mean`), 2)
+         )
 ```
 
-How many geographies gained and lost tree cover?
+    ## # A tibble: 1 x 5
+    ##   county         `07_mean` `15_mean` real_change perc_change
+    ##   <chr>              <dbl>     <dbl>       <dbl>       <dbl>
+    ## 1 baltimore city     0.279     0.282     0.00276        0.99
+
+How many neighborhoods and blocks gained and lost tree cover?
 
 ``` r
 #### NSAs ####
@@ -792,7 +803,7 @@ street_trees_nsa_summarized %>%
   theme(legend.position = "bottom")
 ```
 
-![](role-of-trees-data-analysis_files/figure-markdown_github/unnamed-chunk-30-1.png)
+![](role-of-trees-data-analysis_files/figure-markdown_github/unnamed-chunk-29-1.png)
 
 ``` r
 # Plot HEIGHT by nsa for ALL nsas using controled averages
@@ -813,7 +824,7 @@ ggplot(filter(street_trees_nsa_summarized, !is.na(avg_ht_controled)),
         axis.text.x = element_text(angle = 90, hjust = 1, size = 5))
 ```
 
-<img src="role-of-trees-data-analysis_files/figure-markdown_github/unnamed-chunk-31-1.png" width="1000px" />
+<img src="role-of-trees-data-analysis_files/figure-markdown_github/unnamed-chunk-30-1.png" width="1000px" />
 
 It is clear that taller trees are more common in wealthier NSAs compared to poorer ones such as Broadway East.
 
@@ -1079,6 +1090,30 @@ street_trees_nsa_categorized %>%
     ## 17 baltimore…    19    43    43              105      41.0              217
     ## 18 ellwood p…    33    78    70              181      38.7              224
     ## 19 broadway …    45   103    91              239      38.1              227
+
+### CCTV tree trimming data
+
+``` r
+cctv_cameras_street_trees <- read_csv(paste0(path_to_data, "cctv_cameras_street_trees.csv"))
+cctv_cameras_street_trees
+```
+
+    ## # A tibble: 94 x 2
+    ##    Description                   Address                                   
+    ##    <chr>                         <chr>                                     
+    ##  1 vri clear camera line of sig… 600 n patterson park ave, baltimore, md, …
+    ##  2 vri clear camera line of sig… 2301 e monument st, baltimore, md, 21205  
+    ##  3 vri clear camera line of sig… 2056 harford rd, baltimore, md, 21218     
+    ##  4 vri clear camera line of sig… 713 e preston st, baltimore, md, 21202    
+    ##  5 vri clear camera line of sig… 2056 harford rd, baltimore, md, 21218     
+    ##  6 vri clear camera line of sig… 2100 harford road, baltimore, md, 21218   
+    ##  7 vri clear camera line of sig… 2100 harford road, baltimore, md, 21218   
+    ##  8 vri clear camera line of sig… 50 market pl, baltimore, md, 21202        
+    ##  9 vri clear camera line of sig… 3001 east drive, baltimore, md 21217      
+    ## 10 vri clear camera line of sig… 3001 east drive, baltimore, md 21217      
+    ## # … with 84 more rows
+
+There are 94 trees that have been marked for trimming or removal in this table.
 
 ### Individual street trees
 
