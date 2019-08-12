@@ -68,6 +68,7 @@ library(tidyverse)
 library(janitor) # For cleaning names
 library(weathermetrics) # For calculating heat index
 library(readxl) # For reading in Excel files
+library(corrr) # For correlations
 
 # Turn off scientific notation in RStudio 
 # (prevents accidental coersion to character type on export)
@@ -267,7 +268,7 @@ path_to_data <- "../data/input-data/tree-canopy/post-qgis-processing/"
 
 ### Execute load-in and cleaning
 
-``` {r}
+```{r}
 
 #### Block ####
 # 2007
@@ -364,7 +365,7 @@ path_to_data <- "../data/input-data/demographics/"
 
 ### Execute load-in and cleaning
 
-``` {r}
+```{r}
 #### Blocks #### 
 # Read in 2010 population data, SF1 U.S. Census data by block. Used only to filter out no population blocks before doing analysis. Otherwise, 2010 data is too old to use.
 demographics_block <- read_csv(paste0(path_to_data, "by_block/2010_SF1_Baltimore_City_Population_by_Block.csv")) %>%
@@ -393,7 +394,7 @@ demographics_zcta <- read_csv(paste0(path_to_data, "by_zcta/acs_2017_baltimore_z
 
 Once the individual component data frames have been created and cleaned, they can be merged and saved for use in the analysis.
 
-``` {r}
+```{r}
 #### Blocks #### 
 # Demographics at this level only used for removing low population blocks
 blocks_tree_temp_population <- all_temp_block %>%
@@ -583,7 +584,7 @@ street_trees_categorized <- street_trees %>%
 
 ### Create building block tables
 
-``` {r}
+```{r}
 ######################################################
 ### Basic count tables, required for later queries ###
 ######################################################
@@ -656,7 +657,7 @@ tree_as_percent_of_spaces_by_nsa <- spaces_count_by_nsa_all %>%
   mutate(rank_perc_of_nontreed_are_suitable = rank(desc(perc_of_nontreed_are_suitable), na.last = "keep", ties.method = "first"))
 ```
 
-``` {r}
+```{r}
 
 ###################################
 ### Difficulty of planting ########
@@ -705,7 +706,7 @@ empty_spaces_by_diff_by_nsa <- empty_spaces_by_diff_by_nsa_count %>%
 
 ```
 
-``` {r}
+```{r}
 
 ######################################
 ### Tree condition by nsa ############
@@ -788,7 +789,7 @@ tree_condition_by_nsa <- tree_condition_by_nsa %>%
 
 ### Join all into master summary table
 
-``` {r}
+```{r}
 
 master_by_nsa <- tree_as_percent_of_spaces_by_nsa %>%
   left_join(empty_spaces_by_diff_by_nsa) %>%
@@ -824,7 +825,7 @@ path_to_data <- "../data/input-data/redlining-data/"
 
 ### Execute load in and cleaning
 
-``` {r}
+```{r}
 
 redlining_tree <- read_csv(paste0(path_to_data, "HOLC_Redlining_2015_tree_canopy.csv")) %>%
   select(-matches("name"), -matches("area_descr")) %>%
@@ -1148,72 +1149,91 @@ DESCRIPTION
 
 ### Store universal variables
 
-``` {r}
+```{r}
 # Common file path to raw EMS data
 path_to_data <- "../data/input-data/hscrc-hospital-data/"
+
+make_correlation_matrix <- function(dataframe) {
+  # Read in hospital data and join it to demographics by zipcode
+  temp <- left_join(dataframe, zcta_temp_demographics, by=c("ZIPCODE" = "zcta"))
+  # Filter data for needed columns and remove unneeded zipcodes
+  temp <- temp %>%
+    select(matches('ZIPCODE'), 
+           matches('kidney_disease'),             
+           matches('copd'),                     
+           matches('asthma'),                    
+           matches('heart_attack'),             
+           matches('congestive_artery_disease'),
+           matches('angina_pectoris'),           
+           matches('heart_disease'),            
+           matches('diabetes'),
+           matches('temp_median_aft')
+    ) %>%
+    na.omit(temp_median_aft)
+  
+  # Add merged temperature + condition dataframe to environment
+  table_name <- paste0(deparse(substitute(dataframe)), "_disease_heat")
+  assign(table_name, temp, envir = parent.frame())
+  
+  # Build correlation matrix
+  correlation_matrix <- temp %>%
+    select(-ZIPCODE) %>%
+    as.matrix %>%
+    correlate() %>%
+    focus(-matches("_prev")) %>%
+    select(matches("rowname|_%$|_f$|_d$|_a$|^temp_|_mean$")) %>%
+    filter(complete.cases(.))
+    
+
+  # Add merged temperature + condition dataframe to environment
+  table_name <- paste0(deparse(substitute(dataframe)), "_correlation_matrix")
+  assign(table_name, correlation_matrix, envir = parent.frame())
+
+}
+
+
 ```
 
 ### Execute Load in and Cleaning
 
-``` {r}
+```{r}
 # Load inpatient hospital admissions percentage by zipcode 
 ip_full_zip <- read_csv(paste0(path_to_data, "ip/ip_full_zip.csv"))
 ip_full_zip <- ip_full_zip %>%
-  filter(ZIPCODE != "CITYWIDE") %>%
+  filter(ZIPCODE != "CITYWIDE", ZIPCODE != "21251") %>%
   select(ZIPCODE, matches("asthma"), matches("kidney"), matches("diabetes"), matches("copd"), matches("heart"), matches("angina"), matches("artery"), -matches("count"), -matches("percap"), -matches("population") )
 
 # Load inpatient hospital admissions percentage by zipcode, broken down by medicaid status
 ip_full_zip_medicaid <- read_csv(paste0(path_to_data, "ip/ip_full_medicaid.csv"))
 ip_full_zip_medicaid <- ip_full_zip_medicaid %>%
-  filter(ZIPCODE != "CITYWIDE") %>%
+  filter(ZIPCODE != "CITYWIDE", ZIPCODE != "21251") %>%
   select(ZIPCODE, matches("asthma"), matches("kidney"), matches("diabetes"), matches("copd"), matches("heart"), matches("angina"), matches("artery"), -matches("count"), -matches("percap"), -matches("population"), -matches("not"), -matches("commercial")) %>%
   select(ZIPCODE, matches("medicaid"))
 
 # Load ER hospital admissions percentage by zipcode 
 op_er_full_zip <- read_csv(paste0(path_to_data, "op_er/op_er_full_zip.csv"))
 op_er_full_zip <- op_er_full_zip %>%
-  filter(ZIPCODE != "CITYWIDE") %>%
+  filter(ZIPCODE != "CITYWIDE", ZIPCODE != "21251") %>%
   select(ZIPCODE, matches("asthma"), matches("kidney"), matches("diabetes"), matches("copd"), matches("heart"), matches("angina"), matches("artery"), -matches("count"), -matches("percap"), -matches("population") )
 
 # Load ER hospital admissions percentage by zipcode, broken down by medicaid status
 op_er_full_zip_medicaid <- read_csv(paste0(path_to_data, "op_er/op_er_full_medicaid.csv"))
 op_er_full_zip_medicaid <- op_er_full_zip_medicaid %>%
-  filter(ZIPCODE != "CITYWIDE") %>%
+  filter(ZIPCODE != "CITYWIDE", ZIPCODE != "21251") %>%
   select(ZIPCODE, matches("asthma"), matches("kidney"), matches("diabetes"), matches("copd"), matches("heart"), matches("angina"), matches("artery"), -matches("count"), -matches("percap"), -matches("population"), -matches("not"), -matches("commercial")) %>%
   select(ZIPCODE, matches("medicaid"))
 
-
+# Execute function to create correlation matrixes and data frame for each function. 
+make_correlation_matrix(ip_full_zip)
+make_correlation_matrix(ip_full_zip_medicaid)
+make_correlation_matrix(op_er_full_zip)
+make_correlation_matrix(op_er_full_zip_medicaid)
 
 ```
-
-
-
-
-
-Last summer in Baltimore, when the heat index hit 103 degrees, EMS calls increased citywide for asthma, COPD and cardiovascular conditions.
-
-
-
-For the last five years in Baltimore, low-income people in the hottest parts of the city have visited the hospital at higher rates for those same conditions, when compared to low-income people in the cooler parts of town.
-
-ER VISITS
-
-ASTHMA
-COPD
-HEART DISEASE
-DIABETES
-KIDNEY DISEASE
-
-
 
 ## Load and Clean Sensor Data
 
 DESCRIPTION
-
-``` {r}
-
-
-```
 
 ### Store universal variables
 
@@ -1315,7 +1335,7 @@ path_to_data <- "../data/input-data/street-trees/"
 
 ```
 
-``` {r}
+```{r}
 
 #### Load in CCTV and tree trimming data
 cctv_cameras_street_trees <- read_excel(paste0(path_to_data, "Violence_Reduction_Locations.xls")) %>%
@@ -1327,24 +1347,37 @@ cctv_cameras_street_trees <- read_excel(paste0(path_to_data, "Violence_Reduction
 
 The following generated files are necessary for future portions of this analysis.
 
-``` {r}
+```{r}
 
 #### Common save path ####
 save_path <- "../data/output-data/cleaned/"
 
 #### Write to CSV ####
+
+# Tree Canopy, Heat Islaand Temperature, Demographics
 write_csv(blocks_tree_temp_population, paste0(save_path, "blocks_tree_temp_demographics.csv"))
 write_csv(csa_tree_temp_demographics, paste0(save_path, "csa_tree_temp_demographics.csv"))
 write_csv(nsa_tree_temp, paste0(save_path, "nsa_tree_temp.csv"))
 write_csv(zcta_temp_demographics, paste0(save_path, "zcta_temp_demographics.csv"))
+
+# Street Trees
 write_csv(street_trees_categorized, paste0(save_path, "street_trees_nsa_categorized.csv"))
 write_csv(master_by_nsa,  paste0(save_path, "street_trees_nsa_summarized.csv"))
+write_csv(cctv_cameras_street_trees, paste0(save_path, "cctv_cameras_street_trees.csv"))
+
+# Redlining and Trees
 write_csv(redlining_tree, paste0(save_path, "redlining_tree.csv"))
+
+# For EMS analysis
 write_csv(EMS_all, paste0(save_path, "EMS_all.csv"))
 write_csv(dmh_ems, paste0(save_path, "dmh_ems.csv"))
+
+# Weather Station Data
 write_csv(estimated_historical_dmh, paste0(save_path, "estimated_historical_dmh.csv"))
 write_csv(dmh, paste0(save_path, "dmh.csv"))
 write_csv(bwi, paste0(save_path, "bwi.csv"))
+
+# Sensor Data
 write_csv(stephanie_day_averages, paste0(save_path, "stephanie_day_averages.csv"))
 write_csv(stephanie_day_hourly_averages, paste0(save_path, "stephanie_day_hourly_averages.csv"))
 write_csv(stephanie_day_minute_averages, paste0(save_path, "stephanie_day_minute_averages.csv"))
@@ -1357,10 +1390,26 @@ write_csv(michael_day_minute_averages, paste0(save_path, "michael_day_minute_ave
 write_csv(audrey_day_averages, paste0(save_path, "audrey_day_averages.csv"))
 write_csv(audrey_day_hourly_averages, paste0(save_path, "audrey_day_hourly_averages.csv"))
 write_csv(audrey_day_minute_averages, paste0(save_path, "audrey_day_minute_averages.csv"))
-write_csv(cctv_cameras_street_trees, paste0(save_path, "cctv_cameras_street_trees.csv"))
 
+# Hospital Data 
+# Inpatient by Zip Code
+write_csv(ip_full_zip_correlation_matrix, paste0(save_path, "ip_full_zip_correlation_matrix.csv"))
+write_csv(ip_full_zip_disease_heat, paste0(save_path, "ip_full_zip_disease_heat.csv"))
+
+# Emergency Room by Zip Code
+write_csv(op_er_full_zip_correlation_matrix, paste0(save_path, "op_er_full_zip_correlation_matrix.csv"))
+write_csv(op_er_full_zip_disease_heat, paste0(save_path, "op_er_full_zip_disease_heat.csv"))
+
+# Medicaid Inpatient by Zip Code
+write_csv(ip_full_zip_medicaid_correlation_matrix, paste0(save_path, "ip_full_zip_medicaid_correlation_matrix.csv"))
+write_csv(ip_full_zip_medicaid_disease_heat, paste0(save_path, "ip_full_zip_medicaid_disease_heat.csv"))
+
+# Medicaid Emergency Room by ZipCode
+write_csv(op_er_full_zip_medicaid_correlation_matrix, paste0(save_path, "op_er_full_zip_medicaid_correlation_matrix.csv"))
+write_csv(op_er_full_zip_medicaid_disease_heat, paste0(save_path, "op_er_full_zip_medicaid_disease_heat.csv"))
 
 
 #### Clean up the workspace ####
 rm(list=setdiff(ls(), c("blocks_tree_temp_population", "zcta_temp_demographics", "nsa_tree_temp", "csa_tree_temp_demographics", "street_trees_categorized", "redlining_tree")))
+
 ```

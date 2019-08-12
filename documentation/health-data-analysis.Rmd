@@ -228,6 +228,8 @@ audrey_day_hourly_averages %>%
 
 ```
 
+Asthma rates in low-income areas like McElderry Park and Broadway East are higher than in more affluent areas,
+
 #### GRAPHICS
 
 * https://amarton.github.io/2019-baltimore-climate-health-project-graphics-repo/health-leaflet-map/combined-maps.html
