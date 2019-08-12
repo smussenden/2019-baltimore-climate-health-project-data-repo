@@ -534,7 +534,7 @@ read_csv(paste0(path_to_data, "citywide_2007_2015_lidar.csv")) %>%
 
 ```
 
-How many geographies gained and lost tree cover?
+How many neighborhoods and blocks gained and lost tree cover?
 
 ```{r}
 

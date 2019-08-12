@@ -516,7 +516,7 @@ csa_tree_temp_demographics %>%
         plot.subtitle = element_text(size = 12))
 ```
 
-![](role-of-trees-data-analysis_files/figure-markdown_github/unnamed-chunk-46-1.png)
+![](role-of-trees-data-analysis_files/figure-markdown_github/unnamed-chunk-17-1.png)
 
 There are some exceptions to this trend, such as Penn North/Reservoir Hill and Greater Rosemont, which both have relatively high rates of both poverty and tree canopy:
 
@@ -684,7 +684,7 @@ read_csv(paste0(path_to_data, "citywide_2007_2015_lidar.csv")) %>%
     ##   <chr>              <dbl>     <dbl>       <dbl>       <dbl>
     ## 1 baltimore city     0.279     0.282     0.00276        0.99
 
-How many geographies gained and lost tree cover?
+How many neighborhoods and blocks gained and lost tree cover?
 
 ``` r
 #### NSAs ####
@@ -803,7 +803,7 @@ street_trees_nsa_summarized %>%
   theme(legend.position = "bottom")
 ```
 
-![](role-of-trees-data-analysis_files/figure-markdown_github/unnamed-chunk-58-1.png)
+![](role-of-trees-data-analysis_files/figure-markdown_github/unnamed-chunk-29-1.png)
 
 ``` r
 # Plot HEIGHT by nsa for ALL nsas using controled averages
@@ -824,7 +824,7 @@ ggplot(filter(street_trees_nsa_summarized, !is.na(avg_ht_controled)),
         axis.text.x = element_text(angle = 90, hjust = 1, size = 5))
 ```
 
-<img src="role-of-trees-data-analysis_files/figure-markdown_github/unnamed-chunk-59-1.png" width="1000px" />
+<img src="role-of-trees-data-analysis_files/figure-markdown_github/unnamed-chunk-30-1.png" width="1000px" />
 
 It is clear that taller trees are more common in wealthier NSAs compared to poorer ones such as Broadway East.
 
