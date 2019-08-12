@@ -778,6 +778,20 @@ street_trees_nsa_categorized %>%
 
 ```
 
+
+### CCTV tree trimming data
+
+The following data is a sample of tree trimming and removal requests by police to the Baltimore City Recreation & Parks Urban Forestry Division.
+
+``` {r, rows.print = 15}
+
+cctv_cameras_street_trees <- read_csv(paste0(path_to_data, "cctv_cameras_street_trees.csv"))
+cctv_cameras_street_trees
+
+```
+
+There are `r nrow(cctv_cameras_street_trees)` trees that have been marked for trimming or removal in this table.
+
 ### Individual street trees
 
 The story references a number of trees in Broadway East along N. Milton Avenue and E. Lanvale Street. All trees and potential tree locations along those stretches of road are referenced below:

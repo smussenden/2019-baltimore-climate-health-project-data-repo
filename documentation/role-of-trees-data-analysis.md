@@ -53,7 +53,6 @@ library(colorspace) # For improved color palettes
 library(ggplot2) # For graphing
 library(ggrepel) # For graph labeling
 require(scales) # For percent labeling on distribution tables
-#library(here) # For cleaner file path writing
 
 # Turn off scientific notation in RStudio (prevents coersion to character type)
 options(scipen = 999)
@@ -76,7 +75,7 @@ target_nsas <- c("Berea", "Broadway East", "Oliver", "Middle East",
                  "Patterson Place", "Patterson Park Neighborhood", 
                  "Baltimore Highlands", "Highlandtown", 
                  "Upper Fells Point") %>%
-  lapply(tolower)
+                lapply(tolower)
 
 counterpoint_nsas <- c("Butcher's Hill", "Canton", "Washington Hill", "Roland Park") %>%
   lapply(tolower)
@@ -516,7 +515,7 @@ csa_tree_temp_demographics %>%
         plot.subtitle = element_text(size = 12))
 ```
 
-![](role-of-trees-data-analysis_files/figure-markdown_github/unnamed-chunk-18-1.png)
+![](role-of-trees-data-analysis_files/figure-markdown_github/unnamed-chunk-48-1.png)
 
 There are some exceptions to this trend, such as Penn North/Reservoir Hill and Greater Rosemont, which both have relatively high rates of both poverty and tree canopy:
 
@@ -792,7 +791,7 @@ street_trees_nsa_summarized %>%
   theme(legend.position = "bottom")
 ```
 
-![](role-of-trees-data-analysis_files/figure-markdown_github/unnamed-chunk-30-1.png)
+![](role-of-trees-data-analysis_files/figure-markdown_github/unnamed-chunk-60-1.png)
 
 ``` r
 # Plot HEIGHT by nsa for ALL nsas using controled averages
@@ -813,7 +812,7 @@ ggplot(filter(street_trees_nsa_summarized, !is.na(avg_ht_controled)),
         axis.text.x = element_text(angle = 90, hjust = 1, size = 5))
 ```
 
-<img src="role-of-trees-data-analysis_files/figure-markdown_github/unnamed-chunk-31-1.png" width="1000px" />
+<img src="role-of-trees-data-analysis_files/figure-markdown_github/unnamed-chunk-61-1.png" width="1000px" />
 
 It is clear that taller trees are more common in wealthier NSAs compared to poorer ones such as Broadway East.
 

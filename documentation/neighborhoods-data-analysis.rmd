@@ -16,7 +16,7 @@ output:
 
 ```{r include=FALSE}
 # Save this file and run the following line from the Console to output both HTML and .md formats:
-# rmarkdown::render('documentation/role-of-trees-data-analysis.Rmd', output_format = 'all')
+# rmarkdown::render('documentation/neighborhoods-data-analysis.Rmd', output_format = 'all')
 ```
 
 
@@ -73,6 +73,9 @@ options(scipen = 999)
 
 #### Common path to data ####
 path_to_data <- "../data/output-data/cleaned/"
+
+#### Common save path ####
+save_path <- "../data/output-data/cleaned/"
 
 ###################
 #### Load Data ####
@@ -152,6 +155,7 @@ select_x <- function(df){
 
 ```
 
+## Line-By-Line Fact-Check
 
 ...a dangerous, 11-day heat wave tormented the city this summer...
 Some issues here, let's talk about this line
@@ -610,7 +614,7 @@ chart_title <- "hourly averages"
 But citywide, the tree canopy is just 27%, up from 26% X years before. Washington’s is XX%. 
 
 ``` {r}
-TBD
+# TBD
 ```
 And in 2015, many East Baltimore neighborhoods had a tree canopy of about 10%, according to a Howard Center analysis of tree canopy data gathered by researchers at the U.S. Forest Service and the University of Vermont.  
 MORE ACCURATE TO SAY IN EAST BALTIMORE, MOST HAD LESS THAN 10 percent.
@@ -646,26 +650,39 @@ blocks_tree_temp_demographics %>%
 As temperatures at Baltimore’s Inner Harbor reached 100 on July 20, most everyone around 
 * Will have to do this by official records, not our data. Put in link here. 
 
-### GRAPHICS
+## Graphics: Temperature vs. Demographics
+
+These data confirm the graphs found [here](https://amarton.github.io/2019-baltimore-climate-health-project-graphics-repo/heat-demographics-scatterplots/combined-scatterplots.html).
 
 ``` {r}
 
-w <- csa_tree_temp_demographics %>%
+#### Save working table of only the variables needed for this story ####
+wk_csa_tree_temp_demographics <- csa_tree_temp_demographics %>%
   select(matches("csa2010"), matches("temp_mean_aft"),
          perc_below_poverty = matches("percent_of_family_households_living_below_the_poverty_line"),
          matches("violent_crime_rate_per_1_000_residents"), matches("life_expectancy"),
-         matches("unemployment_rate"))
+         matches("unemployment_rate")) %>%
+  arrange(desc(temp_mean_aft))
+
+#### Save the table to CSV for reference ####
+write_csv(wk_csa_tree_temp_demographics, paste0(save_path, "csa_tree_temp_demographics_truncated.csv"))
+
+#### Remove working table from workspace ####
+rm(wk_csa_tree_temp_demographics)
 
 ```
 
-#### Temperature v. Poverty
+### Poverty
+
+Percent of families living below the poverty line compared to mean temperature:
 
 ``` {r}
 
 #### Data used ####
 csa_tree_temp_demographics %>%
   select(matches("csa2010"), matches("temp_mean_aft"),
-         perc_below_poverty = matches("percent_of_family_households_living_below_the_poverty_line"))
+         perc_below_poverty = matches("percent_of_family_households_living_below_the_poverty_line")) %>%
+  arrange(desc(temp_mean_aft))
 
 #### Build correlation matrix ####
 wk_corr <- csa_tree_temp_demographics %>%
@@ -675,6 +692,7 @@ wk_corr <- csa_tree_temp_demographics %>%
   correlate() %>%
   mutate(variable=rowname) %>%
   select(variable, everything(), -rowname)
+#### Print out correlation matrix ####
 wk_corr
 
 #### Scatterplot ####
@@ -686,16 +704,19 @@ csa_tree_temp_demographics %>%
   
 ```
 
-There is a `round(wk_corr[[2, 2]], 2)` correlation between temperature and poverty.
+There is a `r round(wk_corr[[2, 2]], 2)` correlation between temperature and poverty.
 
-#### Temperature v. Crime
+### Crime
+
+Rates of violent crime per 1,000 residents compared to mean temperature:
 
 ``` {r}
 
 #### Data used ####
 csa_tree_temp_demographics %>%
   select(matches("csa2010"), matches("temp_mean_aft"),
-         matches("violent_crime_rate_per_1_000_residents"), matches("life_expectancy"))
+         matches("violent_crime_rate_per_1_000_residents"), matches("life_expectancy")) %>%
+  arrange(desc(temp_mean_aft))
 
 #### Build correlation matrix ####
 wk_corr <- csa_tree_temp_demographics %>%
@@ -705,6 +726,7 @@ wk_corr <- csa_tree_temp_demographics %>%
   correlate() %>%
   mutate(variable=rowname) %>%
   select(variable, everything(), -rowname)
+#### Print out correlation matrix ####
 wk_corr
 
 #### Scatterplot ####
@@ -716,16 +738,19 @@ csa_tree_temp_demographics %>%
   
 ```
 
-There is a `round(wk_corr[[2, 2]], 2)` correlation between temperature and crime.
+There is a `r round(wk_corr[[2, 2]], 2)` correlation between temperature and crime.
 
-#### Temperature v. life expectancy
+### Life expectancy
+
+Average life expectancy of neighborhood residents compared to mean temperature:
 
 ``` {r}
 
 #### Data used ####
 csa_tree_temp_demographics %>%
   select(matches("csa2010"), matches("temp_mean_aft"),
-         matches("life_expectancy"))
+         matches("life_expectancy")) %>%
+  arrange(desc(temp_mean_aft))
 
 #### Build correlation matrix ####
 wk_corr <- csa_tree_temp_demographics %>%
@@ -734,7 +759,8 @@ wk_corr <- csa_tree_temp_demographics %>%
   as.matrix() %>%
   correlate() %>%
   mutate(variable=rowname) %>%
-  select(variable, everything(), -rowname)
+  select(variable, everything(), -rowname) 
+#### Print out correlation matrix ####
 wk_corr
 
 #### Scatterplot ####
@@ -746,16 +772,19 @@ csa_tree_temp_demographics %>%
   
 ```
 
-There is a `round(wk_corr[[2, 2]], 2)` correlation between temperature and life expectancy.
+There is a `r round(wk_corr[[2, 2]], 2)` correlation between temperature and life expectancy.
 
-#### Temperature v. unemployment rate
+### Unemployment rate
+
+Unemployment rates among residents compared to mean temperature:
 
 ``` {r}
 
 #### Data used ####
 csa_tree_temp_demographics %>%
   select(matches("csa2010"), matches("temp_mean_aft"),
-         matches("unemployment_rate"))
+         matches("unemployment_rate")) %>%
+  arrange(desc(temp_mean_aft))
 
 #### Build correlation matrix ####
 wk_corr <- csa_tree_temp_demographics %>%
@@ -765,6 +794,7 @@ wk_corr <- csa_tree_temp_demographics %>%
   correlate() %>%
   mutate(variable=rowname) %>%
   select(variable, everything(), -rowname)
+#### Print out correlation matrix ####
 wk_corr
 
 #### Scatterplot ####
@@ -776,8 +806,10 @@ csa_tree_temp_demographics %>%
   
 ```
 
-There is a `round(wk_corr[[2, 2]], 2)` correlation between temperature and unemployment rate.
+There is a `r round(wk_corr[[2, 2]], 2)` correlation between temperature and unemployment rate.
 
 ``` {r include=FALSE}
+
+#### Delete the temporary table used to display correlations in-line ####
 rm(wk_corr)
 ```
