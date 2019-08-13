@@ -159,7 +159,7 @@ select_x <- function(df){
 
 ...a dangerous, 11-day heat wave tormented the city this summer...
 Some issues here, let's talk about this line
-``` {r}
+```{r}
 
  dmh %>%
   filter(`date` >= date("2019-07-01") & `date` <= ("2019-07-31")) %>%
@@ -178,7 +178,7 @@ Some issues here, let's talk about this line
 “Can’t even put your head out the door,” said Tammy Wilson Jackson, 48, on a day when the temperature at the Inner Harbor hit 100 degrees.
 Was this Sunday 7/21? If so, we can use our data, which is hourly averages.  If it was Saturday 7/20, then we're going to have to use NWS official records, which captures minute by minute records
 
-``` {r}
+```{r}
 
  dmh %>%
   filter(`date` >= date("2019-07-01") & `date` <= ("2019-07-31")) %>%
@@ -197,7 +197,7 @@ Was this Sunday 7/21? If so, we can use our data, which is hourly averages.  If 
 data show that temperatures here [McElderry Park] and in surrounding neighborhoods can run 10 degrees hotter than in communities that have more trees and less pavement. 
 IF WE USE MEAN IT'S 8.3 degrees NOTE I TOOK OUT GWYNNS FALLS
 
-``` {r}
+```{r}
 nsa_tree_temp %>%
   select(nsa_name, temp_mean_aft) %>%
   filter(nsa_name != "gwynns falls/leakin park") %>%
@@ -208,7 +208,7 @@ nsa_tree_temp %>%
 
 McElderry Park ... which despite its lyrical name offers little green space, is the hottest neighborhood in Baltimore. 
 
-``` {r}
+```{r}
 nsa_tree_temp %>%
   select(nsa_name, temp_mean_aft) %>%
   arrange(desc(temp_mean_aft))
@@ -218,13 +218,13 @@ nsa_tree_temp %>%
 
 Residents on these blocks tend to make more emergency calls for illness, city data show. NO IDEA.
 
-``` {r}
+```{r}
 
 ```
 
 In hot weather, calls for help increase.
 LETS TALK TO SANDY ABOUT A BETTER WAY
-``` {r}
+```{r}
 
 # Five-part NWS heat index danger scale
 heat_index_count_per_nws_five_scale_bucket <- dmh_ems %>%
@@ -252,7 +252,7 @@ call_heat_index_ratio_five_primary_impression_group <- EMS_all %>%
 Ambulance calls related to diabetes, for example, where 6.5 times more frequent when the heat index rose to 103.
 LETS TALK TO SANDY ABOUT COMING UP WITH A BETTER WAY
 
-``` {r}
+```{r}
 
 # Create dataframes with a count of hourly heat_index readings for each bucket ###
 
@@ -281,7 +281,7 @@ call_heat_index_ratio_five_primary_impression_group <- EMS_all %>%
 
 Households in the city’s hottest neighborhoods have lower incomes, 
 WOULD SUGGEST REWRITING AS POVERTY RATE AND AREAS
-``` {r}
+```{r}
  csa_tree_temp_demographics %>%
   select_x() %>%
   as.matrix() %>%
@@ -300,7 +300,7 @@ csa_tree_temp_demographics %>%
 
 Public transportation, which many residents here use, is unreliable.
 
-``` {r}
+```{r}
  csa_tree_temp_demographics %>%
   select_x() %>%
   as.matrix() %>%
@@ -319,7 +319,7 @@ csa_tree_temp_demographics %>%
 The streets have fewer trees than those in more affluent communities.
 TECHNICALLY LESS TREE CANOPY
 
-``` {r}
+```{r}
  csa_tree_temp_demographics %>%
   select_x() %>%
   as.matrix() %>%
@@ -409,7 +409,7 @@ csa_tree_temp_demographics %>%
 
 Crime rates are higher, so many people won’t put an air-conditioning unit in a first-floor window for fear of break-ins. 
 
-``` {r}
+```{r}
  csa_tree_temp_demographics %>%
   select_x() %>%
   as.matrix() %>%
@@ -502,7 +502,7 @@ Reporters from the University of Maryland’s Howard Center for Investigative Jo
 
 Those sensors recorded temperatures that reached as high as 97 degrees and heat index values of 119 degrees.  
 CORRECT
-``` {r}
+```{r}
 
 all_sensors_day_minute_averages <- bind_rows(michael_day_minute_averages, tammy_day_minute_averages, stephanie_day_minute_averages) 
 
@@ -518,7 +518,7 @@ all_sensors_day_minute_averages %>%
 On the first floor of Wilson Jackson’s two-story rowhouse, the heat index registered 94 degrees at 10 p.m. on Sunday, July 21. Outside, the heat index was 9 degrees lower, 84 degrees. 
 NOTE: SHOULD BE 93 DEGREES.
 
-``` {r}
+```{r}
 tammy_day_hourly_averages %>%
   mutate(date = date(date_hour)) %>%
   mutate(hour = hour(date_hour)) %>%
@@ -541,7 +541,7 @@ tammy_day_minute_averages %>%
 At 7 p.m. Friday, the heat index in Baltimore hit 107 degrees in the Inner Harbor.  Inside Stephanie Pingley’s house, it was 9 degrees hotter, with a heat index of 116 degrees.
 DIFFERENT VALUES, FIX THESE.
 
-``` {r}
+```{r}
 
 stephanie_day_hourly_averages %>%
   mutate(date = date(date_hour)) %>%
@@ -563,7 +563,7 @@ stephanie_day_minute_averages %>%
 By Saturday, the temperature inside the second-floor apartment of Michael Thomas and Alberta Wilkerson hit 96 degrees. 
 YES, BUT the heat index hit 112!
 
-``` {r}
+```{r}
 
 michael_day_hourly_averages %>%
   mutate(date = date(date_hour)) %>%
@@ -582,7 +582,7 @@ michael_day_hourly_averages %>%
 
 A sensor inside a bedroom showed that the heat index during the heat wave was consistently higher inside than outside Pingley’s house. 
 
-``` {r}
+```{r}
 
 stephanie_day_hourly_averages %>%
   mutate(hourly_mean_group = "hourly_mean_group") %>%
@@ -613,13 +613,13 @@ chart_title <- "hourly averages"
 
 But citywide, the tree canopy is just 27%, up from 26% X years before. Washington’s is XX%. 
 
-``` {r}
+```{r}
 # TBD
 ```
 And in 2015, many East Baltimore neighborhoods had a tree canopy of about 10%, according to a Howard Center analysis of tree canopy data gathered by researchers at the U.S. Forest Service and the University of Vermont.  
 MORE ACCURATE TO SAY IN EAST BALTIMORE, MOST HAD LESS THAN 10 percent.
 
-``` {r}
+```{r}
 
 east_baltimore_nsas <- c("Berea", "Broadway East", "Oliver", "Middle East", 
                  "Biddle Street","Milton-Montford", "Madison-Eastend", 
@@ -639,7 +639,7 @@ nsa_tree_temp %>%
 Some blocks have no trees at all. 
 ALSO TRUE FROM OBSERVATIONS
 
-``` {r}
+```{r}
 blocks_tree_temp_demographics %>%
   filter(`15_lid_mean` == 0) %>%
   filter(population_2010 >0) %>%
@@ -654,7 +654,7 @@ As temperatures at Baltimore’s Inner Harbor reached 100 on July 20, most every
 
 These data confirm the graphs found [here](https://amarton.github.io/2019-baltimore-climate-health-project-graphics-repo/heat-demographics-scatterplots/combined-scatterplots.html).
 
-``` {r}
+```{r}
 
 #### Save working table of only the variables needed for this story ####
 wk_csa_tree_temp_demographics <- csa_tree_temp_demographics %>%
@@ -676,7 +676,7 @@ rm(wk_csa_tree_temp_demographics)
 
 Percent of families living below the poverty line compared to mean temperature:
 
-``` {r}
+```{r}
 
 #### Data used ####
 csa_tree_temp_demographics %>%
@@ -710,7 +710,7 @@ There is a `r round(wk_corr[[2, 2]], 2)` correlation between temperature and pov
 
 Rates of violent crime per 1,000 residents compared to mean temperature:
 
-``` {r}
+```{r}
 
 #### Data used ####
 csa_tree_temp_demographics %>%
@@ -744,7 +744,7 @@ There is a `r round(wk_corr[[2, 2]], 2)` correlation between temperature and cri
 
 Average life expectancy of neighborhood residents compared to mean temperature:
 
-``` {r}
+```{r}
 
 #### Data used ####
 csa_tree_temp_demographics %>%
@@ -778,7 +778,7 @@ There is a `r round(wk_corr[[2, 2]], 2)` correlation between temperature and lif
 
 Unemployment rates among residents compared to mean temperature:
 
-``` {r}
+```{r}
 
 #### Data used ####
 csa_tree_temp_demographics %>%
