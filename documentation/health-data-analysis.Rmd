@@ -218,6 +218,20 @@ It was the morning of July 19 (TD 8/7/19), and the outdoor temperature would ris
 
 ```
 
+Pingley says that room can get as “hot as Hades,” which is reflected in readings of a sensor placed there. The heat index in that room climbed as high as 118 degrees and never dropped below 88 degrees for a seven-day stretch.
+
+```{r}
+check_stephanie_day_minute_averages <- stephanie_day_minute_averages %>%
+  filter(date_hour_minute >= "2019-07-16 00:00:00", 
+         date_hour_minute <= "2019-07-22 23:59:00") %>%
+  arrange(mean_indoor_heat_index)
+
+class(stephanie_day_minute_averages)
+
+#The sentence above is true.
+
+```
+
 Air conditioning is an effective tool to tame the harmful effects of extreme heat, but DeWitt has only two units, one on the first floor near where she sleeps and another upstairs, and they don’t cool the entire house, she says. A sensor placed there by University of Maryland journalists WE WILL DROP IN DATA HERE ON SENSOR READING IN DEWITTS HOUSE. 
 
 ``` {r}
