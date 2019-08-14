@@ -343,18 +343,19 @@ hi_over_103_dmh <- estimated_inner_harbor_data %>%
   group_by(year, month) %>%
   summarise(count=n())
 
-ggplot(data = hi_over_103_dmh, aes(x=year, y=count)) + 
-  geom_col() + 
-  geom_smooth() + 
-  theme(plot.title = element_text(size = 25),
-        axis.title = element_text(size=20),
-        axis.text = element_text(size=15)) +
-  labs(title = "#Hours When Heat Index > 103 in Inner Harbor",
-       x = "Year",
-       y = "#Hours")
-ggsave(filename = "dmh_hours_heat_index_over_103.png",
-       device = "png", path = "/Users/tdiff/Documents/Github/bwi_dmh_temps/Graphs",
-       width = 20, height = 15, units = "in")
+#to run ggplot data, take out final summarise statement
+#ggplot(data = hi_over_103_dmh, aes(x=year, y=count)) + 
+#  geom_col() + 
+#  geom_smooth() + 
+#  theme(plot.title = element_text(size = 25),
+#        axis.title = element_text(size=20),
+#        axis.text = element_text(size=15)) +
+#  labs(title = "#Hours When Heat Index > 103 in Inner Harbor",
+#       x = "Year",
+#       y = "#Hours")
+#ggsave(filename = "dmh_hours_heat_index_over_103.png",
+#       device = "png", path = "/Users/tdiff/Documents/Github/bwi_dmh_temps/Graphs",
+#       width = 20, height = 15, units = "in")
 
 ```
 
@@ -379,18 +380,19 @@ hi_over_ninety_bwi <- clean_bwi_data %>%
   summarise(count=n()) %>%
   summarise(average_days = mean(count))
 
-ggplot(data = hi_over_ninety_bwi, aes(x=year, y=count)) + 
-  geom_col() + 
-  geom_smooth() + 
-  theme(plot.title = element_text(size = 25),
-        axis.title = element_text(size=20),
-        axis.text = element_text(size=15)) +
-  labs(title = "#Days When Heat Index > 90 in BWI",
-       x = "Year",
-       y = "Days")
-ggsave(filename = "bwi_days_heat_index_over_ninety.png",
-       device = "png", path = "/Users/tdiff/Documents/Github/bwi_dmh_temps/Graphs",
-       width = 20, height = 15, units = "in")
+#to run ggplot data, take out final summarise statement above
+#ggplot(data = hi_over_ninety_bwi, aes(x=year, y=count)) + 
+#  geom_col() + 
+#  geom_smooth() + 
+#  theme(plot.title = element_text(size = 25),
+#        axis.title = element_text(size=20),
+#        axis.text = element_text(size=15)) +
+#  labs(title = "#Days When Heat Index > 90 in BWI",
+#       x = "Year",
+#       y = "Days")
+#ggsave(filename = "bwi_days_heat_index_over_ninety.png",
+#       device = "png", path = "/Users/tdiff/Documents/Github/bwi_dmh_temps/Graphs",
+#       width = 20, height = 15, units = "in")
 
 #same as above but #hours instead of days
 hours_hi_over_ninety_bwi <- clean_bwi_data %>%
@@ -399,18 +401,19 @@ hours_hi_over_ninety_bwi <- clean_bwi_data %>%
   group_by(year) %>%
   summarise(count=n())
 
-ggplot(data = hours_hi_over_ninety_bwi, aes(x=year, y=count)) + 
-  geom_col() + 
-  geom_smooth() + 
-  theme(plot.title = element_text(size = 25),
-        axis.title = element_text(size=20),
-        axis.text = element_text(size=15)) +
-  labs(title = "#Hours When Heat Index > 90 in BWI",
-       x = "Year",
-       y = "#Hours")
-ggsave(filename = "bwi_hours_heat_index_over_ninety.png",
-       device = "png", path = "/Users/tdiff/Documents/Github/bwi_dmh_temps/Graphs",
-       width = 20, height = 15, units = "in")
+#to run ggplot data, take out final summarise statement above
+#ggplot(data = hours_hi_over_ninety_bwi, aes(x=year, y=count)) + 
+#  geom_col() + 
+#  geom_smooth() + 
+#  theme(plot.title = element_text(size = 25),
+#        axis.title = element_text(size=20),
+#        axis.text = element_text(size=15)) +
+#  labs(title = "#Hours When Heat Index > 90 in BWI",
+#       x = "Year",
+#       y = "#Hours")
+#ggsave(filename = "bwi_hours_heat_index_over_ninety.png",
+#       device = "png", path = "/Users/tdiff/Documents/Github/bwi_dmh_temps/Graphs",
+#       width = 20, height = 15, units = "in")
 
 #BWI over 100 data
 hi_over_100_bwi <- clean_bwi_data %>%
@@ -421,18 +424,19 @@ hi_over_100_bwi <- clean_bwi_data %>%
   summarise(count=n()) %>%
   summarise(average_days = mean(count))
 
-ggplot(data = hi_over_100_bwi, aes(x=year, y=count)) + 
-  geom_col() + 
-  geom_smooth() + 
-  theme(plot.title = element_text(size = 25),
-        axis.title = element_text(size=20),
-        axis.text = element_text(size=15)) +
-  labs(title = "#Days When Heat Index > 100 in BWI",
-       x = "Year",
-       y = "Days")
-ggsave(filename = "bwi_days_heat_index_over_100.png",
-       device = "png", path = "/Users/tdiff/Documents/Github/bwi_dmh_temps/Graphs",
-       width = 20, height = 15, units = "in")
+#to run ggplot data, take out final summarise statement above
+#ggplot(data = hi_over_100_bwi, aes(x=year, y=count)) + 
+#  geom_col() + 
+#  geom_smooth() + 
+#  theme(plot.title = element_text(size = 25),
+#        axis.title = element_text(size=20),
+#        axis.text = element_text(size=15)) +
+#  labs(title = "#Days When Heat Index > 100 in BWI",
+#       x = "Year",
+#       y = "Days")
+#ggsave(filename = "bwi_days_heat_index_over_100.png",
+#       device = "png", path = "/Users/tdiff/Documents/Github/bwi_dmh_temps/Graphs",
+#       width = 20, height = 15, units = "in")
 
 #BWI over 105 data
 hi_over_105_bwi <- clean_bwi_data %>%
@@ -443,18 +447,19 @@ hi_over_105_bwi <- clean_bwi_data %>%
   summarise(count=n()) %>%
   summarise(average_days = mean(count))
 
-ggplot(data = hi_over_105_bwi, aes(x=year, y=count)) + 
-  geom_col() + 
-  geom_smooth() + 
-  theme(plot.title = element_text(size = 25),
-        axis.title = element_text(size=20),
-        axis.text = element_text(size=15)) +
-  labs(title = "#Days When Heat Index > 105 in BWI",
-       x = "Year",
-       y = "Days")
-ggsave(filename = "bwi_days_heat_index_over_105.png",
-       device = "png", path = "/Users/tdiff/Documents/Github/bwi_dmh_temps/Graphs",
-       width = 20, height = 15, units = "in")
+#to run ggplot data, take out final summarise statement above
+#ggplot(data = hi_over_105_bwi, aes(x=year, y=count)) + 
+#  geom_col() + 
+#  geom_smooth() + 
+#  theme(plot.title = element_text(size = 25),
+#        axis.title = element_text(size=20),
+#        axis.text = element_text(size=15)) +
+#  labs(title = "#Days When Heat Index > 105 in BWI",
+#      x = "Year",
+#       y = "Days")
+#ggsave(filename = "bwi_days_heat_index_over_105.png",
+#       device = "png", path = "/Users/tdiff/Documents/Github/bwi_dmh_temps/Graphs",
+#       width = 20, height = 15, units = "in")
 
 #same as above but #hours instead of days
 hours_hi_over_103_bwi <- clean_bwi_data %>%
@@ -463,18 +468,19 @@ hours_hi_over_103_bwi <- clean_bwi_data %>%
   group_by(year, month) %>%
   summarise(count=n())
 
-ggplot(data = hours_hi_over_103_bwi, aes(x=year, y=count)) + 
-  geom_col() + 
-  geom_smooth() + 
-  theme(plot.title = element_text(size = 25),
-        axis.title = element_text(size=20),
-        axis.text = element_text(size=15)) +
-  labs(title = "#Hours When Heat Index > 103 in BWI",
-       x = "Year",
-       y = "#Hours")
-ggsave(filename = "bwi_hours_heat_index_over_103.png",
-       device = "png", path = "/Users/tdiff/Documents/Github/bwi_dmh_temps/Graphs",
-       width = 20, height = 15, units = "in")
+#to run ggplot data, take out final summarise statement above
+#ggplot(data = hours_hi_over_103_bwi, aes(x=year, y=count)) + 
+#  geom_col() + 
+#  geom_smooth() + 
+#  theme(plot.title = element_text(size = 25),
+#        axis.title = element_text(size=20),
+#        axis.text = element_text(size=15)) +
+#  labs(title = "#Hours When Heat Index > 103 in BWI",
+#       x = "Year",
+#       y = "#Hours")
+#ggsave(filename = "bwi_hours_heat_index_over_103.png",
+#       device = "png", path = "/Users/tdiff/Documents/Github/bwi_dmh_temps/Graphs",
+#       width = 20, height = 15, units = "in")
 
 
 ```
