@@ -24,6 +24,13 @@ output:
 knitr::opts_chunk$set(echo = TRUE, message=FALSE, paged.print=TRUE)
 ```
 
+## LEFT TO DO:
+
+* Redlining Scrollytelly
+* "neighborhood growth"" [WHAT IS THIS] section
+* Citywide canopy losses and gains
+* Home vacancy rate in Broadway East
+
 ## Introduction
 
 This R markdown document describes the methodology and results of a portion of the data analysis we conducted in support of a reporting project examining the effects of tree canopy inequity across the city of Baltimore, especially as it relates to climate change.
