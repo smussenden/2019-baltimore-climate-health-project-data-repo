@@ -157,8 +157,13 @@ select_x <- function(df){
 
 ## Line-By-Line Fact-Check
 
-...a dangerous, 11-day heat wave tormented the city this summer...
-Some issues here, let's talk about this line
+####Fact
+"...a dangerous, 11-day heat wave tormented the city this summer..."
+
+####Explanation
+By running the code below, you can see July 12-22 had max temperatures of at least 90 degrees and max heat indexes of at least 92, hence the 11-day heat wave
+
+####Supporting Code
 ```{r}
 
  dmh %>%
@@ -174,10 +179,18 @@ Some issues here, let's talk about this line
 
 
 ```
+
+####Fact
 
 “Can’t even put your head out the door,” said Tammy Wilson Jackson, 48, on a day when the temperature at the Inner Harbor hit 100 degrees.
-Was this Sunday 7/21? If so, we can use our data, which is hourly averages.  If it was Saturday 7/20, then we're going to have to use NWS official records, which captures minute by minute records
 
+####Explanation
+
+Our data below shows that the inner harbor hit a max temperature of 100 on Sunday 7/21. There is no other day in our data when the max temperature was 100. However our data uses hourly averages. The National Climatic Data Center also takes weather data hour by hour, but instead of calculating the average the NCDC records the conditions at the exact time of the reading. NCDC also has daily summaries detailing the maximum and minimum temperature experienced over the entire day and the amount of precipitation in inches. Using the NCDC's daily summaries for the month of July 2019, there are two days when the max temperature hit at least 100: 7/20 and 7/21. 
+
+Note: the max temperature on 7/30 was also 100 degrees, but this interview was before then.
+
+####Supporting Code
 ```{r}
 
  dmh %>%
@@ -194,9 +207,15 @@ Was this Sunday 7/21? If so, we can use our data, which is hourly averages.  If 
 
 ```
 
-data show that temperatures here [McElderry Park] and in surrounding neighborhoods can run 10 degrees hotter than in communities that have more trees and less pavement. 
-IF WE USE MEAN IT'S 8.3 degrees NOTE I TOOK OUT GWYNNS FALLS
+####Fact
+"data show that temperatures here [McElderry Park] and in surrounding neighborhoods can run 10 degrees hotter than in communities that have more trees and less pavement."
 
+####Explanation
+IF WE USE MEAN IT'S 8.3 degrees 
+
+*Note: Gwynns Falls/Leakin Park was removed from the dataset as the topography of the area is more akin to a park than neighborhood.
+
+####Supporting Code
 ```{r}
 nsa_tree_temp %>%
   select(nsa_name, temp_mean_aft) %>%
