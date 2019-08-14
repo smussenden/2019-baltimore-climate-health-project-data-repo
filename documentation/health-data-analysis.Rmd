@@ -1,5 +1,5 @@
 ---
-title: "Health Analysis"
+title: "Health Story Data Analysis"
 author: "Roxanne Ready, Sean Mussenden, Theresa Diffendal | Howard Center for Investigative Journalism"
 date: "8/6/2019"
 output: 
@@ -16,7 +16,7 @@ output:
 
 ```{r include=FALSE}
 # Save this file and run the following line from the Console to output both HTML and .md formats:
-# rmarkdown::render('documentation/role-of-trees-data-analysis.Rmd', output_format = 'all')
+# rmarkdown::render('documentation/health-data-analysis.Rmd', output_format = 'all')
 ```
 
 
@@ -26,8 +26,10 @@ knitr::opts_chunk$set(echo = TRUE, message=FALSE, paged.print=TRUE)
 
 ## Introduction
 
-REWRITE
-This R markdown document describes the methodology and results of a portion of the data analysis we conducted in support of a reporting project examining the effects of tree canopy inequity across the city of Baltimore, especially as it relates to climate change.
+This R markdown document describes the methodology and results of a portion of the data analysis for a reporting project examining the effects of climate change and temperature increases on the health of people in Baltimore's hottest neighborhoods.  
+
+This story was written by 
+
 
 In general, this document is arranged into analyses of the following categories, though there are some cases where one statistic depends on multiple categories (e.g. the canopy cover in a hot neighborhood):
 
@@ -67,7 +69,7 @@ options(scipen = 999)
 
 ### Load variables and data
 
-``` {r}
+```{r}
 #########################
 #### Store Variables ####
 #########################
@@ -258,7 +260,7 @@ COME BACK TO THIS ONE, PROCESS HOSPITAL DATA
 
 https://amarton.github.io/2019-baltimore-climate-health-project-graphics-repo/ems-calls-barcharts/emsCalls.html
 NOTE NEW NUMBERS
-``` {r}
+```{r}
 
 # Five-part NWS heat index danger scale
 heat_index_count_per_nws_five_scale_bucket <- dmh_ems %>%
