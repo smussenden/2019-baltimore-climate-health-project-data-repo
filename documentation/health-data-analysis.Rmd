@@ -30,7 +30,6 @@ This R markdown document describes the methodology and results of a portion of t
 
 This story was written by 
 
-
 In general, this document is arranged into analyses of the following categories, though there are some cases where one statistic depends on multiple categories (e.g. the canopy cover in a hot neighborhood):
 
 * Temperature
@@ -272,11 +271,12 @@ heat_index_count_per_nws_five_scale_bucket <- dmh_ems %>%
 ########### Five NWS Buckets #################
 #### Table 1 | Primary Impression Group | Ratio Condition Calls v Heat Index | five NWS Buckets #####
 # Ratio of number of calls for each condition type in each heat index bucket to total number of hours in each given temperature bucket. A lower number indicates a higher number of calls for each condition adjusted for the fact that some temperatures are simply more common than other others. It's 70 degrees for many more hours in a year than it is 110.  
-conditions <- c( "Asthma", "Cardiac Arrest", "COPD (Emphysema/Chronic Bronchitis)", "Dehydration", "Dizziness / Vertigo", "Hypertension", "Respiratory Distress", "Stroke/CVA", "Unconscious")
+
+conditions <- c("Cardiac Arrest", "COPD (Emphysema/Chronic Bronchitis)", "Dehydration", "Dizziness / Vertigo", "Hypertension", "Respiratory Distress", "Stroke/CVA", "Unconscious")
 
 
 call_heat_index_ratio_five_primary_impression_group <- EMS_all %>%
-  # filter(primary_impression_group %in% conditions) %>%
+  filter(primary_impression_group %in% conditions) %>%
   group_by(primary_impression_group, adjusted_heat_index_nws_five_scale_bucket) %>%
   summarise(condition_calls_count_per_bucket=n()) %>%
   inner_join(heat_index_count_per_nws_five_scale_bucket, by = c("adjusted_heat_index_nws_five_scale_bucket" = "heat_index_nws_five_scale_bucket")) %>%
@@ -284,6 +284,12 @@ call_heat_index_ratio_five_primary_impression_group <- EMS_all %>%
   select(primary_impression_group, adjusted_heat_index_nws_five_scale_bucket, hours_per_call) %>%
   spread(adjusted_heat_index_nws_five_scale_bucket, hours_per_call) %>%
   select(primary_impression_group, `not_unsafe_under_80`,`caution_80_89`,`extreme_caution_90_102`,`danger_103_124`)
+
+ems_graphic <- call_heat_index_ratio_five_primary_impression_group
+
+path_to_data <- "../data/output-data/cleaned/"
+
+write_csv(ems_graphic, paste0(path_to_data,"ems_graphic.csv"))
 
 ```
 
