@@ -97,6 +97,17 @@ audrey_day_hourly_averages <- read_csv(paste0(path_to_data, "audrey_day_hourly_a
 audrey_day_minute_averages <- read_csv(paste0(path_to_data, "audrey_day_minute_averages.csv"))
 nsa_tree_temp <- read_csv(paste0(path_to_data,"nsa_tree_temp.csv"))
 blocks_tree_temp_demographics <- read_csv(paste0(path_to_data, "blocks_tree_temp_demographics.csv"))
+# Emergency Room by Zip Code
+write_csv(op_er_full_zip_correlation_matrix, paste0(save_path, "op_er_full_zip_correlation_matrix.csv"))
+write_csv(op_er_full_zip_disease_heat, paste0(save_path, "op_er_full_zip_disease_heat.csv"))
+
+# Medicaid Inpatient by Zip Code
+write_csv(ip_full_zip_medicaid_correlation_matrix, paste0(save_path, "ip_full_zip_medicaid_correlation_matrix.csv"))
+write_csv(ip_full_zip_medicaid_disease_heat, paste0(save_path, "ip_full_zip_medicaid_disease_heat.csv"))
+
+# Medicaid Emergency Room by ZipCode
+write_csv(op_er_full_zip_medicaid_correlation_matrix, paste0(save_path, "op_er_full_zip_medicaid_correlation_matrix.csv"))
+write_csv(op_er_full_zip_medicaid_disease_heat, paste0(save_path, "op_er_full_zip_medicaid_disease_heat.csv"))
 
 ####################################
 ######## Define Functions ##########
@@ -231,7 +242,77 @@ class(stephanie_day_minute_averages)
 
 #The sentence above is true.
 
+
 ```
+## PINGLEY GRAPHIC MOVE OVER
+```{r}
+# The seven-day stretch between July 16 and July 22 were the hottest consecutive days of the summer. 
+
+# The OUTDOOR heat index reached 111 degrees on July 21 at 8 p.m. (CHANGE TO 4 PM)
+dmh %>%
+  filter(date == "2019-07-21") %>%
+  arrange(desc(avg_hourly_heat_index_dmh)) %>%
+  select(avg_hourly_heat_index_dmh, everything())
+
+# The mean indoor heat index for that seven-day period was 98 degrees and the hourly average heat index climbed to 113. (Looks like 8 pm on July 19). TECHNICALLY, THIS IS TRUE. WE ARE IMPLYING THIS IS THE HIGHEST IT WENT.  BUT IT WENT TO 115.7 at 7/19, at 7 pm and 112.7 at 7/19 at 8 p.m. 
+
+# The heat index in the bedroom never dropped below 89 degrees. # TRUE, if we are rounding up, go to 88.8
+
+stephanie_day_hourly_averages %>%
+  filter(date_hour >= "2019-07-16",
+         date_hour < "2019-07-23") %>%
+  summarise(avg_indoor_heat_index = mean(mean_indoor_heat_index),
+            max_indoor_heat_index = max(mean_indoor_heat_index),
+            min_indoor_heat_index = min(mean_indoor_heat_index))
+
+stephanie_day_hourly_averages %>%
+  filter(date_hour == "2019-07-19 20:00:00") %>%
+  summarise(avg_indoor_heat_index = mean(mean_indoor_heat_index),
+            max_indoor_heat_index = max(mean_indoor_heat_index),
+            min_indoor_heat_index = min(mean_indoor_heat_index))
+
+# The heat index in Stephanie’s home consistently exceeded that of the outdoors. # TRUE, 108 to 60 hours during that period
+
+stephanie_day_hourly_averages %>%
+  filter(date_hour >= "2019-07-16",
+         date_hour < "2019-07-23") %>%
+  mutate(difference = case_when(
+      indoor_heat_index_difference > 0 ~ "hotter_inside",
+      indoor_heat_index_difference <= 0 ~ "hotter_outside"
+  )) %>%
+  group_by(difference) %>%
+  summarise(count=n())
+
+# On Friday, July 19 at 8 p.m., in the midst of the summer's most brutal heat wave, the heat index hit a blistering 106 degrees in the Inner Harbor. Inside Stephanie Pingley's house, it was 7 degrees hotter, with a heat index of 113 degrees. # 102 DEGREES at Inner Harbor. 11 DEGREES HOTTER, heat index of 113 degrees
+
+stephanie_day_hourly_averages %>%
+  filter(date_hour == "2019-7-19 20:00:00") %>%
+  select(date_hour, mean_indoor_heat_index, mean_outdoor_heat_index)
+
+# On Saturday, July 20, the heat index in Baltimore was still 94 degrees at 4 a.m. in the Inner Harbor. # 89 degrees at 4 am
+
+# Inside Stephanie Pingley's house, in the bedroom where two children sleep, it felt even hotter, with a heat index of 99 degrees. # 99 degrees at 4 am
+
+stephanie_day_hourly_averages %>%
+  filter(date_hour == "2019-7-20 04:00:00") %>%
+  select(date_hour, mean_indoor_heat_index, mean_outdoor_heat_index)
+
+# Export 
+stephanie_day_hourly_averages_graphic <- stephanie_day_hourly_averages %>%
+  mutate(date = date(date_hour)) %>%
+  mutate(hour = hour(date_hour)) %>%
+  filter(hour %in% c(0,4,8,12,16,20)) %>%
+  filter(date_hour >= "2019-07-16",
+         date_hour < "2019-07-23") %>%
+  select(date_hour, date, hour, mean_indoor_heat_index, mean_outdoor_heat_index)
+
+# Path to Data
+path_to_data <- "../data/output-data/cleaned/"
+
+write_csv(stephanie_day_hourly_averages_graphic, paste0(path_to_data, "stephanie_pingley_graphic.csv") )
+
+```
+
 
 Air conditioning is an effective tool to tame the harmful effects of extreme heat, but DeWitt has only two units, one on the first floor near where she sleeps and another upstairs, and they don’t cool the entire house, she says. A sensor placed there by University of Maryland journalists WE WILL DROP IN DATA HERE ON SENSOR READING IN DEWITTS HOUSE. 
 
@@ -256,6 +337,8 @@ Pingley says that room can get as “hot as Hades,” which is reflected in read
 * https://amarton.github.io/2019-baltimore-climate-health-project-graphics-repo/health-leaflet-map/combined-maps.html
 COME BACK TO THIS ONE, PROCESS HOSPITAL DATA
 
+``` {r}
+```
 
 https://amarton.github.io/2019-baltimore-climate-health-project-graphics-repo/ems-calls-barcharts/emsCalls.html
 NOTE NEW NUMBERS
