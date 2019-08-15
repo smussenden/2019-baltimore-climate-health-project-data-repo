@@ -726,20 +726,6 @@ chart_title <- "hourly averages"
 
 ```
 
-### Fact: Citywide Canopy Cover
-
-"But citywide, the tree canopy is just 27%, up from 26% X years before. Washington’s is XX%."
-
-#### Explanation
-
-
-
-#### Supporting Code
-
-```{r}
-# TBD
-```
-
 ### Fact: East Baltimore Tree Cover
 
 "And in 2015, many East Baltimore neighborhoods had a tree canopy of about 10%, according to a Howard Center analysis of tree canopy data gathered by researchers at the U.S. Forest Service and the University of Vermont."
@@ -771,11 +757,17 @@ nsa_tree_temp %>%
 
 ### Fact: Blocks without Trees
 
-"Some blocks have no trees at all."
+"Many blocks have no trees at all."
 
 #### Explanation
 
+The code below scans the "blocks_trees_temp_demographics" dataset for blocks with 0 tree canopy coverage in 2015 as determined by the 2015 LiDar data. The GeoID is a unique number combining state, county, tract and block identifiers to designate a specific block in Baltimore. Blocks without anyone living on them, as in having a recorded population of 0, are removed from the set. Even after the filtering, 86 blocks remain with a population greater than 0 and 0% tree canopy coverage.
 
+The GeoID 245100803011000 can be broken down into:
+        State: 24, for Maryland
+        County: 510, for Baltimore
+        Tract: 080301
+        Block: 1000
 
 #### Supporting Code
 ```{r}
@@ -798,11 +790,19 @@ blocks_tree_temp_demographics %>%
 
 #### Supporting Code
 
+```{r}
 
-## Graphics: Temperature vs. Demographics
+```
+
+## Fact: Temperature vs. Demographics Graphics
 
 These data confirm the graphs found [here](https://amarton.github.io/2019-baltimore-climate-health-project-graphics-repo/heat-demographics-scatterplots/combined-scatterplots.html).
 
+#### Explanation
+
+The data below pulls from the dataset "csa_tree_temp_demographics" which contains information about average temperature, tree canopy coverage, crime rate, poverty levels, and more demographics for neighborhoods in Baltimore. The created subset selects columns for average afternoon temperature, poverty levels, crime rate, life expectancy and unemployment rate. The data is then plotted. Temperature is plotted on the x-axis, with the other values on the y-axis for a total of four different graphs. The graphs can be seen at the link above. 
+
+#### Supporting Code
 ```{r}
 
 #### Save working table of only the variables needed for this story ####
@@ -814,10 +814,10 @@ wk_csa_tree_temp_demographics <- csa_tree_temp_demographics %>%
   arrange(desc(temp_mean_aft))
 
 #### Save the table to CSV for reference ####
-write_csv(wk_csa_tree_temp_demographics, paste0(save_path, "csa_tree_temp_demographics_truncated.csv"))
+#write_csv(wk_csa_tree_temp_demographics, paste0(save_path, "csa_tree_temp_demographics_truncated.csv"))
 
 #### Remove working table from workspace ####
-rm(wk_csa_tree_temp_demographics)
+#rm(wk_csa_tree_temp_demographics)
 
 ```
 
@@ -827,7 +827,9 @@ rm(wk_csa_tree_temp_demographics)
 
 #### Explanation
 
+The first chunk of code below pulls the information on average afternoon temperatures and poverty rate for Baltimore neighborhoods from the larger csa_tree_temp_demographics set. The correlation between temperature values and poverty percentage is calculated by the second chunk of code using a correlation matrix. The correlation works out to about .4; again, the closer to 1 a correlation is, the greater the relationship between one variable and another. .4, while less than half of 1, still indicates some relationship betwen poverty and temperature. 
 
+The poverty and temperature values are mapped, with poverty on the y-axis and temperature on the x-axis. Despite outliers, there is a clear trend showing poverty rates increasing as temperature increases.
 
 There is a `r round(wk_corr[[2, 2]], 2)` correlation between temperature and poverty.
 
@@ -866,7 +868,9 @@ csa_tree_temp_demographics %>%
 
 #### Explanation
 
+The first chunk of code below pulls the information on average afternoon temperatures and crime rate for Baltimore neighborhoods from the larger csa_tree_temp_demographics set. The correlation between temperature values and crime rate is calculated by the second chunk of code using a correlation matrix. The correlation works out to about .58; again, the closer to 1 a correlation is, the greater the relationship between one variable and another. .58 indicates a moderate relationship betwen poverty and temperature. 
 
+The crime and temperature values are mapped, with crime on the y-axis and temperature on the x-axis. Outside of a few extremes, there is a clear trend showing crime rates increasing as temperature increases.
 
 There is a `r round(wk_corr[[2, 2]], 2)` correlation between temperature and crime.
 
@@ -876,7 +880,7 @@ There is a `r round(wk_corr[[2, 2]], 2)` correlation between temperature and cri
 #### Data used ####
 csa_tree_temp_demographics %>%
   select(matches("csa2010"), matches("temp_mean_aft"),
-         matches("violent_crime_rate_per_1_000_residents"), matches("life_expectancy")) %>%
+         matches("violent_crime_rate_per_1_000_residents")) %>%
   arrange(desc(temp_mean_aft))
 
 #### Build correlation matrix ####
@@ -905,7 +909,9 @@ csa_tree_temp_demographics %>%
 
 #### Explanation
 
+The first chunk of code below pulls the information on average afternoon temperatures and life expectancy for Baltimore neighborhoods from the larger csa_tree_temp_demographics set. The correlation between temperature values and life expectancy is calculated by the second chunk of code using a correlation matrix. The correlation works out to about -.41; again, the closer to 1 a correlation is, the greater the relationship between one variable and another. A negative correlation indicates an inverse relationship; as one variable increases, the other decreases. In this case -.41 indicates an inverse relationship betwen life expectancy and temperature. 
 
+The life expectancy and temperature values are mapped, with life expectancy on the y-axis and temperature on the x-axis. There is a trend showing life expectancy decreasing as temperature increases.
 
 There is a `r round(wk_corr[[2, 2]], 2)` correlation between temperature and life expectancy.
 
@@ -944,7 +950,9 @@ csa_tree_temp_demographics %>%
 
 #### Explanation
 
+The first chunk of code below pulls the information on average afternoon temperatures and unemployment rates for Baltimore neighborhoods from the larger csa_tree_temp_demographics set. The correlation between temperature values and unemployment rates is calculated by the second chunk of code using a correlation matrix. The correlation works out to about .32; again, the closer to 1 a correlation is, the greater the relationship between one variable and another. .32 indicates a slight relationship betwen unemployment rates and temperature. 
 
+The unemployment rates and temperature values are mapped, with unemployment rates on the y-axis and temperature on the x-axis. While there are some values showing lower unemployment at higher temperatures, the graph still plots a trend showing that, overall, unemployment rates increase as temperature increases.
 
 There is a `r round(wk_corr[[2, 2]], 2)` correlation between temperature and unemployment rate.
 
