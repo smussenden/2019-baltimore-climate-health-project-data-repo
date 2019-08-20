@@ -1,6 +1,6 @@
 ---
 title: "Code Red Data Cleaning"
-author: "Roxanne Ready, Sean Mussenden, Theresa Diffendal, Jake Gluck and Jane Gerard | Capital News Service and the Howard Center for Investigative Journalism"
+author: "Roxanne Ready, Theresa Diffendal, Jake Gluck, Jane Gerard and Sean Mussenden| Howard Center for Investigative Journalism and Capital News Service"
 date: "8/5/2019"
 output: 
   md_document:
@@ -14,7 +14,7 @@ output:
 ---
 
 ```{r include=FALSE}
-# Save this file and run the following line from the Console to output both HTML and .md formats:
+# Save this file and run the following line from the console to output both HTML and .md formats:
 # rmarkdown::render('documentation/code-red-data-cleaning.Rmd', output_format = 'all')
 ```
 
@@ -24,20 +24,19 @@ knitr::opts_chunk$set(echo = TRUE, message=FALSE)
 
 ## Introduction
 
-This R markdown document describes the methodology and results of the data cleaning portion of the data analysis conducted in support of a reporting project examining tree canopy, heat and health inequity across the city of Baltimore, especially as it relates to climate change.
+This R markdown document describes the methodology and results of the data cleaning portion of the data analysis conducted in support of a reporting project examining the impact of climate change on the health of people in Baltimore's hottest neighborhoods.
 
-The analysis that uses the cleaned data output by this document is located in the [Role of Trees Data Analysis](https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/documentation/code-red-data-analysis.md).
+The analysis that uses the cleaned data output by this document is located in the [Role of Trees Data Analysis](https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/documentation/code-red-data-analysis.md). [ADD OTHER TWO STORIES]
 
 ### Definitions
 
 **Geographic Units**: Several geographic units are used throughout the analysis. The geographic units are: 
 
-* **U.S. Census block**: The smallest geographic area tracked by the U.S. government. Shapefiles downloaded from [Census.gov](https://www2.census.gov/geo/tiger/TIGER2018/TABBLOCK/).
+* **U.S. Census block**: The smallest geographic area tracked by the U.S. Census bureau. Shapefiles downloaded from [Census.gov](https://www2.census.gov/geo/tiger/TIGER2018/TABBLOCK/).
 * **ZCTAs - ZIP Code Tabulation Areas**: A U.S. Census proxy for postal ZIP Code units. Shapefiles downloaded from [Census.gov](https://www2.census.gov/geo/tiger/TIGER2018/ZCTA5/).
 * **NSAs - Neighborhood Statistical Areas**: Areas created by Baltimore City to represent Baltimore neighborhoods, comprised of custom groupings of U.S. Census blocks. This grouping is considered by Baltimore City and this analysis as the best representation of true Baltimore neighborhoods. Shapefiles provided by the [Baltimore City Department of Planning](https://planning.baltimorecity.gov/maps-data/GIS).
 * **CSAs - Community Statistical Areas**: Groupings of neighborhoods, created and used by the Baltimore Neighborhood Indicators Alliance (BNIA). In some cases, there is one neighborhood per CSA; in others, it's multiple. Recent demographic data is only available by CSA. Shapefiles downloaded from the [Baltimore Neighborhood Indicators Alliance Vital Signs project](https://data-bniajfi.opendata.arcgis.com/datasets/794586676bcc4f5fb629c08c51474cf6_0).
 * **Redlined geographic units**: Between 1935 and 1940, local real estate lenders, developers and real estate appraisers assigned grades to residential neighborhoods based on the perceived risk for banks to grant loans. This process was based in part on the race of residents and is known today as "redlining." The ["Mapping Inequality"](https://dsl.richmond.edu/panorama/redlining/#loc=5/39.1/-94.58&text=intro) project, conducted by [teams at four different universites](https://dsl.richmond.edu/panorama/redlining/#loc=12/39.293/-76.679&text=about), generated interactive maps of cities across the U.S., including Baltimore, and made their [shapefiles available by city](https://dsl.richmond.edu/panorama/redlining/#loc=11/39.3/-76.673&text=downloads).
-** EMS Data Description**
 
 **A Note About ZCTAs**: 
     * There are some differences in the exact boundaries between ZCTA shapefiles pulled from Census.gov when pulled county-by-county and for MD as a whole. All ZCTA groups are from the state-level ZCTA files.
@@ -56,15 +55,15 @@ The analysis that uses the cleaned data output by this document is located in th
 
 ## Setup
 
-Due to GitHub file upload limitations, input data is not included in this repo. When creating the file structure on a local machine, create a sub-folder called "input-data" within the existing "data" folder for maximum compatibility with the following code.
+Due to GitHub file upload limitations, input data is not included in this repo. When creating the file structure on a local machine, create a sub-folder called "input-data" within the existing "data" folder for maximum compatibility with the following code.[NOTE, WE SHOULD INCLUDE THIS, TRIMMED OUT]
 
 ```{r}
 #######################
 #### Load Packages ####
 #######################
 
-library(lubridate)
-library(tidyverse)
+library(lubridate) # For working with dates
+library(tidyverse) # For data science goodness
 library(janitor) # For cleaning names
 library(weathermetrics) # For calculating heat index
 library(readxl) # For reading in Excel files
@@ -76,14 +75,14 @@ options(scipen = 999)
 
 ```
 
-## Load and Clean Temperature Data
+## Load and Clean Urban Heat Island Temperature Data
 
-The School of Urban Studies and Planning provided temperature data from its Urban Heat Island Temperature study, which captured micro-level temperature variations for all of Baltimore City on August 29, 2018.
+Researchers at Portland State University in Oregon and the Science Museum of Virginia provided temperature data from its Urban Heat Island Temperature study, which captured micro-level temperature variations for all of Baltimore City on August 29, 2018.
 
 * The data can be downloaded [here](https://osf.io/e63x9/).
 * Full methodology paper [here](https://osf.io/ur7my/).
 
-Temperature data was compiled in three batches for morning, afternoon and evening, in a raster image with one temperature (Celcius) per pixels.
+Temperature data was compiled in three batches for morning, afternoon and evening, in a raster image with one temperature value (in degrees Celcius) per pixel.
 
 For each time period, reporters used the open-source mapping program [QGIS](https://qgis.org/en/site/) to calculate zonal statistics (mean, median, min and max) for the temperture in several geographic units. 
 
@@ -93,6 +92,7 @@ After caclulating the zonal statistis, reporters exported the files from QGIS as
 
 ```{r}
 # Convert celcius values to fahrenheit
+### Replace this weathermetrics? 
 c_to_f_convert <- function(x) (x * (9/5) + 32)
 
 # Common file path to raw temperature data
@@ -253,7 +253,7 @@ rm(list=setdiff(ls(), c("all_temp_block", "all_temp_zcta", "all_temp_nsa", "all_
 
 ## Load and Clean Tree Canopy LIDAR Data
 
-The BES-LTER Program and the Cary Institute of Ecosystem Studies provided a shapefile of tree canopy gain and loss data for 2007-2015 from LIDAR satellite imaging. (_Citation: O'Neil-Dunne J. 2017. GIS Shapefile, Tree Canopy Change 2007 - 2015 - Baltimore City. Environmental Data Initiative. https://doi.org/10.6073/pasta/79c1d2079271546e61823a98df2d2039_)
+The U.S. Forest Service and the University of Vermont Spatial Analysis Lab created detailed maps of Baltimore's tree canopy in 2007 and 2015 using LIDAR and aerial imagery data. (Citation: O'Neil-Dunne J. 2017. GIS Shapefile, Tree Canopy Change 2007 - 2015 - Baltimore City. Environmental Data Initiative. https://doi.org/10.6073/pasta/79c1d2079271546e61823a98df2d2039)
 
 The original shapefile data was presented in terms of "no change," "gain," and "loss" categories. To perform the following analysis, reporters restructured the data within Qgis to represent 2007 and 2015 canopy coverage and [calculated zonal statistics](https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/documentation/qgis-directions/qgis-how-tos.md#d) (mean and median) at each year. They then exported the data from QGIS into CSVs, loaded them into R and joined them into master tables for further processing and analysis.
 
@@ -262,7 +262,7 @@ The original shapefile data was presented in terms of "no change," "gain," and "
 ```{r}
 
 # Common file path to raw canopy data
-path_to_data <- "../data/input-data/tree-canopy/post-qgis-processing/"
+path_to_data <- "../data/input-data/tree-canopy/"
 
 ```
 
@@ -279,7 +279,7 @@ tree_block_lidar_2007 <- read_csv(paste0(path_to_data, "by_block/btree_statistic
 tree_block_lidar_2015 <- read_csv(paste0(path_to_data, "by_block/btree_statistics_by_block_2015_lidar.csv")) %>%
   rename_all(tolower)
 
-# Join 2009 to 2015
+# Join 2007 to 2015
 tree_block_lidar_2007_2015 <- tree_block_lidar_2007 %>%
   left_join(tree_block_lidar_2015) %>%
   mutate(
@@ -327,7 +327,7 @@ tree_nsa_lidar_2007 <- read_csv(paste0(path_to_data, "by_neighborhood_statistica
 # 2015
 tree_nsa_lidar_2015 <- read_csv(paste0(path_to_data, "by_neighborhood_statistical_area/btree_statistics_by_nsa_2015_lidar.csv"))
 
-# Join 2009 to 2015
+# Join 2007 to 2015
 tree_nsa_lidar_2007_2015 <- tree_nsa_lidar_2007 %>%
   left_join(tree_nsa_lidar_2015) %>%
   mutate(
@@ -345,7 +345,7 @@ tree_nsa_lidar_2007_2015 <- tree_nsa_lidar_2007 %>%
 ```{r}
 #### Remove unneeded files ####
 rm(list=setdiff(ls(), c(
-  "tree_block_lidar_2007_2015", "tree_zcta_clipped_lidar_2007_2015", "tree_nsa_lidar_2007_2015", "tree_csa_lidar_2007_2015", 
+  "tree_block_lidar_2007_2015", "tree_nsa_lidar_2007_2015", "tree_csa_lidar_2007_2015", 
   "all_temp_block", "all_temp_zcta", "all_temp_nsa", "all_temp_csa")))
 
 ```
@@ -472,7 +472,7 @@ path_to_data <- "../data/input-data/street-trees/csv/"
 #### Load in the data ####
 ##########################
 
-street_trees <- read_csv(paste0(path_to_data, "street_trees_nsa_join_table.csv")) %>%
+street_trees <- read_csv(paste0(path_to_data, "by_nsa/street_trees_nsa_join_table.csv")) %>%
   select(-COLOR_2, -LABEL) %>%
   rename_all(tolower) %>%
   mutate_all(tolower) %>%
@@ -791,7 +791,7 @@ tree_condition_by_nsa <- tree_condition_by_nsa %>%
 
 ```{r}
 
-master_by_nsa <- tree_as_percent_of_spaces_by_nsa %>%
+master_street_trees_by_nsa <- tree_as_percent_of_spaces_by_nsa %>%
   left_join(empty_spaces_by_diff_by_nsa) %>%
   left_join(tree_condition_by_nsa) %>%
   # Add ranking for perc good
@@ -807,7 +807,7 @@ master_by_nsa <- tree_as_percent_of_spaces_by_nsa %>%
   ))
 
 #### Remove unneeded files ####
-rm(list=setdiff(ls(), c("blocks_tree_temp_population", "zcta_temp_demographics", "nsa_tree_temp", "csa_tree_temp_demographics", "street_trees_categorized", "redlining_tree", "master_by_nsa")))
+rm(list=setdiff(ls(), c("blocks_tree_temp_population", "zcta_temp_demographics", "nsa_tree_temp", "csa_tree_temp_demographics", "street_trees_categorized", "redlining_tree", "master_street_trees_by_nsa")))
 ```
 
 ## Load and Clean Redlining Data
@@ -960,7 +960,7 @@ Description of Baltimore City EMS Data Here
 ```{r}
 
 # Common file path to raw EMS data
-path_to_data <- "../data/input-data/baltimore-ems/raw-data/ems-data/csv/"
+path_to_data <- "../data/input-data/baltimore-ems/csv/"
 
 ```
 
@@ -1324,7 +1324,7 @@ process_sensor_data(tammy)
 process_sensor_data(audrey)
 ```
 
-## Load and Clean CCTV Data
+## Load and Clean Police Tree Trimming Data
 
 The following data is a sample of tree trimming and removal requests the Baltimore Police Department made to the Baltimore City Recreation & Parks Urban Forestry Division going back to roughly January 2018. This is not a complete list of all requests.
 
@@ -1349,67 +1349,74 @@ The following generated files are necessary for future portions of this analysis
 
 ```{r}
 
-#### Common save path ####
-save_path <- "../data/output-data/cleaned/"
-
 #### Write to CSV ####
 
-# Tree Canopy, Heat Islaand Temperature, Demographics
+# Tree Canopy, Heat Island Temperature, Demographics
+# updatesave path ####
+save_path <- "../data/output-data/tree_temp_demographics/"
 write_csv(blocks_tree_temp_population, paste0(save_path, "blocks_tree_temp_demographics.csv"))
 write_csv(csa_tree_temp_demographics, paste0(save_path, "csa_tree_temp_demographics.csv"))
 write_csv(nsa_tree_temp, paste0(save_path, "nsa_tree_temp.csv"))
 write_csv(zcta_temp_demographics, paste0(save_path, "zcta_temp_demographics.csv"))
 
 # Street Trees
+save_path <- "../data/output-data/street_trees/"
 write_csv(street_trees_categorized, paste0(save_path, "street_trees_nsa_categorized.csv"))
-write_csv(master_by_nsa,  paste0(save_path, "street_trees_nsa_summarized.csv"))
+write_csv(master_street_trees_by_nsa,  paste0(save_path, "street_trees_nsa_summarized.csv"))
 write_csv(cctv_cameras_street_trees, paste0(save_path, "cctv_cameras_street_trees.csv"))
 
 # Redlining and Trees
+save_path <- "../data/output-data/redlining_trees/"
 write_csv(redlining_tree, paste0(save_path, "redlining_tree.csv"))
 
 # For EMS analysis
+save_path <- "../data/output-data/ems/"
 write_csv(EMS_all, paste0(save_path, "EMS_all.csv"))
 write_csv(dmh_ems, paste0(save_path, "dmh_ems.csv"))
 
 # Weather Station Data
+save_path <- "../data/output-data/baltimore_weather_stations/"
 write_csv(estimated_historical_dmh, paste0(save_path, "estimated_historical_dmh.csv"))
 write_csv(dmh, paste0(save_path, "dmh.csv"))
 write_csv(bwi, paste0(save_path, "bwi.csv"))
 
 # Sensor Data
+save_path <- "../data/output-data/temperature_sensors/stephanie/"
 write_csv(stephanie_day_averages, paste0(save_path, "stephanie_day_averages.csv"))
 write_csv(stephanie_day_hourly_averages, paste0(save_path, "stephanie_day_hourly_averages.csv"))
 write_csv(stephanie_day_minute_averages, paste0(save_path, "stephanie_day_minute_averages.csv"))
+save_path <- "../data/output-data/temperature_sensors/tammy/"
 write_csv(tammy_day_averages, paste0(save_path, "tammy_day_averages.csv"))
 write_csv(tammy_day_hourly_averages, paste0(save_path, "tammy_day_hourly_averages.csv"))
 write_csv(tammy_day_minute_averages, paste0(save_path, "tammy_day_minute_averages.csv"))
+save_path <- "../data/output-data/temperature_sensors/michael/"
 write_csv(michael_day_averages, paste0(save_path, "michael_day_averages.csv"))
 write_csv(michael_day_hourly_averages, paste0(save_path, "michael_day_hourly_averages.csv"))
 write_csv(michael_day_minute_averages, paste0(save_path, "michael_day_minute_averages.csv"))
+save_path <- "../data/output-data/temperature_sensors/audrey/"
 write_csv(audrey_day_averages, paste0(save_path, "audrey_day_averages.csv"))
 write_csv(audrey_day_hourly_averages, paste0(save_path, "audrey_day_hourly_averages.csv"))
 write_csv(audrey_day_minute_averages, paste0(save_path, "audrey_day_minute_averages.csv"))
 
 # Hospital Data 
 # Inpatient by Zip Code
+save_path <- "../data/output-data/hospital_data/ip/"
 write_csv(ip_full_zip_correlation_matrix, paste0(save_path, "ip_full_zip_correlation_matrix.csv"))
 write_csv(ip_full_zip_disease_heat, paste0(save_path, "ip_full_zip_disease_heat.csv"))
-
-# Emergency Room by Zip Code
-write_csv(op_er_full_zip_correlation_matrix, paste0(save_path, "op_er_full_zip_correlation_matrix.csv"))
-write_csv(op_er_full_zip_disease_heat, paste0(save_path, "op_er_full_zip_disease_heat.csv"))
-
 # Medicaid Inpatient by Zip Code
 write_csv(ip_full_zip_medicaid_correlation_matrix, paste0(save_path, "ip_full_zip_medicaid_correlation_matrix.csv"))
 write_csv(ip_full_zip_medicaid_disease_heat, paste0(save_path, "ip_full_zip_medicaid_disease_heat.csv"))
 
+# Emergency Room by Zip Code
+save_path <- "../data/output-data/hospital_data/op_er/"
+write_csv(op_er_full_zip_correlation_matrix, paste0(save_path, "op_er_full_zip_correlation_matrix.csv"))
+write_csv(op_er_full_zip_disease_heat, paste0(save_path, "op_er_full_zip_disease_heat.csv"))
 # Medicaid Emergency Room by ZipCode
 write_csv(op_er_full_zip_medicaid_correlation_matrix, paste0(save_path, "op_er_full_zip_medicaid_correlation_matrix.csv"))
 write_csv(op_er_full_zip_medicaid_disease_heat, paste0(save_path, "op_er_full_zip_medicaid_disease_heat.csv"))
 
 
 #### Clean up the workspace ####
-rm(list=setdiff(ls(), c("blocks_tree_temp_population", "zcta_temp_demographics", "nsa_tree_temp", "csa_tree_temp_demographics", "street_trees_categorized", "redlining_tree")))
+rm(list=ls())
 
 ```
