@@ -61,7 +61,7 @@ Due to GitHub file upload limitations, input data is not included in this repo. 
 #######################
 #### Load Packages ####
 #######################
-
+#rm(list=ls())
 library(lubridate) # For working with dates
 library(tidyverse) # For data science goodness
 library(janitor) # For cleaning names
@@ -1167,7 +1167,9 @@ make_correlation_matrix <- function(dataframe) {
            matches('angina_pectoris'),           
            matches('heart_disease'),            
            matches('diabetes'),
-           matches('temp_median_aft')
+           matches('temp_median_aft'),
+           matches('median_household_income_d'),
+           matches('poverty_%')
     ) %>%
     na.omit(temp_median_aft)
   
