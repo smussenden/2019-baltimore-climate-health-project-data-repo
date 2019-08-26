@@ -68,10 +68,10 @@ options(scipen = 999)
 #########################
 
 #### Common path to data ####
-path_to_data <- "../data/output-data/cleaned/"
+path_to_data <- "../data/output-data/"
 
 #### Common save path ####
-save_path <- "../data/output-data/cleaned/"
+save_path <- "../data/output-data/"
 
 ###################
 #### Load Data ####
@@ -90,7 +90,7 @@ michael_day_averages<- read_csv(paste0(path_to_data, "michael_day_averages.csv")
 michael_day_hourly_averages <- read_csv(paste0(path_to_data, "michael_day_hourly_averages.csv"))
 michael_day_minute_averages <- read_csv(paste0(path_to_data, "michael_day_minute_averages.csv"))
 nsa_tree_temp <- read_csv(paste0(path_to_data,"nsa_tree_temp.csv"))
-csa_tree_temp_demographics <- read_csv(paste0(path_to_data,"csa_tree_temp_demographics.csv"))
+csa_tree_temp_demographics <-read_csv(paste0(path_to_data,"tree_temp_demographics/csa_tree_temp_demographics.csv"))
 blocks_tree_temp_demographics <- read_csv(paste0(path_to_data, "blocks_tree_temp_demographics.csv"))
 
 ####################################
@@ -204,6 +204,10 @@ Note: the max temperature on 7/30 was also 100 degrees, but this interview was b
             mean_heat_index = mean(avg_hourly_heat_index_dmh) 
   )
 
+dmh %>%
+ filter(month == 7,
+         year == 2019,
+         day == 20)
 
 ```
 
@@ -1089,6 +1093,57 @@ ggplotRegression(baltimore_slope)
 ## .0275 x 124 = 3.41
 
 ```
+
+#### FOR MEG
+
+### Fact: Franklin Square heat (for NPR)
+
+"Franklin isn't imagining that: Her neighborhood -- Franklin Square -- is
+literally hotter than about two thirds of the neighborhoods in Baltimore."
+
+#### Explanation
+
+With a median afternoon temperature as measured by researchers in August 2018 of 95.4 degrees, Franklin Square was in the top-third of the city's 278 neighborhoods.  66.9 percent were cooler. 
+
+#### Supporting code
+```{r}
+nsa_tree_temp %>%
+  select(nsa_name, temp_median_aft) %>%
+  mutate(rank = dense_rank(temp_median_aft), pct_nhoods_cooler = (rank/max(rank))) %>%
+  filter(nsa_name == "franklin square")
+```
+### Fact: Franklin Square poverty (for NPR)
+
+"It's [Franklin Square] also one of the poorer communities in the city."
+
+#### Explanation
+
+True.  There isn't good demographic data at the neighborhood level, so we have to use the slightly larger "community statistical area" geography to analyze this.  Franklin Square is entirely contained by a slightly larger grouping of neighborhoods known as "Southwest Baltimore". The poverty rate here is 36 percent. There are 55 CSAs in Baltimore.  Southwest Baltimore has the 51st highest poverty rate, making it poorer than more than 90 percent of CSAs. 
+
+#### Supporting code
+```{r}
+csa_tree_temp_demographics %>%
+  select(`csa2010`, percent_of_family_households_living_below_the_poverty_line) %>%
+  mutate(rank = dense_rank(percent_of_family_households_living_below_the_poverty_line), pct_nhoods_wealthier = (rank/max(rank))) %>%
+  filter(`csa2010` == "southwest baltimore")
+```
+
+### Fact: Neighborhood heat difference (for NPR)
+
+Citywide in Baltimore, the hottest neighborhoods differ by as much as 10 degrees from the coolest neighborhoods. 
+
+```{r}
+nsa_tree_temp %>%
+  select(nsa_name, temp_median_aft) %>%
+  # filter(nsa_name != "gwynns falls/leakin park") %>%å
+  filter((temp_median_aft == min(temp_median_aft)) | (temp_median_aft == max(temp_median_aft)))
+  
+```
+
+
+ And those hot spots had higher
+rates of poverty. That&#39;s according to data analyzed by NPR and the Howard
+Center.
 
 ## PINGLEY GRAPHIC MOVE OVER
 ```{r}

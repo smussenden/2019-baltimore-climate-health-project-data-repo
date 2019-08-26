@@ -449,7 +449,7 @@ EMS_all %>%
 ```
 
 
-### Fact: Substance abuse calls rate
+### Fact: Substance abuse calls rate (for NPR)
 
 "Calls relating to substance abuse more than doubled in extreme heat, according to data analyzed by the Howard Center."
 
@@ -462,6 +462,7 @@ In Summer 2018, when the heat index was under 80 degrees, there was a medical ca
 That's an increase in the rate of about an hour and a half, or an increase of 118 percent. Yes, it's weird to say that a *decrease* in the number of hours between calls actually represents an increase in the rate, but it makes sense logically.  If there are fewer hours between calls, then there are more calls on any given day.  We use the classic percent change formula ((new-old)/old) to calculate the difference between the two values. It's a 118 percent change. 
 
 It's easier to see this if we convert the hours between calls statistic to calls per day by dividing the hours between calls by 24.  We get a rate of calls per day of 8.11 when it's under 80, and a rate of 17.67 when it's over 103.  The percent change between those values is 118 percent.
+
 ``` {r}
 
 # Select conditions
@@ -494,34 +495,74 @@ EMS_all %>%
 
 ```
 
-### FOR MEG
+### Fact: calls increase in hot weather (for NPR)
 
-Franklin isn&#39;t imagining that: Her neighborhood -- Franklin Square -- is
-literally hotter than about two thirds of the neighborhoods in Baltimore.
- 
-It&#39;s also one of the poorer communities in the city.
-Citywide in Baltimore, the hottest neighborhoods differ by as much as 10
-degrees from the coolest neighborhoods. And those hot spots had higher
-rates of poverty. That&#39;s according to data analyzed by NPR and the Howard
-Center.
-
-NPR and the Howard Center obtained and analyzed EMS and hospital data
-in Baltimore.
- 
-When the heat index reached dangerous levels last summer, EMS calls
+"When the heat index reached dangerous levels last summer, EMS calls
 increased citywide for heat stroke ... which can be fatal ... but calls also
 increased for chronic conditions, including several respiratory and
-cardiovascular conditions.
- 
-And neighborhood made a difference ... in the last five years, Medicaid
+cardiovascular conditions."
+
+### Explanation
+
+Using emergency medical call records from Baltimore City, we examined calls during Summer 2018.  They were aligned to heat index data captured at the Inner Harbor and adjusted for the urban heat island using the ZIP Code of each call location.  The statistics in the table below represent the number of hours that passed between calls for select conditions when the temperature was in a given heat index bucket. 
+
+As expected, calls for heat stroke increased dramatically.  When it was under 80 degrees, there was a call for heat stroke every 480 hours, or about once every thre weeks. When it was 103 degrees or higher, there was a call for heat stroke every 1.4 hours.  Calls for chronic conditions like diabetes and kidney disease increased, though less dramatically.  Calls for respiratory distress and COPD were also more common in very hot weather, as were heart conditions like congestive heart failure and cardiac arrest. 
+
+
+#### Supporting Code
+``` {r}
+
+# Select conditions
+conditions <- c("Heat Exhaustion/Heat Stroke", "Hyperthermia", "Dehydration","Respiratory Distress", "COPD (Emphysema/Chronic Bronchitis)", "End Stage Renal Disease", "Diabetic Hyperglycemia", "Diabetic Hypoglycemia", "Cardiac Arrest", "CHF (Congestive Heart Failure)")
+
+
+# Calculate the total number of hours over the course of Summer 2018 that the heat index fell into each heat index level, as defined by the national weather service: not unsafe (under 80), caution (80-89), extreme caution (90-102), danger (103-124).   
+
+heat_index_count_per_nws_five_scale_bucket <- dmh_ems %>%
+  select(heat_index_nws_five_scale_bucket) %>%
+  group_by(heat_index_nws_five_scale_bucket) %>%
+  summarise(heat_index_count_per_nws_five_scale_bucket=n()) %>%
+  arrange(heat_index_nws_five_scale_bucket)
+
+# For each target condition, calculate the number of hours between calls at each temperature level.  This metric allows us to account for the fact that simply counting calls in each bucket would be flawed, because it wouldn't adjust for the rarity of very hot temperatures. 
+
+EMS_all %>%
+  filter(primary_impression_group %in% conditions) %>%
+  group_by(primary_impression_group, adjusted_heat_index_nws_five_scale_bucket) %>%
+  summarise(condition_calls_count_per_bucket=n()) %>%
+  inner_join(heat_index_count_per_nws_five_scale_bucket, by = c("adjusted_heat_index_nws_five_scale_bucket" = "heat_index_nws_five_scale_bucket")) %>%
+  mutate(hours_per_call = heat_index_count_per_nws_five_scale_bucket/condition_calls_count_per_bucket) %>%
+  select(primary_impression_group, adjusted_heat_index_nws_five_scale_bucket, hours_per_call) %>%
+  spread(adjusted_heat_index_nws_five_scale_bucket, hours_per_call) %>%
+  select(primary_impression_group, `not_unsafe_under_80`,`danger_103_124`)
+
+
+```
+
+### Fact: Medicaid patients (for NPR) 
+
+"And neighborhood made a difference ... in the last five years, Medicaid
 patients in Baltimore’s hottest areas visited the hospital for those (SHOULD BE WITH)
 conditions at higher rates than Medicaid patients in the cooler parts of
-town.
+town." 
 
-In Baltimore, city officials are working on planting trees and creating more
-green space in the city’s low-income neighborhoods.
- 
-The neighborhood where Shakira Franklin lives has increased its tree
-canopy in recent years. But by 2015, it still had one of the city’s lowest in
-the city.
+I would rewrite to say "between 2013 and 2018, Medicaid patients with those conditions in Baltimore’s hottest areas visited the hospital at higher rates than Medicaid patients in the cooler parts of town."
+I'm concerned about the phrase "neighborhood made a difference".  It suggests causal, as opposed to simply unfortunate. 
+
+#### Explanation
+
+We examined rates of chronic conditions among low-income people in different parts of Baltimore by examining in-patient hospital admissions by people on Medicaid in Baltimore, and discovered that low-income people in different parts of the city had different prevalance rates for chronic conditions affected by heat -- asthma, COPD, heart disease, kidney disease and diabetes. And, we found, those differences varied in line with temperature differences in the area in which they lived.
+
+There were moderate to strong positive relationships (kidney disease, r = .6; copd, r=.75; asthma, r=.51; heart_disease, r=.71; diabetes, r=.5) between a ZIP code's prevalance rate for chronic medical conditions as diagnosed in inpatient hospital visits and a ZIP code's median afternoon temperature as measured by urban heat island researchers in August 2018.  That is to say: the higher the neighborhood temperature, the higher the disease rate amongst the poorest inhabitants, and vice versa. This is not a causal relationship we are describing.  
+
+#### Supporting Code
+
+``` {r}
+ip_full_zip_medicaid_correlation_matrix %>%
+    filter(str_detect(rowname, "asthma|copd|kidney|heart_disease|diabetes")) %>%
+    select(rowname, temp_median_aft)
+
+```
+
+
 -30-

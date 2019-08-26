@@ -1317,4 +1317,39 @@ csa_tree_temp_demographics %>%
 
 ```
 
+### Fact: Franklin Square tree canopy in recent years (for NPR)
 
+The neighborhood where Shakira Franklin (Franklin Square) lives has increased its tree
+canopy in recent years. 
+
+#### Explanation
+
+In 2007, 14.2 percent of the neighborhood was covered by tree canopy in the summer.  By 2015, that had increased to 16.1 percent, a 1.9 percentage point increase. 
+
+#### Supporting Code
+
+```{r}
+
+nsa_tree_temp %>%
+  select(nsa_name, `avg_canopy_%_07` = `07_lid_mean`, `avg_canopy_15` = `15_lid_mean`, `%_point_change` = lid_change_percent_point) %>%
+  filter(nsa_name == "franklin square")
+
+```
+
+### Fact: Franklin Square tree canopy level (for NPR)
+
+But by 2015, it [Franklin Square] still had one of the city’s lowest.
+
+#### Explanation
+
+In 2015, two-thirds of Baltiore's 278 neighborhoods had more tree canopy than Franklin Square's 16 percent coverage. 
+
+```{r}
+
+nsa_tree_temp %>%
+  select(nsa_name, `avg_canopy_15` = `15_lid_mean`) %>%
+  arrange(nsa_name) %>%
+  mutate(rank = dense_rank(desc(`avg_canopy_15`)), pct_nhoods_w_more_tree_canopy = (rank/max(rank))) %>%
+  filter(nsa_name == "franklin square")
+
+```

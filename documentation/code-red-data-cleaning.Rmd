@@ -1149,7 +1149,6 @@ DESCRIPTION
 
 ### Store universal variables
 
-```{r}
 # Common file path to raw EMS data
 path_to_data <- "../data/input-data/hscrc-hospital-data/"
 
