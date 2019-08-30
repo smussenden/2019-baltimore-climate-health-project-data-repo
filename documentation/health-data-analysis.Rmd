@@ -366,6 +366,9 @@ stephanie_day_minute_averages %>%
   summarise(max_heat_index = max(mean_indoor_heat_index),
             min_heat_index = min(mean_indoor_heat_index))
 
+stephanie_day_minute_averages %>%
+  arrange(desc(mean_indoor_heat_index))
+
 ```
 
 ### Fact: EMS calls for certain conditions spike when it gets very hot

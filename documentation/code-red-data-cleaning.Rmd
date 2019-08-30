@@ -1347,6 +1347,24 @@ cctv_cameras_street_trees <- read_excel(paste0(path_to_data, "Violence_Reduction
 
 ```
 
+
+### Stuff I need to add in
+Theresa 1895 data and directions on how I pulled that down
+Data on heat index days jump
+hscrc data
+
+
+    3.3-6V Input
+    1-1.5mA measuring current
+    40-50 uA standby current
+    Humidity from 0-100% RH
+    -40 - 80 degrees C temperature range
+    +-2% RH accuracy
+    +-0.5 degrees C
+https://www.sparkfun.com/products/10167
+
+
+
 ## Output All Cleaned Data to CSV Files
 
 The following generated files are necessary for future portions of this analysis.

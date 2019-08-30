@@ -1,7 +1,7 @@
 ---
 title: "Analysis for story and graphics: In urban heat islands, climate crisis hits harder"
-author: "Roxanne Ready, Theresa Diffendal, Jane Gerard, Jake Gluck and Sean Mussenden  | Howard Center for Investigative Journalism"
-date: "9/4/2019"
+author: "Roxanne Ready, Theresa Diffendal, Jane Gerard, Jake Gluck and Sean Mussenden | Howard Center for Investigative Journalism"
+date: "9/3/2019"
 output: 
   html_document:
     toc: true
@@ -26,16 +26,17 @@ knitr::opts_chunk$set(echo = TRUE, message=FALSE, paged.print=TRUE)
 
 ## Introduction
 
-This R markdown document describes the methodology, results and explanation of a portion of the data analysis we conducted in support of reporting project examining the effects of climate-change driven temperature increases on the health of people who live in cities, focusing on Baltimore.
+This R markdown document describes the methodology, results and explanation of a portion of the data analysis we conducted in support of reporting project examining the effects of climate-change driven temperature increases on the health of people who live in cities, focusing on Baltimore.  The project was done in partnership with the University of Maryland's Philip Merrill College of Journalism, Capital News Service, the Howard Center for Investigative Journalism, NPR, Wide Angle Youth Media and WMAR.  
+XXXX PUT IN LINKS TO PLACES HERE
 
 Read the whole project, "[Code Red: Baltimore's Climate Divide](https://cnsmaryland.org/code-red
 )." 
 
-This document provides support for facts in the story, "[In urban heat islands, climate crisis hits harder](https://cnsmaryland.org/interactives/summer-2019/code-red/neighborhood-heat-inequality.html#story)".
+This document provides support for facts based on data analysis in the story, "[In urban heat islands, climate crisis hits harder](https://cnsmaryland.org/interactives/summer-2019/code-red/neighborhood-heat-inequality.html#story)" as well as LINK TO NPR STORY. 
 
 ## Setup
-
-Before running this file, **please view and run the [Code Red Data Cleaning document](https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/documentation/code-red-data-cleaning.md)** for this project. As well as outputting necessary cleaned data for the following ananlysis, that document also includes the following items necessary to understand this analysis: 
+XXX UPDATE LINK
+Before running this file, please view and run the [Code Red Data Cleaning document](https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/documentation/code-red-data-cleaning.md)** for this project. As well as outputting necessary cleaned data for the following ananlysis, that document also includes the following items necessary to understand this analysis: 
 
 * definitions
 * source data citation and information
@@ -48,8 +49,9 @@ Before running this file, **please view and run the [Code Red Data Cleaning docu
 #######################
 #### Load Packages ####
 #######################
+# For debugging rm(list=ls())
 
-library(tidyverse)
+library(tidyverse) # For general data science goodness
 library(DescTools) # For %like% operator
 library(corrr) # For correlation matrices
 library(colorspace) # For improved color palettes
@@ -60,6 +62,7 @@ require(scales) # For percent labeling on distribution tables
 
 # Turn off scientific notation in RStudio (prevents coersion to character type)
 options(scipen = 999)
+
 ```
 
 ### Load variables and data
@@ -69,44 +72,56 @@ options(scipen = 999)
 #### Store Variables ####
 #########################
 
-#### Common path to data ####
+#### Common path to output data folder ####
 path_to_data <- "../data/output-data/"
-
-#### Common save path ####
-save_path <- "../data/output-data/"
 
 ###################
 #### Load Data ####
 ###################
 
-dmh <- read_csv(paste0(path_to_data, "baltimore_weather_stations/dmh.csv"))
-EMS_all <- read_csv(paste0(path_to_data, "ems/EMS_all.csv"))
-dmh_ems <- read_csv(paste0(path_to_data, "ems/dmh_ems.csv"))
-stephanie_day_averages<- read_csv(paste0(path_to_data, "temperature_sensors/stephanie/stephanie_day_averages.csv"))
-stephanie_day_hourly_averages <- read_csv(paste0(path_to_data, "temperature_sensors/stephanie/stephanie_day_hourly_averages.csv"))
-stephanie_day_minute_averages <- read_csv(paste0(path_to_data, "temperature_sensors/stephanie/stephanie_day_minute_averages.csv"))
-tammy_day_averages <- read_csv(paste0(path_to_data, "temperature_sensors/tammy/tammy_day_averages.csv"))
-tammy_day_hourly_averages <- read_csv(paste0(path_to_data, "temperature_sensors/tammy/tammy_day_hourly_averages.csv"))
-tammy_day_minute_averages <- read_csv(paste0(path_to_data, "temperature_sensors/tammy/tammy_day_minute_averages.csv"))
-michael_day_averages<- read_csv(paste0(path_to_data, "temperature_sensors/michael/michael_day_averages.csv"))
-michael_day_hourly_averages <- read_csv(paste0(path_to_data, "temperature_sensors/michael/michael_day_hourly_averages.csv"))
-michael_day_minute_averages <- read_csv(paste0(path_to_data, "temperature_sensors/michael/michael_day_minute_averages.csv"))
-audrey_day_averages<- read_csv(paste0(path_to_data, "temperature_sensors/audrey/audrey_day_averages.csv"))
-audrey_day_hourly_averages <- read_csv(paste0(path_to_data, "temperature_sensors/audrey/audrey_day_hourly_averages.csv"))
-audrey_day_minute_averages <- read_csv(paste0(path_to_data, "temperature_sensors/audrey/audrey_day_minute_averages.csv"))
-nsa_tree_temp <- read_csv(paste0(path_to_data,"tree_temp_demographics/nsa_tree_temp.csv"))
-csa_tree_temp_demographics <-read_csv(paste0(path_to_data,"tree_temp_demographics/csa_tree_temp_demographics.csv"))
-blocks_tree_temp_demographics <- read_csv(paste0(path_to_data, "tree_temp_demographics/blocks_tree_temp_demographics.csv"))
-op_er_full_zip_correlation_matrix <- read_csv(paste0(path_to_data, "hospital_data/op_er/op_er_full_zip_correlation_matrix.csv"))
-op_er_full_zip_disease_heat <- read_csv(paste0(path_to_data, "hospital_data/op_er/op_er_full_zip_disease_heat.csv"))
-ip_full_zip_correlation_matrix <- read_csv(paste0(path_to_data, "hospital_data/ip/ip_full_zip_correlation_matrix.csv"))
-ip_full_zip_disease_heat <- read_csv(paste0(path_to_data, "hospital_data/ip/ip_full_zip_disease_heat.csv"))
+### Indoor temperature and humidity sensor data
 
+# Michael and Alberta
+folder <- "temperature_sensors/michael/"
+michael_day_hourly_averages <- read_csv(paste0(path_to_data, folder, "michael_day_hourly_averages.csv"))
+michael_day_minute_averages <- read_csv(paste0(path_to_data, folder, "michael_day_minute_averages.csv"))
 
+# Stephanie and family
+folder <- "temperature_sensors/stephanie/"
+stephanie_day_minute_averages <- read_csv(paste0(path_to_data, folder, "stephanie_day_minute_averages.csv"))
+stephanie_day_hourly_averages <- read_csv(paste0(path_to_data, folder, "stephanie_day_hourly_averages.csv"))
+
+# Audrey
+folder <- "temperature_sensors/audrey/"
+audrey_day_minute_averages <- read_csv(paste0(path_to_data, folder, "audrey_day_minute_averages.csv"))
+audrey_day_hourly_averages <- read_csv(paste0(path_to_data, folder, "audrey_day_hourly_averages.csv"))
+
+# Tammy
+folder <- "temperature_sensors/tammy/"
+tammy_day_minute_averages <- read_csv(paste0(path_to_data, folder, "tammy_day_minute_averages.csv"))
+tammy_day_hourly_averages <- read_csv(paste0(path_to_data, folder, "tammy_day_hourly_averages.csv"))
+
+### Outdoor temperature data 
+
+# Inner Harbor temperature data
+folder <- "baltimore_weather_stations/"
+dmh <- read_csv(paste0(path_to_data, folder, "dmh.csv"))
+
+### Urban heat island, tree canopy, demographics data
+folder <- "tree_temp_demographics/"
+
+# Neighborhood geography
+nsa_tree_temp <- read_csv(paste0(path_to_data, folder, "nsa_tree_temp.csv"))
+
+# Community statistical area geography
+csa_tree_temp_demographics <- read_csv(paste0(path_to_data, folder, "csa_tree_temp_demographics.csv"))
 
 ####################################
 ######## Define Functions ##########
 ####################################
+
+
+
 
 # Function to save each matrix as CSV
 write_matrix_csv <- function(dataframe) {
@@ -166,14 +181,14 @@ select_x <- function(df){
 
 ### Fact: 11-Day Heat Wave
 
-"...a dangerous, 11-day heat wave tormented the city this summer..."
+"So as a dangerous 11-day heat wave tormented the city in July, the hottest month ever recorded on the planet, fewer and fewer residents were going outside."
 
 #### Explanation
 
-Over an 11-day period in July -- July 12 to July 22 -- each day had a max temperature of at least 90 degrees F and max heat indexes of at least 92 degrees F. 
+Over an 11-day period in July 2019 -- July 12 to July 22 -- each day during that stretch had a maximum temperature of at least 90 degrees F and maximum heat index values of at least 92 degrees F. This was measured at a National Weather Service monitoring station located in the Inner Harbor. 
 
-#### Supporting Code
-```{r}
+#### Supporting code and output 
+```{r rows.print=11}
 
  dmh %>%
   filter(month == 7,
@@ -187,20 +202,22 @@ Over an 11-day period in July -- July 12 to July 22 -- each day had a max temper
             min_heat_index = min(avg_hourly_heat_index_dmh),
             max_heat_index = max(avg_hourly_heat_index_dmh),
             mean_heat_index = mean(avg_hourly_heat_index_dmh) 
-  )
-
+  ) %>%
+  select(date, max_temp, max_heat_index)
 
 ```
 
 ### Fact: Baltimore hit 100 Degrees
 
-“Can’t even put your head out the door,” said Tammy Jackson, 48, on a day when the temperature outside hit 100 degrees and 92 in her home.  “This is too much. Oh Lord, this is too much.”
+“Can’t even put your head out the door,” said Tammy Jackson, 48, on a day when the temperature outside hit 100 degrees Fahrenheit and 92 degrees in her home. “This is too much. Oh Lord, this is too much.”
 
 #### Explanation
 
-Tammy Jackson, a resident of Baltimore's McElderry Park neighborhood, had a temperature and humidity sensor installed in her house by our reporters.  In her home, the highest temperature reading on Saturday, July 20, the day she said that quote to a reporter, registered 92 degrees (91.6 degrees F). For outdoor temperature, in most of the project, we used hourly snapshot readings taken at a National Weather Service monitoring station in the Inner Harbor.  The highest hourly reading in that data set on that day was 99 degrees. But the NWS official daily summary for that monitoring station -- which incorporates all readings taken, not just hourly snapshots -- indicates it did hit 100 degrees at some point on July 20.    
+Tammy Jackson, a resident of Baltimore's McElderry Park neighborhood, had a temperature and humidity sensor installed in her house by our reporters. In her home, the highest temperature reading on Saturday, July 20, the day referenced in the story, was registered 92 degrees (91.6 degrees F). 
 
-#### Supporting Code
+For outdoor temperature, in most of our analysis, we used hourly snapshot readings taken at a National Weather Service monitoring station in the Inner Harbor. As the table below shows, the highest hourly reading in that data set on July 20 was 99 degrees. But the NWS official daily summary for that monitoring station -- which incorporates all readings taken, not just hourly snapshots -- indicates it did hit 100 degrees at some point on July 20. The data [can be viewed here]( https://www.ncdc.noaa.gov/cdo-web/datasets/GHCND/stations/GHCND:USW00093784/detail)
+
+#### Supporting code and output
 ```{r}
 
 tammy_day_hourly_averages %>%
@@ -208,6 +225,11 @@ tammy_day_hourly_averages %>%
   filter(date == "2019-07-20") %>%
   group_by(date) %>%
   summarise(max_indoor_temperature = max(mean_indoor_temperature))
+
+
+tammy_day_hourly_averages %>%
+  mutate(date = date(date_hour)) %>%
+  filter(date == "2019-07-20")
 
 dmh %>%
  filter(month == 7,
@@ -231,7 +253,7 @@ dmh %>%
 #### Explanation
 To create this graphic, we used a FLIR camera to take temperature readings on several city surfaces -- houses, streets, cars, sidewalks and more. To get the outdoor temperature at the time we took the FLIR readings, we used the NWS hourly snapshots at the Inner Harbor monitoring station. In the 11 a.m. hour, it was 87.1 degrees.  
 
-#### Supporting Code
+#### Supporting code and output
 
 ``` {r}
 dmh %>%
@@ -366,7 +388,7 @@ There are several ways of measuring differences between neighborhoods, based on 
 Using the median afternoon temperature, another valid measure of central tendancy, the difference was 9 degrees if we left out Gwynns Falls/Leakin Park, and 10 degrees if we included it. 
 
 
-#### Supporting Code
+#### Supporting code and output
 ```{r}
 nsa_tree_temp %>%
   select(nsa_name, temp_mean_aft) %>%
@@ -403,7 +425,7 @@ nsa_tree_temp %>%
 
 Similar to above, the code below selects the neighborhood and average afternoon temperature columns from the dataframe "nsa_tree_temp" - which lists Baltimore neighborhoods and a variety of temperature data. The results are then arranged in descending order so the hottest neighborhood is at the top. From this data we can see that McElderry Park has the highest average temperature in the afternoon at 99.39 degrees. 
 
-#### Supporting Code
+#### Supporting code and output
 ```{r}
 nsa_tree_temp %>%
   select(nsa_name, temp_mean_aft) %>%
@@ -441,7 +463,7 @@ For example, when the temperature is below 80 degrees, a call is made to EMS con
 
 Other conditions for which the call frequency increases include: altered level of consciousness, behavioral/psychiatric disorder, cardiac arrest, chest pain - STEMI, COPD, dehydration, diabetic hyper- and hypoglycemia, dizziness/vertigo, hyper- and hypotension, hyperthermia, obvious death, substance/drug abuse, and others.
 
-#### Supporting Code
+#### Supporting code and output
 ```{r}
 
 # Five-part NWS heat index danger scale
@@ -475,7 +497,7 @@ EMS_all %>%
 
 Using the same code as above, the number of hours inbetween calls for diabetes are certain temperatures was calculated. At 80 degrees or below, a call was made every 5.3 hours for Cardiac Arrest and every 15 hours for Congestive Heart Failure. When the heat index is 103 or greater, however, there is a call to EMS for cardiac arrest every 2.94 hours and for congestive heart failure every 8.83 hours. By dividing the value at 80 degrees by the value at 103+, we will get 1.8 for cardiac arrest and 1.7 for congestive heart failure. Those numbers round to 2, which means the frequency of the calls nearly doubles. 
 
-#### Supporting Code
+#### Supporting code and output
 ``` {r}
 
 # Select conditions
@@ -521,7 +543,7 @@ The two hottest neighborhoods, Madison/East End and Oldtown/Middle East, have po
 
 In comparison, the 15 coolest neighborhoods have an average afternoon temperature of 94.1 degrees or less. The highest poverty rate is 19.53% in Greater Govans and 19.26% in Forest Park/Walbrook, only greater than the poverty rating of 7 of the 10 hottest neighborhoods. 8 of the coolest neighborhoods have a single digit poverty rating (or 7 neighborhoods, if you round Cross-Country/Cheswolde's poverty rate to 10%).
 
-#### Supporting Code
+#### Supporting code and output
 ```{r}
  csa_tree_temp_demographics %>%
   select_x() %>%
@@ -548,7 +570,7 @@ The code below below selects from the neighborhood demographic dataset all the n
 
 The ggplot code then graphs that dataset, with special attention paid to the neighborhoods Canton, Clifton-Berea, Patterson Park, Greater Roland Park/Poplar Hill and Greenmount East. Along the y-axis is percentage of tree canopy coverage while the x-axis shows poverty rates. The code geom_smooth() creates a best fit line over the data and clearly shows a decrease in tree canopy coverage as poverty rate increases.
 
-#### Supporting Code
+#### Supporting code and output
 ```{r}
  csa_tree_temp_demographics %>%
   select_x() %>%
@@ -648,7 +670,7 @@ The crime rates are then paired with Baltimore's neighborhoods, which are sorted
 
 The values are then plotted, with average afternoon temperature on the y-axis and number of property crimes per 1,000 residents on the x-axis. The neighborhoods Canton, Clifton-Berea, Greater Roland Park/Poplar Hill, Greenmount East and Patterson Park North and East are highlighted for storytelling purposes. A best fit line is applied to show the average trajectory of the plotted values. It has a positive slope, which shows that as crime rate rises, so too does the average afternoon temperature. 
 
-#### Supporting Code
+#### Supporting code and output
 ```{r}
  csa_tree_temp_demographics %>%
   select_x() %>%
@@ -745,10 +767,18 @@ csa_tree_temp_demographics %>%
 
 The code belowing uses the "all_sensors_day_minute_averages" dataset, which contains all of the temperature and heat index data collected by sensors that reporters from the University of Maryland’s Howard Center for Investigative Journalism and Capital News Service placed in consenting peoples' homes. The values are then filtered, first for the maximum indoor temperature and then for maximum indoor heat index. The two filtered lines return observations of 96.8 degrees (97 when rounded) for maximum temperature and 119 for maximum indoor heat index.
 
-#### Supporting Code
+#### Supporting code and output
 ```{r}
 
 all_sensors_day_minute_averages <- bind_rows(michael_day_minute_averages, tammy_day_minute_averages, stephanie_day_minute_averages)
+
+
+
+all_sensors_day_minute_averages %>%
+    arrange(desc(indoor_heat_index_difference))
+
+
+    filter(indoor_heat_index_difference == max(indoor_heat_index_difference))
 
 all_sensors_day_minute_averages %>%
   filter(mean_indoor_temperature == max(mean_indoor_temperature))
@@ -756,7 +786,7 @@ all_sensors_day_minute_averages %>%
 all_sensors_day_minute_averages %>%
   filter(mean_indoor_heat_index == max(mean_indoor_heat_index))
 
-
+  
 ```
 
 ### Fact: For sensor text box
@@ -765,7 +795,7 @@ all_sensors_day_minute_averages %>%
 * Audrey DeWitt, first floor sensor. Temperature: 87. Relative humidity: 52%. What it felt like: 91.
 * Stephanie Pingley, second floor sensor. Temperature: 95. Relative humidity: 53%. What it felt like: 107.
 
-#### Supporting Code
+#### Supporting code and output
 ```{r}
 
 dmh %>%
@@ -804,7 +834,7 @@ stephanie_day_hourly_averages %>%
 
 The following code pulls from datasets containing the average weather condition recordings from sensors for Tammy Jackson's house. The first set uses the hourly average values while the second uses the average recorded values each minute. Both are filtered for July 21, 2019 at 10 p.m. on the dot. Both have the indoor heat index listed as 93 while the outdoor heat index is 84.
 
-#### Supporting Code
+#### Supporting code and output
 ```{r}
 tammy_day_hourly_averages %>%
   mutate(date = date(date_hour)) %>%
@@ -830,7 +860,7 @@ tammy_day_minute_averages %>%
 
 The following code pulls from datasets containing the average weather condition recordings from sensors in Stephanie Pingley's house. The first set uses the hourly average values, which is then filtered for the days during which the heat wave occurred, July 14-23. From that dataset, the outdoor heat index values are plotted in purple alongside indoor heat index values in red. The x-axis shows degrees while the y-axis shows dates. The red line for indoor heat index values is consistently higher than the outdoor heat index values line, showing that the heat index inside Pingley's house was often greater than the heat index outdoors.
 
-#### Supporting Code
+#### Supporting code and output
 ```{r}
 
 stephanie_day_hourly_averages %>%
@@ -1003,7 +1033,7 @@ The following code pulls from datasets containing the average weather condition 
 
 The final set of code accesses the dataset containing average hourly temperatures, dewpoints, relative humidities, and heat indexes for Baltimore's Inner Harbor since 1998. The data is filtered for July 19 at 7 p.m., at which time the average heat index was listed as 103.
 
-#### Supporting Code
+#### Supporting code and output
 ```{r}
 
 stephanie_day_hourly_averages %>%
@@ -1037,7 +1067,7 @@ The following code pulls from datasets containing the average weather condition 
 
 Note: The heat index hit 112!
 
-#### Supporting Code
+#### Supporting code and output
 ```{r}
 
 michael_day_hourly_averages %>%
@@ -1083,7 +1113,7 @@ More accurate to say that in East Baltimore, most had less than 10 percent.
 
 The following code selects neighborhoods in East Baltimore and arranges them in ascending order of tree canopy coverage as determined by the 2015 LiDar flyover data for Baltimore, the most recent data. 11 of the 15 neighborhoods have single digit percentage canopy cover, while Oliver with the highest only has 14%, far short of the city's goal of 40% tree cover.
 
-#### Supporting Code
+#### Supporting code and output
 ```{r}
 
 east_baltimore_nsas <- c("Berea", "Broadway East", "Oliver", "Middle East",
@@ -1116,7 +1146,7 @@ The GeoID 245100803011000 can be broken down into:
         Tract: 080301
         Block: 1000
 
-#### Supporting Code
+#### Supporting code and output
 ```{r}
 blocks_tree_temp_demographics %>%
   filter(`15_lid_mean` == 0) %>%
@@ -1135,7 +1165,7 @@ blocks_tree_temp_demographics %>%
 
 
 
-#### Supporting Code
+#### Supporting code and output
 
 ```{r}
 
@@ -1149,7 +1179,7 @@ These data confirm the graphs found [here](https://amarton.github.io/2019-baltim
 
 The data below pulls from the dataset "csa_tree_temp_demographics" which contains information about average temperature, tree canopy coverage, crime rate, poverty levels, and more demographics for neighborhoods in Baltimore. The created subset selects columns for average afternoon temperature, poverty levels, crime rate, life expectancy and unemployment rate. The data is then plotted. Temperature is plotted on the x-axis, with the other values on the y-axis for a total of four different graphs. The graphs can be seen at the link above. 
 
-#### Supporting Code
+#### Supporting code and output
 ```{r}
 
 #### Save working table of only the variables needed for this story ####
@@ -1180,7 +1210,7 @@ The poverty and temperature values are mapped, with poverty on the y-axis and te
 
 There is a xxx correlation between temperature and poverty.
 
-#### Supporting Code
+#### Supporting code and output
 ```{r}
 
 #### Data used ####
@@ -1221,7 +1251,7 @@ The crime and temperature values are mapped, with crime on the y-axis and temper
 
 There is a `r round(wk_corr[[2, 2]], 2)` correlation between temperature and crime.
 
-#### Supporting Code
+#### Supporting code and output
 ```{r}
 
 #### Data used ####
@@ -1262,7 +1292,7 @@ The life expectancy and temperature values are mapped, with life expectancy on t
 
 There is a `r round(wk_corr[[2, 2]], 2)` correlation between temperature and life expectancy.
 
-#### Supporting Code
+#### Supporting code and output
 ```{r}
 
 #### Data used ####
@@ -1303,7 +1333,7 @@ The unemployment rates and temperature values are mapped, with unemployment rate
 
 There is a `r round(wk_corr[[2, 2]], 2)` correlation between temperature and unemployment rate.
 
-#### Supporting Code
+#### Supporting code and output
 ```{r}
 
 #### Data used ####
@@ -1346,7 +1376,7 @@ Web Story: "Franklin isn't imagining that: Her neighborhood, Franklin Square, is
 
 With a median afternoon temperature as measured by researchers in August 2018 of 95.4 degrees, Franklin Square was in the top-third of the city's 278 neighborhoods.  66.9 percent were cooler.  It was 95.4 degrees F, about 6 degrees hotter than gwynns falls/leakin park.  If you leave that "neighborhood out", it's 5 degrees F cooler than the coolest neighborhood, dickeyville.
 
-#### Supporting code
+#### Supporting code and output
 ```{r}
 nsa_tree_temp %>%
   select(nsa_name, temp_median_aft) %>%
@@ -1357,6 +1387,13 @@ nsa_tree_temp %>%
   select(nsa_name, temp_median_aft) %>%
   filter(nsa_name != "gwynns falls/leakin park") %>%
   filter((nsa_name == "franklin square") | (temp_median_aft == min(temp_median_aft)))
+
+nsa_tree_temp %>%
+  select(nsa_name, temp_median_aft) %>%
+  filter(nsa_name != "gwynns falls/leakin park") %>%
+  filter((nsa_name == "berea") | (temp_median_aft == min(temp_median_aft)))
+
+
 
 
 ```
@@ -1371,7 +1408,7 @@ Web Story: "It's [Franklin Square] also in one of the city's poorest communities
 
 True.  There isn't good demographic data at the neighborhood level, so we have to use the slightly larger "community statistical area" geography to analyze this.  Franklin Square is entirely contained by a slightly larger grouping of neighborhoods known as "Southwest Baltimore". The poverty rate here is 36 percent, or more than one-third. There are 55 CSAs in Baltimore.  Southwest Baltimore has the 51st highest poverty rate, making it poorer than more than 90 percent of CSAs.
 
-#### Supporting code
+#### Supporting code and output
 ```{r}
 csa_tree_temp_demographics %>%
   select(`csa2010`, percent_of_family_households_living_below_the_poverty_line) %>%
@@ -1394,7 +1431,10 @@ nsa_tree_temp %>%
   select(nsa_name, temp_median_aft) %>%
   # filter(nsa_name != "gwynns falls/leakin park") %>%
   filter((temp_median_aft == min(temp_median_aft)) | (temp_median_aft == max(temp_median_aft)))
-  
+
+nsa_tree_temp %>%
+  select(nsa_name, temp_median_aft) %>%
+  filter(nsa_name == "broadway east" | nsa_name == "berea") 
 ```
 ### Fact: Poverty Heat Relationship (for NPR)
 
@@ -1407,7 +1447,7 @@ Web Story: Problematic: And the hottest parts of the city also have higher rates
 
 There is a moderate positive correlation (r = .38) between median afternoon temperature in a "community statistical area" (groupings of neighborhoods) in August 2018 and the percent of households living in poverty.
 
-#### Supporting Code
+#### Supporting code and output
 
 ```{r}
 csa_tree_temp_demographics %>%

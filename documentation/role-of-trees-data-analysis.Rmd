@@ -280,6 +280,16 @@ csa_tree_temp_demographics %>%
          rank_poverty, rank_canopy) %>%
   arrange(rank_poverty)
 
+
+csa_tree_temp_demographics %>%
+  select(perc_below_poverty = percent_of_family_households_living_below_the_poverty_line,
+         temp_mean_aft) %>%
+  as.matrix() %>%
+  correlate() %>%
+  mutate(variable=rowname) %>%
+  select(variable, everything(), -rowname)
+
+
 ```
 
 ### Fact: Coolest NSAs have 10x the canopy of hottest
@@ -303,7 +313,8 @@ The difference in temperatures between the city's mean hottest and coolest neigh
 
 # The hottest and coolest NSAs
 nsa_tree_temp %>%
-  select(nsa_name, temp_mean_aft, temp_median_aft) %>%
+  select(nsa_name, temp_mean_aft, temp_median_aft, `15_lid_mean`) %>%
+  filter(nsa_name != "gwynns falls/leakin park") %>%
   filter(
     ((temp_mean_aft == min(temp_mean_aft)) | (temp_mean_aft == max(temp_mean_aft))) |
     ((temp_median_aft == min(temp_median_aft)) | (temp_median_aft == max(temp_median_aft)))
@@ -655,7 +666,7 @@ Roland Park has an average of .65 percent canopy cover.
 
 # Roland Park's average canopy cover
 nsa_tree_temp %>%
-  select(nsa_name, avg_canopy = `15_lid_mean`) %>%
+  select(nsa_name, `15_lid_mean`, `07_lid_mean`) %>%
   filter(nsa_name %like% "roland%")
 
 ```
