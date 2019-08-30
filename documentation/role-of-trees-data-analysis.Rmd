@@ -69,7 +69,7 @@ options(scipen = 999)
 #########################
 
 # Common path to data
-path_to_data <- "../data/output-data/cleaned/"
+path_to_data <- "../data/output-data/"
 
 # NSAs of interest
 target_nsas <- c("Berea", "Broadway East", "Oliver", "Middle East", 
@@ -107,32 +107,32 @@ cbPalette <- c("#999999", # Dark Gray
 ###################
 
 blocks_tree_temp_demographics <- 
-  read_csv(paste0(path_to_data, "blocks_tree_temp_demographics.csv")) %>%
+  read_csv(paste0(path_to_data, "tree_temp_demographics/blocks_tree_temp_demographics.csv")) %>%
   mutate_at(vars(matches("geoid10")), as.character) # Recast non-calculable variables as characters
 
 csa_tree_temp_demographics <- 
-  read_csv(paste0(path_to_data, "csa_tree_temp_demographics.csv"))
+  read_csv(paste0(path_to_data, "tree_temp_demographics/csa_tree_temp_demographics.csv"))
 
 nsa_tree_temp <- 
-  read_csv(paste0(path_to_data, "nsa_tree_temp.csv"))
+  read_csv(paste0(path_to_data, "tree_temp_demographics/nsa_tree_temp.csv"))
 
 zcta_tree_temp_demographics <- 
-  read_csv(paste0(path_to_data, "zcta_tree_temp_demographics.csv")) %>%
+  read_csv(paste0(path_to_data, "tree_temp_demographics/zcta_temp_demographics.csv")) %>%
   mutate_at(vars(matches("zcta")), as.character) # Recast non-calculable variables as characters
 
-redlining_tree <- read_csv(paste0(path_to_data, "redlining_tree.csv"))
+redlining_tree <- read_csv(paste0(path_to_data, "redlining_trees/redlining_tree.csv"))
 
 street_trees_nsa_categorized <- 
-  read_csv(paste0(path_to_data, "street_trees_nsa_categorized.csv"))
+  read_csv(paste0(path_to_data, "street_trees/street_trees_nsa_categorized.csv"))
 
 street_trees_nsa_summarized <- 
-  read_csv(paste0(path_to_data, "street_trees_nsa_summarized.csv"))
+  read_csv(paste0(path_to_data, "street_trees/street_trees_nsa_summarized.csv"))
 
-citywide_lidar_data <- read_csv(paste0(path_to_data, "citywide_2007_2015_lidar.csv"))
+#citywide_lidar_data <- read_csv(paste0(path_to_data, "citywide_2007_2015_lidar.csv"))
 
-canopy_2007_2015_gains_losses <- read_csv(paste0(path_to_data, "canopy_2007_2015_gains_losses.csv"))
+#canopy_2007_2015_gains_losses <- read_csv(paste0(path_to_data, "canopy_2007_2015_gains_losses.csv"))
 
-cctv_cameras_street_trees <- read_csv(paste0(path_to_data, "cctv_cameras_street_trees.csv"))
+#cctv_cameras_street_trees <- read_csv(paste0(path_to_data, "cctv_cameras_street_trees.csv"))
 
 ```
 
@@ -960,7 +960,7 @@ This statistic is according to researchers with the U.S. Forest Service and the 
 
 #### Supporting Code
 
-```{r}
+```{r eval=FALSE}
 
 # Calculate citywide canopy change
 citywide_lidar_data %>%
@@ -1004,7 +1004,7 @@ As shown above, the canopy has only increased by a small amount.
 
 #### Supporting Code
 
-```{r}
+```{r eval=FALSE}
 
 # Calculate citywide canopy change
 citywide_lidar_data %>%
@@ -1052,7 +1052,7 @@ Using shapefiles, reporters calculated the percent of land area occupied by cano
 
 #### Supporting Code
 
-```{r}
+```{r eval=FALSE}
 
 # Calculate gains and losses as percentages of the total area
 canopy_2007_2015_gains_losses %>%
@@ -1276,13 +1276,13 @@ street_trees_nsa_categorized %>%
 
 #### Explanation
 
-At least `r nrow(cctv_cameras_street_trees)` trees have been marked for trimming or removal since early 2018.
+At least `# r nrow(cctv_cameras_street_trees)` trees have been marked for trimming or removal since early 2018.
 
 #### Code
 
-```{r, rows.print = 15}
+```{r eval=FALSE, rows.print = 15}
 
-nrow(cctv_cameras_street_trees)
+# nrow(cctv_cameras_street_trees)
 
 ```
 
@@ -1317,11 +1317,12 @@ csa_tree_temp_demographics %>%
 
 ```
 
+## For NPR
+
 ### Fact: Franklin Square tree canopy in recent years (for NPR)
 
-The neighborhood where Shakira Franklin (Franklin Square) lives has increased its tree
-canopy in recent years. 
-
+Audio Script: "The neighborhood where Shakira Franklin [Franklin Square] lives has increased its tree canopy over time."
+Web Story: "The neighborhood where Shakira Franklin lives has increased its tree canopy in recent years."
 #### Explanation
 
 In 2007, 14.2 percent of the neighborhood was covered by tree canopy in the summer.  By 2015, that had increased to 16.1 percent, a 1.9 percentage point increase. 
@@ -1338,11 +1339,11 @@ nsa_tree_temp %>%
 
 ### Fact: Franklin Square tree canopy level (for NPR)
 
-But by 2015, it [Franklin Square] still had one of the city’s lowest.
+Web story and Audio Script But by 2015, it [Franklin Square] was still among the city's lowest. 
 
 #### Explanation
 
-In 2015, two-thirds of Baltiore's 278 neighborhoods had more tree canopy than Franklin Square's 16 percent coverage. 
+In 2015, two-thirds of Baltimore's 278 neighborhoods had more tree canopy than Franklin Square's 16 percent coverage. 
 
 ```{r}
 

@@ -52,6 +52,7 @@ library(corrr) # For correlation matrices
 library(colorspace) # For improved color palettes
 library(ggplot2) # For graphing
 library(ggrepel) # For graph labeling
+library(lubridate) # for dates
 require(scales) # For percent labeling on distribution tables
 
 # Turn off scientific notation in RStudio (prevents coersion to character type)
@@ -104,6 +105,11 @@ op_er_full_zip_disease_heat <- read_csv(paste0(path_to_data, "op_er_full_zip_dis
 path_to_data <- "../data/output-data/hospital_data/ip/"
 ip_full_zip_medicaid_correlation_matrix <- read_csv(paste0(path_to_data, "ip_full_zip_medicaid_correlation_matrix.csv"))
 ip_full_zip_medicaid_disease_heat <- read_csv(paste0(path_to_data, "ip_full_zip_medicaid_disease_heat.csv"))
+
+# ER Medicaid Visits
+path_to_data <- "../data/output-data/hospital_data/op_er/"
+op_er_full_zip_medicaid_correlation_matrix <- read_csv(paste0(path_to_data, "op_er_full_zip_medicaid_correlation_matrix.csv"))
+op_er_full_zip_medicaid_disease_heat <- read_csv(paste0(path_to_data, "op_er_full_zip_medicaid_disease_heat.csv"))
 
 # Neighborhood Temperature Data
 path_to_data <- "../data/output-data/tree_temp_demographics/"
@@ -401,11 +407,13 @@ EMS_all %>%
 
 ```
 
+## For NPR
+
 ### Fact: Rate of increase of psychiatric calls (for NPR)
 
 "The Howard Center analyzed data from emergency response calls in Baltimore. They found that in the summer of 2018, calls for psychiatric conditions increased by nearly 40 percent when the heat index spiked above 103."
 
-### Explanation
+#### Explanation
 
 Using emergency medical call records from Baltimore City, we examined calls during Summer 2018.  They were aligned to heat index data captured at the Inner Harbor and adjusted for the urban heat island using the ZIP Code of each call location.  
 
@@ -463,6 +471,7 @@ That's an increase in the rate of about an hour and a half, or an increase of 11
 
 It's easier to see this if we convert the hours between calls statistic to calls per day by dividing the hours between calls by 24.  We get a rate of calls per day of 8.11 when it's under 80, and a rate of 17.67 when it's over 103.  The percent change between those values is 118 percent.
 
+#### Supporting Code
 ``` {r}
 
 # Select conditions
@@ -497,12 +506,12 @@ EMS_all %>%
 
 ### Fact: calls increase in hot weather (for NPR)
 
-"When the heat index reached dangerous levels last summer, EMS calls
-increased citywide for heat stroke ... which can be fatal ... but calls also
-increased for chronic conditions, including several respiratory and
-cardiovascular conditions."
+Audio Script: "When the heat index reached dangerous levels last summer, EMS calls increased citywide for heat stroke. But calls also increased for chronic conditions, including several cardiovascular and respiratory conditions."
 
-### Explanation
+Web Story: "In the summer of 2018 in Baltimore, when the heat index reached 103 degrees — the threshold deemed dangerous by the National Weather Service — EMS calls increased dramatically citywide for potentially fatal heat stroke. But calls increased for chronic conditions too: EMS calls for chronic obstructive pulmonary disorder (COPD) increased by nearly 70 percent. Calls for respiratory distress increased by 20 percent. Calls for cardiac arrest rose by 80 percent and those for high blood pressure more than doubled. Other conditions spiked too: Psychiatric disorders, substance abuse and dehydration, among others."
+
+
+#### Explanation
 
 Using emergency medical call records from Baltimore City, we examined calls during Summer 2018.  They were aligned to heat index data captured at the Inner Harbor and adjusted for the urban heat island using the ZIP Code of each call location.  The statistics in the table below represent the number of hours that passed between calls for select conditions when the temperature was in a given heat index bucket. 
 
@@ -536,18 +545,38 @@ EMS_all %>%
   spread(adjusted_heat_index_nws_five_scale_bucket, hours_per_call) %>%
   select(primary_impression_group, `not_unsafe_under_80`,`danger_103_124`)
 
+# Select conditions
+conditions <- c("Asthma", "Dehyrdation", "COPD (Emphysema/Chronic Bronchitis)", "Hypertension","Cardiac Arrest", "Behavioral/Psychiatric Disorder", "Substance/Drug Abuse", "Withdrawal/Overdose Drugs", "Withdrawal/Overdose ETOH","Substance/Drug Abuse", "Heat Exhaustion/Heat Stroke", "Respiratory Distress")
+
+
+# For each target condition, calculate the number of hours between calls at each temperature level.  This metric allows us to account for the fact that simply counting calls in each bucket would be flawed, because it wouldn't adjust for the rarity of very hot temperatures. 
+
+EMS_all %>%
+  filter(primary_impression_group %in% conditions) %>%
+  group_by(primary_impression_group, adjusted_heat_index_nws_five_scale_bucket) %>%
+  summarise(condition_calls_count_per_bucket=n()) %>%
+  inner_join(heat_index_count_per_nws_five_scale_bucket, by = c("adjusted_heat_index_nws_five_scale_bucket" = "heat_index_nws_five_scale_bucket")) %>%
+  mutate(hours_per_call = heat_index_count_per_nws_five_scale_bucket/condition_calls_count_per_bucket) %>%
+  select(primary_impression_group, adjusted_heat_index_nws_five_scale_bucket, hours_per_call) %>%
+  spread(adjusted_heat_index_nws_five_scale_bucket, hours_per_call) %>%
+  select(primary_impression_group, `not_unsafe_under_80`,`danger_103_124`) %>%
+  mutate(percent_change = (`not_unsafe_under_80`-`danger_103_124`)/`danger_103_124`) %>%
+  mutate(`calls_per_day_under_80` = 24/`not_unsafe_under_80`) %>%
+  mutate(`calls_per_day_over_103` = 24/`danger_103_124`) %>%
+  mutate(difference_day_percent = ((`calls_per_day_over_103`-`calls_per_day_under_80`)/`calls_per_day_under_80`))
+
 
 ```
 
+
 ### Fact: Medicaid patients (for NPR) 
 
-"And neighborhood made a difference ... in the last five years, Medicaid
-patients in Baltimore’s hottest areas visited the hospital for those (SHOULD BE WITH)
-conditions at higher rates than Medicaid patients in the cooler parts of
-town." 
+Audio Script: "And even when controlling for income, there were differences across the city. From 2013 to 2018, Medicaid patients in Baltimore's hottest areas visited the hospital with those conditions at higher rates than Medicaid patients in the cooler areas, according to the Howard Center analysis." 
 
-I would rewrite to say "between 2013 and 2018, Medicaid patients with those conditions in Baltimore’s hottest areas visited the hospital at higher rates than Medicaid patients in the cooler parts of town."
-I'm concerned about the phrase "neighborhood made a difference".  It suggests causal, as opposed to simply unfortunate. 
+Web Story: The heat affected Baltimore residents citywide, but even when controlling for income by only looking at the patterns of Medicaid patients, there were differences across the city. From 2013 to 2018, Medicaid patients in Baltimore's hottest areas visited the hospital at higher rates than Medicaid patients in the city's coolest areas. The low-income patients in the city's hot spots visited more often with several conditions, including asthma, COPD and heart disease, according to hospital inpatient and emergency room admissions data from the state's Health Services Cost Review Commission.
+
+
+
 
 #### Explanation
 
@@ -559,10 +588,15 @@ There were moderate to strong positive relationships (kidney disease, r = .6; co
 
 ``` {r}
 ip_full_zip_medicaid_correlation_matrix %>%
-    filter(str_detect(rowname, "asthma|copd|kidney|heart_disease|diabetes")) %>%
+    filter(str_detect(rowname, "asthma|copd|heart_disease|diabetes")) %>%
+    select(rowname, temp_median_aft)
+
+op_er_full_zip_medicaid_correlation_matrix %>%
+    filter(str_detect(rowname, "asthma|copd|heart_disease|diabetes")) %>%
     select(rowname, temp_median_aft)
 
 ```
 
+# Facts for NPR
 
 -30-

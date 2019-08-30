@@ -5,46 +5,101 @@
     -   [Store variables](#store-variables)
     -   [Load data](#load-data)
 -   [Line-by-Line Facts](#line-by-line-facts)
-    -   [Fact: Hottest Streets in Baltimore](#fact-hottest-streets-in-baltimore)
-    -   [Fact: A certain block in Broadway East is one of the city's hottest](#fact-a-certain-block-in-broadway-east-is-one-of-the-citys-hottest)
-    -   [Fact: Broadway East is one of the poorest NSAs](#fact-broadway-east-is-one-of-the-poorest-nsas)
-    -   [Fact: Poorest NSAs have less tree canopy](#fact-poorest-nsas-have-less-tree-canopy)
-    -   [Fact: Canopy-to-poverty correlation is pronounced on the east side](#fact-canopy-to-poverty-correlation-is-pronounced-on-the-east-side)
-    -   [Fact: Coolest NSAs have 10x the canopy of hottest](#fact-coolest-nsas-have-10x-the-canopy-of-hottest)
-    -   [Fact: 89 degrees at 1 p.m. on 7/10/2019](#fact-89-degrees-at-1-p.m.-on-7102019)
-    -   [Fact: Street trees & plots on North Milton Ave.](#fact-street-trees-plots-on-north-milton-ave.)
-    -   [Fact: Northern CSAs are both wealthier and cooler](#fact-northern-csas-are-both-wealthier-and-cooler)
-    -   [Fact: Wealthier CSAs have many trees around 35 feet tall](#fact-wealthier-csas-have-many-trees-around-35-feet-tall)
-    -   [Fact: Broadway East lacks many 35-foot trees](#fact-broadway-east-lacks-many-35-foot-trees)
-    -   [Fact: Tree types living on N. Milton in Broadway East](#fact-tree-types-living-on-n.-milton-in-broadway-east)
-    -   [Fact: Broadway East is a low-income neighborhood](#fact-broadway-east-is-a-low-income-neighborhood)
-    -   [Fact: McElderry Park temperature, wealth and canopy](#fact-mcelderry-park-temperature-wealth-and-canopy)
-    -   [Fact: Broadway East is one of the hottest neighborhoods](#fact-broadway-east-is-one-of-the-hottest-neighborhoods)
-    -   [Fact: Roland Park has dense canopy and is cool](#fact-roland-park-has-dense-canopy-and-is-cool)
-    -   [Fact: 2/3 of Roland Park is covered in canopy](#fact-23-of-roland-park-is-covered-in-canopy)
-    -   [Fact: Broadway East has about 10% canopy, 6x Roland Park](#fact-broadway-east-has-about-10-canopy-6x-roland-park)
-    -   [Fact: Inverse relationship between tree cover and temperature](#fact-inverse-relationship-between-tree-cover-and-temperature)
-    -   [Fact: Roland park is one of the coolest NSAs, Broadway East is one of the hottest](#fact-roland-park-is-one-of-the-coolest-nsas-broadway-east-is-one-of-the-hottest)
-    -   [Fact: About 1/4 of families in Broadway East live in poverty](#fact-about-14-of-families-in-broadway-east-live-in-poverty)
-    -   [Fact: Broadway East is one of the poorest NSAs](#fact-broadway-east-is-one-of-the-poorest-nsas-1)
-    -   [Fact: Poorer neighborhoods have less tree cover, with some exceptions](#fact-poorer-neighborhoods-have-less-tree-cover-with-some-exceptions)
-    -   [Fact: Broadway East and Roland Park canopy correlates to historic redlining](#fact-broadway-east-and-roland-park-canopy-correlates-to-historic-redlining)
-    -   [Fact: Roland Park is one of Baltimore's wealthiest and whitest; Broadway East is one of the poorest and blackest](#fact-roland-park-is-one-of-baltimores-wealthiest-and-whitest-broadway-east-is-one-of-the-poorest-and-blackest)
-    -   [Fact: Baltimore tree cover went from 27% in 2007 to 28% in 2015](#fact-baltimore-tree-cover-went-from-27-in-2007-to-28-in-2015)
-    -   [Fact: Hot East Baltimore NSAs are nowhere near 40% canopy](#fact-hot-east-baltimore-nsas-are-nowhere-near-40-canopy)
-    -   [Fact: Canopy growth has been "measured"](#fact-canopy-growth-has-been-measured)
-    -   [Fact: 1/3 of Broadway East blocks lost canopy cover, but overall canopy increased by 1.6 points; Roland Park increased by 2.1 points](#fact-13-of-broadway-east-blocks-lost-canopy-cover-but-overall-canopy-increased-by-1.6-points-roland-park-increased-by-2.1-points)
-    -   [Fact: Citywide canopy loss and gain](#fact-citywide-canopy-loss-and-gain)
+    -   [Fact: Hottest Streets in
+        Baltimore](#fact-hottest-streets-in-baltimore)
+    -   [Fact: A certain block in Broadway East is one of the city’s
+        hottest](#fact-a-certain-block-in-broadway-east-is-one-of-the-citys-hottest)
+    -   [Fact: Broadway East is one of the poorest
+        NSAs](#fact-broadway-east-is-one-of-the-poorest-nsas)
+    -   [Fact: Poorest NSAs have less tree
+        canopy](#fact-poorest-nsas-have-less-tree-canopy)
+    -   [Fact: Canopy-to-poverty correlation is pronounced on the east
+        side](#fact-canopy-to-poverty-correlation-is-pronounced-on-the-east-side)
+    -   [Fact: Coolest NSAs have 10x the canopy of
+        hottest](#fact-coolest-nsas-have-10x-the-canopy-of-hottest)
+    -   [Fact: 89 degrees at 1 p.m. on
+        7/10/2019](#fact-89-degrees-at-1-p.m.-on-7102019)
+    -   [Fact: Street trees & plots on North Milton
+        Ave.](#fact-street-trees-plots-on-north-milton-ave.)
+    -   [Fact: Northern CSAs are both wealthier and
+        cooler](#fact-northern-csas-are-both-wealthier-and-cooler)
+    -   [Fact: Wealthier CSAs have many trees around 35 feet
+        tall](#fact-wealthier-csas-have-many-trees-around-35-feet-tall)
+    -   [Fact: Broadway East lacks many 35-foot
+        trees](#fact-broadway-east-lacks-many-35-foot-trees)
+    -   [Fact: Tree types living on N. Milton in Broadway
+        East](#fact-tree-types-living-on-n.-milton-in-broadway-east)
+    -   [Fact: Broadway East is a low-income
+        neighborhood](#fact-broadway-east-is-a-low-income-neighborhood)
+    -   [Fact: McElderry Park temperature, wealth and
+        canopy](#fact-mcelderry-park-temperature-wealth-and-canopy)
+    -   [Fact: Broadway East is one of the hottest
+        neighborhoods](#fact-broadway-east-is-one-of-the-hottest-neighborhoods)
+    -   [Fact: Roland Park has dense canopy and is
+        cool](#fact-roland-park-has-dense-canopy-and-is-cool)
+    -   [Fact: 2/3 of Roland Park is covered in
+        canopy](#fact-23-of-roland-park-is-covered-in-canopy)
+    -   [Fact: Broadway East has about 10% canopy, 6x Roland
+        Park](#fact-broadway-east-has-about-10-canopy-6x-roland-park)
+    -   [Fact: Inverse relationship between tree cover and
+        temperature](#fact-inverse-relationship-between-tree-cover-and-temperature)
+    -   [Fact: Roland park is one of the coolest NSAs, Broadway East is
+        one of the
+        hottest](#fact-roland-park-is-one-of-the-coolest-nsas-broadway-east-is-one-of-the-hottest)
+    -   [Fact: About 1/4 of families in Broadway East live in
+        poverty](#fact-about-14-of-families-in-broadway-east-live-in-poverty)
+    -   [Fact: Broadway East is one of the poorest
+        NSAs](#fact-broadway-east-is-one-of-the-poorest-nsas-1)
+    -   [Fact: Poorer neighborhoods have less tree cover, with some
+        exceptions](#fact-poorer-neighborhoods-have-less-tree-cover-with-some-exceptions)
+    -   [Fact: Broadway East and Roland Park canopy correlates to
+        historic
+        redlining](#fact-broadway-east-and-roland-park-canopy-correlates-to-historic-redlining)
+    -   [Fact: Roland Park is one of Baltimore’s wealthiest and whitest;
+        Broadway East is one of the poorest and
+        blackest](#fact-roland-park-is-one-of-baltimores-wealthiest-and-whitest-broadway-east-is-one-of-the-poorest-and-blackest)
+    -   [Fact: Baltimore tree cover went from 27% in 2007 to 28% in
+        2015](#fact-baltimore-tree-cover-went-from-27-in-2007-to-28-in-2015)
+    -   [Fact: Hot East Baltimore NSAs are nowhere near 40%
+        canopy](#fact-hot-east-baltimore-nsas-are-nowhere-near-40-canopy)
+    -   [Fact: Canopy growth has been
+        “measured”](#fact-canopy-growth-has-been-measured)
+    -   [Fact: 1/3 of Broadway East blocks lost canopy cover, but
+        overall canopy increased by 1.6 points; Roland Park increased by
+        2.1
+        points](#fact-13-of-broadway-east-blocks-lost-canopy-cover-but-overall-canopy-increased-by-1.6-points-roland-park-increased-by-2.1-points)
+    -   [Fact: Citywide canopy loss and
+        gain](#fact-citywide-canopy-loss-and-gain)
     -   [Fact:](#fact)
-    -   [Fact: The hottest NSAs did not grow enough to correct canopy inequity](#fact-the-hottest-nsas-did-not-grow-enough-to-correct-canopy-inequity)
-    -   [Fact: Broadway East has ~1,000 spaces to put a tree, but most require breaking concrete](#fact-broadway-east-has-1000-spaces-to-put-a-tree-but-most-require-breaking-concrete)
-    -   [Fact: There is a 35-foot Callery pear tree in front of a specific house on E. Lanvale St. in fair condition](#fact-there-is-a-35-foot-callery-pear-tree-in-front-of-a-specific-house-on-e.-lanvale-st.-in-fair-condition)
-    -   [Fact: A 35-foot tree is unusual in Broadway East and average for Roland Park](#fact-a-35-foot-tree-is-unusual-in-broadway-east-and-average-for-roland-park)
-    -   [Fact: Number, condition and height of other trees on the E. Lanvale St. block](#fact-number-condition-and-height-of-other-trees-on-the-e.-lanvale-st.-block)
-    -   [Fact: Trees in Broadway East are less healthy than those in Roland Park and similar NSAs](#fact-trees-in-broadway-east-are-less-healthy-than-those-in-roland-park-and-similar-nsas)
-    -   [Fact: The BPD has requested at least around 100 trees be trimmed to clear CCTV views](#fact-the-bpd-has-requested-at-least-around-100-trees-be-trimmed-to-clear-cctv-views)
-    -   [Fact: The poorest CSAs have higher crime rates](#fact-the-poorest-csas-have-higher-crime-rates)
-    -   [Fact: ~1/3 of Broadway East homes are vacant](#fact-13-of-broadway-east-homes-are-vacant)
+    -   [Fact: The hottest NSAs did not grow enough to correct canopy
+        inequity](#fact-the-hottest-nsas-did-not-grow-enough-to-correct-canopy-inequity)
+    -   [Fact: Broadway East has \~1,000 spaces to put a tree, but most
+        require breaking
+        concrete](#fact-broadway-east-has-1000-spaces-to-put-a-tree-but-most-require-breaking-concrete)
+    -   [Fact: There is a 35-foot Callery pear tree in front of a
+        specific house on E. Lanvale St. in fair
+        condition](#fact-there-is-a-35-foot-callery-pear-tree-in-front-of-a-specific-house-on-e.-lanvale-st.in-fair-condition)
+    -   [Fact: A 35-foot tree is unusual in Broadway East and average
+        for Roland
+        Park](#fact-a-35-foot-tree-is-unusual-in-broadway-east-and-average-for-roland-park)
+    -   [Fact: Number, condition and height of other trees on the E.
+        Lanvale
+        St. block](#fact-number-condition-and-height-of-other-trees-on-the-e.-lanvale-st.block)
+    -   [Fact: Trees in Broadway East are less healthy than those in
+        Roland Park and similar
+        NSAs](#fact-trees-in-broadway-east-are-less-healthy-than-those-in-roland-park-and-similar-nsas)
+    -   [Fact: The BPD has requested at least around 100 trees be
+        trimmed to clear CCTV
+        views](#fact-the-bpd-has-requested-at-least-around-100-trees-be-trimmed-to-clear-cctv-views)
+    -   [Fact: The poorest CSAs have higher crime
+        rates](#fact-the-poorest-csas-have-higher-crime-rates)
+    -   [Fact: \~1/3 of Broadway East homes are
+        vacant](#fact-13-of-broadway-east-homes-are-vacant)
+-   [For NPR](#for-npr)
+    -   [Fact: Franklin Square tree canopy in recent years (for
+        NPR)](#fact-franklin-square-tree-canopy-in-recent-years-for-npr)
+    -   [Fact: Franklin Square tree canopy level (for
+        NPR)](#fact-franklin-square-tree-canopy-level-for-npr)
 
 LEFT TO DO:
 -----------
@@ -54,14 +109,24 @@ LEFT TO DO:
 Introduction
 ------------
 
-This R markdown document describes the methodology and results of a portion of the data analysis we conducted in support of a reporting project examining the effects of tree canopy inequity across the city of Baltimore, especially as it relates to climate change.
+This R markdown document describes the methodology and results of a
+portion of the data analysis we conducted in support of a reporting
+project examining the effects of tree canopy inequity across the city of
+Baltimore, especially as it relates to climate change.
 
-Per editor request, this document is arranged in order of the facts as they appear in the story. Therefore, there is some recognized duplication of both code and facts.
+Per editor request, this document is arranged in order of the facts as
+they appear in the story. Therefore, there is some recognized
+duplication of both code and facts.
 
 Setup
 -----
 
-Before running this file, **please view and run the [Code Red Data Cleaning document](https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/documentation/code-red-data-cleaning.md)** for this project. As well as outputting necessary cleaned data for the following ananlysis, that document also includes the following items necessary to understand this analysis:
+Before running this file, **please view and run the [Code Red Data
+Cleaning
+document](https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/documentation/code-red-data-cleaning.md)**
+for this project. As well as outputting necessary cleaned data for the
+following ananlysis, that document also includes the following items
+necessary to understand this analysis:
 
 -   definitions
 -   source data citation and information
@@ -95,7 +160,7 @@ options(scipen = 999)
 #########################
 
 # Common path to data
-path_to_data <- "../data/output-data/cleaned/"
+path_to_data <- "../data/output-data/"
 
 # NSAs of interest
 target_nsas <- c("Berea", "Broadway East", "Oliver", "Middle East", 
@@ -133,32 +198,32 @@ cbPalette <- c("#999999", # Dark Gray
 ###################
 
 blocks_tree_temp_demographics <- 
-  read_csv(paste0(path_to_data, "blocks_tree_temp_demographics.csv")) %>%
+  read_csv(paste0(path_to_data, "tree_temp_demographics/blocks_tree_temp_demographics.csv")) %>%
   mutate_at(vars(matches("geoid10")), as.character) # Recast non-calculable variables as characters
 
 csa_tree_temp_demographics <- 
-  read_csv(paste0(path_to_data, "csa_tree_temp_demographics.csv"))
+  read_csv(paste0(path_to_data, "tree_temp_demographics/csa_tree_temp_demographics.csv"))
 
 nsa_tree_temp <- 
-  read_csv(paste0(path_to_data, "nsa_tree_temp.csv"))
+  read_csv(paste0(path_to_data, "tree_temp_demographics/nsa_tree_temp.csv"))
 
 zcta_tree_temp_demographics <- 
-  read_csv(paste0(path_to_data, "zcta_tree_temp_demographics.csv")) %>%
+  read_csv(paste0(path_to_data, "tree_temp_demographics/zcta_temp_demographics.csv")) %>%
   mutate_at(vars(matches("zcta")), as.character) # Recast non-calculable variables as characters
 
-redlining_tree <- read_csv(paste0(path_to_data, "redlining_tree.csv"))
+redlining_tree <- read_csv(paste0(path_to_data, "redlining_trees/redlining_tree.csv"))
 
 street_trees_nsa_categorized <- 
-  read_csv(paste0(path_to_data, "street_trees_nsa_categorized.csv"))
+  read_csv(paste0(path_to_data, "street_trees/street_trees_nsa_categorized.csv"))
 
 street_trees_nsa_summarized <- 
-  read_csv(paste0(path_to_data, "street_trees_nsa_summarized.csv"))
+  read_csv(paste0(path_to_data, "street_trees/street_trees_nsa_summarized.csv"))
 
-citywide_lidar_data <- read_csv(paste0(path_to_data, "citywide_2007_2015_lidar.csv"))
+#citywide_lidar_data <- read_csv(paste0(path_to_data, "citywide_2007_2015_lidar.csv"))
 
-canopy_2007_2015_gains_losses <- read_csv(paste0(path_to_data, "canopy_2007_2015_gains_losses.csv"))
+#canopy_2007_2015_gains_losses <- read_csv(paste0(path_to_data, "canopy_2007_2015_gains_losses.csv"))
 
-cctv_cameras_street_trees <- read_csv(paste0(path_to_data, "cctv_cameras_street_trees.csv"))
+#cctv_cameras_street_trees <- read_csv(paste0(path_to_data, "cctv_cameras_street_trees.csv"))
 ```
 
 Line-by-Line Facts
@@ -166,11 +231,14 @@ Line-by-Line Facts
 
 ### Fact: Hottest Streets in Baltimore
 
-"Kwamel Couther stands on the front lines of a campaign to bring thousands of cooling shade trees to some of the **hottest streets in Baltimore**."
+“Kwamel Couther stands on the front lines of a campaign to bring
+thousands of cooling shade trees to some of the **hottest streets in
+Baltimore**.”
 
 #### Explanation
 
-All of the top 10 hottest NSAs are located in the south of the city, and many are in the south-east.
+All of the top 10 hottest NSAs are located in the south of the city, and
+many are in the south-east.
 
 #### Supporting Code
 
@@ -197,13 +265,18 @@ nsa_tree_temp %>%
     ## 10 biddle street                  97.9    10
     ## # … with 268 more rows
 
-### Fact: A certain block in Broadway East is one of the city's hottest
+### Fact: A certain block in Broadway East is one of the city’s hottest
 
-"He needs a lot of water too, working in the summer heat here at the edge of the **Broadway East** neighborhood, on one of the city’s **hottest** -- and poorest -- blocks."
+“He needs a lot of water too, working in the summer heat here at the
+edge of the **Broadway East** neighborhood, on one of the city’s
+**hottest** – and poorest – blocks.”
 
 #### Explanation
 
-Below, we see the block on N. Milton Avenue between Oliver and Federal is one of the city's hottest, ranking at 236 out of 13,598 blocks. The GEOID for this block was pulled from QGIS and breaks down into the following codes:
+Below, we see the block on N. Milton Avenue between Oliver and Federal
+is one of the city’s hottest, ranking at 236 out of 13,598 blocks. The
+GEOID for this block was pulled from QGIS and breaks down into the
+following codes:
 
 -   State: 24
 -   County: 510
@@ -227,13 +300,22 @@ blocks_tree_temp_demographics %>%
 
 ### Fact: Broadway East is one of the poorest NSAs
 
-"He needs a lot of water too, working in the summer heat here at the edge of the **Broadway East** neighborhood, on one of the city’s hottest -- and **poorest** -- blocks."
+“He needs a lot of water too, working in the summer heat here at the
+edge of the **Broadway East** neighborhood, on one of the city’s hottest
+– and **poorest** – blocks.”
 
 #### Explanation
 
-**Broadway East** ranked by percent of families living below the poverty line (out of 55 ranks). The Broadway East NSA is split vertically down the middle between the **Clifton-Berea** and **Greenmount East** CSAs, which also include large portions of the surrounding NSAs. It also includes an insignificant sliver of Oldtown/Middle East, which was disregarded in this analysis.
+**Broadway East** ranked by percent of families living below the poverty
+line (out of 55 ranks). The Broadway East NSA is split vertically down
+the middle between the **Clifton-Berea** and **Greenmount East** CSAs,
+which also include large portions of the surrounding NSAs. It also
+includes an insignificant sliver of Oldtown/Middle East, which was
+disregarded in this analysis.
 
-Broadway East, as a combination of Clifton-Berea and Greenmount East, has a total percent of family households living below the poverty line of 25.93 according to:
+Broadway East, as a combination of Clifton-Berea and Greenmount East,
+has a total percent of family households living below the poverty line
+of 25.93 according to:
 
 #### Supporting Code
 
@@ -270,11 +352,14 @@ csa_tree_temp_demographics %>%
 
 ### Fact: Poorest NSAs have less tree canopy
 
-"The city’s **poorest** neighborhoods tend to have **less tree canopy than wealthier areas**..."
+“The city’s **poorest** neighborhoods tend to have **less tree canopy
+than wealthier areas**…”
 
 #### Discussion
 
-A correlation matrix of poverty and canopy cover shows a negative correlation of -.34. In other words, places with a high poverty rate will have fewer trees, in general.
+A correlation matrix of poverty and canopy cover shows a negative
+correlation of -.34. In other words, places with a high poverty rate
+will have fewer trees, in general.
 
 #### Supporting Code
 
@@ -297,11 +382,14 @@ csa_tree_temp_demographics %>%
 
 ### Fact: Canopy-to-poverty correlation is pronounced on the east side
 
-"The city's poorest neighborhoods tend to have less tree canopy than wealthier areas, **a pattern that is especially pronounced on the concrete-dense east side**, in neighborhoods like **Broadway East**."
+“The city’s poorest neighborhoods tend to have less tree canopy than
+wealthier areas, **a pattern that is especially pronounced on the
+concrete-dense east side**, in neighborhoods like **Broadway East**.”
 
 #### Explanation
 
-Poverty, income and canopy at the top and bottom 10 CSAs when ranked for poverty.
+Poverty, income and canopy at the top and bottom 10 CSAs when ranked for
+poverty.
 
 #### Supporting Code
 
@@ -356,18 +444,26 @@ csa_tree_temp_demographics %>%
 
 ### Fact: Coolest NSAs have 10x the canopy of hottest
 
-"...the coolest neighborhoods have an order of magnitude more tree canopy than the hottest neighborhoods."
+“…the coolest neighborhoods have an order of magnitude more tree canopy
+than the hottest neighborhoods.”
 
-"...there was a 10-degree difference between the coolest and hottest neighborhoods in the city."
+“…there was a 10-degree difference between the coolest and hottest
+neighborhoods in the city.”
 
 #### Explanation
 
-An "order of magnitude" is an imprecise term but is generally considered to be 10. Whether the figure is 10 or approaching 10 depends on whether mean or median is used.
+An “order of magnitude” is an imprecise term but is generally considered
+to be 10. Whether the figure is 10 or approaching 10 depends on whether
+mean or median is used.
 
--   McElderry Park was the hottest, at a mean of 99.39 and a median of 99.3 degrees Fahrenheit.
--   Gwynns Falls/Leakin Park was the coolest, at a mean of 90.75 and a median of 89.32 degrees Fahrenheit.
+-   McElderry Park was the hottest, at a mean of 99.39 and a median of
+    99.3 degrees Fahrenheit.
+-   Gwynns Falls/Leakin Park was the coolest, at a mean of 90.75 and a
+    median of 89.32 degrees Fahrenheit.
 
-The difference in temperatures between the city's mean hottest and coolest neighborhoods is -8.65 degrees Fahrenheit, whereas the difference between median is -9.98 degrees.
+The difference in temperatures between the city’s mean hottest and
+coolest neighborhoods is -8.65 degrees Fahrenheit, whereas the
+difference between median is -9.98 degrees.
 
 #### Supporting Code
 
@@ -390,7 +486,8 @@ nsa_tree_temp %>%
 
 ### Fact: 89 degrees at 1 p.m. on 7/10/2019
 
-"By 1 p.m., when the heat index registered 89 degrees and the sun loomed almost directly overhead, working in the shade was no longer an option."
+“By 1 p.m., when the heat index registered 89 degrees and the sun loomed
+almost directly overhead, working in the shade was no longer an option.”
 
 #### Explanation
 
@@ -404,15 +501,19 @@ nsa_tree_temp %>%
 
 ### Fact: Street trees & plots on North Milton Ave.
 
-"A 35-foot linden tree in the middle of the block once provided serious cover from the sun, but it died within the last few years."
+“A 35-foot linden tree in the middle of the block once provided serious
+cover from the sun, but it died within the last few years.”
 
-"Across the street, another linden, a 25-footer, also appeared dead..."
+“Across the street, another linden, a 25-footer, also appeared dead…”
 
-"...under a 35-foot linden -- alive, but only in “fair” condition, as scored by the city -- with a broad leaf canopy. It was the only tree on the sidewalk to provide any meaningful temperature reduction..."
+“…under a 35-foot linden – alive, but only in “fair” condition, as
+scored by the city – with a broad leaf canopy. It was the only tree on
+the sidewalk to provide any meaningful temperature reduction…"
 
 #### Explanation
 
-All trees and potential tree locations along that stretch of road are referenced below.
+All trees and potential tree locations along that stretch of road are
+referenced below.
 
 #### Supporting Code
 
@@ -441,13 +542,17 @@ street_trees_nsa_categorized %>%
 
 ### Fact: Northern CSAs are both wealthier and cooler
 
-"In the **wealthier**, more **temperate** neighborhoods **north of Broadway East** -- like **Roland Park** ... -- a 35-foot street tree like this would be of roughly average height, with plenty of company."
+“In the **wealthier**, more **temperate** neighborhoods **north of
+Broadway East** – like **Roland Park** … – a 35-foot street tree like
+this would be of roughly average height, with plenty of company.”
 
 #### Explanation
 
-Poverty and temperature shows a correlation of .398. In other words, poorer neighborhoods tend to be more temperate.
+Poverty and temperature shows a correlation of .398. In other words,
+poorer neighborhoods tend to be more temperate.
 
-Secondly, the top and bottom 10 CSAs ranked for poverty in general show norther neighborhoods are both wealthier and cooler.
+Secondly, the top and bottom 10 CSAs ranked for poverty in general show
+norther neighborhoods are both wealthier and cooler.
 
 #### Supporting Code
 
@@ -519,11 +624,14 @@ csa_tree_temp_demographics %>%
 
 ### Fact: Wealthier CSAs have many trees around 35 feet tall
 
-"In the wealthier, more temperate **neighborhoods north of Broadway East** -- like **Roland Park** ... -- a **35-foot street tree** like this would be of **roughly average height**, with **plenty of company**."
+“In the wealthier, more temperate **neighborhoods north of Broadway
+East** – like **Roland Park** … – a **35-foot street tree** like this
+would be of **roughly average height**, with **plenty of company**.”
 
 #### Explanation
 
-Roland Park has an average tree height of 30.86 feet. 42.8 percent of the trees there are 35 feet tall or taller.
+Roland Park has an average tree height of 30.86 feet. 42.8 percent of
+the trees there are 35 feet tall or taller.
 
 #### Supporting Code
 
@@ -617,11 +725,14 @@ ggplot(filter(street_trees_nsa_summarized, !is.na(avg_ht_controled)),
 
 ### Fact: Broadway East lacks many 35-foot trees
 
-"Here in **Broadway East**, in an area of Baltimore that has suffered from decades of disinvestment, this **lonely 35-footer stands out as one of the neighborhood’s largest sidewalk trees**."
+“Here in **Broadway East**, in an area of Baltimore that has suffered
+from decades of disinvestment, this **lonely 35-footer stands out as one
+of the neighborhood’s largest sidewalk trees**.”
 
 #### Explanation
 
-Broadway East has an average tree height of 5.75 feet. 5.24 percent of the trees there are 35 feet tall or taller.
+Broadway East has an average tree height of 5.75 feet. 5.24 percent of
+the trees there are 35 feet tall or taller.
 
 #### Supporting Code
 
@@ -652,7 +763,8 @@ street_trees_nsa_categorized %>%
 
 ### Fact: Tree types living on N. Milton in Broadway East
 
-"The rest of the living trees on this street -- 10-foot red maples, London planes and elms..."
+“The rest of the living trees on this street – 10-foot red maples,
+London planes and elms…”
 
 #### Supporting Code
 
@@ -685,11 +797,13 @@ street_trees_nsa_categorized %>%
 
 ### Fact: Broadway East is a low-income neighborhood
 
-"...in the heat of this low-income neighborhood."
+“…in the heat of this low-income neighborhood.”
 
 #### Explanation
 
-The CSAs that include Broadway East rank near the bottom in terms of average household income (at 45 and 48 out of 55) and percent below the poverty line (10 and 14).
+The CSAs that include Broadway East rank near the bottom in terms of
+average household income (at 45 and 48 out of 55) and percent below the
+poverty line (10 and 14).
 
 #### Supporting Code
 
@@ -720,13 +834,18 @@ csa_tree_temp_demographics %>%
 
 ### Fact: McElderry Park temperature, wealth and canopy
 
-"...McElderry Park, the city’s **hottest neighborhood** and also **among its poorest**. It also has some of the **lowest levels of tree canopy**..."
+“…McElderry Park, the city’s **hottest neighborhood** and also **among
+its poorest**. It also has some of the **lowest levels of tree
+canopy**…”
 
 #### Explanation
 
-The **McElderry Park** NSA is split horizontally across the middle between **Madison/East End** and **Patterson Park North & East**, both of which contain large portions of surrounding NSAs.
+The **McElderry Park** NSA is split horizontally across the middle
+between **Madison/East End** and **Patterson Park North & East**, both
+of which contain large portions of surrounding NSAs.
 
-The McElderry Park CSAs have a high poverty rate, are the first and third hottest CSAs, and have the 52nd and 51st least tree canopy.
+The McElderry Park CSAs have a high poverty rate, are the first and
+third hottest CSAs, and have the 52nd and 51st least tree canopy.
 
 #### Supporting Code
 
@@ -766,7 +885,9 @@ csa_tree_temp_demographics %>%
 
 ### Fact: Broadway East is one of the hottest neighborhoods
 
-"A future where **the hottest city neighborhoods, like Broadway East**, have the kind of dense canopy that help keep places like Roland Park cool as global temperatures rise."
+“A future where **the hottest city neighborhoods, like Broadway East**,
+have the kind of dense canopy that help keep places like Roland Park
+cool as global temperatures rise.”
 
 #### Explanation
 
@@ -789,7 +910,9 @@ nsa_tree_temp %>%
 
 ### Fact: Roland Park has dense canopy and is cool
 
-"A future where the hottest city neighborhoods, like Broadway East, have the kind of **dense canopy that help keep places like Roland Park cool** as global temperatures rise."
+“A future where the hottest city neighborhoods, like Broadway East, have
+the kind of **dense canopy that help keep places like Roland Park cool**
+as global temperatures rise.”
 
 #### Explanation
 
@@ -813,7 +936,8 @@ nsa_tree_temp %>%
 
 ### Fact: 2/3 of Roland Park is covered in canopy
 
-"Two-thirds of the neighborhood \[Roland Park\] is covered with tree canopy in the summer."
+“Two-thirds of the neighborhood \[Roland Park\] is covered with tree
+canopy in the summer.”
 
 #### Explanation
 
@@ -835,7 +959,8 @@ nsa_tree_temp %>%
 
 ### Fact: Broadway East has about 10% canopy, 6x Roland Park
 
-"Broadway East has about 10% canopy coverage. That’s 6 times less than Roland Park."
+“Broadway East has about 10% canopy coverage. That’s 6 times less than
+Roland Park.”
 
 #### Supporting Code
 
@@ -854,13 +979,18 @@ nsa_tree_temp %>%
 
 ### Fact: Inverse relationship between tree cover and temperature
 
-"Trees have a big impact on temperature."
+“Trees have a big impact on temperature.”
 
-"That’s one reason Baltimore’s tree canopy map looks like a photonegative of this map, showing the difference in summer temperature averages by neighborhood."
+“That’s one reason Baltimore’s tree canopy map looks like a
+photonegative of this map, showing the difference in summer temperature
+averages by neighborhood.”
 
 #### Explanation
 
-When comparing temperature to tree canopy, we see a strong correllation of -.89. In other words, places with high temperatures tend to have fewer trees. This negative correllation confirms the visual representation in the story.
+When comparing temperature to tree canopy, we see a strong correllation
+of -.89. In other words, places with high temperatures tend to have
+fewer trees. This negative correllation confirms the visual
+representation in the story.
 
 #### Supporting Code
 
@@ -904,13 +1034,14 @@ nsa_tree_temp %>%
 
 ### Fact: Roland park is one of the coolest NSAs, Broadway East is one of the hottest
 
-"Roland Park is one of the coolest."
+“Roland Park is one of the coolest.”
 
-"Broadway East is one of the hottest."
+“Broadway East is one of the hottest.”
 
 #### Explanation
 
-Roland Park and Broadway East are ranked at 263 and 16, respectively, in terms of temperature, out of 278 NSAs.
+Roland Park and Broadway East are ranked at 263 and 16, respectively, in
+terms of temperature, out of 278 NSAs.
 
 #### Supporting Code
 
@@ -930,11 +1061,13 @@ nsa_tree_temp %>%
 
 ### Fact: About 1/4 of families in Broadway East live in poverty
 
-"Broadway East, with approximately 1 in 4 families below the poverty line..."
+“Broadway East, with approximately 1 in 4 families below the poverty
+line…”
 
 #### Explanation
 
-When both CSAs containing Broadway East are combined, they show an average of 25.9 percent of families living below the poverty line.
+When both CSAs containing Broadway East are combined, they show an
+average of 25.9 percent of families living below the poverty line.
 
 #### Supporting Code
 
@@ -957,11 +1090,12 @@ csa_tree_temp_demographics %>%
 
 ### Fact: Broadway East is one of the poorest NSAs
 
-"Broadway East... is also among the poorest neighborhoods."
+“Broadway East… is also among the poorest neighborhoods.”
 
 #### Explanation
 
-The CSAs that include Broadway East rank near the bottom in terms of average household income (at 45 and 48 out of 55).
+The CSAs that include Broadway East rank near the bottom in terms of
+average household income (at 45 and 48 out of 55).
 
 #### Supporting Code
 
@@ -989,13 +1123,18 @@ csa_tree_temp_demographics %>%
 
 ### Fact: Poorer neighborhoods have less tree cover, with some exceptions
 
-"In Baltimore, as in several other cities, poorer neighborhoods tend to have less tree cover than wealthier areas."
+“In Baltimore, as in several other cities, poorer neighborhoods tend to
+have less tree cover than wealthier areas.”
 
 #### Explanation
 
-A correlation matrix of poverty and canopy cover shows a negative correlation of -.34. In other words, places with a high poverty rate will have fewer trees, in general.
+A correlation matrix of poverty and canopy cover shows a negative
+correlation of -.34. In other words, places with a high poverty rate
+will have fewer trees, in general.
 
-There are some exceptions to this trend, such as Penn North/Reservoir Hill and Greater Rosemont, which both have relatively high rates of both poverty and tree canopy.
+There are some exceptions to this trend, such as Penn North/Reservoir
+Hill and Greater Rosemont, which both have relatively high rates of both
+poverty and tree canopy.
 
 #### Supporting Code
 
@@ -1104,13 +1243,15 @@ csa_tree_temp_demographics %>%
 
 ### Fact: Broadway East and Roland Park canopy correlates to historic redlining
 
-"Most of Roland Park ... was classified as “still desirable,” with some parts labeled “best” and others as “definitely declining.""
+“Most of Roland Park … was classified as “still desirable,” with some
+parts labeled “best” and others as “definitely declining.”"
 
-"Broadway East ... was labeled “definitely declining” and “hazardous.”"
+“Broadway East … was labeled “definitely declining” and “hazardous.”"
 
 #### Explanation
 
-For this section, reporters looked at overlapping shapefiles in QGIS and made determinations visually. *\[SEAN\] may run computations later*.
+For this section, reporters looked at overlapping shapefiles in QGIS and
+made determinations visually. *\[SEAN\] may run computations later*.
 
 #### Supporting Code
 
@@ -1132,17 +1273,22 @@ redlining_tree %>%
     ## 3 C          definitely …        305953084         62659386            20.5
     ## 4 D          hazardous           220227837         25042255            11.4
 
-### Fact: Roland Park is one of Baltimore's wealthiest and whitest; Broadway East is one of the poorest and blackest
+### Fact: Roland Park is one of Baltimore’s wealthiest and whitest; Broadway East is one of the poorest and blackest
 
-"Most of Roland Park -- today one of the wealthiest and whitest parts of Baltimore..."
+“Most of Roland Park – today one of the wealthiest and whitest parts of
+Baltimore…”
 
-"Broadway East -- today one of the poorest parts of Baltimore, with one of the highest percentages of African Americans..."
+“Broadway East – today one of the poorest parts of Baltimore, with one
+of the highest percentages of African Americans…”
 
 #### Explanation
 
-Roland Park is ranked 53 of 55 for percent of people living below the poverty line, and 3rd of 55 for percent of white residents.
+Roland Park is ranked 53 of 55 for percent of people living below the
+poverty line, and 3rd of 55 for percent of white residents.
 
-Broadway East -- split between Clifton-Berea and Greenmount East -- is ranked 10th/14th for poverty and 10th/9th for percent of black residents.
+Broadway East – split between Clifton-Berea and Greenmount East – is
+ranked 10th/14th for poverty and 10th/9th for percent of black
+residents.
 
 #### Supporting Code
 
@@ -1182,11 +1328,12 @@ csa_tree_temp_demographics %>%
 
 ### Fact: Baltimore tree cover went from 27% in 2007 to 28% in 2015
 
-"Baltimore was at 28% in 2015, up from 27% in 2007."
+“Baltimore was at 28% in 2015, up from 27% in 2007.”
 
 #### Explanation
 
-This statistic is according to researchers with the U.S. Forest Service and the University of Vermont. Our analysis shows a smaller change.
+This statistic is according to researchers with the U.S. Forest Service
+and the University of Vermont. Our analysis shows a smaller change.
 
 #### Supporting Code
 
@@ -1201,14 +1348,10 @@ citywide_lidar_data %>%
          )
 ```
 
-    ## # A tibble: 1 x 5
-    ##   county         `07_mean` `15_mean` real_change perc_change
-    ##   <chr>              <dbl>     <dbl>       <dbl>       <dbl>
-    ## 1 baltimore city     0.279     0.282      0.0028      0.0099
-
 ### Fact: Hot East Baltimore NSAs are nowhere near 40% canopy
 
-"Even with a flurry of planting in recent years, Broadway East and other hot East Baltimore neighborhoods are nowhere near 40%..."
+“Even with a flurry of planting in recent years, Broadway East and other
+hot East Baltimore neighborhoods are nowhere near 40%…”
 
 #### Explanation
 
@@ -1244,9 +1387,10 @@ nsa_tree_temp %>%
     ## 14 patterson place                             7.46
     ## 15 upper fells point                          11.2
 
-### Fact: Canopy growth has been "measured"
+### Fact: Canopy growth has been “measured”
 
-"...canopy growth has been relatively measured despite recent planting efforts."
+“…canopy growth has been relatively measured despite recent planting
+efforts.”
 
 #### Explanation
 
@@ -1265,16 +1409,15 @@ citywide_lidar_data %>%
          )
 ```
 
-    ## # A tibble: 1 x 5
-    ##   county         `07_mean` `15_mean` real_change perc_change
-    ##   <chr>              <dbl>     <dbl>       <dbl>       <dbl>
-    ## 1 baltimore city     0.279     0.282      0.0028      0.0099
-
 ### Fact: 1/3 of Broadway East blocks lost canopy cover, but overall canopy increased by 1.6 points; Roland Park increased by 2.1 points
 
-"Between 2007 and 2015, about a third of blocks in Broadway East lost tree canopy cover, while about two-thirds gained. Overall, tree canopy in Broadway East grew 1.6 percentage points, from 9% to 10.6%, over those eight years."
+“Between 2007 and 2015, about a third of blocks in Broadway East lost
+tree canopy cover, while about two-thirds gained. Overall, tree canopy
+in Broadway East grew 1.6 percentage points, from 9% to 10.6%, over
+those eight years.”
 
-"Roland Park, already covered with trees, grew by 2.1 percentage points."
+“Roland Park, already covered with trees, grew by 2.1 percentage
+points.”
 
 #### Supporting Code
 
@@ -1317,11 +1460,13 @@ nsa_tree_temp %>%
 
 ### Fact: Citywide canopy loss and gain
 
-"While some neighborhoods showed gains and others, losses, the net gain was about 1%."
+“While some neighborhoods showed gains and others, losses, the net gain
+was about 1%.”
 
 #### Explanation
 
-Using shapefiles, reporters calculated the percent of land area occupied by canopy that were tagged as canopy gained and canopy lost.
+Using shapefiles, reporters calculated the percent of land area occupied
+by canopy that were tagged as canopy gained and canopy lost.
 
 #### Supporting Code
 
@@ -1343,14 +1488,10 @@ canopy_2007_2015_gains_losses %>%
          difference = round(gain_as_perc - loss_as_perc, 2))
 ```
 
-    ## # A tibble: 1 x 7
-    ##       gain     loss no_change   old_07 gain_as_perc loss_as_perc difference
-    ##      <dbl>    <dbl>     <dbl>    <dbl>        <dbl>        <dbl>      <dbl>
-    ## 1   6.46e7   5.83e7    5.71e8   6.30e8         10.3         9.26       0.99
-
 ### Fact:
 
-"Those gains and losses were not distributed equitably. About 40% of city neighborhoods had net losses. The rest had net gains..."
+“Those gains and losses were not distributed equitably. About 40% of
+city neighborhoods had net losses. The rest had net gains…”
 
 ``` r
 # Count and percent of NSAs that gained and lost canopy
@@ -1375,7 +1516,8 @@ as.data.frame(table(sign(nsa_tree_temp$lid_change_percent))) %>%
 
 ### Fact: The hottest NSAs did not grow enough to correct canopy inequity
 
-"...none of Baltimore’s hottest neighborhoods saw enough growth to even approach correcting the \[tree canopy\] inequity."
+“…none of Baltimore’s hottest neighborhoods saw enough growth to even
+approach correcting the \[tree canopy\] inequity.”
 
 #### Supporting Code
 
@@ -1420,9 +1562,10 @@ nsa_tree_temp %>%
     ## 19 washing…          97.3           18           11.1            12.2 
     ## # … with 1 more variable: change_perc_point <dbl>
 
-### Fact: Broadway East has ~1,000 spaces to put a tree, but most require breaking concrete
+### Fact: Broadway East has \~1,000 spaces to put a tree, but most require breaking concrete
 
-"The city has identified about a thousand spaces in Broadway East where new trees could go, but 96% are currently covered by sidewalk."
+“The city has identified about a thousand spaces in Broadway East where
+new trees could go, but 96% are currently covered by sidewalk.”
 
 #### Supporting Code
 
@@ -1460,15 +1603,17 @@ street_trees_nsa_categorized %>%
     ## 4 broadw…                4 unsuitable                115             1140
     ## # … with 2 more variables: total_suitable <int>, perc_at_difficulty <dbl>
 
-### Fact: There is a 35-foot Callery pear tree in front of a specific house on E. Lanvale St. in fair condition
+### Fact: There is a 35-foot Callery pear tree in front of a specific house on E. Lanvale St. in fair condition
 
-"...the 35-foot Callery pear tree in front of Mary Boyd’s rowhouse on East Lanvale Street in Broadway East..."
+“…the 35-foot Callery pear tree in front of Mary Boyd’s rowhouse on East
+Lanvale Street in Broadway East…”
 
-"Her pear tree is in “fair” condition, according to the city."
+“Her pear tree is in “fair” condition, according to the city."
 
 #### Explanation
 
-Every tree on the Broadway East stretch of E. Lanvale St. is listed below.
+Every tree on the Broadway East stretch of E. Lanvale St. is listed
+below.
 
 #### Supporting Code
 
@@ -1498,11 +1643,15 @@ street_trees_nsa_categorized %>%
 
 ### Fact: A 35-foot tree is unusual in Broadway East and average for Roland Park
 
-"This \[35-foot Callery pear tree in front of Mary Boyd’s rowhouse on East Lanvale Street in Broadway East is\] exemplary for Broadway East, average in Roland Park..."
+“This \[35-foot Callery pear tree in front of Mary Boyd’s rowhouse on
+East Lanvale Street in Broadway East is\] exemplary for Broadway East,
+average in Roland Park…”
 
 #### Explanation
 
-Roland Park has a high percentage of trees 35 feet tall and taller; Broadway East has a low percentage. The average height of trees in Roland Park is about 31 feet. In Broadway East, it's about 6 feet.
+Roland Park has a high percentage of trees 35 feet tall and taller;
+Broadway East has a low percentage. The average height of trees in
+Roland Park is about 31 feet. In Broadway East, it’s about 6 feet.
 
 #### Supporting Code
 
@@ -1533,13 +1682,20 @@ street_trees_nsa_categorized %>%
     ## 1 roland …  30.9         3382             1449            42.8           11
     ## 2 broadwa…   5.75        1526               80             5.24         273
 
-### Fact: Number, condition and height of other trees on the E. Lanvale St. block
+### Fact: Number, condition and height of other trees on the E. Lanvale St. block
 
-"There are two other trees on her side of the block, a pair of 35-foot red maples. The city graded them in poor condition and has identified the trees -- and their thinning canopy -- for removal."
+“There are two other trees on her side of the block, a pair of 35-foot
+red maples. The city graded them in poor condition and has identified
+the trees – and their thinning canopy – for removal.”
 
 #### Explanation
 
-According to [the data schema](%22https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/documentation/street-tree-inventory-spec-sheet.pdf%22) provided by Baltimore City Recreation & Parks, page 11, a "tree removal" value in the "Maintenance Needs" field means: "Tree must be removed. The tree is either dead, or no remedial action can alleviate the poor condition of a tree."
+According to [the data
+schema](%22https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/documentation/street-tree-inventory-spec-sheet.pdf%22)
+provided by Baltimore City Recreation & Parks, page 11, a “tree removal”
+value in the “Maintenance Needs” field means: “Tree must be removed. The
+tree is either dead, or no remedial action can alleviate the poor
+condition of a tree.”
 
 #### Supporting Code
 
@@ -1570,11 +1726,17 @@ street_trees_nsa_categorized %>%
 
 ### Fact: Trees in Broadway East are less healthy than those in Roland Park and similar NSAs
 
-"Unfortunately, the larger street trees in this neighborhood are simply less healthy than they are in cooler neighborhoods to the north. Less than half of trees with a trunk larger than 6 inches in diameter were labeled “good” by the city’s most recent street tree census, compared to about 75% in Roland Park."
+“Unfortunately, the larger street trees in this neighborhood are simply
+less healthy than they are in cooler neighborhoods to the north. Less
+than half of trees with a trunk larger than 6 inches in diameter were
+labeled “good” by the city’s most recent street tree census, compared to
+about 75% in Roland Park."
 
 #### Explanation
 
-When looking at larger trees, Roland Park is ranked 28th in for percent in good condition. Broadway East, by contrast, is ranked 227th of 277 NSAs.
+When looking at larger trees, Roland Park is ranked 28th in for percent
+in good condition. Broadway East, by contrast, is ranked 227th of 277
+NSAs.
 
 #### Supporting Code
 
@@ -1627,23 +1789,25 @@ street_trees_nsa_categorized %>%
 
 ### Fact: The BPD has requested at least around 100 trees be trimmed to clear CCTV views
 
-"Since early 2018, trees were removed or trimmed back nearly 100 times across the city at the request of the police department, records show, including one a few blocks south of Broadway East."
+“Since early 2018, trees were removed or trimmed back nearly 100 times
+across the city at the request of the police department, records show,
+including one a few blocks south of Broadway East.”
 
 #### Explanation
 
-At least 94 trees have been marked for trimming or removal since early 2018.
+At least `# r nrow(cctv_cameras_street_trees)` trees have been marked
+for trimming or removal since early 2018.
 
 #### Code
 
 ``` r
-nrow(cctv_cameras_street_trees)
+# nrow(cctv_cameras_street_trees)
 ```
-
-    ## [1] 94
 
 ### Fact: The poorest CSAs have higher crime rates
 
-"In Baltimore’s poorest neighborhoods, which generally have higher crime rates..."
+“In Baltimore’s poorest neighborhoods, which generally have higher crime
+rates…”
 
 #### Supporting Code
 
@@ -1669,9 +1833,9 @@ csa_tree_temp_demographics %>%
     ## 10 clifton-berea                          27.6                         25.1
     ## # … with 45 more rows
 
-### Fact: ~1/3 of Broadway East homes are vacant
+### Fact: \~1/3 of Broadway East homes are vacant
 
-"In Broadway East, nearly a third of homes are vacant..."
+“In Broadway East, nearly a third of homes are vacant…”
 
 #### Explanation
 
@@ -1682,3 +1846,52 @@ csa_tree_temp_demographics %>%
 ``` r
 # Code here
 ```
+
+For NPR
+-------
+
+### Fact: Franklin Square tree canopy in recent years (for NPR)
+
+The neighborhood where Shakira Franklin (Franklin Square) lives has
+increased its tree canopy in recent years.
+
+#### Explanation
+
+In 2007, 14.2 percent of the neighborhood was covered by tree canopy in
+the summer. By 2015, that had increased to 16.1 percent, a 1.9
+percentage point increase.
+
+#### Supporting Code
+
+``` r
+nsa_tree_temp %>%
+  select(nsa_name, `avg_canopy_%_07` = `07_lid_mean`, `avg_canopy_15` = `15_lid_mean`, `%_point_change` = lid_change_percent_point) %>%
+  filter(nsa_name == "franklin square")
+```
+
+    ## # A tibble: 1 x 4
+    ##   nsa_name        `avg_canopy_%_07` avg_canopy_15 `%_point_change`
+    ##   <chr>                       <dbl>         <dbl>            <dbl>
+    ## 1 franklin square             0.142         0.161           0.0189
+
+### Fact: Franklin Square tree canopy level (for NPR)
+
+But by 2015, it \[Franklin Square\] still had one of the city’s lowest.
+
+#### Explanation
+
+In 2015, two-thirds of Baltimore’s 278 neighborhoods had more tree
+canopy than Franklin Square’s 16 percent coverage.
+
+``` r
+nsa_tree_temp %>%
+  select(nsa_name, `avg_canopy_15` = `15_lid_mean`) %>%
+  arrange(nsa_name) %>%
+  mutate(rank = dense_rank(desc(`avg_canopy_15`)), pct_nhoods_w_more_tree_canopy = (rank/max(rank))) %>%
+  filter(nsa_name == "franklin square")
+```
+
+    ## # A tibble: 1 x 4
+    ##   nsa_name        avg_canopy_15  rank pct_nhoods_w_more_tree_canopy
+    ##   <chr>                   <dbl> <int>                         <dbl>
+    ## 1 franklin square         0.161   186                         0.669

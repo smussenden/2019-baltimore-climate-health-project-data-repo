@@ -26,6 +26,16 @@
     -   [Fact: EMS calls for certain conditions spike when it gets very
         hot](#fact-ems-calls-for-certain-conditions-spike-when-it-gets-very-hot-1)
     -   [Explanation](#explanation-10)
+-   [For NPR](#for-npr)
+    -   [Fact: Rate of increase of psychiatric calls (for
+        NPR)](#fact-rate-of-increase-of-psychiatric-calls-for-npr)
+    -   [Fact: Substance abuse calls rate (for
+        NPR)](#fact-substance-abuse-calls-rate-for-npr)
+    -   [Fact: calls increase in hot weather (for
+        NPR)](#fact-calls-increase-in-hot-weather-for-npr)
+    -   [Fact: Medicaid patients (for
+        NPR)](#fact-medicaid-patients-for-npr)
+-   [Facts for NPR](#facts-for-npr)
 
 Introduction
 ------------
@@ -69,6 +79,7 @@ library(corrr) # For correlation matrices
 library(colorspace) # For improved color palettes
 library(ggplot2) # For graphing
 library(ggrepel) # For graph labeling
+library(lubridate) # for dates
 require(scales) # For percent labeling on distribution tables
 
 # Turn off scientific notation in RStudio (prevents coersion to character type)
@@ -154,12 +165,12 @@ in the afternoon of July 20, 2019, and observed this scene. On July 20,
          hour == 16) 
 ```
 
-    ## # A tibble: 1 x 9
-    ##   date_hour           mean_indoor_tem… mean_indoor_hea… mean_outdoor_te…
+    ## # A tibble: 1 x 10
+    ##   date_hour           mean_indoor_tem… mean_indoor_hea… mean_indoor_rel…
     ##   <dttm>                         <dbl>            <dbl>            <dbl>
-    ## 1 2019-07-20 16:00:00               96             109.               99
-    ## # … with 5 more variables: mean_outdoor_heat_index <dbl>,
-    ## #   indoor_temperature_difference <dbl>,
+    ## 1 2019-07-20 16:00:00               96             109.             51.8
+    ## # … with 6 more variables: mean_outdoor_temperature <dbl>,
+    ## #   mean_outdoor_heat_index <dbl>, indoor_temperature_difference <dbl>,
     ## #   indoor_heat_index_difference <dbl>, date <date>, hour <int>
 
 ### Fact: July 2019 Heat Wave
@@ -242,12 +253,12 @@ michael_day_minute_averages %>%
          minute == 30)
 ```
 
-    ## # A tibble: 1 x 10
-    ##   date_hour_minute    mean_indoor_tem… mean_indoor_hea… mean_outdoor_te…
+    ## # A tibble: 1 x 11
+    ##   date_hour_minute    mean_indoor_tem… mean_indoor_hea… mean_indoor_rel…
     ##   <dttm>                         <dbl>            <dbl>            <dbl>
-    ## 1 2019-07-18 22:30:00             94.5              116               86
-    ## # … with 6 more variables: mean_outdoor_heat_index <dbl>,
-    ## #   indoor_temperature_difference <dbl>,
+    ## 1 2019-07-18 22:30:00             94.5              116             64.7
+    ## # … with 7 more variables: mean_outdoor_temperature <dbl>,
+    ## #   mean_outdoor_heat_index <dbl>, indoor_temperature_difference <dbl>,
     ## #   indoor_heat_index_difference <dbl>, date <date>, hour <int>,
     ## #   minute <int>
 
@@ -368,12 +379,12 @@ audrey_day_hourly_averages %>%
          hour == 6) 
 ```
 
-    ## # A tibble: 1 x 9
-    ##   date_hour           mean_indoor_tem… mean_indoor_hea… mean_outdoor_te…
+    ## # A tibble: 1 x 10
+    ##   date_hour           mean_indoor_tem… mean_indoor_hea… mean_indoor_rel…
     ##   <dttm>                         <dbl>            <dbl>            <dbl>
-    ## 1 2019-07-20 06:00:00             87.8             91.8               84
-    ## # … with 5 more variables: mean_outdoor_heat_index <dbl>,
-    ## #   indoor_temperature_difference <dbl>,
+    ## 1 2019-07-20 06:00:00             87.8             91.8             52.7
+    ## # … with 6 more variables: mean_outdoor_temperature <dbl>,
+    ## #   mean_outdoor_heat_index <dbl>, indoor_temperature_difference <dbl>,
     ## #   indoor_heat_index_difference <dbl>, date <date>, hour <int>
 
 ### Fact: Data for Graphic on Temperature and Health Conditions
@@ -703,5 +714,329 @@ EMS_all %>%
     ## 2 Substance/Drug Abuse                           2.96           1.36
     ## 3 Withdrawal/Overdose Drugs                      2.24           1.06
     ## 4 Withdrawal/Overdose ETOH                       7.11           2.94
+
+For NPR
+-------
+
+### Fact: Rate of increase of psychiatric calls (for NPR)
+
+“The Howard Center analyzed data from emergency response calls in
+Baltimore. They found that in the summer of 2018, calls for psychiatric
+conditions increased by nearly 40 percent when the heat index spiked
+above 103.”
+
+#### Explanation
+
+Using emergency medical call records from Baltimore City, we examined
+calls during Summer 2018. They were aligned to heat index data captured
+at the Inner Harbor and adjusted for the urban heat island using the ZIP
+Code of each call location.
+
+In Summer 2018, when the heat index was under 80 degrees, there was a
+medical call for a behavioral and psychiatric disorder every 1.77 hours
+(1 hour, 46 minutes). When the heat index hit 103 degrees, the rate of
+calls increased dramatically – to one call every 1.29 hours (1 hour, 17
+minutes).
+
+That’s an increase in the rate of 29 minutes, or an increase of 37
+percent. Yes, it’s weird to say that a *decrease* in the number of hours
+between calls actually represents an increase in the rate, but it makes
+sense logically. If there are fewer hours between calls, then there are
+more calls on any given day. We use the classic percent change formula
+((new-old)/old) to calculate the difference between the two values. It’s
+a 37 percent change.
+
+It’s easier to see this if we convert the hours between calls statistic
+to calls per day by dividing the hours between calls by 24. We get a
+rate of calls per day of 13.55 when it’s under 80, and a rate of 18.56
+when it’s over 103. The percent change between 13.55 and 18.56 is 37
+percent.
+
+#### Supporting Code
+
+``` r
+# Select conditions
+conditions <- c("Behavioral/Psychiatric Disorder")
+
+# Calculate the total number of hours over the course of Summer 2018 that the heat index fell into each heat index level, as defined by the national weather service: not unsafe (under 80), caution (80-89), extreme caution (90-102), danger (103-124).   
+
+heat_index_count_per_nws_five_scale_bucket <- dmh_ems %>%
+  select(heat_index_nws_five_scale_bucket) %>%
+  group_by(heat_index_nws_five_scale_bucket) %>%
+  summarise(heat_index_count_per_nws_five_scale_bucket=n()) %>%
+  arrange(heat_index_nws_five_scale_bucket)
+
+# For each target condition, calculate the number of hours between calls at each temperature level.  This metric allows us to account for the fact that simply counting calls in each bucket would be flawed, because it wouldn't adjust for the rarity of very hot temperatures. 
+
+EMS_all %>%
+  filter(primary_impression_group %in% conditions) %>%
+  group_by(primary_impression_group, adjusted_heat_index_nws_five_scale_bucket) %>%
+  summarise(condition_calls_count_per_bucket=n()) %>%
+  inner_join(heat_index_count_per_nws_five_scale_bucket, by = c("adjusted_heat_index_nws_five_scale_bucket" = "heat_index_nws_five_scale_bucket")) %>%
+  mutate(hours_per_call = heat_index_count_per_nws_five_scale_bucket/condition_calls_count_per_bucket) %>%
+  select(primary_impression_group, adjusted_heat_index_nws_five_scale_bucket, hours_per_call) %>%
+  spread(adjusted_heat_index_nws_five_scale_bucket, hours_per_call) %>%
+  select(primary_impression_group, `not_unsafe_under_80`,`danger_103_124`) %>%
+  mutate(percent_change = (`not_unsafe_under_80`-`danger_103_124`)/`danger_103_124`) %>%
+  mutate(`calls_per_day_under_80` = 24/`not_unsafe_under_80`) %>%
+  mutate(`calls_per_day_over_103` = 24/`danger_103_124`) %>%
+  mutate(difference_day_percent = ((`calls_per_day_over_103`-`calls_per_day_under_80`)/`calls_per_day_under_80`))
+```
+
+    ## # A tibble: 1 x 7
+    ## # Groups:   primary_impression_group [1]
+    ##   primary_impress… not_unsafe_unde… danger_103_124 percent_change
+    ##   <chr>                       <dbl>          <dbl>          <dbl>
+    ## 1 Behavioral/Psyc…             1.77           1.29          0.370
+    ## # … with 3 more variables: calls_per_day_under_80 <dbl>,
+    ## #   calls_per_day_over_103 <dbl>, difference_day_percent <dbl>
+
+### Fact: Substance abuse calls rate (for NPR)
+
+“Calls relating to substance abuse more than doubled in extreme heat,
+according to data analyzed by the Howard Center.”
+
+#### Explanation
+
+Using emergency medical call records from Baltimore City, we examined
+calls during Summer 2018. They were aligned to heat index data captured
+at the Inner Harbor and adjusted for the urban heat island using the ZIP
+Code of each call location.
+
+In Summer 2018, when the heat index was under 80 degrees, there was a
+medical call for substance abuse every 2.96 hours (nearly 3 hours). When
+the heat index hit 103 degrees, the rate of calls increased dramatically
+– to one call every 1.35 hours.
+
+That’s an increase in the rate of about an hour and a half, or an
+increase of 118 percent. Yes, it’s weird to say that a *decrease* in the
+number of hours between calls actually represents an increase in the
+rate, but it makes sense logically. If there are fewer hours between
+calls, then there are more calls on any given day. We use the classic
+percent change formula ((new-old)/old) to calculate the difference
+between the two values. It’s a 118 percent change.
+
+It’s easier to see this if we convert the hours between calls statistic
+to calls per day by dividing the hours between calls by 24. We get a
+rate of calls per day of 8.11 when it’s under 80, and a rate of 17.67
+when it’s over 103. The percent change between those values is 118
+percent.
+
+#### Supporting Code
+
+``` r
+# Select conditions
+conditions <- c("Substance/Drug Abuse")
+
+# Calculate the total number of hours over the course of Summer 2018 that the heat index fell into each heat index level, as defined by the national weather service: not unsafe (under 80), caution (80-89), extreme caution (90-102), danger (103-124).   
+
+heat_index_count_per_nws_five_scale_bucket <- dmh_ems %>%
+  select(heat_index_nws_five_scale_bucket) %>%
+  group_by(heat_index_nws_five_scale_bucket) %>%
+  summarise(heat_index_count_per_nws_five_scale_bucket=n()) %>%
+  arrange(heat_index_nws_five_scale_bucket)
+
+# For each target condition, calculate the number of hours between calls at each temperature level.  This metric allows us to account for the fact that simply counting calls in each bucket would be flawed, because it wouldn't adjust for the rarity of very hot temperatures. 
+
+EMS_all %>%
+  filter(primary_impression_group %in% conditions) %>%
+  group_by(primary_impression_group, adjusted_heat_index_nws_five_scale_bucket) %>%
+  summarise(condition_calls_count_per_bucket=n()) %>%
+  inner_join(heat_index_count_per_nws_five_scale_bucket, by = c("adjusted_heat_index_nws_five_scale_bucket" = "heat_index_nws_five_scale_bucket")) %>%
+  mutate(hours_per_call = heat_index_count_per_nws_five_scale_bucket/condition_calls_count_per_bucket) %>%
+  select(primary_impression_group, adjusted_heat_index_nws_five_scale_bucket, hours_per_call) %>%
+  spread(adjusted_heat_index_nws_five_scale_bucket, hours_per_call) %>%
+  select(primary_impression_group, `not_unsafe_under_80`,`danger_103_124`) %>%
+  mutate(percent_change = (`not_unsafe_under_80`-`danger_103_124`)/`danger_103_124`) %>%
+  mutate(`calls_per_day_under_80` = 24/`not_unsafe_under_80`) %>%
+  mutate(`calls_per_day_over_103` = 24/`danger_103_124`) %>%
+  mutate(difference_day_percent = ((`calls_per_day_over_103`-`calls_per_day_under_80`)/`calls_per_day_under_80`))
+```
+
+    ## # A tibble: 1 x 7
+    ## # Groups:   primary_impression_group [1]
+    ##   primary_impress… not_unsafe_unde… danger_103_124 percent_change
+    ##   <chr>                       <dbl>          <dbl>          <dbl>
+    ## 1 Substance/Drug …             2.96           1.36           1.18
+    ## # … with 3 more variables: calls_per_day_under_80 <dbl>,
+    ## #   calls_per_day_over_103 <dbl>, difference_day_percent <dbl>
+
+### Fact: calls increase in hot weather (for NPR)
+
+Audio Script: “When the heat index reached dangerous levels last summer,
+EMS calls increased citywide for heat stroke. But calls also increased
+for chronic conditions, including several cardiovascular and respiratory
+conditions.”
+
+Web Story: “In the summer of 2018 in Baltimore, when the heat index
+reached 103 degrees — the threshold deemed dangerous by the National
+Weather Service — EMS calls increased dramatically citywide for
+potentially fatal heat stroke. But calls increased for chronic
+conditions too: EMS calls for two respiratory conditions — asthma and
+chronic obstructive pulmonary disorder (COPD) — increased by more than
+30 percent. Calls for cardiac arrest rose by 30 percent and those for
+high blood pressure nearly doubled. Other conditions spiked too:
+Psychiatric disorders, substance abuse and dehydration, among others.”
+
+#### Explanation
+
+Using emergency medical call records from Baltimore City, we examined
+calls during Summer 2018. They were aligned to heat index data captured
+at the Inner Harbor and adjusted for the urban heat island using the ZIP
+Code of each call location. The statistics in the table below represent
+the number of hours that passed between calls for select conditions when
+the temperature was in a given heat index bucket.
+
+As expected, calls for heat stroke increased dramatically. When it was
+under 80 degrees, there was a call for heat stroke every 480 hours, or
+about once every thre weeks. When it was 103 degrees or higher, there
+was a call for heat stroke every 1.4 hours. Calls for chronic conditions
+like diabetes and kidney disease increased, though less dramatically.
+Calls for respiratory distress and COPD were also more common in very
+hot weather, as were heart conditions like congestive heart failure and
+cardiac arrest.
+
+Take Ashma out COPD increased by 70 percent Cardiac Arrest by 80 percent
+High blood pressure more than doubled. Heat Exhaustion/Heat Stroke
+
+#### Supporting Code
+
+``` r
+# Select conditions
+conditions <- c("Heat Exhaustion/Heat Stroke", "Hyperthermia", "Dehydration","Respiratory Distress", "COPD (Emphysema/Chronic Bronchitis)", "End Stage Renal Disease", "Diabetic Hyperglycemia", "Diabetic Hypoglycemia", "Cardiac Arrest", "CHF (Congestive Heart Failure)")
+
+
+# Calculate the total number of hours over the course of Summer 2018 that the heat index fell into each heat index level, as defined by the national weather service: not unsafe (under 80), caution (80-89), extreme caution (90-102), danger (103-124).   
+
+heat_index_count_per_nws_five_scale_bucket <- dmh_ems %>%
+  select(heat_index_nws_five_scale_bucket) %>%
+  group_by(heat_index_nws_five_scale_bucket) %>%
+  summarise(heat_index_count_per_nws_five_scale_bucket=n()) %>%
+  arrange(heat_index_nws_five_scale_bucket)
+
+# For each target condition, calculate the number of hours between calls at each temperature level.  This metric allows us to account for the fact that simply counting calls in each bucket would be flawed, because it wouldn't adjust for the rarity of very hot temperatures. 
+
+EMS_all %>%
+  filter(primary_impression_group %in% conditions) %>%
+  group_by(primary_impression_group, adjusted_heat_index_nws_five_scale_bucket) %>%
+  summarise(condition_calls_count_per_bucket=n()) %>%
+  inner_join(heat_index_count_per_nws_five_scale_bucket, by = c("adjusted_heat_index_nws_five_scale_bucket" = "heat_index_nws_five_scale_bucket")) %>%
+  mutate(hours_per_call = heat_index_count_per_nws_five_scale_bucket/condition_calls_count_per_bucket) %>%
+  select(primary_impression_group, adjusted_heat_index_nws_five_scale_bucket, hours_per_call) %>%
+  spread(adjusted_heat_index_nws_five_scale_bucket, hours_per_call) %>%
+  select(primary_impression_group, `not_unsafe_under_80`,`danger_103_124`)
+```
+
+    ## # A tibble: 10 x 3
+    ## # Groups:   primary_impression_group [10]
+    ##    primary_impression_group            not_unsafe_under_80 danger_103_124
+    ##    <chr>                                             <dbl>          <dbl>
+    ##  1 Cardiac Arrest                                     5.30           2.94
+    ##  2 CHF (Congestive Heart Failure)                    15              8.83
+    ##  3 COPD (Emphysema/Chronic Bronchitis)                5.61           3.31
+    ##  4 Dehydration                                       41.7            2.21
+    ##  5 Diabetic Hyperglycemia                             7.33           5.3 
+    ##  6 Diabetic Hypoglycemia                              5.96           4.42
+    ##  7 End Stage Renal Disease                          160             53   
+    ##  8 Heat Exhaustion/Heat Stroke                      480              1.39
+    ##  9 Hyperthermia                                      NA             53   
+    ## 10 Respiratory Distress                               3.34           2.79
+
+``` r
+# Select conditions
+conditions <- c("Asthma", "COPD (Emphysema/Chronic Bronchitis)", "Hypertension","Cardiac Arrest", "Behavioral/Psychiatric Disorder", "Substance/Drug Abuse", "Withdrawal/Overdose Drugs", "Withdrawal/Overdose ETOH","Substance/Drug Abuse", "Heat Exhaustion/Heat Stroke")
+
+
+# For each target condition, calculate the number of hours between calls at each temperature level.  This metric allows us to account for the fact that simply counting calls in each bucket would be flawed, because it wouldn't adjust for the rarity of very hot temperatures. 
+
+EMS_all %>%
+  filter(primary_impression_group %in% conditions) %>%
+  group_by(primary_impression_group, adjusted_heat_index_nws_five_scale_bucket) %>%
+  summarise(condition_calls_count_per_bucket=n()) %>%
+  inner_join(heat_index_count_per_nws_five_scale_bucket, by = c("adjusted_heat_index_nws_five_scale_bucket" = "heat_index_nws_five_scale_bucket")) %>%
+  mutate(hours_per_call = heat_index_count_per_nws_five_scale_bucket/condition_calls_count_per_bucket) %>%
+  select(primary_impression_group, adjusted_heat_index_nws_five_scale_bucket, hours_per_call) %>%
+  spread(adjusted_heat_index_nws_five_scale_bucket, hours_per_call) %>%
+  select(primary_impression_group, `not_unsafe_under_80`,`danger_103_124`) %>%
+  mutate(percent_change = (`not_unsafe_under_80`-`danger_103_124`)/`danger_103_124`) %>%
+  mutate(`calls_per_day_under_80` = 24/`not_unsafe_under_80`) %>%
+  mutate(`calls_per_day_over_103` = 24/`danger_103_124`) %>%
+  mutate(difference_day_percent = ((`calls_per_day_over_103`-`calls_per_day_under_80`)/`calls_per_day_under_80`))
+```
+
+    ## # A tibble: 9 x 7
+    ## # Groups:   primary_impression_group [9]
+    ##   primary_impress… not_unsafe_unde… danger_103_124 percent_change
+    ##   <chr>                       <dbl>          <dbl>          <dbl>
+    ## 1 Asthma                       3.19           4.42         -0.278
+    ## 2 Behavioral/Psyc…             1.77           1.29          0.370
+    ## 3 Cardiac Arrest               5.30           2.94          0.801
+    ## 4 COPD (Emphysema…             5.61           3.31          0.695
+    ## 5 Heat Exhaustion…           480              1.39        343.   
+    ## 6 Hypertension                15.2            5.89          1.59 
+    ## 7 Substance/Drug …             2.96           1.36          1.18 
+    ## 8 Withdrawal/Over…             2.24           1.06          1.11 
+    ## 9 Withdrawal/Over…             7.11           2.94          1.42 
+    ## # … with 3 more variables: calls_per_day_under_80 <dbl>,
+    ## #   calls_per_day_over_103 <dbl>, difference_day_percent <dbl>
+
+### Fact: Medicaid patients (for NPR)
+
+Audio Script: “And even when controlling for income, there were
+differences across the city. From 2013 to 2018, Medicaid patients in
+Baltimore’s hottest areas visited the hospital with those conditions at
+higher rates than Medicaid patients in the cooler areas, according to
+the Howard Center analysis.”
+
+Web Story: The heat affected Baltimore residents citywide, but even when
+controlling for income by only looking at the patterns of Medicaid
+patients, there were differences across the city. From 2013 to 2018,
+Medicaid patients in Baltimore's hottest areas visited the hospital at
+higher rates than Medicaid patients in the city's coolest areas. The
+low-income patients in the city's hot spots visited more often with
+several conditions, including asthma, COPD, heart attacks and high blood
+pressure, according to hospital inpatient and emergency room admissions
+data from the state's Health Services Cost Review Commission.
+
+SWAP OUT HIGH BLOOD PRESSURE FOR KIDNEY DISEASE
+
+#### Explanation
+
+We examined rates of chronic conditions among low-income people in
+different parts of Baltimore by examining in-patient hospital admissions
+by people on Medicaid in Baltimore, and discovered that low-income
+people in different parts of the city had different prevalance rates for
+chronic conditions affected by heat – asthma, COPD, heart disease,
+kidney disease and diabetes. And, we found, those differences varied in
+line with temperature differences in the area in which they lived.
+
+There were moderate to strong positive relationships (kidney disease, r
+= .6; copd, r=.75; asthma, r=.51; heart\_disease, r=.71; diabetes, r=.5)
+between a ZIP code’s prevalance rate for chronic medical conditions as
+diagnosed in inpatient hospital visits and a ZIP code’s median afternoon
+temperature as measured by urban heat island researchers in August 2018.
+That is to say: the higher the neighborhood temperature, the higher the
+disease rate amongst the poorest inhabitants, and vice versa. This is
+not a causal relationship we are describing.
+
+#### Supporting Code
+
+``` r
+ip_full_zip_medicaid_correlation_matrix %>%
+    filter(str_detect(rowname, "asthma|copd|kidney|heart_disease|diabetes")) %>%
+    select(rowname, temp_median_aft)
+```
+
+    ## # A tibble: 5 x 2
+    ##   rowname                      temp_median_aft
+    ##   <chr>                                  <dbl>
+    ## 1 medicaid_kidney_disease_prev           0.596
+    ## 2 medicaid_copd_prev                     0.753
+    ## 3 medicaid_asthma_prev                   0.520
+    ## 4 medicaid_heart_disease_prev            0.711
+    ## 5 medicaid_diabetes_prev                 0.500
+
+Facts for NPR
+=============
 
 -30-

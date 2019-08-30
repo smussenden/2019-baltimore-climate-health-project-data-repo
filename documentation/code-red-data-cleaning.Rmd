@@ -26,6 +26,7 @@ knitr::opts_chunk$set(echo = TRUE, message=FALSE)
 
 This R markdown document describes the methodology and results of the data cleaning portion of the data analysis conducted in support of a reporting project examining the impact of climate change on the health of people in Baltimore's hottest neighborhoods.
 
+xxx
 The analysis that uses the cleaned data output by this document is located in the [Role of Trees Data Analysis](https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/documentation/code-red-data-analysis.md). [ADD OTHER TWO STORIES]
 
 ### Definitions
@@ -54,8 +55,6 @@ The analysis that uses the cleaned data output by this document is located in th
 
 
 ## Setup
-
-Due to GitHub file upload limitations, input data is not included in this repo. When creating the file structure on a local machine, create a sub-folder called "input-data" within the existing "data" folder for maximum compatibility with the following code.[NOTE, WE SHOULD INCLUDE THIS, TRIMMED OUT]
 
 ```{r}
 #######################
@@ -255,7 +254,7 @@ rm(list=setdiff(ls(), c("all_temp_block", "all_temp_zcta", "all_temp_nsa", "all_
 
 The U.S. Forest Service and the University of Vermont Spatial Analysis Lab created detailed maps of Baltimore's tree canopy in 2007 and 2015 using LIDAR and aerial imagery data. (Citation: O'Neil-Dunne J. 2017. GIS Shapefile, Tree Canopy Change 2007 - 2015 - Baltimore City. Environmental Data Initiative. https://doi.org/10.6073/pasta/79c1d2079271546e61823a98df2d2039)
 
-The original shapefile data was presented in terms of "no change," "gain," and "loss" categories. To perform the following analysis, reporters restructured the data within Qgis to represent 2007 and 2015 canopy coverage and [calculated zonal statistics](https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/documentation/qgis-directions/qgis-how-tos.md#d) (mean and median) at each year. They then exported the data from QGIS into CSVs, loaded them into R and joined them into master tables for further processing and analysis.
+The original shapefile data was presented in terms of "no change," "gain," and "loss" categories. To perform the following analysis, reporters restructured the data within QGIS to represent 2007 and 2015 canopy coverage and [calculated zonal statistics](https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/documentation/qgis-directions/qgis-how-tos.md#d) (mean and median) at each year. They then exported the data from QGIS into CSVs, loaded them into R and joined them into master tables for further processing and analysis.
 
 ### Define functions and store universal variables
 
@@ -352,7 +351,7 @@ rm(list=setdiff(ls(), c(
 
 ## Load and Clean Demographic Data
 
-The only recent demographic data available for neighborhood-sized areas is from the [Baltimore Neighborhood Indicators Alliance](https://bniajfi.org/vital_signs/data_downloads/), a **CSA-level** analysis from 2017. The U.S. federal government has not collected demographic information at most geographic levels since the 2010 Census, which this analysis determined is generally too old to be useful. The exception to this is the annual [American Community Survey](https://www.census.gov/acs/www/data/data-tables-and-tools/data-profiles/2017/), which uses a **ZCTA-level** geographic grouping. Additionally, this analysis used the 2010 population numbers at the **block** level to filter out low-population blocks. This analysis did not use demographic information at the **NSA** level.
+The only recent demographic data available for neighborhood proxy areas is from the [Baltimore Neighborhood Indicators Alliance](https://bniajfi.org/vital_signs/data_downloads/), a **CSA-level** analysis from 2017. The U.S. federal government has not collected demographic information at many micro-geographic levels with reasonable margins of error since the 2010 Census, which this analysis determined is generally too old to be useful. The exception to this is the annual [American Community Survey](https://www.census.gov/acs/www/data/data-tables-and-tools/data-profiles/2017/), which uses a **ZCTA-level** geographic grouping. Additionally, this analysis used the 2010 population numbers at the **block** level to filter out low-population blocks. This analysis did not use demographic information at the **NSA** level.
 
 ### Define functions and store universal variables
 
@@ -443,7 +442,7 @@ rm(list=setdiff(ls(), c("blocks_tree_temp_population", "zcta_temp_demographics",
 
 ## Load and Clean Individual Tree Data
 
-The Baltimore City Department of Recreation and Parks tracks each tree and potential tree site across the city and provided this analysis with a database of those records and [accompanying documentation](https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/documentation/street-tree-inventory-spec-sheet.pdf). 
+Baltimore's urban forestry division tracks each tree and potential tree site across the city and provided this analysis with a database of those records and [accompanying documentation](https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/documentation/street-tree-inventory-spec-sheet.pdf). 
 
 The raw data arrived as a .shp file, which reporters joined together with the various core geographies and exported as a CSV for processing in R. The analysis focused on NSA-level geographies.
 
@@ -1150,6 +1149,7 @@ DESCRIPTION
 ### Store universal variables
 
 # Common file path to raw EMS data
+``` {r}
 path_to_data <- "../data/input-data/hscrc-hospital-data/"
 
 make_correlation_matrix <- function(dataframe) {
@@ -1271,6 +1271,7 @@ process_sensor_data <- function(person_location) {
     group_by(date) %>%
     summarise(mean_indoor_temperature = round(mean(temperature),1),
               mean_indoor_heat_index = round(mean(heat_index),1),
+              mean_indoor_relative_humidity = round(mean(relative_humidity),1),
               mean_outdoor_temperature = round(mean(avg_hourly_temperature_dmh),1),
               mean_outdoor_heat_index = round(mean(avg_hourly_heat_index_dmh),1),
               indoor_temperature_difference = mean_indoor_temperature - mean_outdoor_temperature,
@@ -1283,6 +1284,7 @@ process_sensor_data <- function(person_location) {
       group_by(date_hour) %>%
       summarise(mean_indoor_temperature = round(mean(temperature),1),
                 mean_indoor_heat_index = round(mean(heat_index),1),
+                mean_indoor_relative_humidity = round(mean(relative_humidity),1),
                 mean_outdoor_temperature = round(mean(avg_hourly_temperature_dmh),1),
                 mean_outdoor_heat_index = round(mean(avg_hourly_heat_index_dmh),1),
                 indoor_temperature_difference = mean_indoor_temperature - mean_outdoor_temperature,
@@ -1296,6 +1298,7 @@ process_sensor_data <- function(person_location) {
     group_by(date_hour_minute) %>%
     summarise(mean_indoor_temperature = round(mean(temperature),1),
                 mean_indoor_heat_index = round(mean(heat_index),1),
+                mean_indoor_relative_humidity = round(mean(relative_humidity),1),
                 mean_outdoor_temperature = round(mean(avg_hourly_temperature_dmh),1),
                 mean_outdoor_heat_index = round(mean(avg_hourly_heat_index_dmh),1),
                 indoor_temperature_difference = mean_indoor_temperature - mean_outdoor_temperature,
