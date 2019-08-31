@@ -1353,6 +1353,32 @@ cctv_cameras_street_trees <- read_excel(paste0(path_to_data, "Violence_Reduction
 ```
 
 
+## Load and Clean Historical Baltimore and U.S. Weather Data 
+NEED TO WRITE UP THING HERE
+Add in screenshots of what we're downloading, see desktop. and link to website
+
+```{r}
+
+# Common file path to raw temperature data
+path_to_data <- "../data/input-data/1895-2019-average-temp/"
+
+# Read in temperature data files for US
+us_change_temp <- read_csv(paste0(path_to_data, "us-change-temp.csv"))
+
+# Read in temperature data files for Baltimore
+baltimore_change_temp <- read_csv(paste0(path_to_data, "baltimore-change-temp.csv")) 
+
+# Clean date and select only needed columns for Baltimore
+baltimore_change_temp <- baltimore_change_temp %>%
+  mutate(Date = (Date - 12)/100) %>%
+  clean_names()
+
+# Clean date and select only needed columns for Baltimore
+us_change_temp <- us_change_temp %>%
+  mutate(Date = (Date - 12)/100) %>%
+  clean_names()
+
+
 ### Stuff I need to add in
 Theresa 1895 data and directions on how I pulled that down
 Data on heat index days jump
@@ -1424,6 +1450,11 @@ save_path <- "../data/output-data/temperature_sensors/audrey/"
 write_csv(audrey_day_averages, paste0(save_path, "audrey_day_averages.csv"))
 write_csv(audrey_day_hourly_averages, paste0(save_path, "audrey_day_hourly_averages.csv"))
 write_csv(audrey_day_minute_averages, paste0(save_path, "audrey_day_minute_averages.csv"))
+
+# Historical temperature data
+save_path <- "../data/output-data/1895-2019-average-temperature/"
+write_csv(us_change_temp, paste0(save_path, "us_change_temp.csv"))
+write_csv(baltimore_change_temp, paste0(save_path, "baltimore_change_temp.csv"))
 
 # Hospital Data 
 # Inpatient by Zip Code
