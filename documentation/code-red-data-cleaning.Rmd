@@ -56,6 +56,11 @@ The analysis that uses the cleaned data output by this document is located in th
 
 ## Setup
 
+#### NEED TO ADD CLEANING OF 1895 DATA
+#### NEED TO ADD CLEANING OF TREE DATA FROM MEG STUDY
+#### NEED TO ADD CLEANING OF KILLER HEAT DATA
+
+
 ```{r}
 #######################
 #### Load Packages ####
