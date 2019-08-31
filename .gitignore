@@ -37,7 +37,8 @@ vignettes/*.pdf
 rsconnect/
 
 # Ignore MASSIVE files
-/data/input-data
+/data/input-data/street-trees/csv/by_block/street_trees_block_join.csv
+/data/input-data/street-trees/csv/by_csa/street_trees_csa_join_table.csv
 
 ### Ignored Mac junk files
 # General
