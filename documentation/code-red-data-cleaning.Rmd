@@ -621,7 +621,7 @@ empty_spaces_count_by_nsa <- street_trees_categorized %>%
   )) %>%
   group_by(nbrdesc, is_suitable) %>%
   dplyr::summarize(count_spaces = n()) %>%
-  spread(is_suitable, count_spaces) %>%
+  tidyr::spread(is_suitable, count_spaces) %>%
   dplyr::rename(
     suitable_without_tree = "TRUE",
     unsuitable_without_tree = "FALSE"
@@ -671,7 +671,7 @@ tree_as_percent_of_spaces_by_nsa <- spaces_count_by_nsa_all %>%
 empty_spaces_by_diff_by_nsa_count <- street_trees_categorized %>% 
   group_by(nbrdesc, difficulty_level_num) %>%
   dplyr::summarize(num = n()) %>%
-  spread(difficulty_level_num, num) %>%
+  tidyr::spread(difficulty_level_num, num) %>%
   dplyr::rename(
     num_unknown = "0",
     num_easy = "1",
@@ -690,7 +690,7 @@ empty_spaces_by_diff_by_nsa_perc <- street_trees_categorized %>%
   left_join(tree_as_percent_of_spaces_by_nsa %>% select(nbrdesc , spaces_without_live_trees)) %>%
   mutate(perc_difflvl_to_empty_spaces = round(100*(num/spaces_without_live_trees), 2)) %>%
   select(-num) %>%
-  spread(difficulty_level_num, perc_difflvl_to_empty_spaces) %>%
+  tidyr::spread(difficulty_level_num, perc_difflvl_to_empty_spaces) %>%
   select(-"<NA>") %>%
   dplyr::rename(
     perc_of_nontreed_unknown = "0",
@@ -731,7 +731,7 @@ tree_condition_by_nsa_long <- street_trees_categorized %>%
 tree_condition_perc_by_nsa_wide <- tree_condition_by_nsa_long %>%
   # Select cols to spread
   select(nbrdesc, condition, perc_condition_to_live_trees) %>%
-  spread(condition, perc_condition_to_live_trees) %>%
+  tidyr::spread(condition, perc_condition_to_live_trees) %>%
   dplyr::rename(
     poor_perc_of_live = poor,
     fair_perc_of_live = fair,
@@ -742,7 +742,7 @@ tree_condition_perc_by_nsa_wide <- tree_condition_by_nsa_long %>%
 tree_condition_count_by_nsa_wide <- tree_condition_by_nsa_long %>%
   # Select cols to spread
   select(nbrdesc, condition, num_trees) %>%
-  spread(condition, num_trees) %>%
+  tidyr::spread(condition, num_trees) %>%
   dplyr::rename(
     poor_count = poor,
     fair_count = fair,
