@@ -61,7 +61,6 @@ The analysis that uses the cleaned data output by this document is located in th
 #### NEED TO ADD CLEANING OF KILLER HEAT DATA
 #### ADD IN BOX LINK TO WHERE YOU CAN PULL DOWN ALL THE MANY DATAS WE USED IN THIS
 
-
 ```{r}
 #######################
 #### Load Packages ####
@@ -1150,14 +1149,14 @@ filter(`date` >= date("2018-06-21") & `date` <= ("2018-09-21"))
 
 ## Load and Clean Hospital Admissions Data 
 
-DESCRIPTION 
-
-### Store universal variables
+DESCRIPTION GOES HERE
+### Define functions and store universal variables
+```{r}
 
 # Common file path to raw EMS data
-``` {r}
 path_to_data <- "../data/input-data/hscrc-hospital-data/"
 
+# Function to make correlation matrix
 make_correlation_matrix <- function(dataframe) {
   # Read in hospital data and join it to demographics by zipcode
   temp <- left_join(dataframe, zcta_temp_demographics, by=c("ZIPCODE" = "zcta"))
@@ -1379,7 +1378,17 @@ us_change_temp <- us_change_temp %>%
   mutate(Date = (Date - 12)/100) %>%
   clean_names()
 
+```
+### Hot days increase data
 
+```{r}
+
+# Common file path to raw temperature data
+path_to_data <- "../data/input-data/heat-index-projections/"
+
+heat_index_projections <- read_xlsx(paste0(path_to_data, "killer-heat-data-by-city.xlsx"), sheet="cleaned_all_cities")
+
+```
 ### Stuff I need to add in
 Theresa 1895 data and directions on how I pulled that down
 Data on heat index days jump
@@ -1453,9 +1462,16 @@ write_csv(audrey_day_hourly_averages, paste0(save_path, "audrey_day_hourly_avera
 write_csv(audrey_day_minute_averages, paste0(save_path, "audrey_day_minute_averages.csv"))
 
 # Historical temperature data
+#To compute this average annual change over the last century, we pulled historical average annual temperatures between 1895 and 2018 for Baltimore and the U.S. from the National Climactic Data Center https://www.ncdc.noaa.gov/cag/county/time-series 
+#https://www.ncdc.noaa.gov/cag/county/time-series 
+
 save_path <- "../data/output-data/1895-2019-average-temperature/"
 write_csv(us_change_temp, paste0(save_path, "us_change_temp.csv"))
 write_csv(baltimore_change_temp, paste0(save_path, "baltimore_change_temp.csv"))
+
+# Heat index projections
+save_path <- "../data/output-data/heat_index_projections/"
+write_csv(heat_index_projections, paste0(save_path, "heat_index_projections.csv"))
 
 # Hospital Data 
 # Inpatient by Zip Code

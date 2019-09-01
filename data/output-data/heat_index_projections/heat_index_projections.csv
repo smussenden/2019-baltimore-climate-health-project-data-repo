@@ -1,0 +1,482 @@
+state,city,historical_100_plus,midcentury_no_action_100_plus,endcentury_no_action_100_plus
+AL,Anniston-Oxford,10,62,96
+AL,Auburn,7,53,90
+AL,Birmingham,13,68,101
+AL,Daphne-Fairhope,13,78,119
+AL,Decatur,10,62,95
+AL,Dothan,15,75,112
+AL,Florence,13,68,99
+AL,Gadsden,12,66,98
+AL,Huntsville,6,55,89
+AL,Mobile,10,73,114
+AL,Montgomery,18,77,111
+AL,Tuscaloosa,19,78,110
+AR,Conway,26,81,108
+AR,Fayetteville-Springdale-Rogers,8,56,86
+AR,Fort Smith,28,82,109
+AR,Hot Springs,28,81,109
+AR,Jonesboro,17,71,99
+AR,Little Rock,23,79,107
+AR,Pine Bluff,24,82,111
+AZ,Avondale-Goodyear,62,111,128
+AZ,Casa Grande,68,116,132
+AZ,Flagstaff,0,0,2
+AZ,Lake Havasu City,58,106,117
+AZ,Phoenix-Mesa,51,105,125
+AZ,Prescott Valley-Prescott,0,3,17
+AZ,Sierra Vista,0,14,48
+AZ,Tucson,15,73,104
+AZ,Yuma,78,119,133
+CA,Antioch,3,19,44
+CA,Arroyo Grande-Grover Beach,0,0,0
+CA,Bakersfield,13,57,90
+CA,Camarillo,0,4,18
+CA,Chico,10,51,84
+CA,Concord,0,8,23
+CA,Davis,7,36,68
+CA,Delano,16,60,93
+CA,El Centro-Calexico,80,122,137
+CA,El Paso de Robles (Paso Robles)-Atascadero,1,11,30
+CA,Fairfield,3,19,44
+CA,Fresno,14,58,91
+CA,Gilroy-Morgan Hill,0,8,24
+CA,Hanford,12,53,86
+CA,Hemet,10,46,79
+CA,Indio-Cathedral City,76,121,134
+CA,Lancaster-Palmdale,3,29,60
+CA,Livermore,1,11,30
+CA,Lodi,4,26,56
+CA,Lompoc,0,0,2
+CA,Los Angeles-Long Beach-Anaheim,1,11,32
+CA,Madera,14,57,90
+CA,Manteca,6,33,64
+CA,Merced,8,42,75
+CA,Mission Viejo-Lake Forest-San Clemente,0,3,21
+CA,Modesto,5,32,63
+CA,Murrieta-Temecula-Menifee,12,50,84
+CA,Napa,0,9,26
+CA,Oxnard,0,3,13
+CA,Petaluma,0,3,13
+CA,Porterville,13,61,95
+CA,Redding,12,52,82
+CA,Riverside-San Bernardino,4,32,65
+CA,Sacramento,6,33,65
+CA,Salinas,0,0,1
+CA,San Diego,0,7,27
+CA,San Francisco-Oakland,0,1,5
+CA,San Jose,0,3,11
+CA,San Luis Obispo,0,0,1
+CA,Santa Barbara,0,0,2
+CA,Santa Clarita,1,20,48
+CA,Santa Cruz,0,3,11
+CA,Santa Maria,0,0,2
+CA,Santa Rosa,0,3,15
+CA,Seaside-Monterey,0,0,0
+CA,Simi Valley,3,21,49
+CA,Stockton,6,32,63
+CA,Thousand Oaks,3,16,41
+CA,Tracy,6,33,63
+CA,Turlock,5,33,63
+CA,Vacaville,7,34,63
+CA,Vallejo,0,6,21
+CA,Victorville-Hesperia,1,20,49
+CA,Visalia,13,55,89
+CA,Watsonville,0,2,8
+CA,Woodland,10,44,77
+CA,Yuba City,9,46,78
+CO,Boulder,0,1,11
+CO,Colorado Springs,0,0,2
+CO,Denver-Aurora,0,1,10
+CO,Fort Collins,0,1,10
+CO,Grand Junction,0,6,28
+CO,Greeley,0,4,22
+CO,Lafayette-Louisville-Erie,0,2,14
+CO,Longmont,0,2,16
+CO,Pueblo,0,6,31
+CT,Bridgeport-Stamford,1,18,40
+CT,Danbury,1,18,39
+CT,Hartford,0,15,35
+CT,New Haven,0,15,36
+CT,Norwich-New London,0,12,31
+CT,Waterbury,0,13,32
+DC,Washington,5,37,65
+DE,Dover,4,31,59
+FL,Bonita Springs,29,132,162
+FL,Cape Coral,26,125,160
+FL,Deltona,17,90,130
+FL,Fort Walton Beach-Navarre-Wright,7,74,112
+FL,Gainesville,18,95,133
+FL,Homosassa Springs-Beverly Hills-Citrus Springs,20,104,141
+FL,Jacksonville,16,83,121
+FL,Kissimmee,25,111,147
+FL,Lady Lake-The Villages,26,108,143
+FL,Lakeland,25,114,150
+FL,Leesburg-Eustis-Tavares,20,101,138
+FL,Miami,16,114,153
+FL,North Port-Port Charlotte,36,130,164
+FL,Ocala,20,102,139
+FL,Orlando,22,107,144
+FL,Palm Bay-Melbourne,10,89,132
+FL,Palm Coast-Daytona Beach-Port Orange,9,78,121
+FL,Panama City,9,77,115
+FL,Pensacola,9,82,116
+FL,Port St. Lucie,14,110,146
+FL,Sarasota-Bradenton,24,122,154
+FL,Sebastian-Vero Beach South-Florida Ridge,10,95,136
+FL,Sebring-Avon Park,29,118,155
+FL,Spring Hill,36,125,156
+FL,St. Augustine,10,78,117
+FL,Tallahassee,21,89,126
+FL,Tampa-St. Petersburg,30,123,155
+FL,Titusville,22,102,140
+FL,Winter Haven,25,113,150
+FL,Zephyrhills,30,119,155
+GA,Albany,25,89,121
+GA,Athens-Clarke County,10,56,90
+GA,Atlanta,6,46,82
+GA,Augusta-Richmond County,15,68,101
+GA,Brunswick,23,90,121
+GA,Cartersville,7,52,87
+GA,Columbus,14,69,103
+GA,Dalton,8,56,90
+GA,Gainesville,3,34,69
+GA,Hinesville,30,95,127
+GA,Macon,18,74,108
+GA,Rome,8,54,88
+GA,Savannah,18,78,112
+GA,Valdosta,20,87,122
+GA,Warner Robins,19,76,109
+IA,Ames,4,31,57
+IA,Cedar Rapids,6,32,57
+IA,Davenport,6,33,59
+IA,Des Moines,5,33,59
+IA,Dubuque,4,28,53
+IA,Iowa City,7,37,62
+IA,Sioux City,5,29,55
+IA,Waterloo,4,27,52
+ID,Boise City,0,11,32
+ID,Coeur d'Alene,0,3,16
+ID,Idaho Falls,0,2,12
+ID,Lewiston,2,20,41
+ID,Nampa,0,18,42
+ID,Pocatello,0,4,18
+IL,Alton,10,54,79
+IL,Bloomington-Normal,7,41,68
+IL,Carbondale,11,60,88
+IL,Champaign,5,39,66
+IL,Chicago,3,26,50
+IL,Danville,6,41,68
+IL,Decatur,8,45,72
+IL,DeKalb,3,24,48
+IL,Kankakee,6,35,61
+IL,Peoria,6,37,64
+IL,Rockford,4,25,50
+IL,Round Lake Beach-McHenry-Grayslake,3,22,45
+IL,Springfield,6,43,70
+IN,Anderson,3,27,55
+IN,Bloomington,5,43,72
+IN,Columbus,4,38,68
+IN,Elkhart,3,25,51
+IN,Evansville,9,56,85
+IN,Fort Wayne,2,24,51
+IN,Indianapolis,3,31,60
+IN,Kokomo,3,29,57
+IN,Lafayette,4,33,61
+IN,Michigan City-La Porte,2,22,46
+IN,Muncie,3,26,54
+IN,South Bend,2,23,48
+IN,Terre Haute,6,44,73
+KS,Lawrence,15,60,86
+KS,Manhattan,13,54,81
+KS,Topeka,12,55,82
+KS,Wichita,11,55,83
+KY,Bowling Green,12,63,92
+KY,Elizabethtown-Radcliff,4,46,77
+KY,Lexington-Fayette,2,35,67
+KY,Louisville-Jefferson County,5,48,79
+KY,Owensboro,12,59,89
+LA,Alexandria,35,101,132
+LA,Baton Rouge,22,96,132
+LA,Hammond,28,101,135
+LA,Houma,21,95,132
+LA,Lafayette,26,99,133
+LA,Lake Charles,31,103,136
+LA,Mandeville-Covington,27,102,136
+LA,Monroe,35,96,126
+LA,New Orleans,22,97,132
+LA,Shreveport,30,94,125
+LA,Slidell,21,94,129
+MA,Barnstable Town,0,5,17
+MA,Boston,1,15,33
+MA,Leominster-Fitchburg,0,9,25
+MA,New Bedford,1,13,31
+MA,Pittsfield,0,5,19
+MA,Springfield,0,16,36
+MA,Worcester,0,10,26
+MD,Aberdeen-Bel Air South-Bel Air North,7,39,67
+MD,Baltimore,6,37,65
+MD,Cumberland,2,23,49
+MD,Frederick,5,40,68
+MD,Hagerstown,3,31,58
+MD,Lexington Park-California-Chesapeake Ranch Estates,3,33,63
+MD,Salisbury,8,40,68
+MD,Waldorf,5,37,65
+MD,Westminster-Eldersburg,4,33,59
+ME,Bangor,0,5,19
+ME,Lewiston,0,8,25
+ME,Portland,0,4,17
+MI,Ann Arbor,1,19,44
+MI,Battle Creek,1,19,42
+MI,Bay City,1,14,34
+MI,Benton Harbor-St. Joseph-Fair Plain,3,23,47
+MI,Detroit,1,15,37
+MI,Flint,1,14,35
+MI,Grand Rapids,1,15,37
+MI,Holland,1,17,39
+MI,Jackson,1,16,39
+MI,Kalamazoo,2,22,46
+MI,Lansing,1,15,38
+MI,Midland,2,18,39
+MI,Monroe,3,25,51
+MI,Muskegon,0,10,29
+MI,Port Huron,1,16,37
+MI,Saginaw,2,19,41
+MI,South Lyon-Howell,1,14,36
+MN,Duluth,0,4,16
+MN,Mankato,2,20,43
+MN,Minneapolis-St. Paul,2,20,42
+MN,Rochester,2,20,42
+MN,St. Cloud,1,15,35
+MO,Cape Girardeau,13,65,92
+MO,Columbia,10,54,80
+MO,Jefferson City,9,54,81
+MO,Joplin,13,63,90
+MO,Kansas City,11,53,80
+MO,Lee's Summit,11,53,80
+MO,Springfield,7,52,80
+MO,St. Joseph,10,50,77
+MO,St. Louis,11,57,82
+MS,Gulfport,18,92,125
+MS,Hattiesburg,17,82,119
+MS,Jackson,21,85,117
+MS,Pascagoula,16,86,123
+MT,Billings,0,6,22
+MT,Great Falls,0,2,13
+MT,Missoula,0,2,12
+NC,Asheville,0,15,43
+NC,Burlington,7,49,79
+NC,Charlotte,7,47,80
+NC,Concord,7,49,81
+NC,Durham,9,51,82
+NC,Fayetteville,12,58,89
+NC,Gastonia,6,48,81
+NC,Goldsboro,14,61,92
+NC,Greensboro,4,40,72
+NC,Greenville,12,55,87
+NC,Hickory,3,39,72
+NC,High Point,5,41,74
+NC,Jacksonville,14,63,95
+NC,New Bern,14,61,94
+NC,Raleigh,9,49,81
+NC,Rocky Mount,14,60,90
+NC,Wilmington,8,59,91
+NC,Winston-Salem,3,38,70
+ND,Bismarck,0,12,28
+ND,Fargo,1,14,31
+ND-MN,Grand Forks,1,11,27
+NE,Grand Island,4,31,58
+NE,Lincoln,8,40,67
+NE,Omaha,6,35,62
+NH,Dover-Rochester,1,15,33
+NH,Manchester,0,11,29
+NH,Nashua,0,13,31
+NH,Portsmouth,0,10,27
+NJ,Atlantic City,3,22,47
+NJ,Trenton,3,27,52
+NJ,Twin Rivers-Hightstown,3,26,50
+NJ,Villas,1,15,41
+NJ,Vineland,6,34,60
+NM,Albuquerque,0,6,28
+NM,Farmington,0,2,17
+NM,Las Cruces,0,23,63
+NM,Los Lunas,0,11,41
+NM,Santa Fe,0,0,3
+NV,Carson City,0,1,8
+NV,Las Vegas-Henderson,18,71,96
+NV,Reno,0,2,11
+NY,Albany-Schenectady,0,15,37
+NY,Binghamton,0,8,26
+NY,Buffalo,0,8,25
+NY,Elmira,0,12,32
+NY,Glens Falls,0,14,34
+NY,Ithaca,0,10,29
+NY,Kingston,1,21,44
+NY,Middletown,1,21,45
+NY,Poughkeepsie-Newburgh,1,18,40
+NY,Rochester,0,12,32
+NY,Saratoga Springs,0,17,39
+NY,Syracuse,0,13,34
+NY,Utica,0,12,32
+NY,Watertown,0,7,22
+NY-NJ,New York-Newark,2,18,40
+OH,Akron,0,16,39
+OH,Canton,0,15,39
+OH,Cincinnati,4,35,66
+OH,Cleveland,0,12,35
+OH,Columbus,1,24,52
+OH,Dayton,2,28,57
+OH,Lima,2,24,52
+OH,Lorain-Elyria,1,18,43
+OH,Mansfield,0,15,38
+OH,Middletown,3,33,63
+OH,Newark,1,23,50
+OH,Springfield,1,23,51
+OH,Toledo,2,23,49
+OH,Youngstown,0,16,40
+OK,Lawton,23,77,106
+OK,Norman,20,72,102
+OK,Oklahoma City,18,69,99
+OK,Tulsa,25,78,103
+OR,Albany,0,3,14
+OR,Bend,0,1,7
+OR,Corvallis,0,3,13
+OR,Eugene,0,4,17
+OR,Grants Pass,1,14,33
+OR,Medford,1,14,34
+OR,Portland,0,4,16
+OR,Salem,0,4,14
+PA,Allentown,1,19,43
+PA,Altoona,0,11,31
+PA,Bloomsburg-Berwick,1,17,40
+PA,Chambersburg,1,24,50
+PA,East Stroudsburg,0,13,33
+PA,Erie,0,4,20
+PA,Hanover,3,30,57
+PA,Harrisburg,2,26,51
+PA,Hazleton,0,6,22
+PA,Johnstown,0,8,26
+PA,Lancaster,2,25,50
+PA,Lebanon,2,22,47
+PA,Monessen-California,1,21,49
+PA,Philadelphia,4,29,55
+PA,Pittsburgh,0,17,42
+PA,Pottstown,3,27,52
+PA,Reading,1,21,45
+PA,Scranton,0,10,29
+PA,State College,0,10,30
+PA,Uniontown-Connellsville,0,15,40
+PA,Williamsport,1,16,38
+PA,York,3,29,55
+RI,Providence,1,13,31
+SC,Anderson,9,55,88
+SC,Charleston-North Charleston,14,68,102
+SC,Columbia,15,65,97
+SC,Florence,16,67,99
+SC,Greenville,5,45,78
+SC,Hilton Head Island,12,70,105
+SC,Mauldin-Simpsonville,5,42,76
+SC,Myrtle Beach-Socastee,10,60,92
+SC,Rock Hill,9,52,85
+SC,Spartanburg,7,51,83
+SC,Sumter,14,63,97
+SD,Rapid City,0,5,21
+SD,Sioux Falls,2,20,43
+TN,Chattanooga,6,50,84
+TN,Clarksville,12,64,94
+TN,Cleveland,6,52,86
+TN,Jackson,14,69,99
+TN,Johnson City,0,23,56
+TN,Kingsport,1,29,63
+TN,Knoxville,3,45,80
+TN,Memphis,19,74,103
+TN,Morristown,2,40,75
+TN,Murfreesboro,9,61,93
+TN,Nashville-Davidson,8,59,90
+TN-VA,Bristol,0,17,48
+TX,Abilene,9,68,104
+TX,Amarillo,0,17,52
+TX,Austin,29,95,129
+TX,Beaumont,39,107,139
+TX,Brownsville,52,135,164
+TX,College Station-Bryan,36,103,136
+TX,Conroe-The Woodlands,42,110,141
+TX,Corpus Christi,23,113,147
+TX,Dallas-Fort Worth-Arlington,30,92,123
+TX,Denton-Lewisville,28,90,121
+TX,El Paso,1,34,74
+TX,Harlingen,56,134,163
+TX,Houston,36,109,142
+TX,Killeen,22,86,121
+TX,Lake Jackson-Angleton,52,121,150
+TX,Laredo,62,122,152
+TX,Longview,31,97,127
+TX,Lubbock,0,30,69
+TX,McAllen,67,137,164
+TX,McKinney,30,91,122
+TX,Midland,3,52,91
+TX,Odessa,2,46,86
+TX,Port Arthur,29,102,136
+TX,San Angelo,7,66,104
+TX,San Antonio,27,96,132
+TX,San Marcos,30,97,131
+TX,Sherman,21,79,112
+TX,Temple,26,91,125
+TX,Texas City,29,108,140
+TX,Tyler,25,92,125
+TX,Victoria,45,119,151
+TX,Waco,31,95,128
+TX,Wichita Falls,31,86,114
+TX-AR,Texarkana,30,90,120
+UT,Logan,0,3,16
+UT,Ogden-Layton,0,4,19
+UT,Provo-Orem,0,4,20
+UT,Salt Lake City-West Valley City,0,6,26
+UT,St. George,6,49,80
+VA,Blacksburg,0,11,36
+VA,Charlottesville,5,39,68
+VA,Fredericksburg,8,46,74
+VA,Harrisonburg,2,29,58
+VA,Lynchburg,4,35,66
+VA,Richmond,9,48,77
+VA,Roanoke,2,27,58
+VA,Staunton-Waynesboro,2,30,60
+VA,Virginia Beach,9,43,73
+VA,Williamsburg,12,53,84
+VA,Winchester,2,30,58
+VT,Burlington,0,8,25
+WA,Bellingham,0,0,3
+WA,Bremerton,0,1,5
+WA,Kennewick-Pasco,1,19,39
+WA,Longview,0,2,9
+WA,Marysville,0,0,5
+WA,Mount Vernon,0,0,1
+WA,Olympia-Lacey,0,2,9
+WA,Seattle,0,1,7
+WA,Spokane,0,5,18
+WA,Walla Walla,0,15,35
+WA,Wenatchee,0,9,24
+WA,Yakima,0,10,25
+WI,Appleton,2,14,33
+WI,Eau Claire,2,16,36
+WI,Fond du Lac,2,15,35
+WI,Green Bay,1,10,26
+WI,Janesville,5,26,50
+WI,Kenosha,2,14,33
+WI,La Crosse,3,22,46
+WI,Madison,3,20,43
+WI,Milwaukee,3,18,38
+WI,Oshkosh,2,15,34
+WI,Racine,1,13,32
+WI,Sheboygan,2,13,33
+WI,Wausau,0,9,26
+WI,West Bend,2,17,37
+WI-IL,Beloit,4,26,50
+WV,Beckley,0,8,29
+WV,Charleston,2,30,62
+WV,Huntington,3,36,67
+WV,Morgantown,0,20,48
+WV,Parkersburg,2,30,60
+WV,Wheeling,0,17,43
+WV-OH,Weirton-Steubenville,0,19,45
+WY,Casper,0,1,14
+WY,Cheyenne,0,0,1
