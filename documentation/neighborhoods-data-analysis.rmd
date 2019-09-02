@@ -359,7 +359,7 @@ heat_index_projections %>%
 ### Fact: Heat index on first floor of Tammy Jackson's home [cq]
 "Photo caption: The heat index on the first floor of Tammy Jackson’s McElderry Park home registered 93 degrees, 9 degrees hotter than it was outside, at 10 p.m. Sunday, July 21. Jackson has several grandchildren with asthma." 
 
-### Explanation [cq]
+#### Explanation [cq]
 Tammy Jackson, a resident of Baltimore's McElderry Park neighborhood, had a temperature and humidity sensor installed in her house by our reporters. In her home, at 10 p.m. on Sunday, July 21, the heat index was 93 degrees F, 9 degrees hotter than the outside heat index of 84 degrees. 
 
 #### Supporting code and output [cq]

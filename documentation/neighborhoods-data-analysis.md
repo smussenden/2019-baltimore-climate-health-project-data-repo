@@ -2,80 +2,54 @@
 -   [Setup](#setup)
     -   [Load packages](#load-packages)
     -   [Load variables and data](#load-variables-and-data)
--   [Line-By-Line Fact-Check](#line-by-line-fact-check)
-    -   [Fact: 11-Day Heat Wave](#fact-11-day-heat-wave)
-    -   [Fact: Inner Harbor Hit 100
-        Degrees](#fact-inner-harbor-hit-100-degrees)
-    -   [Fact: McElderry Park is 8 Degrees
-        Hotter](#fact-mcelderry-park-is-8-degrees-hotter)
-    -   [Fact: McElderry Park is the hottest neighborhood in
-        Baltimore](#fact-mcelderry-park-is-the-hottest-neighborhood-in-baltimore)
-    -   [Fact: Frequency of EMS Calls Increase with
-        Temperature](#fact-frequency-of-ems-calls-increase-with-temperature)
-    -   [Fact: Frequency of Diabetes Calls Increases with
-        Temperature](#fact-frequency-of-diabetes-calls-increases-with-temperature)
-    -   [Fact: Hot Neighborhoods Have Lower
-        Incomes](#fact-hot-neighborhoods-have-lower-incomes)
-    -   [Fact: Unreliable Public
-        Transportation](#fact-unreliable-public-transportation)
-    -   [Fact: More Affluence = More Tree
-        Canopy](#fact-more-affluence-more-tree-canopy)
-    -   [Fact:](#fact)
-    -   [Fact: Highset Sensor Values](#fact-highset-sensor-values)
-    -   [Fact: Jackson’s House’s Heat Index was 94 on
-        7/21](#fact-jacksons-houses-heat-index-was-94-on-721)
-    -   [Fact:](#fact-1)
-    -   [Fact: Thomas’ House was 96 on
-        7-20](#fact-thomas-house-was-96-on-7-20)
-    -   [Fact: Pingley’s Indoor Heat Index Greater than
-        Outdoor](#fact-pingleys-indoor-heat-index-greater-than-outdoor)
-    -   [Fact: East Baltimore Tree
-        Cover](#fact-east-baltimore-tree-cover)
-    -   [Fact: Blocks without Trees](#fact-blocks-without-trees)
-    -   [Fact:](#fact-2)
--   [Fact: Temperature vs. Demographics
-    Graphics](#fact-temperature-vs.demographics-graphics)
-    -   [Explanation](#explanation-18)
-    -   [Supporting Code](#supporting-code-18)
-    -   [Fact: Poverty](#fact-poverty)
-    -   [Fact: Crime](#fact-crime)
-    -   [Fact: Life Expectancy](#fact-life-expectancy)
-    -   [Fact: Unemployment rate](#fact-unemployment-rate)
-    -   [Fact: Checking WaPo’s data](#fact-checking-wapos-data)
--   [FOR NPR](#for-npr)
-    -   [Fact: Franklin Square heat (for
-        NPR)](#fact-franklin-square-heat-for-npr)
-    -   [Fact: Franklin Square poverty (for
-        NPR)](#fact-franklin-square-poverty-for-npr)
-    -   [Fact: Neighborhood heat difference (for
-        NPR)](#fact-neighborhood-heat-difference-for-npr)
-    -   [Fact: Poverty Heat Relationship (for
-        NPR)](#fact-poverty-heat-relationship-for-npr)
--   [PINGLEY GRAPHIC MOVE OVER](#pingley-graphic-move-over)
+-   [CNSMaryland.org Line-By-Line Fact-Check](#cnsmaryland.org-line-by-line-fact-check)
+    -   [Fact: 11-Day Heat Wave \[cq\]](#fact-11-day-heat-wave-cq)
+    -   [Fact: Temperature inside and outside Tammy Jackson's home \[cq\]](#fact-temperature-inside-and-outside-tammy-jacksons-home-cq)
+    -   [Fact: Outdoor temperature in Baltimore on August 1, 2019 at 11:20 a.m. \[cq\]](#fact-outdoor-temperature-in-baltimore-on-august-1-2019-at-1120-a.m.-cq)
+    -   [Fact: Average annual temperature increase in U.S., Baltimore \[cq\]](#fact-average-annual-temperature-increase-in-u.s.-baltimore-cq)
+    -   [Fact: Projected increase in hot days in Baltimore \[cq\]](#fact-projected-increase-in-hot-days-in-baltimore-cq)
+    -   [Fact: Heat index on first floor of Tammy Jackson's home \[cq\]](#fact-heat-index-on-first-floor-of-tammy-jacksons-home-cq)
+    -   [Explanation \[cq\]](#explanation-cq-5)
+    -   [Fact: 8 Degree F difference between hottest and coolest neighborhoods \[cq\]](#fact-8-degree-f-difference-between-hottest-and-coolest-neighborhoods-cq)
+    -   [Fact: Heat and poverty, life expectancy, crime, unemployment \[cq\]](#fact-heat-and-poverty-life-expectancy-crime-unemployment-cq)
+    -   [Fact: McElderry Park is the hottest neighborhood in Baltimore \[cq\]](#fact-mcelderry-park-is-the-hottest-neighborhood-in-baltimore-cq)
+    -   [Fact: Heat and chronic illness](#fact-heat-and-chronic-illness)
+    -   [Fact: Frequency of EMS Calls Increase with Temperature \[cq\]](#fact-frequency-of-ems-calls-increase-with-temperature-cq)
+    -   [Fact: Hot neighborhoods have lower incomes](#fact-hot-neighborhoods-have-lower-incomes)
+    -   [Fact: More affluent communities have more trees \[cq\]](#fact-more-affluent-communities-have-more-trees-cq)
+    -   [Fact: Crime rates higher in poorer neighborhoods \[cq\]](#fact-crime-rates-higher-in-poorer-neighborhoods-cq)
+    -   [Fact: Highset temperature, humidity sensor values \[cq\]](#fact-highset-temperature-humidity-sensor-values-cq)
+    -   [Fact: Hotter inside than outside \[cq\]](#fact-hotter-inside-than-outside-cq)
+    -   [Fact: Tammy Jackson's house on July 21 \[cq\]](#fact-tammy-jacksons-house-on-july-21-cq)
+    -   [Fact: Hotter inside Stephanie Pingley's house than outside \[cq\]](#fact-hotter-inside-stephanie-pingleys-house-than-outside-cq)
+    -   [Fact: Hottest seven-day stretch of the summer](#fact-hottest-seven-day-stretch-of-the-summer)
+    -   [Fact: Heat index on July 21 \[cq\]](#fact-heat-index-on-july-21-cq)
+    -   [Fact: Heat index in the bedroom](#fact-heat-index-in-the-bedroom)
+    -   [Fact: Minimum heat index in Pingley bedroom \[cq\]](#fact-minimum-heat-index-in-pingley-bedroom-cq)
+    -   [Fact: Heat index indoors and out \[cq\]](#fact-heat-index-indoors-and-out-cq)
+    -   [Fact: Outdoor heat index on July 19](#fact-outdoor-heat-index-on-july-19)
+    -   [Fact: Indoor heat index on July 19 \[cq\]](#fact-indoor-heat-index-on-july-19-cq)
+    -   [Fact: Heat index Baltimore July 20 \[cq\]](#fact-heat-index-baltimore-july-20-cq)
+    -   [Fact: Heat index in Pingley's house July 20 \[cq\]](#fact-heat-index-in-pingleys-house-july-20-cq)
+    -   [Fact: Pingley's house at 7 p.m. Friday, July 19](#fact-pingleys-house-at-7-p.m.-friday-july-19)
+    -   [Fact: Heat index Michael Thomas and Alberta Wilkerson \[cq\]](#fact-heat-index-michael-thomas-and-alberta-wilkerson-cq)
+    -   [Fact: tree canopy on McElderry Park neighborhood](#fact-tree-canopy-on-mcelderry-park-neighborhood)
+    -   [Fact: East Baltimore Tree Cover](#fact-east-baltimore-tree-cover)
 
 Introduction
 ------------
 
-REWRITE This R markdown document describes the methodology and results
-of a portion of the data analysis we conducted in support of a reporting
-project examining the effects of tree canopy inequity across the city of
-Baltimore, especially as it relates to climate change.
+This R markdown document describes the methodology, results and explanation of a portion of the data analysis we conducted in support of reporting project examining the effects of climate-change driven temperature increases on the health of people who live in cities, focusing on Baltimore. The project was done in partnership with the University of Maryland's Philip Merrill College of Journalism, Capital News Service, the Howard Center for Investigative Journalism, NPR, Wide Angle Youth Media and WMAR.
+XXXX PUT IN LINKS TO PLACES HERE
 
-In general, this document contains the data facts stated in the
-“Neighborhoods” story. The quote from the story appears first, followed
-by an explanation of the fact and the code which generated the fact. The
-code is listed last. The quotes are listed in the order they appear in
-the Neighborhoods story.
+Read the whole project, "[Code Red: Baltimore's Climate Divide](https://cnsmaryland.org/code-red)."
+
+This document provides support for facts based on data analysis in the story, "[In urban heat islands, climate crisis hits harder](https://cnsmaryland.org/interactives/summer-2019/code-red/neighborhood-heat-inequality.html#story)" as well as LINK TO NPR STORY.
 
 Setup
 -----
 
-Before running this file, **please view and run the [Code Red Data
-Cleaning
-document](https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/documentation/code-red-data-cleaning.md)**
-for this project. As well as outputting necessary cleaned data for the
-following ananlysis, that document also includes the following items
-necessary to understand this analysis:
+XXX UPDATE LINK Before running this file, please view and run the [Code Red Data Cleaning document](https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/documentation/code-red-data-cleaning.md)\*\* for this project. As well as outputting necessary cleaned data for the following ananlysis, that document also includes the following items necessary to understand this analysis:
 
 -   definitions
 -   source data citation and information
@@ -88,15 +62,18 @@ necessary to understand this analysis:
 #######################
 #### Load Packages ####
 #######################
+# For debugging rm(list=ls())
 
-library(tidyverse)
+library(tidyverse) # For general data science goodness
 library(DescTools) # For %like% operator
 library(corrr) # For correlation matrices
 library(colorspace) # For improved color palettes
 library(ggplot2) # For graphing
 library(ggrepel) # For graph labeling
 library(lubridate) # For working with and mutating dates
+library(broom) # for converting lm output to dataframe
 require(scales) # For percent labeling on distribution tables
+library(TTR) # For moving averages
 
 # Turn off scientific notation in RStudio (prevents coersion to character type)
 options(scipen = 999)
@@ -109,31 +86,76 @@ options(scipen = 999)
 #### Store Variables ####
 #########################
 
-#### Common path to data ####
+#### Common path to output data folder ####
 path_to_data <- "../data/output-data/"
-
-#### Common save path ####
-save_path <- "../data/output-data/"
 
 ###################
 #### Load Data ####
 ###################
 
-dmh <- read_csv(paste0(path_to_data, "baltimore_weather_stations/dmh.csv"))
-EMS_all <- read_csv(paste0(path_to_data, "ems/EMS_all.csv"))
-dmh_ems <- read_csv(paste0(path_to_data, "ems/dmh_ems.csv"))
-stephanie_day_averages<- read_csv(paste0(path_to_data, "temperature_sensors/stephanie/stephanie_day_averages.csv"))
-stephanie_day_hourly_averages <- read_csv(paste0(path_to_data, "temperature_sensors/stephanie/stephanie_day_hourly_averages.csv"))
-stephanie_day_minute_averages <- read_csv(paste0(path_to_data, "temperature_sensors/stephanie/stephanie_day_minute_averages.csv"))
-tammy_day_averages <- read_csv(paste0(path_to_data, "temperature_sensors/tammy/tammy_day_averages.csv"))
-tammy_day_hourly_averages <- read_csv(paste0(path_to_data, "temperature_sensors/tammy/tammy_day_hourly_averages.csv"))
-tammy_day_minute_averages <- read_csv(paste0(path_to_data, "temperature_sensors/tammy/tammy_day_minute_averages.csv"))
-michael_day_averages<- read_csv(paste0(path_to_data, "temperature_sensors/michael/michael_day_averages.csv"))
-michael_day_hourly_averages <- read_csv(paste0(path_to_data, "temperature_sensors/michael/michael_day_hourly_averages.csv"))
-michael_day_minute_averages <- read_csv(paste0(path_to_data, "temperature_sensors/michael/michael_day_minute_averages.csv"))
-nsa_tree_temp <- read_csv(paste0(path_to_data,"tree_temp_demographics/nsa_tree_temp.csv"))
-csa_tree_temp_demographics <-read_csv(paste0(path_to_data,"tree_temp_demographics/csa_tree_temp_demographics.csv"))
-blocks_tree_temp_demographics <- read_csv(paste0(path_to_data, "tree_temp_demographics/blocks_tree_temp_demographics.csv"))
+### Indoor temperature and humidity sensor data
+
+# Michael and Alberta
+folder <- "temperature_sensors/michael/"
+michael_day_hourly_averages <- read_csv(paste0(path_to_data, folder, "michael_day_hourly_averages.csv"))
+michael_day_minute_averages <- read_csv(paste0(path_to_data, folder, "michael_day_minute_averages.csv"))
+
+# Stephanie and family
+folder <- "temperature_sensors/stephanie/"
+stephanie_day_minute_averages <- read_csv(paste0(path_to_data, folder, "stephanie_day_minute_averages.csv"))
+stephanie_day_hourly_averages <- read_csv(paste0(path_to_data, folder, "stephanie_day_hourly_averages.csv"))
+
+# Audrey
+folder <- "temperature_sensors/audrey/"
+audrey_day_minute_averages <- read_csv(paste0(path_to_data, folder, "audrey_day_minute_averages.csv"))
+audrey_day_hourly_averages <- read_csv(paste0(path_to_data, folder, "audrey_day_hourly_averages.csv"))
+
+# Tammy
+folder <- "temperature_sensors/tammy/"
+tammy_day_minute_averages <- read_csv(paste0(path_to_data, folder, "tammy_day_minute_averages.csv"))
+tammy_day_hourly_averages <- read_csv(paste0(path_to_data, folder, "tammy_day_hourly_averages.csv"))
+
+### Outdoor temperature data 
+
+# Inner Harbor temperature data
+folder <- "baltimore_weather_stations/"
+dmh <- read_csv(paste0(path_to_data, folder, "dmh.csv"))
+
+# Historical temperature data, Baltimore and U.S. 
+folder <- "1895-2019-average-temperature/"
+us_change_temp <- read_csv(paste0(path_to_data, folder, "us_change_temp.csv"))
+baltimore_change_temp <- read_csv(paste0(path_to_data, folder, "baltimore_change_temp.csv"))
+
+# Heat index projections
+folder <- "heat_index_projections/"
+heat_index_projections <- read_csv(paste0(path_to_data, folder, "heat_index_projections.csv"))
+
+### Urban heat island, tree canopy, demographics data
+folder <- "tree_temp_demographics/"
+
+# Neighborhood geography
+nsa_tree_temp <- read_csv(paste0(path_to_data, folder, "nsa_tree_temp.csv"))
+
+# Community statistical area geography
+csa_tree_temp_demographics <- read_csv(paste0(path_to_data, folder, "csa_tree_temp_demographics.csv"))
+
+# Blocks geography
+blocks_tree_temp_demographics <- read_csv(paste0(path_to_data, folder, "blocks_tree_temp_demographics.csv"))
+
+
+### Hospital Data
+folder <- "hospital_data/"
+
+# Inpatient admissions data
+ip_full_zip_correlation_matrix <- read_csv(paste0(path_to_data, folder, "ip/ip_full_zip_correlation_matrix.csv"))
+
+# Emergency room admissions data
+op_er_full_zip_correlation_matrix <- read_csv(paste0(path_to_data, folder, "op_er/op_er_full_zip_correlation_matrix.csv"))
+
+### EMS Data
+folder <- "ems/"
+dmh_ems <- read_csv(paste0(path_to_data, folder, "dmh_ems.csv")) 
+EMS_all <- read_csv(paste0(path_to_data, folder, "EMS_all.csv")) 
 
 ####################################
 ######## Define Functions ##########
@@ -192,25 +214,25 @@ select_x <- function(df){
 }
 ```
 
-Line-By-Line Fact-Check
------------------------
+CNSMaryland.org Line-By-Line Fact-Check
+---------------------------------------
 
-### Fact: 11-Day Heat Wave
+### Fact: 11-Day Heat Wave \[cq\]
 
-“…a dangerous, 11-day heat wave tormented the city this summer…”
+"So as a dangerous 11-day heat wave tormented the city in July, the hottest month ever recorded on the planet, fewer and fewer residents were going outside.""
 
-#### Explanation
+#### Explanation \[cq\]
 
-By running the code below, you can see July 12-22 had max temperatures
-of at least 90 degrees and max heat indexes of at least 92, hence the
-11-day heat wave
+Over an 11-day period in July 2019 -- July 12 to July 22 -- each day during that stretch had a maximum temperature of at least 90 degrees F and maximum heat index values of at least 92 degrees F. This was measured at a National Weather Service monitoring station located in the Inner Harbor.
 
-#### Supporting Code
+#### Supporting code and output \[cq\]
 
 ``` r
  dmh %>%
   filter(month == 7,
-         year == 2019) %>%
+         year == 2019,
+         day >= 12,
+         day <= 22) %>%
   group_by(`date`) %>%
   summarise(min_temp = min(avg_hourly_temperature_dmh),
             max_temp = max(avg_hourly_temperature_dmh),
@@ -218,153 +240,296 @@ of at least 90 degrees and max heat indexes of at least 92, hence the
             min_heat_index = min(avg_hourly_heat_index_dmh),
             max_heat_index = max(avg_hourly_heat_index_dmh),
             mean_heat_index = mean(avg_hourly_heat_index_dmh) 
-  )
+  ) %>%
+  select(date, max_temp, max_heat_index)
 ```
 
-    ## # A tibble: 31 x 7
-    ##    date       min_temp max_temp mean_temp min_heat_index max_heat_index
-    ##    <date>        <dbl>    <dbl>     <dbl>          <dbl>          <dbl>
-    ##  1 2019-07-01     70       87.1      77.8             69             86
-    ##  2 2019-07-02     71.1     95        81.8             71            101
-    ##  3 2019-07-03     75       91.9      82.7             76             97
-    ##  4 2019-07-04     79       91.9      81.9             82            102
-    ##  5 2019-07-05     77       91        83.3             78            104
-    ##  6 2019-07-06     75.9     93.9      84.9             77            106
-    ##  7 2019-07-07     75       87.1      79.8             76             95
-    ##  8 2019-07-08     73       80.1      75.2             74             82
-    ##  9 2019-07-09     69.1     87.1      78.9             70             91
-    ## 10 2019-07-10     72       89.1      81.2             73             93
-    ## # … with 21 more rows, and 1 more variable: mean_heat_index <dbl>
+    ## # A tibble: 11 x 3
+    ##    date       max_temp max_heat_index
+    ##    <date>        <dbl>          <dbl>
+    ##  1 2019-07-12     90               92
+    ##  2 2019-07-13     91               92
+    ##  3 2019-07-14     93.9             98
+    ##  4 2019-07-15     90               93
+    ##  5 2019-07-16     96.1            104
+    ##  6 2019-07-17     98.1            110
+    ##  7 2019-07-18     93.9            103
+    ##  8 2019-07-19     98.1            108
+    ##  9 2019-07-20     99              108
+    ## 10 2019-07-21    100              111
+    ## 11 2019-07-22     96.1            104
 
-### Fact: Inner Harbor Hit 100 Degrees
+### Fact: Temperature inside and outside Tammy Jackson's home \[cq\]
 
-““Can’t even put your head out the door,” said Tammy Wilson Jackson, 48,
-on a day when the temperature at the Inner Harbor hit 100 degrees."
+“Can’t even put your head out the door,” said Tammy Jackson, 48, on a day when the temperature outside hit 100 degrees Fahrenheit and 92 degrees in her home. “This is too much. Oh Lord, this is too much.”
 
-#### Explanation
+#### Explanation \[cq\]
 
-Our data below shows that the inner harbor hit a max temperature of 100
-on Sunday 7/21. There is no other day in our data when the max
-temperature was 100. However our data uses hourly averages. The National
-Climatic Data Center also takes weather data hour by hour, but instead
-of calculating the average the NCDC records the conditions at the exact
-time of the reading. NCDC also has daily summaries detailing the maximum
-and minimum temperature experienced over the entire day and the amount
-of precipitation in inches. Using the NCDC’s daily summaries for the
-month of July 2019, there are two days when the max temperature hit at
-least 100: 7/20 and 7/21.
+Tammy Jackson, a resident of Baltimore's McElderry Park neighborhood, had a temperature and humidity sensor installed in her house by our reporters. In her home, the highest temperature reading on Saturday, July 20, the day referenced in the story, was registered 92 degrees (91.6 degrees F).
 
-Note: the max temperature on 7/30 was also 100 degrees, but this
-interview was before then.
+For outdoor temperature, in most of our analysis, we used hourly snapshot readings taken at a National Weather Service monitoring station in the Inner Harbor. As the table below shows, the highest hourly reading in that data set on July 20 was 99 degrees. But the NWS official daily summary for that monitoring station -- which incorporates all readings taken, not just hourly snapshots -- indicates it did hit 100 degrees at some point on July 20. The data [can be viewed here](https://www.ncdc.noaa.gov/cdo-web/datasets/GHCND/stations/GHCND:USW00093784/detail)
 
-#### Supporting Code
+#### Supporting code and output \[cq\]
 
 ``` r
- dmh %>%
- filter(month == 7,
-         year == 2019) %>%
-  group_by(`date`) %>%
-  summarise(min_temp = min(avg_hourly_temperature_dmh),
-            max_temp = max(avg_hourly_temperature_dmh),
-            mean_temp = mean(avg_hourly_temperature_dmh),
-            min_heat_index = min(avg_hourly_heat_index_dmh),
-            max_heat_index = max(avg_hourly_heat_index_dmh),
-            mean_heat_index = mean(avg_hourly_heat_index_dmh) 
-  )
+# Max temperature in Jackson's House on July 20
+
+tammy_day_hourly_averages %>%
+  mutate(date = date(date_hour)) %>%
+  filter(date == "2019-07-20") %>%
+  group_by(date) %>%
+  summarise(max_indoor_temperature = max(mean_indoor_temperature))
 ```
 
-    ## # A tibble: 31 x 7
-    ##    date       min_temp max_temp mean_temp min_heat_index max_heat_index
-    ##    <date>        <dbl>    <dbl>     <dbl>          <dbl>          <dbl>
-    ##  1 2019-07-01     70       87.1      77.8             69             86
-    ##  2 2019-07-02     71.1     95        81.8             71            101
-    ##  3 2019-07-03     75       91.9      82.7             76             97
-    ##  4 2019-07-04     79       91.9      81.9             82            102
-    ##  5 2019-07-05     77       91        83.3             78            104
-    ##  6 2019-07-06     75.9     93.9      84.9             77            106
-    ##  7 2019-07-07     75       87.1      79.8             76             95
-    ##  8 2019-07-08     73       80.1      75.2             74             82
-    ##  9 2019-07-09     69.1     87.1      78.9             70             91
-    ## 10 2019-07-10     72       89.1      81.2             73             93
-    ## # … with 21 more rows, and 1 more variable: mean_heat_index <dbl>
+    ## # A tibble: 1 x 2
+    ##   date       max_indoor_temperature
+    ##   <date>                      <dbl>
+    ## 1 2019-07-20                   91.6
 
 ``` r
+# Max temperature outside on July 20
 dmh %>%
  filter(month == 7,
          year == 2019,
-         day == 20)
+        day == 20) %>%
+  group_by(`date`) %>%
+  summarise(max_temp = max(avg_hourly_temperature_dmh)) 
 ```
 
-    ## # A tibble: 24 x 9
-    ##    date        year month   day  hour avg_hourly_temp… avg_hourly_dewp…
-    ##    <date>     <dbl> <dbl> <dbl> <dbl>            <dbl>            <dbl>
-    ##  1 2019-07-20  2019     7    20     0             87.1             72  
-    ##  2 2019-07-20  2019     7    20     1             87.1             72  
-    ##  3 2019-07-20  2019     7    20     2             86               71.1
-    ##  4 2019-07-20  2019     7    20     3             84.9             71.1
-    ##  5 2019-07-20  2019     7    20     4             84               71.1
-    ##  6 2019-07-20  2019     7    20     5             82.9             71.1
-    ##  7 2019-07-20  2019     7    20     6             84               72  
-    ##  8 2019-07-20  2019     7    20     7             86               72  
-    ##  9 2019-07-20  2019     7    20     8             89.1             73  
-    ## 10 2019-07-20  2019     7    20     9             93               73.9
-    ## # … with 14 more rows, and 2 more variables:
-    ## #   avg_hourly_relative_humidity_dmh <dbl>,
-    ## #   avg_hourly_heat_index_dmh <dbl>
+    ## # A tibble: 1 x 2
+    ##   date       max_temp
+    ##   <date>        <dbl>
+    ## 1 2019-07-20       99
 
-### Fact: McElderry Park is 8 Degrees Hotter
+### Fact: Outdoor temperature in Baltimore on August 1, 2019 at 11:20 a.m. \[cq\]
 
-“data show that temperatures here \[McElderry Park\] and in surrounding
-neighborhoods can run 8 degrees hotter than in communities that have
-more trees and less pavement.”
+"The graphic below shows temperatures in the 500 block of North Milton Street in McElderry Park at 11:20 a.m. on a summer morning in August."
 
-#### Explanation
+#### Explanation \[cq\]
 
-The code below selects part of the dataframe “nsa\_tree\_temp” - which
-lists Baltimore neighborhoods and a variety of temperature data - and
-filters it for the neighborhoods with the lowest average temperature in
-the afternoon or the highest average temperature in the afternoon. The
-results are then arranged in descending order. From this data we can see
-that McElderry Park has the highest average temperature in the afternoon
-at 99.39 degrees. Dickeyville, on the other hand, has the lowest average
-afternoon temperature at 91.01 degrees. The difference between those
-temperatures is 8.38 degrees, which is rounded to 8.
+The date and time referenced in the graphic was 11:20 a.m. on August 1, 2019. To get the outdoor temperature we used the NWS hourly snapshots at the Inner Harbor monitoring station. In the 11 a.m. hour, it was 87.1 degrees.
 
-\*Note: Gwynns Falls/Leakin Park was removed from the dataset as the
-topography of the area is more akin to a park than neighborhood.
+#### Supporting code and output \[cq\]
 
-#### Supporting Code
+``` r
+dmh %>%
+ filter(month == 8,
+         year == 2019,
+         day == 1, 
+         hour == 11) %>%
+  select(date, avg_hourly_temperature_dmh)
+```
+
+    ## # A tibble: 1 x 2
+    ##   date       avg_hourly_temperature_dmh
+    ##   <date>                          <dbl>
+    ## 1 2019-08-01                       87.1
+
+### Fact: Average annual temperature increase in U.S., Baltimore \[cq\]
+
+"Average annual temperatures in Baltimore have gone up more than 3 degrees F over the last century, nearly twice as much as the rest of the country."
+
+#### Explanation \[cq\]
+
+To compute this average annual change over the last century, we pulled historical average annual temperatures between 1895 and 2018 and annual departure from the mean temperature for Baltimore and the U.S. from the National Climactic Data Center and used linear regression to examine the trend and produce a line of best fit through plotted points. We took the slope of the line of best fit and multiplied it by the number of years to arrive at the temperature increase for Baltimore (3.4 degrees F), the U.S. (1.9 degrees F) and the difference between the two. Baltimore increased by 3.4 degrees F, 80 percent (nearly twice as much) as the U.S. (1.9 percent). A note: we got the idea to use this method from the excellent Washington Post interactive ["2°C: BEYOND THE LIMIT"](https://www.washingtonpost.com/graphics/2019/national/climate-environment/climate-change-america/), which arrived at the same figures as we did for Baltimore and the U.S.
+
+#### Supporting code and output \[cq\]
+
+``` r
+# Create linear model showing trend of change in annual average temperature change 1895-2018 for the US 
+us_lm <- lm(anomaly ~ date, data = us_change_temp)
+
+# Get the slope of the line of best fit from the linear model
+us_slope <- tidy(us_lm) %>%
+  filter(term == "date") %>%
+  mutate(location = "us") %>%
+  select(location, estimate) %>%
+  rename(slope = estimate)
+
+# Get the number of yearly observations from original data
+us_years_count <- us_change_temp %>%
+  # group_by(date) %>%
+  summarise(years_count= n()) %>%
+  mutate(location = "us") %>%
+  select(location, years_count)
+
+# Calculate degrees change
+us_historical_change <- us_years_count %>%
+  left_join(us_slope, by = "location") %>%
+  mutate(change_degrees = years_count * slope)
+
+# Create linear model showing trend of change in annual average temperature change 1895-2018 for Baltimore 
+baltimore_lm <- lm(anomaly ~ date, data = baltimore_change_temp)
+
+# Get the slope of the line of best fit from the linear model
+baltimore_slope <- tidy(baltimore_lm) %>%
+  filter(term == "date") %>%
+  mutate(location = "baltimore") %>%
+  select(location, estimate) %>%
+  rename(slope = estimate)
+
+# Get the number of yearly observations from original data
+baltimore_years_count <- baltimore_change_temp %>%
+  # group_by(date) %>%
+  summarise(years_count= n()) %>%
+  mutate(location = "baltimore") %>%
+  select(location, years_count)
+
+# Calculate degrees change
+baltimore_historical_change <- baltimore_years_count %>%
+  left_join(baltimore_slope, by = "location") %>%
+  mutate(change_degrees = years_count * slope)
+
+# Bind together US and Baltimore
+us_baltimore <- bind_rows(baltimore_historical_change, us_historical_change)
+
+# Show change degrees and diference between two values as percentage
+difference <- us_baltimore %>%
+  select(location, change_degrees) %>%
+  tidyr::spread(location, change_degrees) %>%
+  mutate(difference = (baltimore-us)/us)
+  
+difference
+```
+
+    ## # A tibble: 1 x 3
+    ##   baltimore    us difference
+    ##       <dbl> <dbl>      <dbl>
+    ## 1      3.41  1.89      0.804
+
+### Fact: Projected increase in hot days in Baltimore \[cq\]
+
+"And the planet’s warming has gained momentum, say researchers who estimate the number of very hot days in Baltimore could increase six-fold by the middle of the century."
+
+#### Explanation \[cq\]
+
+The Union of Concerned Scientists \[Killer Heat in the United States\] \[study\](<https://www.ucsusa.org/sites/default/files/attach/2019/07/killer-heat-analysis-full-report.pdf>) released this summer included detailed tables projecting the number of days of 100+ heat index days for most U.S. cities, and projected how many additional days of 100+ heat index days there would be by mid-century. They found there were six days of 100+ heat index days per year historically in Baltimore, and by mid-century there would be 37 days, a 6x increase. Note: our own analysis of historical Baltimore heat index data at a NWS Inner Harbor monitoring station found that the 6 days per year figure was likely a conservative estimate.
+
+#### Supporting code and output \[cq\]
+
+``` r
+heat_index_projections %>%
+  select(state, city, historical_100_plus, midcentury_no_action_100_plus) %>%
+  filter(state == "MD", city == "Baltimore") %>%
+  mutate(increase_x = midcentury_no_action_100_plus/historical_100_plus)
+```
+
+    ## # A tibble: 1 x 5
+    ##   state city      historical_100_pl… midcentury_no_action_100_p… increase_x
+    ##   <chr> <chr>                  <dbl>                       <dbl>      <dbl>
+    ## 1 MD    Baltimore                  6                          37       6.17
+
+### Fact: Heat index on first floor of Tammy Jackson's home \[cq\]
+
+"Photo caption: The heat index on the first floor of Tammy Jackson’s McElderry Park home registered 93 degrees, 9 degrees hotter than it was outside, at 10 p.m. Sunday, July 21. Jackson has several grandchildren with asthma."
+
+### Explanation \[cq\]
+
+Tammy Jackson, a resident of Baltimore's McElderry Park neighborhood, had a temperature and humidity sensor installed in her house by our reporters. In her home, at 10 p.m. on Sunday, July 21, the heat index was 93 degrees F, 9 degrees hotter than the outside heat index of 84 degrees.
+
+#### Supporting code and output \[cq\]
+
+``` r
+tammy_day_hourly_averages %>%
+  mutate(date = date(date_hour)) %>%
+  mutate(hour = hour(date_hour)) %>%
+  filter(date == "2019-07-21") %>%
+  filter(hour == 22) %>%
+  select(date, mean_indoor_heat_index, mean_outdoor_heat_index, indoor_heat_index_difference)
+```
+
+    ## # A tibble: 1 x 4
+    ##   date       mean_indoor_heat_i… mean_outdoor_heat_i… indoor_heat_index_di…
+    ##   <date>                   <dbl>                <dbl>                 <dbl>
+    ## 1 2019-07-21                  93                   84                     9
+
+### Fact: 8 Degree F difference between hottest and coolest neighborhoods \[cq\]
+
+"Researchers at Portland State University in Oregon and the Science Museum of Virginia have mapped these areas, called urban heat islands, and data shows that temperatures here and in surrounding neighborhoods can run 8 degrees F hotter than in communities that have more trees and less pavement."
+
+#### Explanation \[cq\]
+
+The researchers took detailed measurements of Baltimore's urban heat island on August 29, 2018, and found differences across the city. Using the mean afternoon temperature for each neighborhood (excluding the representation of Leakin Park in our data -- we found the coolest neighborhood was Dickeyville (91 degrees F) and the hottest was McElderry Park (99.4 degrees F), a difference of 8.4 degrees F.
+
+#### Supporting code and output \[cq\]
 
 ``` r
 nsa_tree_temp %>%
   select(nsa_name, temp_mean_aft) %>%
   filter(nsa_name != "gwynns falls/leakin park") %>%
   filter((temp_mean_aft == min(temp_mean_aft)) | (temp_mean_aft == max(temp_mean_aft))) %>%
-  arrange(desc(temp_mean_aft))
+  arrange(desc(temp_mean_aft)) %>% 
+  tidyr::spread(nsa_name, temp_mean_aft) %>%
+  mutate(difference_coolest_hottest = `mcelderry park`-`dickeyville`)
 ```
 
-    ## # A tibble: 2 x 2
-    ##   nsa_name       temp_mean_aft
-    ##   <chr>                  <dbl>
-    ## 1 mcelderry park          99.4
-    ## 2 dickeyville             91.0
+    ## # A tibble: 1 x 3
+    ##   dickeyville `mcelderry park` difference_coolest_hottest
+    ##         <dbl>            <dbl>                      <dbl>
+    ## 1        91.0             99.4                       8.39
 
-### Fact: McElderry Park is the hottest neighborhood in Baltimore
+### Fact: Heat and poverty, life expectancy, crime, unemployment \[cq\]
 
-“McElderry Park … which despite its lyrical name offers little green
-space, is the hottest neighborhood in Baltimore.”
+"Graphic Caption: People who live in the hottest parts of the city are more likely to be poor, to live shorter lives, and to experience higher rates of violent crime and unemployment."
 
-#### Explanation
+#### Explanation \[cq\]
 
-Similar to above, the code below selects the neighborhood and average
-afternoon temperature columns from the dataframe “nsa\_tree\_temp” -
-which lists Baltimore neighborhoods and a variety of temperature data.
-The results are then arranged in descending order so the hottest
-neighborhood is at the top. From this data we can see that McElderry
-Park has the highest average temperature in the afternoon at 99.39
-degrees.
+In Baltimore's "community statistical areas", we examined the relationship between heat (mean afternoon temperature in our urban heat island data) and poverty, life expectancy, unemployment rates and violent crime by computing the correlation coefficient (r) for each metric. Where an r of 1 would indicate a perfect positive linear relationship and an r of -1 would indicate a perfect negative linear relationship and 0 indicating no relationship. There were moderate correlations with poverty (r =.4), violent crime (r=.58), life expectancy (r=-.41), and the unemployment rate (r=.32).
 
-#### Supporting Code
+A table with the values used in the graphic is also displayed below. The same table is used in the scatterplot graphics that appear lower.
+
+#### Supporting code and output \[cq\]
+
+``` r
+# Correlation coefficients
+csa_tree_temp_demographics %>%
+  select_x() %>%
+  as.matrix() %>%
+  correlate() %>%
+  focus(matches("temp_")) %>%
+  mutate(variable=rowname) %>%
+  select(variable, temp_mean_aft) %>%
+  filter(str_detect(variable, "households_living|violent|life|unemployment"))
+```
+
+    ## # A tibble: 4 x 2
+    ##   variable                                                   temp_mean_aft
+    ##   <chr>                                                              <dbl>
+    ## 1 percent_of_family_households_living_below_the_poverty_line         0.398
+    ## 2 violent_crime_rate_per_1_000_residents                             0.580
+    ## 3 life_expectancy                                                   -0.409
+    ## 4 unemployment_rate                                                  0.316
+
+``` r
+# Graphic table
+csa_tree_temp_demographics %>%
+  select(csa2010, temp_mean_aft, matches("households_living|violent|life|unemployment"))
+```
+
+    ## # A tibble: 55 x 6
+    ##    csa2010 temp_mean_aft percent_of_fami… violent_crime_r… life_expectancy
+    ##    <chr>           <dbl>            <dbl>            <dbl>           <dbl>
+    ##  1 allend…          94.0            20.7              19.4            69.6
+    ##  2 beechf…          92.6            10.5              11.0            73.4
+    ##  3 belair…          95.1            20.3              19.3            70.5
+    ##  4 brookl…          95.0            24.2              29.9            69.2
+    ##  5 canton           95.3             3.66             10.4            79.8
+    ##  6 cedoni…          94.4            12.2              15.6            72.2
+    ##  7 cherry…          95.0            39.3              26.7            70  
+    ##  8 chinqu…          93.8            10.1              10.6            75.3
+    ##  9 clarem…          94.6            24                15.8            70.5
+    ## 10 clifto…          96.7            27.6              25.1            67.6
+    ## # … with 45 more rows, and 1 more variable: unemployment_rate <dbl>
+
+### Fact: McElderry Park is the hottest neighborhood in Baltimore \[cq\]
+
+"McElderry Park, which despite its lyrical name offers little green space, is one of these: the hottest neighborhood in Baltimore, a city whose climate has long been classified as humid subtropical."
+
+#### Explanation \[cq\]
+
+Using the mean afternoon temperature in the urban heat island study, McElderry Park was the city's hottest neighborhood, with a mean afternoon temperature of 99.4 degrees F.
+
+#### Supporting code and output \[cq\]
 
 ``` r
 nsa_tree_temp %>%
@@ -387,263 +552,130 @@ nsa_tree_temp %>%
     ## 10 biddle street                  97.9
     ## # … with 268 more rows
 
-### Fact: Frequency of EMS Calls Increase with Temperature
+### Fact: Heat and chronic illness
 
-“In hot weather, emergency medical calls for some chronic conditions
-increase.”
+"Residents in these neighborhoods have higher rates of chronic illnesses affected by heat, including asthma and COPD." ///Should we change this to "residents in hotter areas" ///This uses Median. If median
 
 #### Explanation
 
-The initial code below sorts the number of calls to EMS into groups
-based on the outside temperature when the call was made. You’ll see that
-calls for help decrease as temperature increases.
+Using condition prevalance rates from inpatient hospital admissions and emergency room visits, which are only available by ZIP code, and the median afternoon temperature of Baltimore ZIP codes, as calculated in the urban heat island data. The correlation coefficient for people diagnosed with asthma during hospital visits (r=.55) and emergency room visits (r=.49), and people diagnosed with COPD during hospital visits (r=.67) and emergency room visits (r=.57), indicating strong to moderate positive relationship between heat and asthma and copd rates. This is not causal. In hotter areas, rates of asthma and copd are higher, and vice versa.
 
-The second bit of code, however, breaks the calls down by the illness
-for which the call was made and counts the number of calls per condition
-during each temperature “bucket.” Many of these illness were selected
-since hot weather tends to aggravate their symptoms/conditions. These
-numbers show that calls decrease as temperature increases, but a likely
-explanation is that hot temperatures occur much less frequently than
-cooler ones, limiting the amount of time when calls can be made in that
-temperature “bucket.”
-
-To account for the rarity of hotter temperatures, the number of hours
-for which the temperature was in a certain bucket is divided by the
-total amount of calls. This will give us the frequency of calls,
-represented as “hours\_per\_call.” In examining this value per condition
-per temperature bucket, the data shows that the freqeuency of many calls
-increases during hotter weather.
-
-For example, when the temperature is below 80 degrees, a call is made to
-EMS concerning dehydration every 41.74 hours. When the temperature
-climbs into the “danger” zone, or 103 to 124 degrees, the rate of calls
-for dehydration increases to one every 2.21 hours. Similarly, a call for
-a seizure is made every 2.34 hours when the temperature is less than 80
-degrees, but increases to a call every 1.4 hours when the temperature is
-between 103 and 124 degrees.
-
-Other conditions for which the call frequency increases include: altered
-level of consciousness, behavioral/psychiatric disorder, cardiac arrest,
-chest pain - STEMI, COPD, dehydration, diabetic hyper- and hypoglycemia,
-dizziness/vertigo, hyper- and hypotension, hyperthermia, obvious death,
-substance/drug abuse, and others.
-
-#### Supporting Code
+#### Supporting code and output \[cq\]
 
 ``` r
-# Five-part NWS heat index danger scale
+ip_full_zip_correlation_matrix %>%
+    filter(str_detect(rowname, "asthma|copd")) %>%
+    select(rowname, temp_median_aft)
+```
+
+    ## # A tibble: 2 x 2
+    ##   rowname     temp_median_aft
+    ##   <chr>                 <dbl>
+    ## 1 copd_prev             0.673
+    ## 2 asthma_prev           0.559
+
+``` r
+op_er_full_zip_correlation_matrix %>%
+    filter(str_detect(rowname, "asthma|copd")) %>%
+    select(rowname, temp_median_aft)
+```
+
+    ## # A tibble: 2 x 2
+    ##   rowname     temp_median_aft
+    ##   <chr>                 <dbl>
+    ## 1 copd_prev             0.570
+    ## 2 asthma_prev           0.489
+
+### Fact: Frequency of EMS Calls Increase with Temperature \[cq\]
+
+"In hot weather, emergency medical calls for some chronic conditions increase. The rate of emergency medical calls for cardiac arrest and congestive heart failure, for example, nearly double when the heat index hits 103 degrees."
+
+#### Explanation \[cq\]
+
+By aligning emergency medical calls in Baltimore in summer 2018 for select conditions that are affected by heat with the heat index in Baltimore at the time of call, we were able to compare how rates differed when the heat index was below 80 degrees and above 103, the level the NWS defines as "dangerous". The second and third columns below reflect the number of hours that passed between calls (on average) when the heat index was below 80 degrees or above 103 degrees. For example, when the heat index was above 103, there was a call for cardiac arrest every 2.94 hours. When the heat index was under 80, the calls happened less frequently, every 5.3 hours. That meant there were 80 percent more calls per day in very hot weather for cardiac arrest. There were 70 percent more calls for congestive heart failure. There were 343x more calls for heat exhaustion in hot weather and 17x more calls for dehydration.
+
+#### Supporting code and output \[cq\]
+
+``` r
+# Select conditions
+conditions <- c("Heat Exhaustion/Heat Stroke", "Dehydration","Respiratory Distress", "COPD (Emphysema/Chronic Bronchitis)", "End Stage Renal Disease", "Diabetic Hyperglycemia", "Diabetic Hypoglycemia", "Cardiac Arrest", "CHF (Congestive Heart Failure)")
+
+# Calculate the total number of hours over the course of Summer 2018 that the heat index fell into each heat index level, as defined by the national weather service: not unsafe (under 80), caution (80-89), extreme caution (90-102), danger (103-124).   
+
 heat_index_count_per_nws_five_scale_bucket <- dmh_ems %>%
   select(heat_index_nws_five_scale_bucket) %>%
   group_by(heat_index_nws_five_scale_bucket) %>%
   summarise(heat_index_count_per_nws_five_scale_bucket=n()) %>%
   arrange(heat_index_nws_five_scale_bucket)
 
-########### Five NWS Buckets #################
-#### Table 1 | Primary Impression Group | Ratio Condition Calls v Heat Index | five NWS Buckets #####
-# Ratio of number of calls for each condition type in each heat index bucket to total number of hours in each given temperature bucket. A lower number indicates a higher number of calls for each condition adjusted for the fact that some temperatures are simply more common than other others. It's 70 degrees for many more hours in a year than it is 110.  
+# For each target condition, calculate the number of hours between calls at each temperature level.  This metric allows us to account for the fact that simply counting calls in each bucket would be flawed, because it wouldn't adjust for the rarity of very hot temperatures. 
 
-call_heat_index_ratio_five_primary_impression_group <- EMS_all %>%
-  filter(primary_impression_group != "Other") %>%
+EMS_all %>%
+  filter(primary_impression_group %in% conditions) %>%
   group_by(primary_impression_group, adjusted_heat_index_nws_five_scale_bucket) %>%
   summarise(condition_calls_count_per_bucket=n()) %>%
   inner_join(heat_index_count_per_nws_five_scale_bucket, by = c("adjusted_heat_index_nws_five_scale_bucket" = "heat_index_nws_five_scale_bucket")) %>%
   mutate(hours_per_call = heat_index_count_per_nws_five_scale_bucket/condition_calls_count_per_bucket) %>%
   select(primary_impression_group, adjusted_heat_index_nws_five_scale_bucket, hours_per_call) %>%
-  spread(adjusted_heat_index_nws_five_scale_bucket, hours_per_call) %>%
-  select(primary_impression_group, `not_unsafe_under_80`,`caution_80_89`,`extreme_caution_90_102`,`danger_103_124`)
+  tidyr::spread(adjusted_heat_index_nws_five_scale_bucket, hours_per_call) %>%
+  select(primary_impression_group, `not_unsafe_under_80`,`danger_103_124`) %>%
+  mutate(`calls_per_day_under_80` = 24/`not_unsafe_under_80`) %>%
+  mutate(`calls_per_day_over_103` = 24/`danger_103_124`) %>%
+  mutate(difference_day_percent = ((`calls_per_day_over_103`-`calls_per_day_under_80`)/`calls_per_day_under_80`))
 ```
 
-### Fact: Frequency of Diabetes Calls Increases with Temperature
+    ## # A tibble: 9 x 6
+    ## # Groups:   primary_impression_group [9]
+    ##   primary_impress… not_unsafe_unde… danger_103_124 calls_per_day_u…
+    ##   <chr>                       <dbl>          <dbl>            <dbl>
+    ## 1 Cardiac Arrest               5.30           2.94            4.53 
+    ## 2 CHF (Congestive…            15              8.83            1.6  
+    ## 3 COPD (Emphysema…             5.61           3.31            4.28 
+    ## 4 Dehydration                 41.7            2.21            0.575
+    ## 5 Diabetic Hyperg…             7.33           5.3             3.28 
+    ## 6 Diabetic Hypogl…             5.96           4.42            4.03 
+    ## 7 End Stage Renal…           160             53               0.15 
+    ## 8 Heat Exhaustion…           480              1.39            0.05 
+    ## 9 Respiratory Dis…             3.34           2.79            7.18 
+    ## # … with 2 more variables: calls_per_day_over_103 <dbl>,
+    ## #   difference_day_percent <dbl>
 
-“The rate of emergency medical calls for cardiac arrest and congestive
-heart failure, for example, nearly double when the heat index hits 103
-degrees.”
+### Fact: Hot neighborhoods have lower incomes
+
+"Households in the city’s hottest areas have lower incomes, which means the residents don’t have the resources to move out." //WE SHOULD CHANGE THIS TO POORER
 
 #### Explanation
 
-Using the same code as above, the number of hours inbetween calls for
-diabetes are certain temperatures was calculated. At 80 degrees or
-below, a call was made every 5.3 hours for Cardiac Arrest and every 15
-hours for Congestive Heart Failure. When the heat index is 103 or
-greater, however, there is a call to EMS for cardiac arrest every 2.94
-hours and for congestive heart failure every 8.83 hours. By dividing the
-value at 80 degrees by the value at 103+, we will get 1.8 for cardiac
-arrest and 1.7 for congestive heart failure. Those numbers round to 2,
-which means the frequency of the calls nearly doubles.
+In Baltimore's "community statistical areas", we examined the relationship between heat (mean afternoon temperature in our urban heat island data) and poverty. Where an r of 1 would indicate a perfect positive linear relationship and an r of -1 would indicate a perfect negative linear relationship and 0 indicating no relationship. There were moderate correlations with poverty (r =.4).
 
-#### Supporting Code
+#### Supporting code and output
 
 ``` r
-# Create dataframes with a count of hourly heat_index readings for each bucket ###
-
-# Five-part NWS heat index danger scale
-heat_index_count_per_nws_five_scale_bucket <- dmh_ems %>%
-  select(heat_index_nws_five_scale_bucket) %>%
-  group_by(heat_index_nws_five_scale_bucket) %>%
-  summarise(heat_index_count_per_nws_five_scale_bucket=n()) %>%
-  arrange(heat_index_nws_five_scale_bucket)
-
-########### Five NWS Buckets #################
-#### Table 1 | Primary Impression Group | Ratio Condition Calls v Heat Index | five NWS Buckets #####
-# Ratio of number of calls for each condition type in each heat index bucket to total number of hours in each given temperature bucket. A lower number indicates a higher number of calls for each condition adjusted for the fact that some temperatures are simply more common than other others. It's 70 degrees for many more hours in a year than it is 110.
-
-call_heat_index_ratio_five_primary_impression_group <- EMS_all %>%
-  filter(primary_impression_group != "Other") %>%
-  group_by(primary_impression_group, adjusted_heat_index_nws_five_scale_bucket) %>%
-  summarise(condition_calls_count_per_bucket=n()) %>%
-  inner_join(heat_index_count_per_nws_five_scale_bucket, by = c("adjusted_heat_index_nws_five_scale_bucket" = "heat_index_nws_five_scale_bucket")) %>%
-  mutate(hours_per_call = heat_index_count_per_nws_five_scale_bucket/condition_calls_count_per_bucket) %>%
-  select(primary_impression_group, adjusted_heat_index_nws_five_scale_bucket, hours_per_call) %>%
-  spread(adjusted_heat_index_nws_five_scale_bucket, hours_per_call) %>%
-  select(primary_impression_group, `not_unsafe_under_80`,`caution_80_89`,`extreme_caution_90_102`,`danger_103_124`) %>%
-  filter(primary_impression_group == "Cardiac Arrest" | primary_impression_group == "CHF (Congestive Heart Failure)")
-```
-
-### Fact: Hot Neighborhoods Have Lower Incomes
-
-“Households in the city’s hottest neighborhoods have lower incomes”
-
-#### Explanation
-
-The code below pulls from the “csa\_tree\_temp\_demographics” dataset,
-which includes a variety of information on each neighborhood in
-Baltimore. From that dataset, median afternoon temperature and
-percentage of family households below the poverty line are isolated to
-allow for a comparison of median temperatures to poverty rate. The
-temperature is arranged in descending order, putting the hottest
-neighborhoods on top.
-
-The two hottest neighborhoods, Madison/East End and Oldtown/Middle East,
-have poverty rates of 33.74% and 40.13%, respectively. The ten hottest
-neighborhoods all have average afternoon temperatures of at least 96
-(when rounded) and only two have single digit poverty rates; the poverty
-rates for the other neighborhoods are all at least 19%.
-
-In comparison, the 15 coolest neighborhoods have an average afternoon
-temperature of 94.1 degrees or less. The highest poverty rate is 19.53%
-in Greater Govans and 19.26% in Forest Park/Walbrook, only greater than
-the poverty rating of 7 of the 10 hottest neighborhoods. 8 of the
-coolest neighborhoods have a single digit poverty rating (or 7
-neighborhoods, if you round Cross-Country/Cheswolde’s poverty rate to
-10%).
-
-#### Supporting Code
-
-``` r
- csa_tree_temp_demographics %>%
+# Correlation coefficients
+csa_tree_temp_demographics %>%
   select_x() %>%
   as.matrix() %>%
   correlate() %>%
   focus(matches("temp_")) %>%
   mutate(variable=rowname) %>%
-  select(variable, temp_median_aft) %>%
-  filter(variable=="percent_of_family_households_living_below_the_poverty_line")
+  select(variable, temp_mean_aft) %>%
+  filter(str_detect(variable, "family_households"))
 ```
 
     ## # A tibble: 1 x 2
-    ##   variable                                                  temp_median_aft
-    ##   <chr>                                                               <dbl>
-    ## 1 percent_of_family_households_living_below_the_poverty_li…           0.378
+    ##   variable                                                   temp_mean_aft
+    ##   <chr>                                                              <dbl>
+    ## 1 percent_of_family_households_living_below_the_poverty_line         0.398
 
-``` r
-csa_tree_temp_demographics %>%
-  select(csa2010,temp_median_aft,percent_of_family_households_living_below_the_poverty_line) %>%
-  arrange(desc(temp_median_aft))
-```
+### Fact: More affluent communities have more trees \[cq\]
 
-    ## # A tibble: 55 x 3
-    ##    csa2010             temp_median_aft percent_of_family_households_living…
-    ##    <chr>                         <dbl>                                <dbl>
-    ##  1 madison/east end               98.4                                33.7 
-    ##  2 oldtown/middle east            97.5                                40.1 
-    ##  3 patterson park nor…            97.2                                21.7 
-    ##  4 midtown                        97.1                                 5.42
-    ##  5 greenmount east                97.0                                24.2 
-    ##  6 clifton-berea                  96.9                                27.6 
-    ##  7 greater charles vi…            96.8                                19.0 
-    ##  8 midway/coldstream              96.4                                22.6 
-    ##  9 highlandtown                   96.3                                 6.65
-    ## 10 upton/druid heights            95.9                                43.0 
-    ## # … with 45 more rows
+"The streets have fewer trees than those in more affluent communities."
 
-### Fact: Unreliable Public Transportation
+#### Explanation \[cq\]
 
-“Public transportation, which many residents here use, is unreliable.”
+In Baltimore "community statistical areas", there is a moderate negative correlation between an area's tree canopy cover and the area's poverty rate, with a correlation coefficient (r) of -.34, where -1 would reference a perfect negative correlation. Generally, the poorer the area, the fewer trees it will have.
 
-#### Explanation
-
-The code below returns Baltimore neighborhoods in descending order of
-average afternoon temperature as well as the percentage of that
-neighborhood’s population that uses public transportation to get to
-work. Of all the neighborhoods, only 10 have single digit values for the
-percentage of population that uses public transportation. Of the top ten
-hottest neighborhoods, only one has a single digit public transportation
-usage value; the next lowest is 12.20% and the greatest is 42.55%. Over
-30% of the population uses public transportation in 10 neighborhoods,
-and five of those neighbors are also among the ten hottest (six of the
-highest public transportation using neighborhoods are also among the 12
-hottest).
-
-#### Supporting Code
-
-``` r
- csa_tree_temp_demographics %>%
-  select_x() %>%
-  as.matrix() %>%
-  correlate() %>%
-  focus(matches("temp_")) %>%
-  mutate(variable=rowname) %>%
-  select(variable, temp_median_aft) %>%
-  filter(variable=="percent_of_population_that_uses_public_transportation_to_get_to_work")
-```
-
-    ## # A tibble: 1 x 2
-    ##   variable                                                  temp_median_aft
-    ##   <chr>                                                               <dbl>
-    ## 1 percent_of_population_that_uses_public_transportation_to…           0.410
-
-``` r
-csa_tree_temp_demographics %>%
-  select(csa2010,temp_median_aft,percent_of_population_that_uses_public_transportation_to_get_to_work) %>%
-  arrange(desc(temp_median_aft))
-```
-
-    ## # A tibble: 55 x 3
-    ##    csa2010            temp_median_aft percent_of_population_that_uses_publ…
-    ##    <chr>                        <dbl>                                 <dbl>
-    ##  1 madison/east end              98.4                                 34.2 
-    ##  2 oldtown/middle ea…            97.5                                 27.0 
-    ##  3 patterson park no…            97.2                                 12.2 
-    ##  4 midtown                       97.1                                 27.0 
-    ##  5 greenmount east               97.0                                 42.5 
-    ##  6 clifton-berea                 96.9                                 34.0 
-    ##  7 greater charles v…            96.8                                 22.5 
-    ##  8 midway/coldstream             96.4                                 32.6 
-    ##  9 highlandtown                  96.3                                  7.19
-    ## 10 upton/druid heigh…            95.9                                 31.6 
-    ## # … with 45 more rows
-
-### Fact: More Affluence = More Tree Canopy
-
-“The streets have fewer trees than those in more affluent communities.”
-
-#### Explanation
-
-The code below below selects from the neighborhood demographic dataset
-all the neighborhoods, the poverty rate in those neighborhoods, and the
-percentage of tree cover for each neighborhood according to the most
-recent LiDar data available for Baltimore from 2015. The selected
-observations are then listed in order of greatest tree canopy percentage
-to least.
-
-The ggplot code then graphs that dataset, with special attention paid to
-the neighborhoods Canton, Clifton-Berea, Patterson Park, Greater Roland
-Park/Poplar Hill and Greenmount East. Along the y-axis is percentage of
-tree canopy coverage while the x-axis shows poverty rates. The code
-geom\_smooth() creates a best fit line over the data and clearly shows a
-decrease in tree canopy coverage as poverty rate increases.
-
-#### Supporting Code
+#### Supporting code and output \[cq\]
 
 ``` r
  csa_tree_temp_demographics %>%
@@ -661,590 +693,569 @@ decrease in tree canopy coverage as poverty rate increases.
     ##   <chr>                                                              <dbl>
     ## 1 percent_of_family_households_living_below_the_poverty_line        -0.340
 
-``` r
-csa_tree_temp_demographics %>%
-  select(csa2010,`15_lid_mean`,percent_of_family_households_living_below_the_poverty_line) %>%
-  arrange(desc(`15_lid_mean`))
-```
+### Fact: Crime rates higher in poorer neighborhoods \[cq\]
 
-    ## # A tibble: 55 x 3
-    ##    csa2010              `15_lid_mean` percent_of_family_households_living_…
-    ##    <chr>                        <dbl>                                 <dbl>
-    ##  1 dickeyville/frankli…         0.732                                 17.4 
-    ##  2 mount washington/co…         0.670                                  2.00
-    ##  3 greater roland park…         0.603                                  2.15
-    ##  4 edmondson village            0.551                                  8.89
-    ##  5 forest park/walbrook         0.536                                 19.3 
-    ##  6 north baltimore/gui…         0.512                                  3.48
-    ##  7 beechfield/ten hill…         0.492                                 10.5 
-    ##  8 cross-country/chesw…         0.479                                  9.89
-    ##  9 lauraville                   0.410                                  7.49
-    ## 10 penn north/reservoi…         0.408                                 26.0 
-    ## # … with 45 more rows
+"Crime rates are higher, so many people won’t put an air-conditioning unit in a first-floor window for fear of break-ins."
 
-``` r
-# CSAs to call out
-callout_ls <- c("Canton", "Clifton-Berea", "Greater Roland Park/Poplar Hill", "Greenmount East")
+#### Explanation \[cq\]
 
-## POVERTY TO TREE COVER
-csa_tree_temp_demographics %>%
-  mutate_at(vars("csa2010"), str_to_title) %>%
-  # Start ggplot and set x and y for entire plot
-  ggplot(aes(
-    x = percent_of_family_households_living_below_the_poverty_line/100,
-    y = `15_lid_mean`
-    )) +
-  # This section for the basic scatterplot
-  geom_point(aes(color = `15_lid_mean`),
-             size=4) +
-  # This section for circling all sample neighborhood points
-  geom_point(data = csa_tree_temp_demographics %>%
-               mutate_at(vars("csa2010"), str_to_title) %>%
-               filter((csa2010 %in% callout_ls)
-                      # Patterson Park must be included seperately because of its unique label positioning
-                      | (csa2010 == "Patterson Park North & East")
-                      ),
-             aes(color = `15_lid_mean`),
-             size=6, shape = 1) +
-  # This section shows the trend line
-  geom_smooth(se = FALSE, # Removes gray banding
-              method = glm,
-              color = "black") +
-  # This section for labeling Canton, etc.
-  ggrepel::geom_label_repel(data = csa_tree_temp_demographics %>%
-                              mutate_at(vars("csa2010"), str_to_title) %>%
-                              filter(csa2010 %in% callout_ls) %>%
-                              mutate(csa2010 = case_when(
-                                csa2010 == "Greenmount East" ~ "Greenmount East \n(includes part of Broadway East)",
-                                csa2010 == "Clifton-Berea" ~ "Clifton-Berea \n(includes part of Broadway East)",
-                                T ~ csa2010)),
-            aes(label = csa2010),
-            min.segment.length = .1,
-            segment.alpha = .5,
-            alpha = .85,
-            nudge_x = .05,
-            nudge_y = .06) +
-  # This section for labeling Patterson Park (so its label can be nudged)
-  ggrepel::geom_label_repel(data = csa_tree_temp_demographics %>%
-                              mutate_at(vars("csa2010"), str_to_title) %>%
-                              filter(csa2010 == "Patterson Park North & East") %>%
-                              mutate(csa2010 = case_when(
-                                csa2010 == "Patterson Park North & East" ~ "Patterson Park North & East \n(includes most of McElderry Park)",
-                                T ~ csa2010)),
-                            aes(label = csa2010),
-                            min.segment.length = .1,
-                            segment.alpha = .5,
-                            alpha = .85,
-                            nudge_x = -.06,
-                            nudge_y = .03) +
-  # Colors and label formatting follow
-  #coord_flip() +
-  scale_colour_gradient(low = "#E0FEA9", high = "#144A11") +
-  labs(title = "Poverty to Tree Canopy",
-       subtitle = "Percent of households living below the poverty line \ncompared to the percent of tree cover in the area",
-       x = "Percent of households living below the poverty line",
-       y = "Percent of land covered by trees") +
-  scale_x_continuous(label = scales::percent_format(accuracy = 1.0),
-                     breaks = seq(0, 1, .1)) +
-  scale_y_continuous(label = scales::percent_format(accuracy = 1.0),
-                     breaks = seq(0, 1, .1)) +
-  theme_bw() +
-  theme(legend.position = "none",
-        plot.title = element_text(size = 20),
-        plot.subtitle = element_text(size = 12))
-```
+In Baltimore "community statistical areas", there is a moderate positive correlation between an area's tree violent crime rate and the area's poverty rate, with a correlation coefficient (r) of .43, where -1 would reference a perfect positive correlation. Generally, the poorer the area, the more violent crime.
 
-![](neighborhoods-data-analysis_files/figure-markdown_github/unnamed-chunk-12-1.png)
-
-### Fact:
-
-“Crime rates are higher, so many people won’t put an air-conditioning
-unit in a first-floor window for fear of break-ins.”
-
-#### Explanation
-
-The first set of code returns a dataset with the amount of various
-crimes per 1000 residents. The crimes include part 1 crimes, violent
-crimes, property crimes, shootings, gun related homicides, common
-assault, and narcotics. The next column, titled “temp\_mean\_aft”, lists
-the coefficient of the crime rate to temperature. The closer the
-coefficient is to 1, the greater the relation.
-
-The crime rates are then paired with Baltimore’s neighborhoods, which
-are sorted from highest average afternoon temperature to lowest. The
-third column, “part\_1\_crime\_rate\_per\_1\_000\_residents”, lists the
-amount of part 1 crimes per 1,000 residents in that neighborhood.
-
-The values are then plotted, with average afternoon temperature on the
-y-axis and number of property crimes per 1,000 residents on the x-axis.
-The neighborhoods Canton, Clifton-Berea, Greater Roland Park/Poplar
-Hill, Greenmount East and Patterson Park North and East are highlighted
-for storytelling purposes. A best fit line is applied to show the
-average trajectory of the plotted values. It has a positive slope, which
-shows that as crime rate rises, so too does the average afternoon
-temperature.
-
-#### Supporting Code
+#### Supporting code and output \[ca\]
 
 ``` r
  csa_tree_temp_demographics %>%
   select_x() %>%
   as.matrix() %>%
   correlate() %>%
-  focus(matches("temp_")) %>%
+  focus(matches("percent_of_family_households_living_below_the_poverty_line")) %>%
   mutate(variable=rowname) %>%
-  select(variable, temp_mean_aft) %>%
-  filter(str_detect(variable, "crime|shootings|gun|assault|narcotics"))
+  select(variable, percent_of_family_households_living_below_the_poverty_line) %>%
+  filter(str_detect(variable, "violent")) %>%
+  rename(poverty_rate = percent_of_family_households_living_below_the_poverty_line)
 ```
 
-    ## # A tibble: 7 x 2
-    ##   variable                                                    temp_mean_aft
-    ##   <chr>                                                               <dbl>
-    ## 1 part_1_crime_rate_per_1_000_residents                               0.553
-    ## 2 violent_crime_rate_per_1_000_residents                              0.580
-    ## 3 property_crime_rate_per_1_000_residents                             0.525
-    ## 4 number_of_shootings_per_1_000_residents                             0.404
-    ## 5 number_of_gun_related_homicides_per_1_000_residents                 0.387
-    ## 6 number_of_common_assault_calls_for_service_per_1_000_resid…         0.420
-    ## 7 number_of_narcotics_calls_for_service_per_1_000_residents           0.356
+    ## # A tibble: 1 x 2
+    ##   variable                               poverty_rate
+    ##   <chr>                                         <dbl>
+    ## 1 violent_crime_rate_per_1_000_residents        0.428
+
+### Fact: Highset temperature, humidity sensor values \[cq\]
+
+"Reporters from the University of Maryland’s Howard Center for Investigative Journalism and Capital News Service placed sensors that record heat and humidity inside several homes in McElderry Park and nearby neighborhoods. Those sensors recorded temperatures that reached as high as 97 degrees and heat index values of 119 degrees."
+
+#### Explanation \[cq\]
+
+In the four homes referenced in this story where we placed sensors, the highest heat index reading we captured was 119 degrees, and the highest temperature reading was 96.8 degrees.
+
+#### Supporting code and output \[cq\]
 
 ``` r
-csa_tree_temp_demographics %>%
-  select(csa2010,temp_mean_aft,matches("crime|shootings|gun|assault|narcotics")) %>%
-  arrange(desc(temp_mean_aft))
-```
+# bind together four sensor data sets
+all_sensors_day_minute_averages <- bind_rows(michael_day_minute_averages, tammy_day_minute_averages, stephanie_day_minute_averages, audrey_day_minute_averages)
 
-    ## # A tibble: 55 x 9
-    ##    csa2010 temp_mean_aft part_1_crime_ra… violent_crime_r… property_crime_…
-    ##    <chr>           <dbl>            <dbl>            <dbl>            <dbl>
-    ##  1 madiso…          98.3            119.              28.7             89.3
-    ##  2 patter…          97.4            113.              27.4             83.9
-    ##  3 oldtow…          97.3            111.              38.0             71.1
-    ##  4 midtown          96.9             80.3             20.8             58.6
-    ##  5 greenm…          96.9             86.0             32.9             51.7
-    ##  6 clifto…          96.7             67.8             25.1             41.5
-    ##  7 midway…          96.4             76.3             26.1             48.1
-    ##  8 greate…          96.3             67.2             23.5             43.1
-    ##  9 highla…          96.3             98.5             28.1             69.8
-    ## 10 upton/…          95.9             84.2             30.9             51.7
-    ## # … with 45 more rows, and 4 more variables:
-    ## #   number_of_shootings_per_1_000_residents <dbl>,
-    ## #   number_of_gun_related_homicides_per_1_000_residents <dbl>,
-    ## #   number_of_common_assault_calls_for_service_per_1_000_residents <dbl>,
-    ## #   number_of_narcotics_calls_for_service_per_1_000_residents <dbl>
-
-``` r
-# CSAs to call out
-callout_ls <- c("Canton", "Clifton-Berea", "Greater Roland Park/Poplar Hill", "Greenmount East")
-
-## PROPERTY CRIME TO TEMPERATURE
-csa_tree_temp_demographics %>%
-  mutate_at(vars("csa2010"), str_to_title) %>%
-  # Start ggplot and set x and y for entire plot
-  ggplot(aes(
-    x = property_crime_rate_per_1_000_residents,
-    y = temp_mean_aft
-    )) +
-  # This section for the basic scatterplot
-  geom_point(aes(color = temp_mean_aft),
-             size=4) +
-  # This section for circling all sample neighborhood points
-  geom_point(data = csa_tree_temp_demographics %>%
-               mutate_at(vars("csa2010"), str_to_title) %>%
-               filter((csa2010 %in% callout_ls)
-                      # Patterson Park must be included seperately because of its unique label positioning
-                      | (csa2010 == "Patterson Park North & East")
-                      ),
-             aes(color = temp_mean_aft),
-             size=6, shape = 1) +
-  # This section shows the trend line
-  geom_smooth(se = FALSE, # Removes gray banding
-              method = glm,
-              color = "black") +
-  # This section for labeling Canton, etc.
-  ggrepel::geom_label_repel(data = csa_tree_temp_demographics %>%
-                              mutate_at(vars("csa2010"), str_to_title) %>%
-                              filter(csa2010 %in% callout_ls) %>%
-                              mutate(csa2010 = case_when(
-                                csa2010 == "Greenmount East" ~ "Greenmount East \n(includes part of Broadway East)",
-                                csa2010 == "Clifton-Berea" ~ "Clifton-Berea \n(includes part of Broadway East)",
-                                T ~ csa2010)),
-            aes(label = csa2010),
-            min.segment.length = .1,
-            segment.alpha = .5,
-            alpha = .85,
-            nudge_x = .05,
-            nudge_y = .06) +
-  # This section for labeling Patterson Park (so its label can be nudged)
-  ggrepel::geom_label_repel(data = csa_tree_temp_demographics %>%
-                              mutate_at(vars("csa2010"), str_to_title) %>%
-                              filter(csa2010 == "Patterson Park North & East") %>%
-                              mutate(csa2010 = case_when(
-                                csa2010 == "Patterson Park North & East" ~ "Patterson Park North & East \n(includes most of McElderry Park)",
-                                T ~ csa2010)),
-                            aes(label = csa2010),
-                            min.segment.length = .1,
-                            segment.alpha = .5,
-                            alpha = .85,
-                            nudge_x = -.06,
-                            nudge_y = .03) +
-  # Colors and label formatting follow
-  #coord_flip() +
-  scale_colour_gradient(low = "#E0FEA9", high = "#144A11") +
-  labs(title = "PROPERTY CRIME TO TEMPERATURE",
-       subtitle = "Property Crime per 1,000",
-       x = "Property crime per 1000 people",
-       y = "mean aft temperature") +
-  scale_x_continuous(label = scales::percent_format(accuracy = 1.0),
-                     breaks = seq(0, 1, .1)) +
-  scale_y_continuous(label = scales::percent_format(accuracy = 1.0),
-                     breaks = seq(0, 1, .1)) +
-  theme_bw() +
-  theme(legend.position = "none",
-        plot.title = element_text(size = 20),
-        plot.subtitle = element_text(size = 12))
-```
-
-![](neighborhoods-data-analysis_files/figure-markdown_github/unnamed-chunk-13-1.png)
-
-### Fact: Highset Sensor Values
-
-"Reporters from the University of Maryland’s Howard Center for
-Investigative Journalism and Capital News Service placed sensors that
-record heat and humidity inside several homes in McElderry Park and
-nearby neighborhoods.
-
-“Those sensors recorded temperatures that reached as high as 97 degrees
-and heat index values of 119 degrees.”
-
-#### Explanation
-
-The code belowing uses the “all\_sensors\_day\_minute\_averages”
-dataset, which contains all of the temperature and heat index data
-collected by sensors that reporters from the University of Maryland’s
-Howard Center for Investigative Journalism and Capital News Service
-placed in consenting peoples’ homes. The values are then filtered, first
-for the maximum indoor temperature and then for maximum indoor heat
-index. The two filtered lines return observations of 96.8 degrees (97
-when rounded) for maximum temperature and 119 for maximum indoor heat
-index.
-
-#### Supporting Code
-
-``` r
-all_sensors_day_minute_averages <- bind_rows(michael_day_minute_averages, tammy_day_minute_averages, stephanie_day_minute_averages)
-
+# return the highest temperature
 all_sensors_day_minute_averages %>%
-  filter(mean_indoor_temperature == max(mean_indoor_temperature))
+  filter(mean_indoor_temperature == max(mean_indoor_temperature)) %>%
+  select(date_hour_minute, mean_indoor_temperature)
 ```
 
-    ## # A tibble: 4 x 7
-    ##   date_hour_minute    mean_indoor_tem… mean_indoor_hea… mean_outdoor_te…
-    ##   <dttm>                         <dbl>            <dbl>            <dbl>
-    ## 1 2019-07-19 20:55:00             96.8              112             93.9
-    ## 2 2019-07-19 21:06:00             96.8              112             91.9
-    ## 3 2019-07-19 21:30:00             96.8              112             91.9
-    ## 4 2019-07-19 21:45:00             96.8              112             91.9
-    ## # … with 3 more variables: mean_outdoor_heat_index <dbl>,
-    ## #   indoor_temperature_difference <dbl>,
-    ## #   indoor_heat_index_difference <dbl>
+    ## # A tibble: 4 x 2
+    ##   date_hour_minute    mean_indoor_temperature
+    ##   <dttm>                                <dbl>
+    ## 1 2019-07-19 20:55:00                    96.8
+    ## 2 2019-07-19 21:06:00                    96.8
+    ## 3 2019-07-19 21:30:00                    96.8
+    ## 4 2019-07-19 21:45:00                    96.8
 
 ``` r
+# return the highest heat index
 all_sensors_day_minute_averages %>%
-  filter(mean_indoor_heat_index == max(mean_indoor_heat_index))
+  filter(mean_indoor_heat_index == max(mean_indoor_heat_index)) %>%
+  select(date_hour_minute, mean_indoor_heat_index)
 ```
 
-    ## # A tibble: 1 x 7
-    ##   date_hour_minute    mean_indoor_tem… mean_indoor_hea… mean_outdoor_te…
-    ##   <dttm>                         <dbl>            <dbl>            <dbl>
-    ## 1 2019-07-20 18:12:00             95.7              119             96.1
-    ## # … with 3 more variables: mean_outdoor_heat_index <dbl>,
-    ## #   indoor_temperature_difference <dbl>,
-    ## #   indoor_heat_index_difference <dbl>
+    ## # A tibble: 1 x 2
+    ##   date_hour_minute    mean_indoor_heat_index
+    ##   <dttm>                               <dbl>
+    ## 1 2019-07-20 18:12:00                    119
 
-### Fact: Jackson’s House’s Heat Index was 94 on 7/21
+### Fact: Hotter inside than outside \[cq\]
 
-“On the first floor of Jackson’s two-story rowhouse, the heat index
-registered 93 degrees at 10 p.m. on Sunday, July 21. Outside, the heat
-index was 9 degrees lower, 84 degrees.”
+"In some homes, those readings showed that it was hotter inside than outside. At 4 p.m. Saturday, July 20, the temperature in Baltimore hit 99 degrees F, but the humidity made it feel like 108 degrees F. Here is what the combination of heat and humidity felt like inside three East Baltimore rowhouses at 4 p.m. that day: \* Michael Thomas and Alberta Wilkerson, second floor sensor. Temperature: 96. Relative humidity: 52%. What it felt like: 109. \* Audrey DeWitt, first floor sensor. Temperature: 87. Relative humidity: 52%. What it felt like: 91. \* Stephanie Pingley, second floor sensor. Temperature: 95. Relative humidity: 53%. What it felt like: 107."
 
-#### Explanation
+#### Explanation \[cq\]
 
-The following code pulls from datasets containing the average weather
-condition recordings from sensors for Tammy Jackson’s house. The first
-set uses the hourly average values while the second uses the average
-recorded values each minute. Both are filtered for July 21, 2019 at 10
-p.m. on the dot. Both have the indoor heat index listed as 93 while the
-outdoor heat index is 84.
+The outdoor heat, humidity and heat index were calculated using data from the Inner Harbor NWS monitoring station. Sensors we placed in their homes were used to calculate the indoor temperatures, heat index and humidity.
 
-#### Supporting Code
+#### Supporting code and output \[cq\]
+
+``` r
+# temperature and heat index at 4 p.m. Saturday, July 20, 2019
+dmh %>%
+ filter(month == 7,
+         year == 2019,
+         day == 20,
+         hour == 16) %>%
+  select(date, hour, avg_hourly_temperature_dmh, avg_hourly_heat_index_dmh)
+```
+
+    ## # A tibble: 1 x 4
+    ##   date        hour avg_hourly_temperature_dmh avg_hourly_heat_index_dmh
+    ##   <date>     <dbl>                      <dbl>                     <dbl>
+    ## 1 2019-07-20    16                         99                       108
+
+``` r
+# Michael and Alberta
+michael_day_hourly_averages %>%
+  mutate(date = date(date_hour)) %>%
+  mutate(hour = hour(date_hour)) %>%
+  filter(date == "2019-07-20") %>%
+  filter(hour == 16) %>%
+  select(date, hour, mean_indoor_temperature, mean_indoor_relative_humidity, mean_indoor_heat_index)
+```
+
+    ## # A tibble: 1 x 5
+    ##   date        hour mean_indoor_tempe… mean_indoor_relati… mean_indoor_heat…
+    ##   <date>     <int>              <dbl>               <dbl>             <dbl>
+    ## 1 2019-07-20    16                 96                51.8              109.
+
+``` r
+# Audrey
+audrey_day_hourly_averages %>%
+  mutate(date = date(date_hour)) %>%
+  mutate(hour = hour(date_hour)) %>%
+  filter(date == "2019-07-20") %>%
+  filter(hour == 16) %>%
+  select(date, hour, mean_indoor_temperature, mean_indoor_relative_humidity, mean_indoor_heat_index)
+```
+
+    ## # A tibble: 1 x 5
+    ##   date        hour mean_indoor_tempe… mean_indoor_relati… mean_indoor_heat…
+    ##   <date>     <int>              <dbl>               <dbl>             <dbl>
+    ## 1 2019-07-20    16               87.4                  52                91
+
+``` r
+# Stephanie
+stephanie_day_hourly_averages %>%
+  mutate(date = date(date_hour)) %>%
+  mutate(hour = hour(date_hour)) %>%
+  filter(date == "2019-07-20") %>%
+  filter(hour == 16) %>%
+  select(date, hour, mean_indoor_temperature, mean_indoor_relative_humidity, mean_indoor_heat_index)
+```
+
+    ## # A tibble: 1 x 5
+    ##   date        hour mean_indoor_tempe… mean_indoor_relati… mean_indoor_heat…
+    ##   <date>     <int>              <dbl>               <dbl>             <dbl>
+    ## 1 2019-07-20    16               94.8                  53              107.
+
+### Fact: Tammy Jackson's house on July 21 \[cq\]
+
+"On the first floor of Jackson’s two-story rowhouse, the heat index registered 93 degrees at 10 p.m. on Sunday, July 21. Outside, the heat index was 9 degrees lower, 84 degrees."
+
+#### Explanation \[cq\]
+
+The following code shows the values presented in the sentence above.
+
+#### Supporting code and output \[cq\]
 
 ``` r
 tammy_day_hourly_averages %>%
   mutate(date = date(date_hour)) %>%
   mutate(hour = hour(date_hour)) %>%
   filter(date == "2019-07-21") %>%
-  filter(hour == 22)
-```
-
-    ## # A tibble: 1 x 9
-    ##   date_hour           mean_indoor_tem… mean_indoor_hea… mean_outdoor_te…
-    ##   <dttm>                         <dbl>            <dbl>            <dbl>
-    ## 1 2019-07-21 22:00:00             87.9               93               81
-    ## # … with 5 more variables: mean_outdoor_heat_index <dbl>,
-    ## #   indoor_temperature_difference <dbl>,
-    ## #   indoor_heat_index_difference <dbl>, date <date>, hour <int>
-
-``` r
-tammy_day_minute_averages %>%
-  mutate(date = date(date_hour_minute)) %>%
-  mutate(hour = hour(date_hour_minute)) %>%
-  mutate(minute = minute(date_hour_minute)) %>%
-  filter(date == "2019-07-21") %>%
   filter(hour == 22) %>%
-  filter(minute == 0)
+  select(date_hour, mean_indoor_heat_index, mean_outdoor_heat_index, indoor_heat_index_difference)
 ```
 
-    ## # A tibble: 1 x 10
-    ##   date_hour_minute    mean_indoor_tem… mean_indoor_hea… mean_outdoor_te…
-    ##   <dttm>                         <dbl>            <dbl>            <dbl>
-    ## 1 2019-07-21 22:00:00             88.2               93               81
-    ## # … with 6 more variables: mean_outdoor_heat_index <dbl>,
-    ## #   indoor_temperature_difference <dbl>,
-    ## #   indoor_heat_index_difference <dbl>, date <date>, hour <int>,
-    ## #   minute <int>
+    ## # A tibble: 1 x 4
+    ##   date_hour           mean_indoor_heat… mean_outdoor_hea… indoor_heat_inde…
+    ##   <dttm>                          <dbl>             <dbl>             <dbl>
+    ## 1 2019-07-21 22:00:00                93                84                 9
 
-### Fact:
+### Fact: Hotter inside Stephanie Pingley's house than outside \[cq\]
 
-“At 7 p.m. Friday, the heat index in Baltimore hit 107 degrees in the
-Inner Harbor. Inside the bedroom Stephanie Pingley’s niece shares with
-one of her three sons, it was 9 degrees hotter, with a heat index of 116
-degrees.”
+"A sensor inside a bedroom showed that the heat index during the heat wave was consistently higher inside than outside Pingley’s house."
 
-Note: DIFFERENT VALUES, FIX THESE.
+#### Explanation \[cq\]
 
-#### Explanation
+Between July 16 and July 23, the heat index inside of Pingley's house was higher than the outside for more hours (108) than hours when the opposite was true (60).
 
-The following code pulls from datasets containing the average weather
-condition recordings from sensors for Stephanie Pingley’s house. The
-first set uses the hourly average values while the second uses the
-average recorded values each minute. Both are filtered for July 19, 2019
-at 7 p.m. on the dot. The heat index for the hourly averages table is
-115.7 degrees, while on the minute table the heat index is listed as
-115.
-
-The final set of code accesses the dataset containing average hourly
-temperatures, dewpoints, relative humidities, and heat indexes for
-Baltimore’s Inner Harbor since 1998. The data is filtered for July 19 at
-7 p.m., at which time the average heat index was listed as 103.
-
-#### Supporting Code
+#### Supporting code and output \[cq\]
 
 ``` r
 stephanie_day_hourly_averages %>%
-  mutate(date = date(date_hour)) %>%
-  mutate(hour = hour(date_hour)) %>%
-  filter(date == "2019-07-19") %>%
-  filter(hour == 19)
+  filter(date_hour >= "2019-07-16",
+         date_hour < "2019-07-23") %>%
+  mutate(difference = case_when(
+      indoor_heat_index_difference > 0 ~ "hours hotter inside",
+      indoor_heat_index_difference <= 0 ~ "hours hotter outside"
+  )) %>%
+  group_by(difference) %>%
+  summarise(count=n())
 ```
 
-    ## # A tibble: 1 x 9
-    ##   date_hour           mean_indoor_tem… mean_indoor_hea… mean_outdoor_te…
-    ##   <dttm>                         <dbl>            <dbl>            <dbl>
-    ## 1 2019-07-19 19:00:00               96             116.               95
-    ## # … with 5 more variables: mean_outdoor_heat_index <dbl>,
-    ## #   indoor_temperature_difference <dbl>,
-    ## #   indoor_heat_index_difference <dbl>, date <date>, hour <int>
+    ## # A tibble: 2 x 2
+    ##   difference           count
+    ##   <chr>                <int>
+    ## 1 hours hotter inside    108
+    ## 2 hours hotter outside    60
+
+### Fact: Hottest seven-day stretch of the summer
+
+"The seven-day stretch between July 16 and July 22 were the hottest consecutive days of the summer." NEEDS TO BE UPDATED WITH NEWER TEMP DATA
+
+#### Explanation
+
+The average temperature between July 16 and July 22 was 94.2 degrees, hotter than any period of the summer so far.
+
+#### Supporting code and output
 
 ``` r
-stephanie_day_minute_averages %>%
-  mutate(date = date(date_hour_minute)) %>%
-  mutate(hour = hour(date_hour_minute)) %>%
-  mutate(minute = minute(date_hour_minute)) %>%
-  filter(date == "2019-07-19") %>%
-  filter(hour == 19) %>%
-  filter(minute == 0)
+# compute means for the summer
+summer_means <- dmh %>%
+  filter(year == 2019) %>%
+  filter(date >= "2019-06-21",
+         date <= "2019-09-21") %>%
+  group_by(`date`) %>%
+  summarise(min_temp = min(avg_hourly_temperature_dmh),
+            max_temp = max(avg_hourly_temperature_dmh),
+            mean_temp = mean(avg_hourly_temperature_dmh),
+            min_heat_index = min(avg_hourly_heat_index_dmh),
+            max_heat_index = max(avg_hourly_heat_index_dmh),
+            mean_heat_index = mean(avg_hourly_heat_index_dmh) 
+  )
+
+# calculate mean temperature for seven days prior in each date in data
+running_average <- as.tibble(runMean(summer_means$mean_heat_index, n=7))
+
+# bind moving average back to summer means
+summer_means <- bind_cols(summer_means, running_average) %>%
+  select(date, value) %>%
+  rename(seven_day_prior_mean_temp = value) %>%
+  arrange(desc(seven_day_prior_mean_temp))
+
+# display summer means
+summer_means
 ```
 
-    ## # A tibble: 1 x 10
-    ##   date_hour_minute    mean_indoor_tem… mean_indoor_hea… mean_outdoor_te…
-    ##   <dttm>                         <dbl>            <dbl>            <dbl>
-    ## 1 2019-07-19 19:00:00             95.9              115               95
-    ## # … with 6 more variables: mean_outdoor_heat_index <dbl>,
-    ## #   indoor_temperature_difference <dbl>,
-    ## #   indoor_heat_index_difference <dbl>, date <date>, hour <int>,
-    ## #   minute <int>
+    ## # A tibble: 49 x 2
+    ##    date       seven_day_prior_mean_temp
+    ##    <date>                         <dbl>
+    ##  1 2019-07-22                      94.2
+    ##  2 2019-07-21                      93.5
+    ##  3 2019-07-23                      91.9
+    ##  4 2019-07-20                      91.8
+    ##  5 2019-07-24                      89.9
+    ##  6 2019-07-19                      89.5
+    ##  7 2019-07-25                      88.0
+    ##  8 2019-07-18                      87.5
+    ##  9 2019-07-17                      86.2
+    ## 10 2019-08-03                      85.6
+    ## # … with 39 more rows
+
+### Fact: Heat index on July 21 \[cq\]
+
+"The heat index reached 111 degrees at 4 p.m. July 21."
+
+#### Explanation \[cq\]
+
+The heat index reached 111 degrees at 4 p.m. July 21.
+
+#### Supporting code and output \[cq\]
 
 ``` r
 dmh %>%
-  filter(date == "2019-07-19",
-         hour == 19) %>%
-  select(avg_hourly_heat_index_dmh)
+  filter(date == "2019-07-21") %>%
+  filter(hour == 16) %>%
+  select(date, hour, avg_hourly_heat_index_dmh)
 ```
 
-    ## # A tibble: 1 x 1
-    ##   avg_hourly_heat_index_dmh
-    ##                       <dbl>
-    ## 1                       103
+    ## # A tibble: 1 x 3
+    ##   date        hour avg_hourly_heat_index_dmh
+    ##   <date>     <dbl>                     <dbl>
+    ## 1 2019-07-21    16                       111
 
-### Fact: Thomas’ House was 96 on 7-20
+### Fact: Heat index in the bedroom
 
-“By Saturday, the temperature inside the second-floor apartment of
-Michael Thomas and Alberta Wilkerson hit 96 degrees.”
+"The highest average hourly heat index reading in the bedroom was 113 degrees; it averaged 98 degrees during the seven-day period." NEEDS TO BE REWRITTEN AS "The heat index reached 113 degrees at 8 p.m. on July 19; it averaged 98 degrees during the seven-day period."
 
 #### Explanation
 
-The following code pulls from datasets containing the average weather
-condition recordings from sensors for Michael’s house. The first sorts
-in descending order of mean\_indoor\_temperature values while the second
-sorts in descending order of mean\_indoor\_heat\_index values. Both are
-filtered for July 20, 2019. Both sets contain a value of 96 or greater
-for the mean\_indoor\_temperature at least once during the day.
+The heat index reached 113 degrees at 8 p.m. on July 19. The mean indoor heat index was 98 degrees during that period.
 
-Note: The heat index hit 112!
-
-#### Supporting Code
+#### Supporting code and output
 
 ``` r
-michael_day_hourly_averages %>%
-  mutate(date = date(date_hour)) %>%
-  mutate(hour = hour(date_hour)) %>%
-  filter(date == "2019-07-20") %>%
-  arrange(desc(mean_indoor_temperature))
-```
-
-    ## # A tibble: 17 x 9
-    ##    date_hour           mean_indoor_tem… mean_indoor_hea… mean_outdoor_te…
-    ##    <dttm>                         <dbl>            <dbl>            <dbl>
-    ##  1 2019-07-20 00:00:00             96.1             110.             87.1
-    ##  2 2019-07-20 16:00:00             96               109.             99  
-    ##  3 2019-07-20 01:00:00             95.9             111.             87.1
-    ##  4 2019-07-20 15:00:00             95.9             110.             98.1
-    ##  5 2019-07-20 02:00:00             95.8             111              86  
-    ##  6 2019-07-20 03:00:00             95.7             112.             84.9
-    ##  7 2019-07-20 04:00:00             95.5             112.             84  
-    ##  8 2019-07-20 14:00:00             95.5             109.             97  
-    ##  9 2019-07-20 05:00:00             95.3             112.             82.9
-    ## 10 2019-07-20 06:00:00             94.9             109.             84  
-    ## 11 2019-07-20 13:00:00             94.8             108.             96.1
-    ## 12 2019-07-20 07:00:00             94.1             107.             86  
-    ## 13 2019-07-20 12:00:00             94.1             108.             96.1
-    ## 14 2019-07-20 08:00:00             93.6             106.             89.1
-    ## 15 2019-07-20 11:00:00             93.5             107.             95  
-    ## 16 2019-07-20 09:00:00             93.3             106.             93  
-    ## 17 2019-07-20 10:00:00             93.3             106              93.9
-    ## # … with 5 more variables: mean_outdoor_heat_index <dbl>,
-    ## #   indoor_temperature_difference <dbl>,
-    ## #   indoor_heat_index_difference <dbl>, date <date>, hour <int>
-
-``` r
-michael_day_hourly_averages %>%
-  mutate(date = date(date_hour)) %>%
-  mutate(hour = hour(date_hour)) %>%
-  filter(date == "2019-07-20") %>%
-  arrange(desc(mean_indoor_heat_index))
-```
-
-    ## # A tibble: 17 x 9
-    ##    date_hour           mean_indoor_tem… mean_indoor_hea… mean_outdoor_te…
-    ##    <dttm>                         <dbl>            <dbl>            <dbl>
-    ##  1 2019-07-20 03:00:00             95.7             112.             84.9
-    ##  2 2019-07-20 05:00:00             95.3             112.             82.9
-    ##  3 2019-07-20 04:00:00             95.5             112.             84  
-    ##  4 2019-07-20 02:00:00             95.8             111              86  
-    ##  5 2019-07-20 01:00:00             95.9             111.             87.1
-    ##  6 2019-07-20 00:00:00             96.1             110.             87.1
-    ##  7 2019-07-20 15:00:00             95.9             110.             98.1
-    ##  8 2019-07-20 06:00:00             94.9             109.             84  
-    ##  9 2019-07-20 16:00:00             96               109.             99  
-    ## 10 2019-07-20 14:00:00             95.5             109.             97  
-    ## 11 2019-07-20 13:00:00             94.8             108.             96.1
-    ## 12 2019-07-20 12:00:00             94.1             108.             96.1
-    ## 13 2019-07-20 07:00:00             94.1             107.             86  
-    ## 14 2019-07-20 11:00:00             93.5             107.             95  
-    ## 15 2019-07-20 10:00:00             93.3             106              93.9
-    ## 16 2019-07-20 08:00:00             93.6             106.             89.1
-    ## 17 2019-07-20 09:00:00             93.3             106.             93  
-    ## # … with 5 more variables: mean_outdoor_heat_index <dbl>,
-    ## #   indoor_temperature_difference <dbl>,
-    ## #   indoor_heat_index_difference <dbl>, date <date>, hour <int>
-
-### Fact: Pingley’s Indoor Heat Index Greater than Outdoor
-
-“A sensor inside a bedroom showed that the heat index during the heat
-wave was consistently higher inside than outside Pingley’s house.”
-
-#### Explanation
-
-The following code pulls from datasets containing the average weather
-condition recordings from sensors in Stephanie Pingley’s house. The
-first set uses the hourly average values, which is then filtered for the
-days during which the heat wave occurred, July 14-23. From that dataset,
-the outdoor heat index values are plotted in purple alongside indoor
-heat index values in red. The x-axis shows degrees while the y-axis
-shows dates. The red line for indoor heat index values is consistently
-higher than the outdoor heat index values line, showing that the heat
-index inside Pingley’s house was often greater than the heat index
-outdoors.
-
-#### Supporting Code
-
-``` r
+# Stephanie heat index on July 19
 stephanie_day_hourly_averages %>%
-  mutate(hourly_mean_group = "hourly_mean_group") %>%
-  group_by(hourly_mean_group) %>%
-  summarise(mean_indoor_heat_index_differnence = mean(indoor_heat_index_difference))
+  mutate(date = date(date_hour)) %>%
+  mutate(hour = hour(date_hour)) %>%
+  filter(date == "2019-07-19") %>%
+  filter(hour == 20) %>%
+  select(date_hour, mean_indoor_heat_index)
 ```
 
     ## # A tibble: 1 x 2
-    ##   hourly_mean_group mean_indoor_heat_index_differnence
-    ##   <chr>                                          <dbl>
-    ## 1 hourly_mean_group                               6.91
+    ##   date_hour           mean_indoor_heat_index
+    ##   <dttm>                               <dbl>
+    ## 1 2019-07-19 20:00:00                   113.
 
 ``` r
-stephanie_day_hourly_averages_heat_wave <- stephanie_day_hourly_averages %>%
+# Average indoor heat index during seven day period
+stephanie_day_hourly_averages %>%
   mutate(date = date(date_hour)) %>%
-  filter(date >= "2019-07-14") %>%
-  filter(date <= "2019-07-23")
-
-chart_title <- "hourly averages"
-  temp_hourly_graph <- ggplot() +
-    geom_line(data = stephanie_day_hourly_averages_heat_wave, aes(x = date_hour, y = mean_indoor_heat_index, colour="indoor heat index (f)")) +
-    geom_line(data = stephanie_day_hourly_averages_heat_wave, aes(x = date_hour, y = mean_outdoor_heat_index, colour="outdoor heat index (f)")) +
-    scale_color_manual(
-      values = c('indoor heat index (f)' = 'red',
-                 'outdoor heat index (f)' = 'purple')
-    ) +
-    ggtitle(chart_title) +
-    xlab("day (hours)") +
-    ylab("degrees (f)") +
-    scale_x_datetime(date_breaks = "1 day") +
-    theme(axis.text.x = element_text(angle=50,hjust=1))
-  plot(temp_hourly_graph)
+  filter(date >= "2019-07-16") %>%
+  filter(date <= "2019-07-22") %>%
+  summarise(mean_indoor_heat_index = mean(mean_indoor_heat_index))
 ```
 
-![](neighborhoods-data-analysis_files/figure-markdown_github/unnamed-chunk-18-1.png)
+    ## # A tibble: 1 x 1
+    ##   mean_indoor_heat_index
+    ##                    <dbl>
+    ## 1                   98.2
 
-### Fact: East Baltimore Tree Cover
+### Fact: Minimum heat index in Pingley bedroom \[cq\]
 
-“And in 2015, many East Baltimore neighborhoods had a tree canopy of
-about 10%, according to a Howard Center analysis of tree canopy data
-gathered by researchers at the U.S. Forest Service and the University of
-Vermont.”
+"The average hourly heat index in the bedroom never dropped below 89 degrees."
 
-More accurate to say that in East Baltimore, most had less than 10
-percent.
+#### Explanation \[cq\]
+
+The lowest average hourly heat index in the bedroom during that period was 88.8 degrees, or 89 rounded.
+
+#### Supporting code and output \[cq\]
+
+``` r
+stephanie_day_hourly_averages %>%
+  mutate(date = date(date_hour)) %>%
+  filter(date >= "2019-07-16") %>%
+  filter(date <= "2019-07-22") %>%
+  summarise(min_indoor_heat_index = min(mean_indoor_heat_index))
+```
+
+    ## # A tibble: 1 x 1
+    ##   min_indoor_heat_index
+    ##                   <dbl>
+    ## 1                  88.8
+
+### Fact: Heat index indoors and out \[cq\]
+
+"The heat index was consistently higher inside Pingley’s home than it was outside."
+
+#### Explanation \[cq\]
+
+During that week period, there were 108 hours when the heat index inside was higher than the outside heat index, and only 60 hours when the opposite was true.
+
+#### Supporting code and output \[cq\]
+
+``` r
+stephanie_day_hourly_averages %>%
+  filter(date_hour >= "2019-07-16",
+         date_hour < "2019-07-23") %>%
+  mutate(difference = case_when(
+      indoor_heat_index_difference > 0 ~ "hours hotter inside",
+      indoor_heat_index_difference <= 0 ~ "hours hotter outside"
+  )) %>%
+  group_by(difference) %>%
+  summarise(count=n())
+```
+
+    ## # A tibble: 2 x 2
+    ##   difference           count
+    ##   <chr>                <int>
+    ## 1 hours hotter inside    108
+    ## 2 hours hotter outside    60
+
+### Fact: Outdoor heat index on July 19
+
+"At 8 p.m. July 19, in the midst of the summer's most brutal heat wave, the outdoor heat index hit 102 degrees."
+
+#### Explanation \[cq\]
+
+The heat index in Baltimore hit 102 degrees at 8 p.m. on July 19.
+
+#### Supporting code and output \[cq\]
+
+``` r
+dmh %>%
+  filter(date == "2019-07-19") %>%
+  filter(hour == 20) %>%
+  select(date, hour, avg_hourly_heat_index_dmh)
+```
+
+    ## # A tibble: 1 x 3
+    ##   date        hour avg_hourly_heat_index_dmh
+    ##   <date>     <dbl>                     <dbl>
+    ## 1 2019-07-19    20                       102
+
+### Fact: Indoor heat index on July 19 \[cq\]
+
+"Inside Pingley’s house, it was 11 degrees hotter, with a heat index of 113 degrees."
+
+#### Explanation \[cq\]
+
+At 8 p.m. on July 19, the heat index indoors was 112.7 degrees inside, and the outdoor heat index was 102 degrees, with a difference of 10.7 degrees.
+
+#### Supporting code and output \[cq\]
+
+``` r
+stephanie_day_hourly_averages %>%
+  mutate(date = date(date_hour)) %>%
+  mutate(hour = hour(date_hour)) %>%
+  filter(date == "2019-07-19") %>%
+  filter(hour ==  20) %>%
+  select(date_hour, mean_indoor_heat_index, mean_outdoor_heat_index,indoor_heat_index_difference)
+```
+
+    ## # A tibble: 1 x 4
+    ##   date_hour           mean_indoor_heat… mean_outdoor_hea… indoor_heat_inde…
+    ##   <dttm>                          <dbl>             <dbl>             <dbl>
+    ## 1 2019-07-19 20:00:00              113.               102              10.7
+
+### Fact: Heat index Baltimore July 20 \[cq\]
+
+"At 4 a.m. July 20, the heat index in Baltimore was still 89 degrees."
+
+#### Explanation \[cq\]
+
+At 4 a.m. July 20, the heat index in Baltimore was still 89 degrees.
+
+#### Supporting code and output \[cq\]
+
+``` r
+dmh %>%
+  filter(date == "2019-07-20") %>%
+  filter(hour == 4) %>%
+  select(date, hour, avg_hourly_heat_index_dmh)
+```
+
+    ## # A tibble: 1 x 3
+    ##   date        hour avg_hourly_heat_index_dmh
+    ##   <date>     <dbl>                     <dbl>
+    ## 1 2019-07-20     4                        89
+
+### Fact: Heat index in Pingley's house July 20 \[cq\]
+
+"Inside Pingley’s house, in the bedroom where two children sleep, it felt even hotter, with a heat index of 99 degrees."
+
+#### Explanation \[cq\]
+
+The heat index in Pingley's house at 4 a.m. July 20 was 99.3 degrees.
+
+#### Supporting code and output \[cq\]
+
+``` r
+stephanie_day_hourly_averages %>%
+  mutate(date = date(date_hour)) %>%
+  mutate(hour = hour(date_hour)) %>%
+  filter(date == "2019-07-20") %>%
+  filter(hour ==  4) %>%
+  select(date_hour, mean_indoor_heat_index)
+```
+
+    ## # A tibble: 1 x 2
+    ##   date_hour           mean_indoor_heat_index
+    ##   <dttm>                               <dbl>
+    ## 1 2019-07-20 04:00:00                   99.3
+
+### Fact: Pingley's house at 7 p.m. Friday, July 19
+
+"At 7 p.m. Friday, the heat index in Baltimore hit 103 degrees. Inside the bedroom Stephanie Pingley’s niece shares with one of Pingley’s three sons, it was 9 degrees hotter, with a heat index of 116 degrees. All of her boys have asthma." GAH: THIS SHOULD SAY. NEEDS FIXING ON WEB AND IN AP VERSION "At 7 p.m. Friday, the heat index in Baltimore hit 103 degrees. Inside the bedroom Stephanie Pingley’s niece shares with one of Pingley’s three sons, it was 13 degrees hotter, with a heat index of 116 degrees. All of her boys have asthma."
 
 #### Explanation
 
-The following code selects neighborhoods in East Baltimore and arranges
-them in ascending order of tree canopy coverage as determined by the
-2015 LiDar flyover data for Baltimore, the most recent data. 11 of the
-15 neighborhoods have single digit percentage canopy cover, while Oliver
-with the highest only has 14%, far short of the city’s goal of 40% tree
-cover.
+At 7 p.m. Friday, the heat index in Baltimore was 103. The heat index in the bedroom was 116, 13 degrees hotter.
 
-#### Supporting Code
+#### Supporting code and output
+
+``` r
+stephanie_day_hourly_averages %>%
+  mutate(date = date(date_hour)) %>%
+  mutate(hour = hour(date_hour)) %>%
+  filter(date == "2019-07-19") %>%
+  filter(hour == 19) %>%
+  select(date_hour, mean_indoor_heat_index, mean_outdoor_heat_index, indoor_heat_index_difference)
+```
+
+    ## # A tibble: 1 x 4
+    ##   date_hour           mean_indoor_heat… mean_outdoor_hea… indoor_heat_inde…
+    ##   <dttm>                          <dbl>             <dbl>             <dbl>
+    ## 1 2019-07-19 19:00:00              116.               103              12.7
+
+### Fact: Heat index Michael Thomas and Alberta Wilkerson \[cq\]
+
+"By Saturday, the heat index inside the second-floor apartment of Michael Thomas and Alberta Wilkerson hit 112 degrees. A fan pushed hot air around. Thomas, 61, has emphysema. Wilkerson, 49, has had a heart attack."
+
+#### Explanation \[cq\]
+
+On Saturday, July 20, the heat index in their apartment hit 111.8 degrees.
+
+#### Supporting code and output \[cq\]
+
+``` r
+michael_day_hourly_averages %>%
+  mutate(date = date(date_hour)) %>%
+  mutate(hour = hour(date_hour)) %>%
+  filter(date == "2019-07-20") %>%
+  arrange(desc(mean_indoor_heat_index)) %>%
+  select(date_hour, mean_indoor_heat_index)
+```
+
+    ## # A tibble: 17 x 2
+    ##    date_hour           mean_indoor_heat_index
+    ##    <dttm>                               <dbl>
+    ##  1 2019-07-20 03:00:00                   112.
+    ##  2 2019-07-20 05:00:00                   112.
+    ##  3 2019-07-20 04:00:00                   112.
+    ##  4 2019-07-20 02:00:00                   111 
+    ##  5 2019-07-20 01:00:00                   111.
+    ##  6 2019-07-20 00:00:00                   110.
+    ##  7 2019-07-20 15:00:00                   110.
+    ##  8 2019-07-20 06:00:00                   109.
+    ##  9 2019-07-20 16:00:00                   109.
+    ## 10 2019-07-20 14:00:00                   109.
+    ## 11 2019-07-20 13:00:00                   108.
+    ## 12 2019-07-20 12:00:00                   108.
+    ## 13 2019-07-20 07:00:00                   107.
+    ## 14 2019-07-20 11:00:00                   107.
+    ## 15 2019-07-20 10:00:00                   106 
+    ## 16 2019-07-20 08:00:00                   106.
+    ## 17 2019-07-20 09:00:00                   106.
+
+#### Fact: Historical heat index days
+
+"Historically, the Baltimore area has averaged about six days a year when the heat index exceeded 100 degrees, according to new research from the Union of Concerned Scientists and the University of Idaho. If no action is taken to reduce carbon emissions, by mid-century that figure will rise to more than 37 days annually, according to the researchers. The study defines mid-century as starting in 17 years. By the end of the century, as a baby born today becomes a senior citizen, there will be 65 days with a heat index of 100 degrees or higher, the researchers projected. That’s about the same number as McAllen, Texas, a city that abuts the Mexican border."
+
+#### Explanation \[cq\]
+
+The Union of Concerned Scientists \[Killer Heat in the United States\] \[study\](<https://www.ucsusa.org/sites/default/files/attach/2019/07/killer-heat-analysis-full-report.pdf>) released this summer included detailed tables projecting the number of days of 100+ heat index days for most U.S. cities, and projected how many additional days of 100+ heat index days there would be by mid-century. They found there were six days of 100+ heat index days per year historically in Baltimore, and by mid-century there would be 37 days. By end of the century, there would 65, about as many as McAllen, Texas has today (67). Note: our own analysis of historical Baltimore heat index data at a NWS Inner Harbor monitoring station found that the 6 days per year figure was likely a conservative estimate.
+
+#### Supporting code and output \[cq\]
+
+``` r
+heat_index_projections %>%
+  select(state, city, historical_100_plus, midcentury_no_action_100_plus, endcentury_no_action_100_plus) %>%
+  filter((state == "MD" | state == "TX"), (city == "Baltimore" | city == "McAllen")) 
+```
+
+    ## # A tibble: 2 x 5
+    ##   state city    historical_100_p… midcentury_no_actio… endcentury_no_actio…
+    ##   <chr> <chr>               <dbl>                <dbl>                <dbl>
+    ## 1 MD    Baltim…                 6                   37                   65
+    ## 2 TX    McAllen                67                  137                  164
+
+### Fact: tree canopy on McElderry Park neighborhood
+
+"Photo caption: This block at the edge of the city's McElderry Park neighborhood had tree canopy coverage of about 8% in 2015."
+
+#### Explanation \[cq\]
+
+The block in the photo is on North Milton and East Monument at the edge of the McElderry Park neighborhood. The street shown is split between two U.S. Census blocks, with IDs of "245100702004002" and "245100702004002". They had 7.6 percent and 8.6 percent tree canopy cover in 2015.
+
+#### Suppporting code
+
+``` r
+blocks_tree_temp_demographics %>%
+  filter(geoid10 == "245100702004002" | geoid10 == "245100702005005") %>%
+  select(geoid10, `15_lid_mean`)
+```
+
+    ## # A tibble: 2 x 2
+    ##   geoid10 `15_lid_mean`
+    ##     <dbl>         <dbl>
+    ## 1 2.45e14        0.0869
+    ## 2 2.45e14        0.0757
+
+### Fact: East Baltimore Tree Cover
+
+"And in 2015, many East Baltimore neighborhoods had a tree canopy of about 10%, according to a Howard Center analysis of tree canopy data gathered by researchers at the U.S. Forest Service and the University of Vermont." THIS COULD BE CHANGED IF NOT CHANGED IN AP
+
+#### Explanation
+
+The code below shows the percent of tree canopy cover in more than a dozen east Baltimore neighborhoods in 2015. The range is from 4 to 14.
+
+#### Supporting code and output
 
 ``` r
 east_baltimore_nsas <- c("Berea", "Broadway East", "Oliver", "Middle East",
@@ -1259,730 +1270,25 @@ nsa_tree_temp %>%
   filter(nsa_name %in% east_baltimore_nsas) %>%
   select(nsa_name, `15_lid_mean`) %>%
   arrange(`15_lid_mean`) %>%
-  mutate(`15_lid_mean_percentage` = 100*(`15_lid_mean`))
+  mutate(`15_lid_mean_percentage` = 100*(`15_lid_mean`)) %>%
+  select(nsa_name, `15_lid_mean_percentage`)
 ```
 
-    ## # A tibble: 15 x 3
-    ##    nsa_name                    `15_lid_mean` `15_lid_mean_percentage`
-    ##    <chr>                               <dbl>                    <dbl>
-    ##  1 patterson park neighborhood        0.0419                     4.19
-    ##  2 highlandtown                       0.0426                     4.26
-    ##  3 berea                              0.0597                     5.97
-    ##  4 mcelderry park                     0.0614                     6.14
-    ##  5 milton-montford                    0.0641                     6.41
-    ##  6 ellwood park/monument              0.0645                     6.45
-    ##  7 middle east                        0.0676                     6.76
-    ##  8 patterson place                    0.0746                     7.46
-    ##  9 care                               0.0749                     7.49
-    ## 10 madison-eastend                    0.0771                     7.71
-    ## 11 baltimore highlands                0.0786                     7.86
-    ## 12 broadway east                      0.106                     10.6 
-    ## 13 upper fells point                  0.112                     11.2 
-    ## 14 biddle street                      0.127                     12.7 
-    ## 15 oliver                             0.139                     13.9
-
-### Fact: Blocks without Trees
-
-“Many blocks have no trees at all.”
-
-#### Explanation
-
-The code below scans the “blocks\_trees\_temp\_demographics” dataset for
-blocks with 0 tree canopy coverage in 2015 as determined by the 2015
-LiDar data. The GeoID is a unique number combining state, county, tract
-and block identifiers to designate a specific block in Baltimore. Blocks
-without anyone living on them, as in having a recorded population of 0,
-are removed from the set. Even after the filtering, 86 blocks remain
-with a population greater than 0 and 0% tree canopy coverage.
-
-The GeoID 245100803011000 can be broken down into: State: 24, for
-Maryland County: 510, for Baltimore Tract: 080301 Block: 1000
-
-#### Supporting Code
-
-``` r
-blocks_tree_temp_demographics %>%
-  filter(`15_lid_mean` == 0) %>%
-  filter(population_2010 >0) %>%
-  filter(aland10 > 0) %>%
-  select(geoid10, population_2010, `15_lid_mean`)
-```
-
-    ## # A tibble: 86 x 3
-    ##    geoid10 population_2010 `15_lid_mean`
-    ##      <dbl>           <dbl>         <dbl>
-    ##  1 2.45e14               8             0
-    ##  2 2.45e14              31             0
-    ##  3 2.45e14              37             0
-    ##  4 2.45e14              21             0
-    ##  5 2.45e14               8             0
-    ##  6 2.45e14              18             0
-    ##  7 2.45e14             228             0
-    ##  8 2.45e14               3             0
-    ##  9 2.45e14              20             0
-    ## 10 2.45e14               2             0
-    ## # … with 76 more rows
-
-### Fact:
-
-“As temperatures at Baltimore’s Inner Harbor reached 100 on July 20,
-most everyone around…”
-
--   Will have to do this by official records, not our data. Put in link
-    here.
-
-#### Explanation
-
-#### Supporting Code
-
-Fact: Temperature vs. Demographics Graphics
--------------------------------------------
-
-These data confirm the graphs found
-[here](https://amarton.github.io/2019-baltimore-climate-health-project-graphics-repo/heat-demographics-scatterplots/combined-scatterplots.html).
-
-#### Explanation
-
-The data below pulls from the dataset “csa\_tree\_temp\_demographics”
-which contains information about average temperature, tree canopy
-coverage, crime rate, poverty levels, and more demographics for
-neighborhoods in Baltimore. The created subset selects columns for
-average afternoon temperature, poverty levels, crime rate, life
-expectancy and unemployment rate. The data is then plotted. Temperature
-is plotted on the x-axis, with the other values on the y-axis for a
-total of four different graphs. The graphs can be seen at the link
-above.
-
-#### Supporting Code
-
-``` r
-#### Save working table of only the variables needed for this story ####
-wk_csa_tree_temp_demographics <- csa_tree_temp_demographics %>%
-  select(matches("csa2010"), matches("temp_mean_aft"),
-         perc_below_poverty = matches("percent_of_family_households_living_below_the_poverty_line"),
-         matches("violent_crime_rate_per_1_000_residents"), matches("life_expectancy"),
-         matches("unemployment_rate")) %>%
-  arrange(desc(temp_mean_aft))
-
-#### Save the table to CSV for reference ####
-#write_csv(wk_csa_tree_temp_demographics, paste0(save_path, "csa_tree_temp_demographics_truncated.csv"))
-
-#### Remove working table from workspace ####
-#rm(wk_csa_tree_temp_demographics)
-```
-
-### Fact: Poverty
-
-“Percent of families living below the poverty line compared to mean
-temperature”
-
-#### Explanation
-
-The first chunk of code below pulls the information on average afternoon
-temperatures and poverty rate for Baltimore neighborhoods from the
-larger csa\_tree\_temp\_demographics set. The correlation between
-temperature values and poverty percentage is calculated by the second
-chunk of code using a correlation matrix. The correlation works out to
-about .4; again, the closer to 1 a correlation is, the greater the
-relationship between one variable and another. .4, while less than half
-of 1, still indicates some relationship betwen poverty and temperature.
-
-The poverty and temperature values are mapped, with poverty on the
-y-axis and temperature on the x-axis. Despite outliers, there is a clear
-trend showing poverty rates increasing as temperature increases.
-
-There is a xxx correlation between temperature and poverty.
-
-#### Supporting Code
-
-``` r
-#### Data used ####
-csa_tree_temp_demographics %>%
-  select(matches("csa2010"), matches("temp_mean_aft"),
-         perc_below_poverty = matches("percent_of_family_households_living_below_the_poverty_line")) %>%
-  arrange(desc(temp_mean_aft))
-```
-
-    ## # A tibble: 55 x 3
-    ##    csa2010                         temp_mean_aft perc_below_poverty
-    ##    <chr>                                   <dbl>              <dbl>
-    ##  1 madison/east end                         98.3              33.7 
-    ##  2 patterson park north & east              97.4              21.7 
-    ##  3 oldtown/middle east                      97.3              40.1 
-    ##  4 midtown                                  96.9               5.42
-    ##  5 greenmount east                          96.9              24.2 
-    ##  6 clifton-berea                            96.7              27.6 
-    ##  7 midway/coldstream                        96.4              22.6 
-    ##  8 greater charles village/barclay          96.3              19.0 
-    ##  9 highlandtown                             96.3               6.65
-    ## 10 upton/druid heights                      95.9              43.0 
-    ## # … with 45 more rows
-
-``` r
-#### Build correlation matrix ####
-wk_corr <- csa_tree_temp_demographics %>%
-  select(temp_mean_aft,
-         perc_below_poverty = percent_of_family_households_living_below_the_poverty_line) %>%
-  as.matrix() %>%
-  correlate() %>%
-  mutate(variable=rowname) %>%
-  select(variable, everything(), -rowname)
-#### Print out correlation matrix ####
-wk_corr
-```
-
-    ## # A tibble: 2 x 3
-    ##   variable           temp_mean_aft perc_below_poverty
-    ##   <chr>                      <dbl>              <dbl>
-    ## 1 temp_mean_aft             NA                  0.398
-    ## 2 perc_below_poverty         0.398             NA
-
-``` r
-#### Scatterplot ####
-csa_tree_temp_demographics %>%
-  select(temp_mean_aft,
-         perc_below_poverty = percent_of_family_households_living_below_the_poverty_line) %>%
-  ggplot(aes(x = temp_mean_aft, y = perc_below_poverty)) +
-  geom_point()
-```
-
-![](neighborhoods-data-analysis_files/figure-markdown_github/unnamed-chunk-23-1.png)
-
-### Fact: Crime
-
-“Rates of violent crime per 1,000 residents compared to mean
-temperature”
-
-#### Explanation
-
-The first chunk of code below pulls the information on average afternoon
-temperatures and crime rate for Baltimore neighborhoods from the larger
-csa\_tree\_temp\_demographics set. The correlation between temperature
-values and crime rate is calculated by the second chunk of code using a
-correlation matrix. The correlation works out to about .58; again, the
-closer to 1 a correlation is, the greater the relationship between one
-variable and another. .58 indicates a moderate relationship betwen
-poverty and temperature.
-
-The crime and temperature values are mapped, with crime on the y-axis
-and temperature on the x-axis. Outside of a few extremes, there is a
-clear trend showing crime rates increasing as temperature increases.
-
-There is a 0.4 correlation between temperature and crime.
-
-#### Supporting Code
-
-``` r
-#### Data used ####
-csa_tree_temp_demographics %>%
-  select(matches("csa2010"), matches("temp_mean_aft"),
-         matches("violent_crime_rate_per_1_000_residents")) %>%
-  arrange(desc(temp_mean_aft))
-```
-
-    ## # A tibble: 55 x 3
-    ##    csa2010                   temp_mean_aft violent_crime_rate_per_1_000_re…
-    ##    <chr>                             <dbl>                            <dbl>
-    ##  1 madison/east end                   98.3                             28.7
-    ##  2 patterson park north & e…          97.4                             27.4
-    ##  3 oldtown/middle east                97.3                             38.0
-    ##  4 midtown                            96.9                             20.8
-    ##  5 greenmount east                    96.9                             32.9
-    ##  6 clifton-berea                      96.7                             25.1
-    ##  7 midway/coldstream                  96.4                             26.1
-    ##  8 greater charles village/…          96.3                             23.5
-    ##  9 highlandtown                       96.3                             28.1
-    ## 10 upton/druid heights                95.9                             30.9
-    ## # … with 45 more rows
-
-``` r
-#### Build correlation matrix ####
-wk_corr <- csa_tree_temp_demographics %>%
-  select(temp_mean_aft,
-         violent_crime_rate_per_1_000_residents) %>%
-  as.matrix() %>%
-  correlate() %>%
-  mutate(variable=rowname) %>%
-  select(variable, everything(), -rowname)
-#### Print out correlation matrix ####
-wk_corr
-```
-
-    ## # A tibble: 2 x 3
-    ##   variable                     temp_mean_aft violent_crime_rate_per_1_000_…
-    ##   <chr>                                <dbl>                          <dbl>
-    ## 1 temp_mean_aft                       NA                              0.580
-    ## 2 violent_crime_rate_per_1_00…         0.580                         NA
-
-``` r
-#### Scatterplot ####
-csa_tree_temp_demographics %>%
-  select(temp_mean_aft,
-         violent_crime_rate_per_1_000_residents) %>%
-  ggplot(aes(x = temp_mean_aft, y = violent_crime_rate_per_1_000_residents)) +
-  geom_point()
-```
-
-![](neighborhoods-data-analysis_files/figure-markdown_github/unnamed-chunk-24-1.png)
-
-### Fact: Life Expectancy
-
-“Average life expectancy of neighborhood residents compared to mean
-temperature”
-
-#### Explanation
-
-The first chunk of code below pulls the information on average afternoon
-temperatures and life expectancy for Baltimore neighborhoods from the
-larger csa\_tree\_temp\_demographics set. The correlation between
-temperature values and life expectancy is calculated by the second chunk
-of code using a correlation matrix. The correlation works out to about
--.41; again, the closer to 1 a correlation is, the greater the
-relationship between one variable and another. A negative correlation
-indicates an inverse relationship; as one variable increases, the other
-decreases. In this case -.41 indicates an inverse relationship betwen
-life expectancy and temperature.
-
-The life expectancy and temperature values are mapped, with life
-expectancy on the y-axis and temperature on the x-axis. There is a trend
-showing life expectancy decreasing as temperature increases.
-
-There is a 0.58 correlation between temperature and life expectancy.
-
-#### Supporting Code
-
-``` r
-#### Data used ####
-csa_tree_temp_demographics %>%
-  select(matches("csa2010"), matches("temp_mean_aft"),
-         matches("life_expectancy")) %>%
-  arrange(desc(temp_mean_aft))
-```
-
-    ## # A tibble: 55 x 3
-    ##    csa2010                         temp_mean_aft life_expectancy
-    ##    <chr>                                   <dbl>           <dbl>
-    ##  1 madison/east end                         98.3            68.7
-    ##  2 patterson park north & east              97.4            72.3
-    ##  3 oldtown/middle east                      97.3            69.4
-    ##  4 midtown                                  96.9            76.3
-    ##  5 greenmount east                          96.9            67.4
-    ##  6 clifton-berea                            96.7            67.6
-    ##  7 midway/coldstream                        96.4            67.6
-    ##  8 greater charles village/barclay          96.3            74  
-    ##  9 highlandtown                             96.3            75.2
-    ## 10 upton/druid heights                      95.9            68.1
-    ## # … with 45 more rows
-
-``` r
-#### Build correlation matrix ####
-wk_corr <- csa_tree_temp_demographics %>%
-  select(temp_mean_aft,
-         life_expectancy) %>%
-  as.matrix() %>%
-  correlate() %>%
-  mutate(variable=rowname) %>%
-  select(variable, everything(), -rowname)
-#### Print out correlation matrix ####
-wk_corr
-```
-
-    ## # A tibble: 2 x 3
-    ##   variable        temp_mean_aft life_expectancy
-    ##   <chr>                   <dbl>           <dbl>
-    ## 1 temp_mean_aft          NA              -0.409
-    ## 2 life_expectancy        -0.409          NA
-
-``` r
-#### Scatterplot ####
-csa_tree_temp_demographics %>%
-  select(temp_mean_aft,
-         life_expectancy) %>%
-  ggplot(aes(x = temp_mean_aft, y = life_expectancy)) +
-  geom_point()
-```
-
-![](neighborhoods-data-analysis_files/figure-markdown_github/unnamed-chunk-25-1.png)
-
-### Fact: Unemployment rate
-
-“Unemployment rates among residents compared to mean temperature”
-
-#### Explanation
-
-The first chunk of code below pulls the information on average afternoon
-temperatures and unemployment rates for Baltimore neighborhoods from the
-larger csa\_tree\_temp\_demographics set. The correlation between
-temperature values and unemployment rates is calculated by the second
-chunk of code using a correlation matrix. The correlation works out to
-about .32; again, the closer to 1 a correlation is, the greater the
-relationship between one variable and another. .32 indicates a slight
-relationship betwen unemployment rates and temperature.
-
-The unemployment rates and temperature values are mapped, with
-unemployment rates on the y-axis and temperature on the x-axis. While
-there are some values showing lower unemployment at higher temperatures,
-the graph still plots a trend showing that, overall, unemployment rates
-increase as temperature increases.
-
-There is a -0.41 correlation between temperature and unemployment rate.
-
-#### Supporting Code
-
-``` r
-#### Data used ####
-csa_tree_temp_demographics %>%
-  select(matches("csa2010"), matches("temp_mean_aft"),
-         matches("unemployment_rate")) %>%
-  arrange(desc(temp_mean_aft))
-```
-
-    ## # A tibble: 55 x 3
-    ##    csa2010                         temp_mean_aft unemployment_rate
-    ##    <chr>                                   <dbl>             <dbl>
-    ##  1 madison/east end                         98.3             21.9 
-    ##  2 patterson park north & east              97.4              5.85
-    ##  3 oldtown/middle east                      97.3             14.2 
-    ##  4 midtown                                  96.9              5.89
-    ##  5 greenmount east                          96.9             23.1 
-    ##  6 clifton-berea                            96.7             18.0 
-    ##  7 midway/coldstream                        96.4             25.7 
-    ##  8 greater charles village/barclay          96.3              8.24
-    ##  9 highlandtown                             96.3              4.44
-    ## 10 upton/druid heights                      95.9             12.5 
-    ## # … with 45 more rows
-
-``` r
-#### Build correlation matrix ####
-wk_corr <- csa_tree_temp_demographics %>%
-  select(temp_mean_aft,
-         unemployment_rate) %>%
-  as.matrix() %>%
-  correlate() %>%
-  mutate(variable=rowname) %>%
-  select(variable, everything(), -rowname)
-#### Print out correlation matrix ####
-wk_corr
-```
-
-    ## # A tibble: 2 x 3
-    ##   variable          temp_mean_aft unemployment_rate
-    ##   <chr>                     <dbl>             <dbl>
-    ## 1 temp_mean_aft            NA                 0.316
-    ## 2 unemployment_rate         0.316            NA
-
-``` r
-#### Scatterplot ####
-csa_tree_temp_demographics %>%
-  select(temp_mean_aft,
-         unemployment_rate) %>%
-  ggplot(aes(x = temp_mean_aft, y = unemployment_rate)) +
-  geom_point()
-```
-
-![](neighborhoods-data-analysis_files/figure-markdown_github/unnamed-chunk-26-1.png)
-
-### Fact: Checking WaPo’s data
-
-The following code is used to check and verify the numbers for
-increasing temperature in this Washington Post story:
-<a href="https://www.washingtonpost.com/graphics/2019/national/climate-environment/climate-change-america/" class="uri">https://www.washingtonpost.com/graphics/2019/national/climate-environment/climate-change-america/</a>
-
-\*Goal: Find increase in temperature from 1895-2018, compare Baltimore
-City’s to the US’
-
-``` r
-##Read in temperature files from NCDC
-us_change_temp <- read_csv("../data/input-data/us-change-temp.csv") 
-baltimore_change_temp <- read_csv("../data/input-data/baltimore-change-temp.csv")
-
-#Get rid of the `12` at the end of each date
-us_change_temp$clean_date <- (us_change_temp$Date - 12) / 100
-baltimore_change_temp$clean_date <- (baltimore_change_temp$Date - 12) / 100
-
-#Get rid of old date column
-us_change_temp <-  us_change_temp %>%
-  select("clean_date", "Value", "Anomaly")
-baltimore_change_temp <-  baltimore_change_temp %>%
-  select("clean_date", "Value", "Anomaly")
-
-##Plot the above datasets
- # Start ggplot for US temperature
-  ggplot(us_change_temp, aes(
-    x = clean_date,
-    y = Anomaly
-    )) +
-  # This section for the basic scatterplot
-  geom_point(aes(color = Anomaly),
-             size=2) +
-  # This section shows the trend line
-  geom_smooth(se = FALSE, # Removes gray banding
-              method = glm,
-              color = "black") +
-  # Colors and label formatting follow
-  #coord_flip() +
-  scale_colour_gradient(low = "#E0FEA9", high = "#144A11") +
-  labs(title = "Change in US Temperatures Over Time",
-       x = "Year",
-       y = "Variance from average temperature") +
-  scale_x_continuous(breaks = c(1900, 1910, 1920, 1930, 1940, 1950, 1960, 1970, 1980, 1990, 2000, 2010, 2018)) +
-  theme_bw() +
-  theme(legend.position = "none",
-        plot.title = element_text(size = 20),
-        plot.subtitle = element_text(size = 12))
-  
-# Start ggplot for Baltimore temperature
-    ggplot(baltimore_change_temp, aes(
-    x = clean_date,
-    y = Anomaly
-    )) +
-  # This section for the basic scatterplot
-  geom_point(aes(color = Anomaly),
-             size=2) +
-  # This section shows the trend line
-  geom_smooth(se = FALSE, # Removes gray banding
-              method = glm,
-              color = "black") +
-  # Colors and label formatting follow
-  #coord_flip() +
-  scale_colour_gradient(low = "#E0FEA9", high = "#144A11") +
-  labs(title = "Change in Baltimore Temperatures Over Time",
-       x = "Year",
-       y = "Variance from average temperature") +
-  scale_x_continuous(breaks = c(1900, 1910, 1920, 1930, 1940, 1950, 1960, 1970, 1980, 1990, 2000, 2010, 2018)) +
-  theme_bw() +
-  theme(legend.position = "none",
-        plot.title = element_text(size = 20),
-        plot.subtitle = element_text(size = 12))
-    
-#Function to calculate regression/slope of best fit line
-## Found this function at https://sejohnston.com/2012/08/09/a-quick-and-easy-function-to-plot-lm-results-in-r/ 
-    
-ggplotRegression <- function (fit) {
-
-require(ggplot2)
-
-ggplot(fit$model, aes_string(x = names(fit$model)[2], y = names(fit$model)[1])) + 
-  geom_point() +
-  stat_smooth(method = "lm", 
-              se = FALSE, # Removes gray banding
-              color = "green") +
-  labs(title = "Temperature Changes",
-       subtitle = paste("Adj R2 = ",signif(summary(fit)$adj.r.squared, 5),
-                     "Intercept =",signif(fit$coef[[1]],5 ),
-                     " Slope =",signif(fit$coef[[2]], 5),
-                     " P =",signif(summary(fit)$coef[2,4], 5)))
-}
-
-##Use the function to find slope    
-us_slope <- lm(Anomaly ~ clean_date, data = us_change_temp)
-ggplotRegression(us_slope) 
-## Slope value is .0152, which means temperature rises .0152 degrees per year
-## Multiply by number of years plotted (1895 to 2018 = 124) and multiply by slope
-## .0152 x 124 = 1.8848
-
-baltimore_slope <- lm(Anomaly ~ clean_date, data = baltimore_change_temp)
-ggplotRegression(baltimore_slope) 
-## Slope value is .0275, which means temperature rises .0275 degrees per year
-## Multiply by number of years plotted (1895 to 2018 = 124) and multiply by slope
-## .0275 x 124 = 3.41
-```
-
-FOR NPR
--------
-
-### Fact: Franklin Square heat (for NPR)
-
-“Franklin isn’t imagining that: Her neighborhood – Franklin Square – is
-literally hotter than about two thirds of the neighborhoods in
-Baltimore.”
-
-#### Explanation
-
-With a median afternoon temperature as measured by researchers in August
-2018 of 95.4 degrees, Franklin Square was in the top-third of the city’s
-278 neighborhoods. 66.9 percent were cooler.
-
-#### Supporting code
-
-``` r
-nsa_tree_temp %>%
-  select(nsa_name, temp_median_aft) %>%
-  mutate(rank = dense_rank(temp_median_aft), pct_nhoods_cooler = (rank/max(rank))) %>%
-  filter(nsa_name == "franklin square")
-```
-
-    ## # A tibble: 1 x 4
-    ##   nsa_name        temp_median_aft  rank pct_nhoods_cooler
-    ##   <chr>                     <dbl> <int>             <dbl>
-    ## 1 franklin square            95.4   186             0.669
-
-### Fact: Franklin Square poverty (for NPR)
-
-“It’s \[Franklin Square\] also one of the poorer communities in the
-city.”
-
-#### Explanation
-
-True. There isn’t good demographic data at the neighborhood level, so we
-have to use the slightly larger “community statistical area” geography
-to analyze this. Franklin Square is entirely contained by a slightly
-larger grouping of neighborhoods known as “Southwest Baltimore”. The
-poverty rate here is 36 percent. There are 55 CSAs in Baltimore.
-Southwest Baltimore has the 51st highest poverty rate, making it poorer
-than more than 90 percent of CSAs.
-
-#### Supporting code
-
-``` r
-csa_tree_temp_demographics %>%
-  select(`csa2010`, percent_of_family_households_living_below_the_poverty_line) %>%
-  mutate(rank = dense_rank(percent_of_family_households_living_below_the_poverty_line), pct_nhoods_wealthier = (rank/max(rank))) %>%
-  filter(`csa2010` == "southwest baltimore")
-```
-
-    ## # A tibble: 1 x 4
-    ##   csa2010       percent_of_family_households_livin…  rank pct_nhoods_wealt…
-    ##   <chr>                                       <dbl> <int>             <dbl>
-    ## 1 southwest ba…                                35.8    51             0.927
-
-### Fact: Neighborhood heat difference (for NPR)
-
-Citywide in Baltimore, the hottest neighborhoods differ by as much as 10
-degrees from the coolest neighborhoods.
-
-#### Explanation
-
-Using median afternoon temperature in a 2018 study by researchers
-analyzing the city’s urban heat island, there was a 10 degree
-difference.
-
-``` r
-nsa_tree_temp %>%
-  select(nsa_name, temp_median_aft) %>%
-  filter((temp_median_aft == min(temp_median_aft)) | (temp_median_aft == max(temp_median_aft)))
-```
-
-    ## # A tibble: 2 x 2
-    ##   nsa_name                 temp_median_aft
-    ##   <chr>                              <dbl>
-    ## 1 gwynns falls/leakin park            89.3
-    ## 2 mcelderry park                      99.3
-
-### Fact: Poverty Heat Relationship (for NPR)
-
-“And those hot spots had higher rates of poverty.”
-
-#### Explanation
-
-There is a moderate positive correlation (r = .38) between median
-afternoon temperature in a “community statistical area” (groupings of
-neighborhoods) in August 2018 and the percent of households living in
-poverty.
-
-#### Supporting Code
-
-``` r
-csa_tree_temp_demographics %>%
-  select_x() %>%
-  as.matrix() %>%
-  correlate() %>%
-  focus(matches("temp_")) %>%
-  mutate(variable=rowname) %>%
-  select(variable, temp_median_aft) %>%
-  filter(variable=="percent_of_family_households_living_below_the_poverty_line")
-```
-
-    ## # A tibble: 1 x 2
-    ##   variable                                                  temp_median_aft
-    ##   <chr>                                                               <dbl>
-    ## 1 percent_of_family_households_living_below_the_poverty_li…           0.378
-
-``` r
-csa_tree_temp_demographics %>%
-  select(csa2010,temp_median_aft,percent_of_family_households_living_below_the_poverty_line) %>%
-  arrange(desc(temp_median_aft))
-```
-
-    ## # A tibble: 55 x 3
-    ##    csa2010             temp_median_aft percent_of_family_households_living…
-    ##    <chr>                         <dbl>                                <dbl>
-    ##  1 madison/east end               98.4                                33.7 
-    ##  2 oldtown/middle east            97.5                                40.1 
-    ##  3 patterson park nor…            97.2                                21.7 
-    ##  4 midtown                        97.1                                 5.42
-    ##  5 greenmount east                97.0                                24.2 
-    ##  6 clifton-berea                  96.9                                27.6 
-    ##  7 greater charles vi…            96.8                                19.0 
-    ##  8 midway/coldstream              96.4                                22.6 
-    ##  9 highlandtown                   96.3                                 6.65
-    ## 10 upton/druid heights            95.9                                43.0 
-    ## # … with 45 more rows
-
-PINGLEY GRAPHIC MOVE OVER
--------------------------
-
-``` r
-# The seven-day stretch between July 16 and July 22 were the hottest consecutive days of the summer. 
-
-# The OUTDOOR heat index reached 111 degrees on July 21 at 8 p.m. (CHANGE TO 4 PM)
-dmh %>%
-  filter(date == "2019-07-21") %>%
-  arrange(desc(avg_hourly_heat_index_dmh)) %>%
-  select(avg_hourly_heat_index_dmh, everything())
-
-# The mean indoor heat index for that seven-day period was 98 degrees and the hourly average heat index climbed to 113. (Looks like 8 pm on July 19). TECHNICALLY, THIS IS TRUE. WE ARE IMPLYING THIS IS THE HIGHEST IT WENT.  BUT IT WENT TO 115.7 at 7/19, at 7 pm and 112.7 at 7/19 at 8 p.m. 
-
-# The heat index in the bedroom never dropped below 89 degrees. # TRUE, if we are rounding up, go to 88.8
-
-stephanie_day_hourly_averages %>%
-  filter(date_hour >= "2019-07-16",
-         date_hour < "2019-07-23") %>%
-  summarise(avg_indoor_heat_index = mean(mean_indoor_heat_index),
-            max_indoor_heat_index = max(mean_indoor_heat_index),
-            min_indoor_heat_index = min(mean_indoor_heat_index))
-
-stephanie_day_hourly_averages %>%
-  filter(date_hour == "2019-07-19 20:00:00") %>%
-  summarise(avg_indoor_heat_index = mean(mean_indoor_heat_index),
-            max_indoor_heat_index = max(mean_indoor_heat_index),
-            min_indoor_heat_index = min(mean_indoor_heat_index))
-
-# The heat index in Stephanie’s home consistently exceeded that of the outdoors. # TRUE, 108 to 60 hours during that period
-
-stephanie_day_hourly_averages %>%
-  filter(date_hour >= "2019-07-16",
-         date_hour < "2019-07-23") %>%
-  mutate(difference = case_when(
-      indoor_heat_index_difference > 0 ~ "hotter_inside",
-      indoor_heat_index_difference <= 0 ~ "hotter_outside"
-  )) %>%
-  group_by(difference) %>%
-  summarise(count=n())
-
-# On Friday, July 19 at 8 p.m., in the midst of the summer's most brutal heat wave, the heat index hit a blistering 106 degrees in the Inner Harbor. Inside Stephanie Pingley's house, it was 7 degrees hotter, with a heat index of 113 degrees. # 102 DEGREES at Inner Harbor. 11 DEGREES HOTTER, heat index of 113 degrees
-
-stephanie_day_hourly_averages %>%
-  filter(date_hour == "2019-7-19 20:00:00") %>%
-  select(date_hour, mean_indoor_heat_index, mean_outdoor_heat_index)
-
-# On Saturday, July 20, the heat index in Baltimore was still 94 degrees at 4 a.m. in the Inner Harbor. # 89 degrees at 4 am
-
-# Inside Stephanie Pingley's house, in the bedroom where two children sleep, it felt even hotter, with a heat index of 99 degrees. # 99 degrees at 4 am
-
-stephanie_day_hourly_averages %>%
-  filter(date_hour == "2019-7-20 04:00:00") %>%
-  select(date_hour, mean_indoor_heat_index, mean_outdoor_heat_index)
-
-# Export 
-stephanie_day_hourly_averages_graphic <- stephanie_day_hourly_averages %>%
-  mutate(date = date(date_hour)) %>%
-  mutate(hour = hour(date_hour)) %>%
-  filter(hour %in% c(0,4,8,12,16,20)) %>%
-  filter(date_hour >= "2019-07-16",
-         date_hour < "2019-07-23") %>%
-  select(date_hour, date, hour, mean_indoor_heat_index, mean_outdoor_heat_index)
-
-# Path to Data
-path_to_data <- "../data/output-data/cleaned/"
-```
+    ## # A tibble: 15 x 2
+    ##    nsa_name                    `15_lid_mean_percentage`
+    ##    <chr>                                          <dbl>
+    ##  1 patterson park neighborhood                     4.19
+    ##  2 highlandtown                                    4.26
+    ##  3 berea                                           5.97
+    ##  4 mcelderry park                                  6.14
+    ##  5 milton-montford                                 6.41
+    ##  6 ellwood park/monument                           6.45
+    ##  7 middle east                                     6.76
+    ##  8 patterson place                                 7.46
+    ##  9 care                                            7.49
+    ## 10 madison-eastend                                 7.71
+    ## 11 baltimore highlands                             7.86
+    ## 12 broadway east                                  10.6 
+    ## 13 upper fells point                              11.2 
+    ## 14 biddle street                                  12.7 
+    ## 15 oliver                                         13.9
