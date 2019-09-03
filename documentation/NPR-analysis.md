@@ -3,25 +3,53 @@
     -   [Load packages](#load-packages)
     -   [Load variables and data](#load-variables-and-data)
 -   [Line-by-Line Fact Check](#line-by-line-fact-check)
-    -   [Fact: Franklin Square heat \[cq - audio and web\]](#fact-franklin-square-heat-cq---audio-and-web)
-    -   [Fact: Franklin Square poverty \[cq - web and audio\]](#fact-franklin-square-poverty-cq---web-and-audio)
-    -   [Fact: Heat and poverty \[cq - web and audio\]](#fact-heat-and-poverty-cq---web-and-audio)
-    -   [Fact: Neighborhood heat difference \[Web and audio both NOT CQ\]](#fact-neighborhood-heat-difference-web-and-audio-both-not-cq)
-    -   [Fact: EMS calls for heat stroke \[cq - web and audio\]](#fact-ems-calls-for-heat-stroke-cq---web-and-audio)
-    -   [Fact: EMS calls for chronic conditions \[Audio cq, First web graf cq, Second web graf not cq\]](#fact-ems-calls-for-chronic-conditions-audio-cq-first-web-graf-cq-second-web-graf-not-cq)
-    -   [Fact: Medicaid and chronic conditions \[cq - web and audio\]](#fact-medicaid-and-chronic-conditions-cq---web-and-audio)
-    -   [Fact: Franklin Square tree canopy \[cq - web and audio\]](#fact-franklin-square-tree-canopy-cq---web-and-audio)
+    -   [Fact: Franklin Square heat \[cq - audio and
+        web\]](#fact-franklin-square-heat-cq---audio-and-web)
+    -   [Fact: Franklin Square poverty \[cq - web and
+        audio\]](#fact-franklin-square-poverty-cq---web-and-audio)
+    -   [Fact: Heat and poverty \[cq - web and
+        audio\]](#fact-heat-and-poverty-cq---web-and-audio)
+    -   [Fact: Neighborhood heat difference \[cq - web and
+        audio\]](#fact-neighborhood-heat-difference-cq---web-and-audio)
+    -   [Fact: EMS calls for heat stroke \[cq - web and
+        audio\]](#fact-ems-calls-for-heat-stroke-cq---web-and-audio)
+    -   [Fact: EMS calls for chronic conditions \[Audio cq, First web
+        graf cq, Second web graf not
+        cq\]](#fact-ems-calls-for-chronic-conditions-audio-cq-first-web-graf-cq-second-web-graf-not-cq)
+    -   [Fact: Medicaid and chronic conditions \[cq - web and
+        audio\]](#fact-medicaid-and-chronic-conditions-cq---web-and-audio)
+    -   [Fact: Franklin Square tree canopy \[cq - web and
+        audio\]](#fact-franklin-square-tree-canopy-cq---web-and-audio)
+-   [Mental illness factcheck](#mental-illness-factcheck)
+    -   [Fact: Rate of increase of psychiatric calls
+        \[cq\]](#fact-rate-of-increase-of-psychiatric-calls-cq)
+    -   [Fact: Substance abuse calls rate
+        \[cq\]](#fact-substance-abuse-calls-rate-cq)
 
 Introduction
 ------------
 
-This R markdown document describes the methodology, results and explanation of a portion of the data analysis we conducted in support of reporting project examining the effects of climate-change driven temperature increases on the health of people who live in cities, focusing on Baltimore. The project was done in partnership with the University of Maryland's Philip Merrill College of Journalism, Capital News Service, the Howard Center for Investigative Journalism, NPR, Wide Angle Youth Media and WMAR.
-XXXX PUT IN LINKS TO PLACES HERE
+This R markdown document describes the methodology, results and
+explanation of a portion of the data analysis we conducted in support of
+reporting project examining the effects of climate-change driven
+temperature increases on the health of people who live in cities,
+focusing on Baltimore. The project was done in partnership with the
+University of Maryland’s Philip Merrill College of Journalism, Capital
+News Service, the Howard Center for Investigative Journalism, NPR, Wide
+Angle Youth Media and WMAR.
+
+-   [NPR: As Rising Heat Bakes U.S. Cities, The Poor Often Feel It
+    Most](https://www.npr.org/templates/story/story.php?storyId=754044732&live=1)
 
 Setup
 -----
 
-XXX UPDATE LINK Before running this file, please view and run the [Code Red Data Cleaning document](https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/documentation/code-red-data-cleaning.md)\*\* for this project. As well as outputting necessary cleaned data for the following ananlysis, that document also includes the following items necessary to understand this analysis:
+Before running this file, please view and run the [Code Red Data
+Cleaning
+document](https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/documentation/code-red-data-cleaning.md)\*\*
+for this project. As well as outputting necessary cleaned data for the
+following ananlysis, that document also includes the following items
+necessary to understand this analysis:
 
 -   definitions
 -   source data citation and information
@@ -130,62 +158,6 @@ op_er_full_zip_medicaid_correlation_matrix <- read_csv(paste0(path_to_data, fold
 folder <- "ems/"
 dmh_ems <- read_csv(paste0(path_to_data, folder, "dmh_ems.csv")) 
 EMS_all <- read_csv(paste0(path_to_data, folder, "EMS_all.csv")) 
-
-####################################
-######## Define Functions ##########
-####################################
-
-# Function to save each matrix as CSV
-write_matrix_csv <- function(dataframe) {
-  # Store dataframe name for later use
-  dataframe_name <- deparse(substitute(dataframe))
-  
-  # Create filename for csv
-  filename <- paste0("data/output-data/correlation_matrices/", dataframe_name,".csv")
-  
-  # Write out csv  
-  write_csv(dataframe, path = filename)
-  
-} 
-
-# Function to make a nice little correlation matrix heatmap for each graphic
-
-make_correlation_matrix_graphic <- function(dataframe, grouping = "GROUPING") {
-  
-  # Store name of dataframe for use in title
-  dataframe_name <- deparse(substitute(dataframe))
-  
-  # Build chart title
-  chart_title <- paste0("Correlations by ", grouping, " in Baltimore City | ", dataframe_name )
-  
-  # Create graph
-  ggplot(data = dataframe, aes(x = variable_2, y = variable)) +
-    geom_tile(aes(fill = value)) +
-    scale_fill_gradient2(low = "blue", high = "red", mid="white", midpoint=0) +
-    geom_text(aes(label = round(value, 2)*100), size = 10) +
-    ggtitle(chart_title) +
-    theme(axis.text=element_text(size=14),
-          axis.text.x = element_text(size=14,angle=50,hjust=1),
-          plot.title = element_text(size=14)
-    )
-  # Create filename and filepath to save image. 
-  filename <- paste0(dataframe_name,".png")
-  ggsave(filename, plot = last_plot(), device = "png", path = "data/output-data/plots/correlation-matrix-images", scale = 1, width = 20, height = 20, units = "in", dpi = 300)
-  
-}  
-
-select_x <- function(df){
-  return(df %>%
-           select_if(is.numeric) 
-           # select(-matches("objectid"), 
-           #        -matches("csa2010"), 
-           #        -matches("id"), 
-           #        -matches("09"), 
-           #        -matches("1718"), 
-           #        -matches("change_percent")
-           #        )
-         )
-}
 ```
 
 Line-by-Line Fact Check
@@ -193,52 +165,67 @@ Line-by-Line Fact Check
 
 ### Fact: Franklin Square heat \[cq - audio and web\]
 
-**Audio Story:** "Her neighborhood -- Franklin Square, no relation to her name -- is hotter than about two thirds of the neighborhoods in Baltimore."
+**Audio Story:** “Her neighborhood – Franklin Square, no relation to her
+name – is hotter than about two thirds of the neighborhoods in
+Baltimore.”
 
-**Web Story:** "Her neighborhood, Franklin Square, is hotter than about two thirds of the neighborhoods in Baltimore – about five degrees hotter than the city's coolest neighborhood."
+**Web Story:** “Her neighborhood, Franklin Square, is hotter than about
+two thirds of the neighborhoods in Baltimore – about six degrees hotter
+than the city’s coolest neighborhood.”
 
 #### Explanation \[cq\]
 
-Using the urban heat island measurements taken in August 2018 showing block-by-block temperature variations, we calculated median afternoon temperatures for each of the city's 278 neighborhoods. At 95.4 degrees, Franklin Square was warmer than 67 percent (two-thirds) of Baltimore's neighborhoods. The city's coolest neighborhood -- excluding Leakin Park, which isn't really a neighborhood, per se -- was Dickeyville, at 90.3 degrees F, 5.1 degrees less than Franklin Square.
+Using the urban heat island measurements taken in August 2018 showing
+block-by-block temperature variations, we calculated median afternoon
+temperatures for each of the city’s 278 neighborhoods. At 95.4 degrees,
+Franklin Square was warmer than 67 percent (about two-thirds) of
+Baltimore’s neighborhoods. The city’s coolest neighborhood – “Gwynns
+Falls/Leakin Park” – was 89.3 degrees F, 6.1 degrees less than Franklin
+Square.
 
 #### Supporting code and output \[cq\]
 
 ``` r
-# Rank 
+# Rank, neighborhoods cooler 
 nsa_tree_temp %>%
   select(nsa_name, temp_median_aft) %>%
-  filter(nsa_name != "gwynns falls/leakin park") %>%
-  mutate(rank = dense_rank(temp_median_aft), pct_nhoods_cooler = (rank/max(rank))) %>%
+  mutate(rank = dense_rank(temp_median_aft), pct_nhoods_cooler = (rank/max(rank))*100) %>%
   filter(nsa_name == "franklin square")
 ```
 
     ## # A tibble: 1 x 4
     ##   nsa_name        temp_median_aft  rank pct_nhoods_cooler
     ##   <chr>                     <dbl> <int>             <dbl>
-    ## 1 franklin square            95.4   185             0.668
+    ## 1 franklin square            95.4   186              66.9
 
 ``` r
+# Difference between Franklin Square and coolest
 nsa_tree_temp %>%
   select(nsa_name, temp_median_aft) %>%
-  filter(nsa_name != "gwynns falls/leakin park") %>%
-  filter((nsa_name == "franklin square") | (temp_median_aft == min(temp_median_aft)))
+  filter((nsa_name == "franklin square") | (temp_median_aft == min(temp_median_aft))) %>%
+  spread(nsa_name, temp_median_aft) %>%
+  mutate(difference = `franklin square` - `gwynns falls/leakin park`)
 ```
 
-    ## # A tibble: 2 x 2
-    ##   nsa_name        temp_median_aft
-    ##   <chr>                     <dbl>
-    ## 1 dickeyville                90.4
-    ## 2 franklin square            95.4
+    ## # A tibble: 1 x 3
+    ##   `franklin square` `gwynns falls/leakin park` difference
+    ##               <dbl>                      <dbl>      <dbl>
+    ## 1              95.4                       89.3       6.09
 
 ### Fact: Franklin Square poverty \[cq - web and audio\]
 
-**Audio Story:** "It's also in one of the city's poorer areas."
+**Audio Story:** “It’s also in one of the city’s poorer areas.”
 
-**Web Story:** "It's also in one of the city's poorest communities, with more than one third of residents living in poverty."
+**Web Story:** “It’s also in one of the city’s poorest communities, with
+more than one third of residents living in poverty.”
 
 #### Explanation \[cq\]
 
-Franklin Square is entirely contained by a "community statistical area" known as "Southwest Baltimore". The poverty rate here is 36 percent, or more than one-third. There are 55 CSAs in Baltimore. Southwest Baltimore has the 51st highest poverty rate, making it poorer than more than 90 percent of CSAs.
+Franklin Square is entirely contained by a “community statistical area”
+known as “Southwest Baltimore”. The poverty rate here is 36 percent, or
+more than one-third. There are 55 CSAs in Baltimore. Southwest Baltimore
+has the 51st highest poverty rate, making it poorer than more than 90
+percent of CSAs.
 
 #### Supporting code and output \[cq\]
 
@@ -256,19 +243,26 @@ csa_tree_temp_demographics %>%
 
 ### Fact: Heat and poverty \[cq - web and audio\]
 
-**Audio Story:** "And the hottest parts of the city also have higher rates of poverty."
+**Audio Story:** “And the hottest parts of the city also have higher
+rates of poverty.”
 
-**Web Story:** "Across Baltimore, the hottest areas tend to be the poorest and that pattern is not unusual."
+**Web Story:** “Across Baltimore, the hottest areas tend to be the
+poorest and that pattern is not unusual.”
 
 #### Explanation \[cq\]
 
-In Baltimore's "community statistical areas", we examined the relationship between heat (median afternoon temperature in our urban heat island data) and poverty. Where an r of 1 would indicate a perfect positive linear relationship and an r of -1 would indicate a perfect negative linear relationship and 0 indicating no relationship. There were moderate correlations with poverty (r =.38).
+In Baltimore’s “community statistical areas”, we examined the
+relationship between heat (median afternoon temperature in our urban
+heat island data) and poverty. Where an r of 1 would indicate a perfect
+positive linear relationship and an r of -1 would indicate a perfect
+negative linear relationship and 0 indicating no relationship. There
+were moderate correlations with poverty (r =.38).
 
 #### Supporting code and output \[cq\]
 
 ``` r
 csa_tree_temp_demographics %>%
-  select_x() %>%
+  select_if(is.numeric) %>%
   as.matrix() %>%
   correlate() %>%
   focus(matches("temp_")) %>%
@@ -282,30 +276,24 @@ csa_tree_temp_demographics %>%
     ##   <chr>                                                               <dbl>
     ## 1 percent_of_family_households_living_below_the_poverty_li…           0.378
 
-### Fact: Neighborhood heat difference \[Web and audio both NOT CQ\]
+### Fact: Neighborhood heat difference \[cq - web and audio\]
 
-**Audio Story:** "Citywide in Baltimore, the hottest neighborhoods can differ by as much as 10 degrees from the coolest." /// SHOULD be "differ by as much as 9 degrees". Was correctly changed in web story.
+**Audio Story:** “Citywide in Baltimore, the hottest neighborhoods can
+differ by as much as 10 degrees from the coolest.”
 
-**Web Story:** "According to a Howard Center analysis of U.S. Census data and air temperature data obtained from Portland State University and the Science Museum of Virginia, some of the poorest parts of Baltimore could get as much as 9 degrees hotter than the coolest areas." ///LAST CLAUSE NEEDS WORK. Elsewhere in the story, it's correctly pointed out that hotter areas tend to be poorer. The way this is written data can't support, when we blend poverty. Would suggest rephrasing to match audio story, "...and the Science Museum of Virginia, the hottest neighborhoods in Baltimore were as much as 9 degrees hotter than the coolest neighborhoods." Or something similar.
+**Web Story:** “According to a Howard Center analysis of U.S. Census
+data and air temperature data obtained from Portland State University
+and the Science Museum of Virginia, the hottest neighborhoods in
+Baltimore can differ by as much as 10 degrees from the coolest.”
 
 #### Explanation
 
-Using median afternoon temperature in a 2018 study by researchers analyzing the city's urban heat island, there was a 9 degree difference between the city's hottest neighborhood and coolest neighborhood. If we leave in Gwynns Falls/Leakin Park, the difference is 10 degrees.
+Using median afternoon temperature in a 2018 study by researchers
+analyzing the city’s urban heat island, there was a 9.98 degree
+difference between the city’s hottest neighborhood (McElderry Park) and
+coolest neighborhood (Gwynns Falls/Leakin Park).
 
 #### Supporting code and output
-
-``` r
-nsa_tree_temp %>%
-  select(nsa_name, temp_median_aft) %>%
-  filter(nsa_name != "gwynns falls/leakin park") %>%
-  filter((temp_median_aft == min(temp_median_aft)) | (temp_median_aft == max(temp_median_aft)))
-```
-
-    ## # A tibble: 2 x 2
-    ##   nsa_name       temp_median_aft
-    ##   <chr>                    <dbl>
-    ## 1 dickeyville               90.4
-    ## 2 mcelderry park            99.3
 
 ``` r
 nsa_tree_temp %>%
@@ -319,17 +307,42 @@ nsa_tree_temp %>%
     ## 1 gwynns falls/leakin park            89.3
     ## 2 mcelderry park                      99.3
 
+``` r
+nsa_tree_temp %>%
+  select(nsa_name, temp_median_aft) %>%
+  filter((temp_median_aft == min(temp_median_aft)) | (temp_median_aft == max(temp_median_aft))) %>%
+  spread(nsa_name, temp_median_aft) %>%
+  mutate(difference = `mcelderry park` - `gwynns falls/leakin park`)
+```
+
+    ## # A tibble: 1 x 3
+    ##   `gwynns falls/leakin park` `mcelderry park` difference
+    ##                        <dbl>            <dbl>      <dbl>
+    ## 1                       89.3             99.3       9.98
+
 ### Fact: EMS calls for heat stroke \[cq - web and audio\]
 
-**Audio Story:** "When the heat index reached dangerous levels last summer, EMS calls increased citywide for heat stroke."
+**Audio Story:** “When the heat index reached dangerous levels last
+summer, EMS calls increased citywide for heat stroke.”
 
-**Web Story:** "In the summer of 2018 in Baltimore, when the heat index reached 103 degrees — the threshold deemed dangerous by the National Weather Service — EMS calls increased dramatically citywide for potentially fatal heat stroke."
+**Web Story:** “In the summer of 2018 in Baltimore, when the heat index
+reached 103 degrees — the threshold deemed dangerous by the National
+Weather Service — EMS calls increased dramatically citywide for
+potentially fatal heat stroke.”
 
 #### Explanation \[cq\]
 
-Using emergency medical call records from Baltimore City, we examined calls during Summer 2018. They were aligned to heat index data captured at the Inner Harbor and adjusted for the urban heat island using the ZIP Code of each call location. The statistics in the table below represent the number of hours that passed between calls for select conditions when the temperature was in a given heat index bucket.
+Using emergency medical call records from Baltimore City, we examined
+calls during Summer 2018. They were aligned to heat index data captured
+at the Inner Harbor and adjusted for the urban heat island using the ZIP
+Code of each call location. The statistics in the table below represent
+the number of hours that passed between calls for select conditions when
+the temperature was in a given heat index bucket.
 
-As expected, calls for heat stroke increased dramatically. When it was under 80 degrees, there was a call for heat stroke every 480 hours, or about once every thre weeks. When it was 103 degrees or higher, there was a call for heat stroke every 1.4 hours.
+As expected, calls for heat stroke increased dramatically. When it was
+under 80 degrees, there was a call for heat stroke every 480 hours, or
+about once every thre weeks. When it was 103 degrees or higher, there
+was a call for heat stroke every 1.4 hours.
 
 #### Supporting Code \[cq\]
 
@@ -366,15 +379,30 @@ EMS_all %>%
 
 ### Fact: EMS calls for chronic conditions \[Audio cq, First web graf cq, Second web graf not cq\]
 
-**Audio Story:** "But calls also increased for chronic conditions, including several cardiovascular and respiratory conditions." /// THIS SENTENCE IS FINE
+**Audio Story:** “But calls also increased for chronic conditions,
+including several cardiovascular and respiratory conditions.”
 
-**Web Story:** "But calls increased for chronic conditions too: EMS calls for chronic obstructive pulmonary disorder (COPD) increased by nearly 70 percent. Calls for respiratory distress increased by 20 percent. Calls for cardiac arrest rose by 80 percent and those for high blood pressure more than doubled. Other conditions also spiked: Psychiatric disorders, substance abuse and dehydration, among others." /// THIS GRAF IS FINE
+**Web Story:** “But calls increased for chronic conditions too: EMS
+calls for chronic obstructive pulmonary disorder (COPD) increased by
+nearly 70 percent. Calls for respiratory distress increased by 20
+percent. Calls for cardiac arrest rose by 80 percent and those for high
+blood pressure more than doubled. Other conditions also spiked:
+Psychiatric disorders, substance abuse and dehydration, among others.”
 
-**Web Story:** "And living day after day in an environment that's literally hotter isn't just uncomfortable, it can have dire and sometimes deadly health consequences – a fact we found reflected in Baltimore's soaring rates of emergency calls and hospital admissions when the heat index spiked to dangerous levels." /// THE LAST CLAUSE OF THIS SENTENCE HAS AN ISSUE. "soaring rates of emergency calls" is supported by my analysis. I don't have the data to add "hospital admissions" to this. Unless you're getting the soaring rates of hospital admissions from another source, I'd suggest pulling "and hospital admissions" from this.
+**Web Story:** " And living day after day in an environment that’s
+literally hotter isn’t just uncomfortable, it can have dire and
+sometimes deadly health consequences – a fact we found reflected in
+Baltimore’s soaring rates of emergency calls when the heat index spiked
+to dangerous levels."
 
 #### Explanation \[cq\]
 
-By aligning emergency medical calls in Baltimore in summer 2018 for select conditions that are affected by heat with the heat index in Baltimore at the time of call, we were able to compare how rates differed when the heat index was below 80 degrees and above 103, the level the NWS defines as "dangerous". The second column reflects the increase in calls when the temperature rose.
+By aligning emergency medical calls in Baltimore in summer 2018 for
+select conditions that are affected by heat with the heat index in
+Baltimore at the time of call, we were able to compare how rates
+differed when the heat index was below 80 degrees and above 103, the
+level the NWS defines as “dangerous”. The second column reflects the
+increase in calls when the temperature rose.
 
 #### Supporting code and output \[cq\]
 
@@ -427,15 +455,45 @@ EMS_all %>%
 
 ### Fact: Medicaid and chronic conditions \[cq - web and audio\]
 
-**Audio Story:** "And even when controlling for income, there were differences across the city. From 2013 to 2018, Medicaid patients in Baltimore's hottest areas visited the hospital with those conditions at higher rates than Medicaid patients in the cooler areas, according to the Howard Center analysis."
+**Audio Story:** “And even when controlling for income, there were
+differences across the city. From 2013 to 2018, Medicaid patients in
+Baltimore’s hottest areas visited the hospital with those conditions at
+higher rates than Medicaid patients in the cooler areas, according to
+the Howard Center analysis.”
 
-**Web Story:** "The heat affected residents citywide, but even when controlling for income by only looking at the patterns of Medicaid patients, there were differences across the city. From 2013 to 2018, Medicaid patients in Baltimore's hottest areas visited the hospital at higher rates than Medicaid patients in the city's coolest areas. The low-income patients in the city's hot spots visited more often with several conditions, including asthma, COPD and heart disease, according to hospital inpatient and emergency room admissions data from the state's Health Services Cost Review Commission."
+**Web Story:** “The heat affected residents citywide, but even when
+controlling for income by only looking at the patterns of Medicaid
+patients, there were differences across the city. From 2013 to 2018,
+Medicaid patients in Baltimore’s hottest areas visited the hospital at
+higher rates than Medicaid patients in the city’s coolest areas. The
+low-income patients in the city’s hot spots visited more often with
+several conditions, including asthma, COPD and heart disease, according
+to hospital inpatient and emergency room admissions data from the
+state’s Health Services Cost Review Commission.”
 
 #### Explanation \[cq\]
 
-We examined rates of chronic conditions among low-income people in different parts of Baltimore by examining in-patient hospital admissions by people on Medicaid in Baltimore, and discovered that low-income people in different parts of the city had different prevalance rates for chronic conditions affected by heat -- asthma, COPD, heart disease, kidney disease and diabetes. And, we found, those differences varied in line with temperature differences in the area in which they lived.
+We examined rates of chronic conditions among low-income people in
+different parts of Baltimore by examining in-patient hospital admissions
+by people on Medicaid in Baltimore, and discovered that low-income
+people in different parts of the city had different prevalance rates for
+chronic conditions affected by heat – asthma, COPD, heart disease,
+kidney disease and diabetes. And, we found, those differences varied in
+line with temperature differences in the area in which they lived.
 
-There were moderate to strong positive relationships (copd, r=.75; asthma, r=.52; heart\_disease, r=.71; diabetes, r=.5) between a ZIP code's prevalance rate for chronic medical conditions as diagnosed in inpatient hospital visits and a ZIP code's median afternoon temperature as measured by urban heat island researchers in August 2018. There were moderate to strong positive relationships (copd, r=.51; asthma, r=.38; heart\_disease, r=.44; diabetes, r=.44) between a ZIP code's prevalance rate for chronic medical conditions as diagnosed in emergency room visits and a ZIP code's median afternoon temperature as measured by urban heat island researchers in August 2018. That is to say: the higher the neighborhood temperature, the higher the disease rate amongst the poorest inhabitants, and vice versa. This is not a causal relationship we are describing.
+There were moderate to strong positive relationships (copd, r=.75;
+asthma, r=.52; heart\_disease, r=.71; diabetes, r=.5) between a ZIP
+code’s prevalance rate for chronic medical conditions as diagnosed in
+inpatient hospital visits and a ZIP code’s median afternoon temperature
+as measured by urban heat island researchers in August 2018. There were
+moderate to strong positive relationships (copd, r=.51; asthma, r=.38;
+heart\_disease, r=.44; diabetes, r=.44) between a ZIP code’s prevalance
+rate for chronic medical conditions as diagnosed in emergency room
+visits and a ZIP code’s median afternoon temperature as measured by
+urban heat island researchers in August 2018. That is to say: the higher
+the neighborhood temperature, the higher the disease rate amongst the
+poorest inhabitants, and vice versa. This is not a causal relationship
+we are describing.
 
 #### Supporting Code \[cq\]
 
@@ -469,13 +527,21 @@ op_er_full_zip_medicaid_correlation_matrix %>%
 
 ### Fact: Franklin Square tree canopy \[cq - web and audio\]
 
-**Audio Story:** "The neighborhood where Shakira Franklin lives has increased its tree canopy over time. But in recent years, it's still been among the city's lowest.
+**Audio Story:** "The neighborhood where Shakira Franklin lives has
+increased its tree canopy over time. But in recent years, it’s still
+been among the city’s lowest.
 
-**Web Story:** "The neighborhood where Shakira Franklin lives has increased its tree canopy over time. But by 2015, it still was among the city's lowest."
+**Web Story:** “The neighborhood where Shakira Franklin lives has
+increased its tree canopy over time. But by 2015, it still was among the
+city’s lowest.”
 
 #### Explanation \[cq\]
 
-In 2007, 14.2 percent of the neighborhood was covered by tree canopy in the summer. By 2015, that had increased to 16.1 percent, a 1.9 percentage point increase. In 2015, two-thirds of Baltimore's 278 neighborhoods had more tree canopy than Franklin Square's 16 percent coverage.
+In 2007, 14.2 percent of the neighborhood was covered by tree canopy in
+the summer. By 2015, that had increased to 16.1 percent, a 1.9
+percentage point increase. In 2015, two-thirds of Baltimore’s 278
+neighborhoods had more tree canopy than Franklin Square’s 16 percent
+coverage.
 
 #### Supporting Code \[cq\]
 
@@ -504,3 +570,149 @@ nsa_tree_temp %>%
     ##   nsa_name        avg_canopy_15  rank pct_nhoods_w_more_tree_canopy
     ##   <chr>                   <dbl> <int>                         <dbl>
     ## 1 franklin square         0.161   186                         0.669
+
+Mental illness factcheck
+------------------------
+
+### Fact: Rate of increase of psychiatric calls \[cq\]
+
+“The Howard Center analyzed data from emergency response calls in
+Baltimore. They found that in the summer of 2018, calls for psychiatric
+conditions increased by nearly 40 percent when the heat index spiked
+above 103.”
+
+#### Explanation \[cq\]
+
+Using emergency medical call records from Baltimore City, we examined
+calls during Summer 2018. They were aligned to heat index data captured
+at the Inner Harbor and adjusted for the urban heat island using the ZIP
+Code of each call location.
+
+In Summer 2018, when the heat index was under 80 degrees, there was a
+medical call for a behavioral and psychiatric disorder every 1.77 hours
+(1 hour, 46 minutes). When the heat index hit 103 degrees, the rate of
+calls increased dramatically – to one call every 1.29 hours (1 hour, 17
+minutes).
+
+That’s an increase in the rate of 29 minutes, or an increase of 37
+percent. Yes, it’s weird to say that a *decrease* in the number of hours
+between calls actually represents an increase in the rate, but it makes
+sense logically. If there are fewer hours between calls, then there are
+more calls on any given day. It’s a 37 percent change.
+
+It’s easier to see this if we convert the hours between calls statistic
+to calls per day by dividing the hours between calls by 24. We get a
+rate of calls per day of 13.55 when it’s under 80, and a rate of 18.56
+when it’s over 103. The percent change between 13.55 and 18.56 is 37
+percent.
+
+#### Supporting code and output \[cq\]
+
+``` r
+# Select conditions
+conditions <- c("Behavioral/Psychiatric Disorder")
+
+# Calculate the total number of hours over the course of Summer 2018 that the heat index fell into each heat index level, as defined by the national weather service: not unsafe (under 80), caution (80-89), extreme caution (90-102), danger (103-124).   
+
+heat_index_count_per_nws_five_scale_bucket <- dmh_ems %>%
+  select(heat_index_nws_five_scale_bucket) %>%
+  group_by(heat_index_nws_five_scale_bucket) %>%
+  summarise(heat_index_count_per_nws_five_scale_bucket=n()) %>%
+  arrange(heat_index_nws_five_scale_bucket)
+
+# For each target condition, calculate the number of hours between calls at each temperature level.  This metric allows us to account for the fact that simply counting calls in each bucket would be flawed, because it wouldn't adjust for the rarity of very hot temperatures. 
+
+EMS_all %>%
+  filter(primary_impression_group %in% conditions) %>%
+  group_by(primary_impression_group, adjusted_heat_index_nws_five_scale_bucket) %>%
+  summarise(condition_calls_count_per_bucket=n()) %>%
+  inner_join(heat_index_count_per_nws_five_scale_bucket, by = c("adjusted_heat_index_nws_five_scale_bucket" = "heat_index_nws_five_scale_bucket")) %>%
+  mutate(hours_per_call = heat_index_count_per_nws_five_scale_bucket/condition_calls_count_per_bucket) %>%
+  select(primary_impression_group, adjusted_heat_index_nws_five_scale_bucket, hours_per_call) %>%
+  spread(adjusted_heat_index_nws_five_scale_bucket, hours_per_call) %>%
+  select(primary_impression_group, `not_unsafe_under_80`,`danger_103_124`) %>%
+  mutate(percent_change = (`not_unsafe_under_80`-`danger_103_124`)/`danger_103_124`) %>%
+  mutate(`calls_per_day_under_80` = 24/`not_unsafe_under_80`) %>%
+  mutate(`calls_per_day_over_103` = 24/`danger_103_124`) %>%
+  mutate(difference_day_percent = ((`calls_per_day_over_103`-`calls_per_day_under_80`)/`calls_per_day_under_80`))
+```
+
+    ## # A tibble: 1 x 7
+    ## # Groups:   primary_impression_group [1]
+    ##   primary_impress… not_unsafe_unde… danger_103_124 percent_change
+    ##   <chr>                       <dbl>          <dbl>          <dbl>
+    ## 1 Behavioral/Psyc…             1.77           1.29          0.370
+    ## # … with 3 more variables: calls_per_day_under_80 <dbl>,
+    ## #   calls_per_day_over_103 <dbl>, difference_day_percent <dbl>
+
+### Fact: Substance abuse calls rate \[cq\]
+
+“Calls relating to substance abuse more than doubled in extreme heat,
+according to data analyzed by the Howard Center.”
+
+#### Explanation \[cq\]
+
+Using emergency medical call records from Baltimore City, we examined
+calls during Summer 2018. They were aligned to heat index data captured
+at the Inner Harbor and adjusted for the urban heat island using the ZIP
+Code of each call location.
+
+In Summer 2018, when the heat index was under 80 degrees, there was a
+medical call for substance abuse every 2.96 hours (nearly 3 hours). When
+the heat index hit 103 degrees, the rate of calls increased dramatically
+– to one call every 1.35 hours.
+
+That’s an increase in the rate of about an hour and a half, or an
+increase of 118 percent. Yes, it’s weird to say that a *decrease* in the
+number of hours between calls actually represents an increase in the
+rate, but it makes sense logically. If there are fewer hours between
+calls, then there are more calls on any given day. We use the classic
+percent change formula ((new-old)/old) to calculate the difference
+between the two values. It’s a 118 percent change.
+
+It’s easier to see this if we convert the hours between calls statistic
+to calls per day by dividing the hours between calls by 24. We get a
+rate of calls per day of 8.11 when it’s under 80, and a rate of 17.67
+when it’s over 103. The percent change between those values is 118
+percent.
+
+#### Supporting code and output \[cq\]
+
+``` r
+# Select conditions
+conditions <- c("Substance/Drug Abuse")
+
+# Calculate the total number of hours over the course of Summer 2018 that the heat index fell into each heat index level, as defined by the national weather service: not unsafe (under 80), caution (80-89), extreme caution (90-102), danger (103-124).   
+
+heat_index_count_per_nws_five_scale_bucket <- dmh_ems %>%
+  select(heat_index_nws_five_scale_bucket) %>%
+  group_by(heat_index_nws_five_scale_bucket) %>%
+  summarise(heat_index_count_per_nws_five_scale_bucket=n()) %>%
+  arrange(heat_index_nws_five_scale_bucket)
+
+# For each target condition, calculate the number of hours between calls at each temperature level.  This metric allows us to account for the fact that simply counting calls in each bucket would be flawed, because it wouldn't adjust for the rarity of very hot temperatures. 
+
+EMS_all %>%
+  filter(primary_impression_group %in% conditions) %>%
+  group_by(primary_impression_group, adjusted_heat_index_nws_five_scale_bucket) %>%
+  summarise(condition_calls_count_per_bucket=n()) %>%
+  inner_join(heat_index_count_per_nws_five_scale_bucket, by = c("adjusted_heat_index_nws_five_scale_bucket" = "heat_index_nws_five_scale_bucket")) %>%
+  mutate(hours_per_call = heat_index_count_per_nws_five_scale_bucket/condition_calls_count_per_bucket) %>%
+  select(primary_impression_group, adjusted_heat_index_nws_five_scale_bucket, hours_per_call) %>%
+  spread(adjusted_heat_index_nws_five_scale_bucket, hours_per_call) %>%
+  select(primary_impression_group, `not_unsafe_under_80`,`danger_103_124`) %>%
+  mutate(percent_change = (`not_unsafe_under_80`-`danger_103_124`)/`danger_103_124`) %>%
+  mutate(`calls_per_day_under_80` = 24/`not_unsafe_under_80`) %>%
+  mutate(`calls_per_day_over_103` = 24/`danger_103_124`) %>%
+  mutate(difference_day_percent = ((`calls_per_day_over_103`-`calls_per_day_under_80`)/`calls_per_day_under_80`))
+```
+
+    ## # A tibble: 1 x 7
+    ## # Groups:   primary_impression_group [1]
+    ##   primary_impress… not_unsafe_unde… danger_103_124 percent_change
+    ##   <chr>                       <dbl>          <dbl>          <dbl>
+    ## 1 Substance/Drug …             2.96           1.36           1.18
+    ## # … with 3 more variables: calls_per_day_under_80 <dbl>,
+    ## #   calls_per_day_over_103 <dbl>, difference_day_percent <dbl>
+
+-30-
