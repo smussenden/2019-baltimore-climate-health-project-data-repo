@@ -134,105 +134,125 @@ street_trees_nsa_summarized <-
 
 #cctv_cameras_street_trees <- read_csv(paste0(path_to_data, "cctv_cameras_street_trees.csv"))
 
+
+
+
+###################
+#### Load Data ####
+###################
+
+### Indoor temperature and humidity sensor data
+
+# Michael and Alberta
+folder <- "temperature_sensors/michael/"
+michael_day_hourly_averages <- read_csv(paste0(path_to_data, folder, "michael_day_hourly_averages.csv"))
+michael_day_minute_averages <- read_csv(paste0(path_to_data, folder, "michael_day_minute_averages.csv"))
+
+# Stephanie and family
+folder <- "temperature_sensors/stephanie/"
+stephanie_day_minute_averages <- read_csv(paste0(path_to_data, folder, "stephanie_day_minute_averages.csv"))
+stephanie_day_hourly_averages <- read_csv(paste0(path_to_data, folder, "stephanie_day_hourly_averages.csv"))
+
+# Audrey
+folder <- "temperature_sensors/audrey/"
+audrey_day_minute_averages <- read_csv(paste0(path_to_data, folder, "audrey_day_minute_averages.csv"))
+audrey_day_hourly_averages <- read_csv(paste0(path_to_data, folder, "audrey_day_hourly_averages.csv"))
+
+# Tammy
+folder <- "temperature_sensors/tammy/"
+tammy_day_minute_averages <- read_csv(paste0(path_to_data, folder, "tammy_day_minute_averages.csv"))
+tammy_day_hourly_averages <- read_csv(paste0(path_to_data, folder, "tammy_day_hourly_averages.csv"))
+
+### Outdoor temperature data 
+
+# Inner Harbor temperature data
+folder <- "baltimore_weather_stations/"
+dmh <- read_csv(paste0(path_to_data, folder, "dmh.csv"))
+
+# Historical temperature data, Baltimore and U.S. 
+folder <- "1895-2019-average-temperature/"
+us_change_temp <- read_csv(paste0(path_to_data, folder, "us_change_temp.csv"))
+baltimore_change_temp <- read_csv(paste0(path_to_data, folder, "baltimore_change_temp.csv"))
+
+# Heat index projections
+folder <- "heat_index_projections/"
+heat_index_projections <- read_csv(paste0(path_to_data, folder, "heat_index_projections.csv"))
+
+### Urban heat island, tree canopy, demographics data
+folder <- "tree_temp_demographics/"
+
+# Neighborhood geography
+nsa_tree_temp <- read_csv(paste0(path_to_data, folder, "nsa_tree_temp.csv"))
+
+# Community statistical area geography
+csa_tree_temp_demographics <- read_csv(paste0(path_to_data, folder, "csa_tree_temp_demographics.csv"))
+
+# Blocks geography
+blocks_tree_temp_demographics <- read_csv(paste0(path_to_data, folder, "blocks_tree_temp_demographics.csv"))
+
+### Hospital Data
+folder <- "hospital_data/"
+
+# Inpatient admissions data
+ip_full_zip_correlation_matrix <- read_csv(paste0(path_to_data, folder, "ip/ip_full_zip_correlation_matrix.csv"))
+ip_full_zip_disease_heat <- read_csv(paste0(path_to_data, folder, "ip/ip_full_zip_disease_heat.csv"))
+ip_full_zip_medicaid_correlation_matrix <- read_csv(paste0(path_to_data, folder, "ip/ip_full_zip_medicaid_correlation_matrix.csv"))
+ip_full_zip_medicaid_disease_heat <- read_csv(paste0(path_to_data, folder, "ip/ip_full_zip_medicaid_disease_heat.csv"))
+
+
+# Emergency room admissions data
+op_er_full_zip_correlation_matrix <- read_csv(paste0(path_to_data, folder, "op_er/op_er_full_zip_correlation_matrix.csv"))
+op_er_full_zip_disease_heat <- read_csv(paste0(path_to_data, folder, "op_er/op_er_full_zip_disease_heat.csv"))
+op_er_full_zip_medicaid_matrix <- read_csv(paste0(path_to_data, folder, "op_er/op_er_full_zip_medicaid_correlation_matrix.csv"))
+op_er_full_zip_medicaid_disease_heat <- read_csv(paste0(path_to_data, folder, "op_er/op_er_full_zip_medicaid_disease_heat.csv"))
+
+### EMS Data
+folder <- "ems/"
+dmh_ems <- read_csv(paste0(path_to_data, folder, "dmh_ems.csv")) 
+EMS_all <- read_csv(paste0(path_to_data, folder, "EMS_all.csv")) 
+
+
+
 ```
 
-## Line-by-Line Facts
+### Fact: A certain block in Broadway East is one of the city's hottest [cq]
+"He needs a lot of water too, working in the summer heat here at the edge of the Broadway East neighborhood, on one of the city’s hottest — and poorest — blocks."
 
-### Fact: Hottest Streets in Baltimore
+#### Explanation [ca]
+The scene described in the story took place on a block in Broadway East on North Milton Ave between Oliver Street and East Federal Street, which is in U.S. census "block" with the ID 245100803011000.  With a mean afternoon temperature of 98.3 degrees in an August 2018 urban heat island study showing block-by-block variations in temperatures, this was the 236 hottest block in the city, out of 13,598 blocks. To get data on poverty within a reasonable margin of error, we have to go to a larger level of geography.  This block is located inside the Clifton-Berea "community statistical area." In this CSA -- one of 55 in the city -- 28 percent of households are below the poverty line -- the 10th highest poverty rate in the city.
 
-"Kwamel Couther stands on the front lines of a campaign to bring thousands of cooling shade trees to some of the **hottest streets in Baltimore**."
-
-#### Explanation
-
-All of the top 10 hottest NSAs are located in the south of the city, and many are in the south-east.
-
-#### Supporting Code
-
-```{r, rows.print=10}
-
-# Rank NSAs by temperature
-nsa_tree_temp %>%
-  select(nsa_name, temp_mean_aft) %>%
-  mutate(rank = rank(-temp_mean_aft)) %>%
-  arrange(rank)
-
-```
-
-### Fact: A certain block in Broadway East is one of the city's hottest
-
-"He needs a lot of water too, working in the summer heat here at the edge of the **Broadway East** neighborhood, on one of the city’s **hottest** -- and poorest -- blocks."
-
-#### Explanation
-
-Below, we see the block on N. Milton Avenue between Oliver and Federal is one of the city's hottest, ranking at 236 out of 13,598 blocks. The  GEOID for this block was pulled from QGIS and breaks down into the following codes:
-
-* State: 24
-* County: 510
-* Tract: 080301
-* Block: 1000
-
-#### Supporting Code
-
+#### Supporting code and output [cq]
 ```{r}
 
 # Block of interest ranked by heat
 blocks_tree_temp_demographics %>%
   select(geoid10, temp_mean_aft) %>%
   mutate(rank = rank(-temp_mean_aft)) %>%
-  filter(geoid10 == "245100803011000")
+  filter(geoid10 == "245100803011000") 
 
-```
+# Total number of city blocks
+blocks_tree_temp_demographics %>%
+  summarise(count=n())
 
-### Fact: Broadway East is one of the poorest NSAs
-
-"He needs a lot of water too, working in the summer heat here at the edge of the **Broadway East** neighborhood, on one of the city’s hottest -- and **poorest** -- blocks."
-
-#### Explanation
-
-**Broadway East** ranked by percent of families living below the poverty line (out of 55 ranks). The Broadway East NSA is split vertically down the middle between the **Clifton-Berea** and **Greenmount East** CSAs, which also include large portions of the surrounding NSAs. It also includes an insignificant sliver of Oldtown/Middle East, which was disregarded in this analysis.
-
-Broadway East, as a combination of Clifton-Berea and Greenmount East, has a total percent of family households living below the poverty line of `r round((csa_tree_temp_demographics$percent_of_family_households_living_below_the_poverty_line[csa_tree_temp_demographics$csa2010 %like% "%greenmount%"] +
-csa_tree_temp_demographics$percent_of_family_households_living_below_the_poverty_line[csa_tree_temp_demographics$csa2010 %like% "%clifton%"]) / 2, 2)` according to:
-
-#### Supporting Code
-
-```{r}
-
-# Average Clifton-Berea and Greenmount East CSAs to find Broadway East NSA
-(csa_tree_temp_demographics$percent_of_family_households_living_below_the_poverty_line[csa_tree_temp_demographics$csa2010 %like% "%greenmount%"] +
-csa_tree_temp_demographics$percent_of_family_households_living_below_the_poverty_line[csa_tree_temp_demographics$csa2010 %like% "%clifton%"]) / 2
-
-```
-
-```{r}
-
-# The two CSAs that make up Broadway East average income and percent below poverty
+# CSA ranked by poverty
 csa_tree_temp_demographics %>%
   mutate(rank = rank(-percent_of_family_households_living_below_the_poverty_line)) %>%
-  arrange(rank) %>%
-  mutate(associated_nsa = case_when(
-    (csa2010 %like% "%clifton%") | (csa2010 %like% "%greenmount%") ~ "broadway east",
-    T ~ NA_character_
-  )) %>%
-  select(csa2010, associated_nsa, 
-         avg_household_income = median_household_income, 
-         perc_below_poverty = percent_of_family_households_living_below_the_poverty_line, 
-         rank) %>%
-  filter((csa2010 %like% "%clifton%") | 
-           (csa2010 %like% "%greenmount%"))
+  filter(csa2010 == "clifton-berea") %>%
+  select(matches("percent_of_family_households_living_below_the_poverty_line|csa2010|rank"))
+
+# Total number of CSAs
+csa_tree_temp_demographics %>%
+  summarise(count=n())  
 
 ```
 
-### Fact: Poorest NSAs have less tree canopy
+### Fact: Poorest areas have less tree canopy [cq]
+"The city’s poorest areas tend to have less tree canopy than wealthier areas, a pattern that is especially pronounced on the concrete-dense east side, in neighborhoods like Broadway East."
 
-"The city’s **poorest** neighborhoods tend to have **less tree canopy than wealthier areas**..."
+#### Explanation [cq]
+There is a moderate negative correlation between a "community statistical areas" poverty rate and the amount of tree cover it had in 2015 (r = -.34).  In other words, places with a high poverty rate will have fewer trees, in general, and vice versa.  Broadway East illustrates this.  Most of the neighborhood is divided between two CSAs -- Greenmount East and Clifton-Berea. Greenmount East is 14th (of 55) for poverty in the city, and has less tree canopy than 40 (of 55) areas.   Clifton-Berea is 10th for poverty and has less tree canopy than 48 neighborhoods.
 
-#### Discussion
-
-A correlation matrix of poverty and canopy cover shows a negative correlation of -.34. In other words, places with a high poverty rate will have fewer trees, in general.
-
-#### Supporting Code
-
+#### Supporting code and output [cq]
 ```{r}
 
 # Build correlation matrix between poverty and tree canopy
@@ -242,348 +262,265 @@ csa_tree_temp_demographics %>%
   as.matrix() %>%
   correlate() %>%
   mutate(variable=rowname) %>%
-  select(variable, everything(), -rowname)
+  select(variable, perc_below_poverty) %>%
+  filter(variable == "avg_canopy_2015")
 
-```
-
-### Fact: Canopy-to-poverty correlation is pronounced on the east side
-
-"The city's poorest neighborhoods tend to have less tree canopy than wealthier areas, **a pattern that is especially pronounced on the concrete-dense east side**, in neighborhoods like **Broadway East**."
-
-#### Explanation
-
-Poverty, income and canopy at the top and bottom 10 CSAs when ranked for poverty.
-
-#### Supporting Code
-
-```{r, rows.print=20}
-
-# Top and bottom 10 CSAs ranked for poverty, also showing tree canopy ranking
+# Rank of tree cover and poverty rate for Clifton-Berea and Greenmount East (which holds most of Broadway East)
 csa_tree_temp_demographics %>%
-  select(csa2010,
-         perc_below_poverty = percent_of_family_households_living_below_the_poverty_line,
-         avg_canopy_2015 = `15_lid_mean`) %>%
-  mutate(rank_poverty = rank(-perc_below_poverty),
-         rank_canopy = rank(-avg_canopy_2015)) %>%
-  filter(between(rank_poverty, 1L, 10L) |
-           between(rank_poverty, 46L, 55L)) %>%
-  mutate(associated_nsa = case_when(
-    (csa2010 %like% "%clifton%") | (csa2010 %like% "%greenmount%") ~ "broadway east",
-    (csa2010 %like% "%madison%") | (csa2010 %like% "%park north%") ~ "mcelderry park",
-    (csa2010 %like% "%poplar%") ~ "roland park",
-    T ~ NA_character_
-  )) %>%
-  select(csa2010,
-         associated_nsa,
-         perc_below_poverty,
-         avg_canopy_2015,
-         rank_poverty, rank_canopy) %>%
-  arrange(rank_poverty)
+  mutate(poverty_rank = rank(-percent_of_family_households_living_below_the_poverty_line),
+         canopy_rank = rank(-`15_lid_mean`)) %>%
+  filter(str_detect(csa2010,"clifton-berea|greenmount")) %>%
+  select(matches("percent_of_family_households_living_below_the_poverty_line|csa2010|rank"))
 
-
+# Total CSAs
 csa_tree_temp_demographics %>%
-  select(perc_below_poverty = percent_of_family_households_living_below_the_poverty_line,
-         temp_mean_aft) %>%
-  as.matrix() %>%
-  correlate() %>%
-  mutate(variable=rowname) %>%
-  select(variable, everything(), -rowname)
+  summarise(count=n())  
 
 
 ```
 
-### Fact: Coolest NSAs have 10x the canopy of hottest
+#### Poverty to canopy graf
 
-"...the coolest neighborhoods have an order of magnitude more tree canopy than the hottest neighborhoods."
+```{r}
 
-"...there was a 10-degree difference between the coolest and hottest neighborhoods in the city."
+# Poverty to canopy GRAPH
+csa_tree_temp_demographics %>%
+  # Start ggplot and set x and y for entire plot
+  ggplot(aes(
+    x = percent_of_family_households_living_below_the_poverty_line/100, 
+    y = `15_lid_mean`
+    )) +
+  # This section for the basic scatterplot
+  geom_point(aes(color = `15_lid_mean`),
+             size=4) +
+  # This section for circling all sample neighborhood points
+  geom_point(data = csa_tree_temp_demographics %>%
+               filter((csa2010 %in% target_csas) 
+                      # Patterson Park must be included seperately because of its unique label positioning
+                      | (csa2010 == "Patterson Park North & East") 
+                      ),
+             aes(color = `15_lid_mean`),
+             size=6, shape = 1) +
+  # This section shows the trend line
+  geom_smooth(se = FALSE, # Removes gray banding
+              method = glm, 
+              color = "black") +
+  # This section for labeling Canton, etc.
+  ggrepel::geom_label_repel(data = csa_tree_temp_demographics %>%
+                              filter(csa2010 %in% c("greenmount east", "clifton-berea", "greater roland park/poplar hill")) %>%
+                              mutate(csa2010 = case_when(
+                                csa2010 == "greenmount east" ~ "Greenmount East \n(includes part of Broadway East)", 
+                                csa2010 == "clifton-berea" ~ "Clifton-Berea \n(includes part of Broadway East)",
+                                csa2010 == "greater roland park/poplar hill" ~ "Greater Roland Park/Poplar Hill",
+                                T ~ csa2010)),
+            aes(label = csa2010),
+            label.size =.25,
+            min.segment.length = .1,
+            segment.alpha = .5,
+            alpha = .85,
+            nudge_x = .05,
+            nudge_y = .06) +
+  # This section for labeling Patterson Park (so it can be nudged)
+  ggrepel::geom_label_repel(data = csa_tree_temp_demographics %>%
+                              filter(csa2010 == "Patterson Park North & East") %>%
+                              mutate(csa2010 = case_when(
+                                csa2010 == "Patterson Park North & East" ~ "Patterson Park North & East \n(includes most of McElderry Park)",
+                                T ~ csa2010)),
+                            aes(label = csa2010),
+                            min.segment.length = .1,
+                            segment.alpha = .5,
+                            alpha = .85,
+                            nudge_x = -.06,
+                            nudge_y = .03) +
+  # Colors and label formatting follow
+  #coord_flip() +
+  scale_colour_gradient(low = "#E0FEA9", high = "#144A11") +
+  labs(title = "",
+       subtitle = "",
+       x = "Percent of households living below the poverty line",
+       y = "Percent of land covered by trees") +
+  scale_x_continuous(label = scales::percent_format(accuracy = 1.0),
+                     breaks = seq(0, 1, .1)) + 
+  scale_y_continuous(label = scales::percent_format(accuracy = 1.0),
+                     breaks = seq(0, 1, .1)) + 
+  theme_bw() +
+  theme(legend.position = "none",
+        plot.title = element_text(size = 20),
+        plot.subtitle = element_text(size = 12),
+        axis.title=element_text(size=16,face="bold"),
+        axis.text=element_text(size=16)
+        )
 
-#### Explanation
+# ggsave("poverty_canopy.png", plot = last_plot(), width = 8, height=8)
 
-An "order of magnitude" is an imprecise term but is generally considered to be 10. Whether the figure is 10 or approaching 10 depends on whether mean or median is used.
+```
 
-* McElderry Park was the hottest, at a mean of `r round(max(nsa_tree_temp$temp_mean_aft), 2)` and a median of `r round(max(nsa_tree_temp$temp_median_aft), 2)` degrees Fahrenheit.
-* Gwynns Falls/Leakin Park was the coolest, at a mean of `r round(min(nsa_tree_temp$temp_mean_aft), 2)` and a median of `r round(min(nsa_tree_temp$temp_median_aft), 2)` degrees Fahrenheit.
+### Fact: Heat and tree canopy relationship [cq]
+"This helps partly explain why in Baltimore, as in other cities, the coolest neighborhood has 10 times more tree canopy than the hottest neighborhood. In temperature readings taken by researchers at Portland State University in Oregon and the Science Museum of Virginia on one particularly hot day in August 2018, there was an 8 degree Fahrenheit difference between the coolest and hottest neighborhoods in the city."
 
-The difference in temperatures between the city's mean hottest and coolest neighborhoods is `r round((min(nsa_tree_temp$temp_mean_aft)) - (max(nsa_tree_temp$temp_mean_aft)), 2)` degrees Fahrenheit, whereas the difference between median is `r round((min(nsa_tree_temp$temp_median_aft)) - (max(nsa_tree_temp$temp_median_aft)), 2)` degrees.
+#### Explanation [cq]
+The hottest neighborhood in the city is McElderry Park, with a mean afternoon temperature of 99.39 degrees in the August 2018 urban heat island study.  The coolest, excluding Gwynns Falls/Leakin Park, is Dickeyville, at 91.01 degrees.  There was an 8.4 degree difference in temperature. Dickeyville had 69.8 percent tree canopy in 2015, compared to 6.1 percent for McElderry Park.  
 
-#### Supporting Code
-
+#### Supporting code and output [cq]
 ```{r}
 
 # The hottest and coolest NSAs
 nsa_tree_temp %>%
-  select(nsa_name, temp_mean_aft, temp_median_aft, `15_lid_mean`) %>%
+  select(nsa_name, temp_mean_aft, `15_lid_mean`) %>%
   filter(nsa_name != "gwynns falls/leakin park") %>%
   filter(
-    ((temp_mean_aft == min(temp_mean_aft)) | (temp_mean_aft == max(temp_mean_aft))) |
-    ((temp_median_aft == min(temp_median_aft)) | (temp_median_aft == max(temp_median_aft)))
+    ((temp_mean_aft == min(temp_mean_aft)) | (temp_mean_aft == max(temp_mean_aft))) 
          ) %>%
   arrange(desc(temp_mean_aft))
 
 ```
 
-### Fact: 89 degrees at 1 p.m. on 7/10/2019
 
+#### ADD THIS
+U.S. cities are losing 29 million trees every year - and many cities are struggling to reverse their dwindling canopies, according to an investigation by NPR and the University of Maryland's Howard Center for Investigative Journalism. Between 2009 and 2014, 44 states lost tree cover in urban areas, according to the U.S. Forest Service, though Baltimore bucked the trend with a small increase between 2007 and 2015.
+
+
+
+He was taking a brief break to chat while tucked into a sliver of slowly disappearing shadow from one of several vacant houses on North Milton Avenue. By 1 p.m., when the heat index registered 89 degrees and the sun loomed almost directly overhead, working in the shade was no longer an option.
+
+
+### Fact: Heat index at 1 p.m. July 10 [cq]
 "By 1 p.m., when the heat index registered 89 degrees and the sun loomed almost directly overhead, working in the shade was no longer an option."
 
-#### Explanation
+#### Explanation [cq]
+The heat index at 1 p.m. on July 10 was 89 degrees F, as measured at the Inner Harbor NWS monitoring station.
 
-[INCOMPLETE] [SEAN]
-
-#### Supporting Code
-
+#### Supporting code and output [cq]
 ```{r}
 
-# Code here
-
+dmh %>%
+ filter(month == 7,
+         year == 2019,
+        day == 10,
+        hour == 13) %>%
+  group_by(`date`) %>%
+  select(date, hour, avg_hourly_heat_index_dmh)
 ```
 
-### Fact: Street trees & plots on North Milton Ave.
+### Fact: Street trees & plots on North Milton Ave. [cq]
+A 35-foot linden tree in the middle of the block once provided extensive cover from the sun, but it died within the last few years. Its branches, completely denuded of leaves, created useless spindles of shadow on the baking concrete sidewalk below. Across the street, another linden, a 25-footer, also appeared dead, the handful of remaining brown leaves providing little relief.
 
-"A 35-foot linden tree in the middle of the block once provided serious cover from the sun, but it died within the last few years."
+Couther and his three-person crew initially parked their truck at the other end of the street, under a 35-foot linden — alive, but only in “fair” condition, as scored by the city — with a broad leaf canopy. It was the only tree on the sidewalk to provide any meaningful temperature reduction, but the crew quickly abandoned its cover to continue watering.
 
-"Across the street, another linden, a 25-footer, also appeared dead..."
+#### Explanation [cq]
+The information for these paragraphs was pulled from the city's street tree database.  
 
-"...under a 35-foot linden -- alive, but only in “fair” condition, as scored by the city -- with a broad leaf canopy. It was the only tree on the sidewalk to provide any meaningful temperature reduction..."
-
-#### Explanation
-
-All trees and potential tree locations along that stretch of road are referenced below.
-
-#### Supporting Code
-
+#### Supporting code and output [cq]
 ```{r, rows.print = 25}
 
-# All street trees & locations along N. Milton in Broadway East
+
+# A 35-foot linden tree in the middle of the block once provided extensive cover from the sun, but it died within the last few years. 
 street_trees_nsa_categorized %>%
-  filter((nbrdesc %like% "broadway%") & ((street %like% "n milton%"))) %>%
-  select(nbrdesc, address, street, genus_clean, common, dbh, condition, date_inspected = inspect_dt) %>%
-  arrange(street, address)
+  select(address, street, tree_ht, condition, common) %>%
+  filter(street %like% "n milton%" & (address == 1536) & condition %like% 'dead') 
+
+# Across the street, another linden, a 25-footer, also appeared dead, the handful of remaining brown leaves providing little relief. (This was marked on tree census as "good condition" when it was inventoried in 2018, but it has clearly died since then).
+street_trees_nsa_categorized %>%
+  select(address, street, tree_ht, condition, common, inv_date) %>%
+  filter(street %like% "n milton%" & (address == 1507) & common %like% 'linden%') 
+
+# Couther and his three-person crew initially parked their truck at the other end of the street, under a 35-foot linden — alive, but only in “fair” condition, as scored by the city — with a broad leaf canopy.
+
+street_trees_nsa_categorized %>%
+  select(address, street, tree_ht, condition, common) %>%
+  filter(street %like% "n milton%" & (address == 1538) & common %like% 'linden%') 
 
 ```
 
-### Fact: Northern CSAs are both wealthier and cooler
+### Fact: Northern CSAs are both wealthier and cooler [cq]
 
-"In the **wealthier**, more **temperate** neighborhoods **north of Broadway East** -- like **Roland Park** ... -- a 35-foot street tree like this would be of roughly average height, with plenty of company."
+"In the wealthier, more temperate neighborhoods north of Broadway East — like Roland Park, its stately tree-lined streets a 20-minute drive away — a 35-foot street tree like this would be of roughly average height, with plenty of company. "Here in Broadway East, in an area of Baltimore that has suffered from decades of disinvestment, this lonely linden stands out as one of the neighborhood’s largest sidewalk trees." 
 
-#### Explanation
+#### Explanation [cq]
+Roland Park is cooler than 263 of Baltimore's 278 neighborhoods, as judged in the Baltimore urban heat island study using afternoon temperatures in August 2018. It has more tree canopy than all but 9 of Baltimore's 278 neighborhoods. In Roland Park, the average street tree is 34.7 feet tall, with half of street trees taller than 35 feet, a total of 1449 trees.  In Broadway East, the average street tree is 22 feet, with only 80 trees (21 percent), 35 feet or taller.
 
-Poverty and temperature shows a correlation of .398. In other words, poorer neighborhoods tend to be more temperate.
-
-Secondly, the top and bottom 10 CSAs ranked for poverty in general show norther neighborhoods are both wealthier and cooler.
-
-#### Supporting Code
-
+#### Supporting code and output [cq]
 ```{r}
 
-# Build correlation matrix between poverty and temperature
-csa_tree_temp_demographics %>%
-  select(perc_below_poverty = percent_of_family_households_living_below_the_poverty_line,
-         temp_mean_aft) %>%
-  as.matrix() %>%
-  correlate() %>%
-  mutate(variable=rowname) %>%
-  select(variable, everything(), -rowname)
+# Broadway East, Roland Park temperature and tree canopy rank
+nsa_tree_temp %>%
+  mutate(temp_rank = rank(-temp_mean_aft),
+         canopy_rank = rank(-`15_lid_mean`)) %>%
+  filter(nsa_name == "roland park" | nsa_name == "broadway east") %>%
+  select(nsa_name, temp_mean_aft, temp_rank, canopy_rank, `15_lid_mean`)
 
-```
+# Count of neighborhoods
+nsa_tree_temp %>%
+  summarise(count=n())
 
-```{r, rows.print=20}
-
-# Top and bottom 10 CSAs ranked for poverty, also showing average temperature
-csa_tree_temp_demographics %>%
-  select(csa2010,
-         perc_below_poverty = percent_of_family_households_living_below_the_poverty_line,
-         temp_mean_aft) %>%
-  mutate(rank_poverty = rank(-perc_below_poverty),
-         rank_temp = rank(-temp_mean_aft)) %>%
-  filter(between(rank_poverty, 1L, 10L) |
-           between(rank_poverty, 46L, 55L)) %>%
-  mutate(associated_nsa = case_when(
-    (csa2010 %like% "%clifton%") | (csa2010 %like% "%greenmount%") ~ "broadway east",
-    (csa2010 %like% "%madison%") | (csa2010 %like% "%park north%") ~ "mcelderry park",
-    (csa2010 %like% "%poplar%") ~ "roland park",
-    T ~ NA_character_
-  )) %>%
-  select(csa2010,
-         associated_nsa,
-         perc_below_poverty,
-         temp_mean_aft,
-         rank_poverty, rank_temp) %>%
-  arrange(rank_poverty)
-
-```
-
-### Fact: Wealthier CSAs have many trees around 35 feet tall
-
-"In the wealthier, more temperate **neighborhoods north of Broadway East** -- like **Roland Park** ... -- a **35-foot street tree** like this would be of **roughly average height**, with **plenty of company**."
-
-#### Explanation
-
-Roland Park has an average tree height of 30.86 feet. 42.8 percent of the trees there are 35 feet tall or taller.
-
-#### Supporting Code
-
-```{r, rows.print=19}
-
-# See average height of trees in NSAs of interest
-# and counts/percentages of trees greater than 35 feet tall
-street_trees_nsa_categorized %>%
-  select(nbrdesc, tree_ht) %>%
-  group_by(nbrdesc) %>%
-  summarize(avg_ht = mean(tree_ht),
-            total_trees = n()) %>%
-  left_join(
-    street_trees_nsa_categorized %>%
+# Average tree height and 35-footers in Broadway East
+thirty_five_footers <- street_trees_nsa_categorized %>%
     select(nbrdesc, tree_ht) %>%
     group_by(nbrdesc) %>%
     filter(tree_ht >= 35) %>%
     summarize(count_35_or_taller = n())
-  ) %>%
-  mutate(perc_35_or_taller = round(100*(count_35_or_taller/total_trees), 2)) %>%
-  mutate(rank_avg_ht = rank(-avg_ht)) %>%
-  filter((nbrdesc %in% target_nsas) | (nbrdesc %in% counterpoint_nsas)) %>%
-  arrange(desc(avg_ht))
 
-```
-
-```{r}
-
-# Plot height by of NSAs of interest using controled averages
-street_trees_nsa_summarized %>%
-  filter((nbrdesc %in% target_nsas) | (nbrdesc %in% counterpoint_nsas)) %>%
-  ggplot(aes(x = reorder(nbrdesc, avg_ht_controled), 
-           y = avg_ht_controled, 
-           fill = factor(is_target_nsa, 
-                         # Rename fill levels in legend
-                         labels=c("Counterpoint NSA"," Target NSA"))
-           )) +
-  geom_col() +
-  coord_flip() +
-  labs(title = "Average Tree Height of Target NSAs",
-       x = "",
-       y = "",
-       fill = "") +
-  scale_fill_manual(values=cbPalette) +
-  theme(legend.position = "bottom")
-
-```
-
-```{r, out.width='1000px'}
-
-# Plot height for all NSAs using controled averages
-# (For an overview, not intended for reading each NSA name)
-ggplot(filter(street_trees_nsa_summarized, !is.na(avg_ht_controled)), 
-       aes(x = reorder(nbrdesc, avg_ht_controled), 
-           y = avg_ht_controled, 
-           fill = factor(is_target_nsa, 
-                         # Rename fill levels in legend
-                         labels=c("Not Target NSA", "Target NSA"))
-           )) +
-  geom_col() +
-  labs(title = "Average Tree Height of NSAs",
-       x = "",
-       y = "",
-       fill = "") +
-  scale_fill_manual(values=cbPalette) +
-  theme(legend.position = "top", 
-        axis.text.x = element_text(angle = 90, hjust = 1, size = 5))
-
-```
-
-### Fact: Broadway East lacks many 35-foot trees
-
-"Here in **Broadway East**, in an area of Baltimore that has suffered from decades of disinvestment, this **lonely 35-footer stands out as one of the neighborhood’s largest sidewalk trees**."
-
-#### Explanation
-
-Broadway East has an average tree height of 5.75 feet. 5.24 percent of the trees there are 35 feet tall or taller.
-
-#### Supporting Code
-
-```{r}
-
-# See average height of trees in Broadway East only
-# and counts/percentages of trees greater than 35 feet tall
 street_trees_nsa_categorized %>%
-  select(nbrdesc, tree_ht) %>%
-  group_by(nbrdesc) %>%
-  summarize(avg_ht = mean(tree_ht),
+    filter(nbrdesc %like% "broadway east|roland park", has_live_tree == "TRUE") %>% 
+    group_by(nbrdesc) %>% 
+    summarize(avg_ht = mean(tree_ht),
             total_trees = n()) %>%
-  left_join(
-    street_trees_nsa_categorized %>%
-    select(nbrdesc, tree_ht) %>%
-    group_by(nbrdesc) %>%
-    filter(tree_ht >= 35) %>%
-    summarize(count_35_or_taller = n())
-  ) %>%
-  mutate(perc_35_or_taller = round(100*(count_35_or_taller/total_trees), 2)) %>%
-  mutate(rank_avg_ht = rank(-avg_ht)) %>%
-  filter(nbrdesc %like% "broadway%")
+    left_join(thirty_five_footers) %>%
+    mutate(perc_35_or_taller = round(100*(count_35_or_taller/total_trees), 2)) %>%
+    select(nbrdesc, avg_ht, count_35_or_taller, perc_35_or_taller)
 
 ```
 
-### Fact: Tree types living on N. Milton in Broadway East
+### Fact: Broadway East is a low-income neighborhood [cq]
+"These new plantings, with thin branches and small leaves, did almost nothing to shield Couther from the sun as he worked to keep them alive in the heat of this low-income neighborhood."
 
-"The rest of the living trees on this street -- 10-foot red maples, London planes and elms..."
+#### Explanation [cq]
+The two community statistical areas that include most of Broadway East rank near the bottom in terms of average household income (at 45 and 48 out of 55 CSAs) and percent below the poverty line (10 and 14 out of CSAs).
 
-#### Supporting Code
-
-```{r, rows.print = 25}
-
-# All street trees & locations along N. Milton in Broadway East
-street_trees_nsa_categorized %>%
-  filter((nbrdesc %like% "broadway%") & (street %like% "n milton%") & (condition != "absent")
-         ) %>%
-  select(nbrdesc, address, street, genus_clean, common, dbh, condition, tree_ht, date_inspected = inspect_dt) %>%
-  arrange(street, address)
-
-```
-
-### Fact: Broadway East is a low-income neighborhood
-
-"...in the heat of this low-income neighborhood."
-
-#### Explanation
-
-The CSAs that include Broadway East rank near the bottom in terms of average household income (at 45 and 48 out of 55) and percent below the poverty line (10 and 14).
-
-#### Supporting Code
-
+#### Supporting code and output [cq]
 ```{r}
 
 # See how Broadway East CSAs rank in comparison to the other 53 CSAs in terms of poverty
 csa_tree_temp_demographics %>%
-  mutate(rank_avg_income = rank(-median_household_income),
+   mutate(rank_avg_income = rank(-median_household_income),
          rank_perc_poverty = rank(-percent_of_family_households_living_below_the_poverty_line)) %>%
-  arrange(rank_avg_income) %>%
-  mutate(associated_nsa = case_when(
-    (csa2010 %like% "%clifton%") | (csa2010 %like% "%greenmount%") ~ "broadway east",
-    T ~ NA_character_
-  )) %>%
-  select(csa2010, associated_nsa, 
-         avg_household_income = median_household_income, 
-         perc_below_poverty = percent_of_family_households_living_below_the_poverty_line, 
-         rank_avg_income,
-         rank_perc_poverty) %>%
-  filter(associated_nsa %like% "%broadway east%")
+  filter(str_detect(csa2010,"clifton-berea|greenmount")) %>%
+  select(matches("percent_of_family_households_living_below_the_poverty_line|csa2010|rank")) %>%
+  select(csa2010, rank_avg_income, rank_perc_poverty)
+
+# Neighborhood count
+csa_tree_temp_demographics %>%
+  summarise(count=n())
+
 
 ```
 
-### Fact: McElderry Park temperature, wealth and canopy
+### Fact: McElderry Park temperature, wealth and canopy [cq]
+"Couther lives just south of Broadway East in McElderry Park, the city’s hottest neighborhood and also among its poorest. It also has some of the lowest levels of tree canopy, a disparity Couther said feels unfair."
 
-"...McElderry Park, the city’s **hottest neighborhood** and also **among its poorest**. It also has some of the **lowest levels of tree canopy**..."
+#### Explanation [cq]
+As measured by mean afternoon temperature in August 2018, McElderry Park is the city's hottest neighborhood, at 99.39 degrees. It ranked 260th out of 278 neighborhoods for amount of tree canopy cover in 2015.  The McElderry Park neighborhood is split horizontally across the middle between Madison/East End and Patterson Park North & East community statistical areas. The McElderry Park CSAs have a high poverty rate, ranked 7th and 20th out of 55 CSAs.
 
-#### Explanation
-
-The **McElderry Park** NSA is split horizontally across the middle between **Madison/East End** and **Patterson Park North & East**, both of which contain large portions of surrounding NSAs. 
-
-The McElderry Park CSAs have a high poverty rate, are the first and third hottest CSAs, and have the 52nd and 51st least tree canopy.
-
-#### Supporting Code
-
+#### Supporting code and output [cq]
 ```{r}
 
+# McElderry Park, city's hottest neighborhood
+nsa_tree_temp %>%
+  select(nsa_name, temp_mean_aft) %>%
+  arrange(desc(temp_mean_aft))
+
+# McElderry Park canopy cover
+nsa_tree_temp %>%
+  mutate(canopy_rank = rank(-`15_lid_mean`)) %>%
+  select(nsa_name, `15_lid_mean`, canopy_rank) %>%
+  arrange(`15_lid_mean`) %>%
+  filter(nsa_name == 'mcelderry park')
+
+# Count of neighborhoods 
+nsa_tree_temp %>%
+  summarise(count=n())
+
+# Poverty 
 csa_tree_temp_demographics %>%
   mutate(
     # Wealth
@@ -606,98 +543,63 @@ csa_tree_temp_demographics %>%
          canopy_2015 = `15_lid_mean`,
          rank_canopy
          ) %>%
-  filter(associated_nsa %like% "%mcelderry park%")
+  filter(associated_nsa %like% "%mcelderry park%") %>%
+  select(csa2010, perc_below_poverty, rank_perc_poverty)
+
+# Count of csas
+
+csa_tree_temp_demographics %>%
+  summarise(count=n())
+
 
 ```
 
-### Fact: Broadway East is one of the hottest neighborhoods
+### Fact: Roland Park canopy [cq]
+"Two-thirds of the neighborhood [Roland Park] is covered with tree canopy in the summer. It has more tree canopy than all but a few Baltimore neighborhoods."
 
-"A future where **the hottest city neighborhoods, like Broadway East**, have the kind of dense canopy that help keep places like Roland Park cool as global temperatures rise."
+#### Explanation [cq]
+Roland Park had an average of 65 percent tree canopy cover in 2015. It ranked 9th of Baltimore's 278 neighborhoods for tree canopy. 
 
-#### Explanation
-
-Broadway East is the 16th-hottest NSA out of 278.
-
-#### Supporting Code
-
-```{r}
-
-# Broadway East ranked by mean afternoon heat
-nsa_tree_temp %>%
-  select(nsa_name, temp_mean_aft) %>%
-  mutate(rank = rank(-temp_mean_aft)) %>%
-  filter(nsa_name == "broadway east")
-
-```
-
-
-### Fact: Roland Park has dense canopy and is cool
-
-"A future where the hottest city neighborhoods, like Broadway East, have the kind of **dense canopy that help keep places like Roland Park cool** as global temperatures rise."
-
-#### Explanation
-
-Roland Park is ranked 9th-most dense and 263rd-hottest, out of 278 NSAs.
-
-#### Supporting Code
-
-```{r}
-
-# Roland Park ranked by mean afternoon heat and amount canopy cover
-nsa_tree_temp %>%
-  select(nsa_name, temp_mean_aft, avg_canopy = `15_lid_mean`) %>%
-  mutate(rank_temp = rank(-temp_mean_aft),
-         rank_canopy = (rank(-avg_canopy))) %>%
-  filter(nsa_name %like% "roland%")
-
-```
-
-### Fact: 2/3 of Roland Park is covered in canopy
-
-"Two-thirds of the neighborhood [Roland Park] is covered with tree canopy in the summer."
-
-#### Explanation
-
-Roland Park has an average of .65 percent canopy cover.
-
-#### Supporting Code
-
+#### Supporting code and output [cq]
 ```{r}
 
 # Roland Park's average canopy cover
 nsa_tree_temp %>%
-  select(nsa_name, `15_lid_mean`, `07_lid_mean`) %>%
+  mutate(tree_canopy_rank = rank(-`15_lid_mean`)) %>%
+  select(nsa_name, `15_lid_mean`, tree_canopy_rank) %>%
   filter(nsa_name %like% "roland%")
+
+# Number of neighborhoods
+nsa_tree_temp %>%
+  summarise(count=n())
 
 ```
 
-### Fact: Broadway East has about 10% canopy, 6x Roland Park
-
+### Fact: Broadway East has about 10% canopy [cq]
 "Broadway East has about 10% canopy coverage. That’s 6 times less than Roland Park."
 
-#### Supporting Code
+#### Explanation [cq]
+Broadway East had 10.6 percent canopy coverage in 2015.  Roland Park had 64.5 percent. That's a little more than 6x difference.
 
+#### Supporting code and output [cq]
 ```{r}
 
 # Broadway East and Roland Park's average canopy cover
 nsa_tree_temp %>%
   select(nsa_name, avg_canopy = `15_lid_mean`) %>%
-  filter((nsa_name %like% "broadway%") | (nsa_name %like% "roland%"))
+  filter((nsa_name %like% "broadway%") | (nsa_name %like% "roland%")) %>%
+  spread(nsa_name, avg_canopy) %>%
+  mutate(difference_x = `roland park`/`broadway east`)
 
 ```
 
-### Fact: Inverse relationship between tree cover and temperature
+### Fact: Inverse relationship between tree cover and temperature [cq]
+"Neighborhoods in the north and west have a lot. Neighborhoods in the east have little. Trees have a big impact on temperature. That’s one reason Baltimore’s tree canopy map looks like the inverse of this map, showing the difference in summer temperature averages by neighborhood."
 
-"Trees have a big impact on temperature."
+#### Explanation [cq]
+Trees are a primary driver of neighborhood cooling.  Using Baltimore CSAs, there's an extremely strong inverse relationship (r=-.89) between a CSAs mean afternoon temperature in August 2018 and tree canopy in 2015. The data for the tree canopy graphic and temperature graphic is populated as a table below.   
 
-"That’s one reason Baltimore’s tree canopy map looks like a photonegative of this map, showing the difference in  summer temperature averages by neighborhood."
-
-#### Explanation
-
-When comparing temperature to tree canopy, we see a strong correllation of -.89. In other words, places with high temperatures tend to have fewer trees. This negative correllation confirms the visual representation in the story.
-
-#### Supporting Code
-
+#### Supporting code and output [cq]
 ```{r}
 
 # Correlation matrix of temperature to canopy cover
@@ -707,30 +609,24 @@ csa_tree_temp_demographics %>%
   as.matrix() %>%
   correlate() %>%
   mutate(variable=rowname) %>%
-  select(variable, everything(), -rowname)
+  select(variable, temp_mean_aft) %>%
+  filter(variable != "temp_mean_aft")
+  
+# Data for graphic. Percentage of canopy cover in 2015 and data for mean afternoon temperature in 2018.
+  nsa_tree_temp %>%
+  select(nsa_name, avg_canopy_2015 = `15_lid_mean`, temp_mean_aft) %>%
+  arrange(desc(temp_mean_aft))
 
 ```
 
-```{r}
+### Fact: Roland Park and Broadway East temperature [cq]
+"Roland Park is one of the coolest. Broadway East is one of the hottest."
 
-# Canopy and afternoon temperature averages across neighborhoods
-nsa_tree_temp %>%
-  select(nsa_name, temp_mean_aft, avg_canopy_2015 = `15_lid_mean`)
-
-```
-
-### Fact: Roland park is one of the coolest NSAs, Broadway East is one of the hottest
-
-"Roland Park is one of the coolest."
-
-"Broadway East is one of the hottest."
-
-#### Explanation
+#### Explanation [cq]
 
 Roland Park and Broadway East are ranked at 263 and 16, respectively, in terms of temperature, out of 278 NSAs.
 
-#### Supporting Code
-
+#### Supporting code and output [cq]
 ```{r}
 
 # Afternoon temperature averages of Roland Park and Broadway East
@@ -741,70 +637,42 @@ nsa_tree_temp %>%
 
 ```
 
-### Fact: About 1/4 of families in Broadway East live in poverty
+### Fact: Broadway East poverty [cq]
+"Broadway East, with approximately 1 in 4 families below the poverty line, is also among the poorest neighborhoods." 
+#### Explanation [cq]
+The two CSAs containing most of Broadway East are Greenmount East (24 percent poverty) and Clifton-Berea (27.6 percent poverty). They rank 10th and 14th out of 55 CSAs for highest poverty rate.  
 
-"Broadway East, with approximately 1 in 4 families below the poverty line..."
-
-#### Explanation
-
-When both CSAs containing Broadway East are combined, they show an average of 25.9 percent of families living below the poverty line.
-
-#### Supporting Code
-
-```{r}
-
-# The two CSAs that make up Broadway East average percent below poverty
-csa_tree_temp_demographics %>%
-  mutate(associated_nsa = case_when(
-    (csa2010 %like% "%clifton%") | (csa2010 %like% "%greenmount%") ~ "broadway east",
-    T ~ NA_character_
-  )) %>%
-  filter(associated_nsa == "broadway east") %>%
-  group_by(associated_nsa) %>%
-  summarize(avg_below_poverty_line = mean(percent_of_family_households_living_below_the_poverty_line))
-
-```
-
-### Fact: Broadway East is one of the poorest NSAs
-
-"Broadway East... is also among the poorest neighborhoods."
-
-#### Explanation
-
-The CSAs that include Broadway East rank near the bottom in terms of average household income (at 45 and 48 out of 55).
-
-#### Supporting Code
-
+#### Supporting code and output [cq]
 ```{r}
 
 # See how Broadway East CSAs rank in comparison to the other 53 CSAs in terms of poverty
 csa_tree_temp_demographics %>%
-  mutate(rank_avg_income = rank(-median_household_income)) %>%
-  arrange(rank_avg_income) %>%
+  mutate(rank_poverty = rank(-percent_of_family_households_living_below_the_poverty_line)) %>%
   mutate(associated_nsa = case_when(
     (csa2010 %like% "%clifton%") | (csa2010 %like% "%greenmount%") ~ "broadway east",
     T ~ NA_character_
   )) %>%
   select(csa2010, associated_nsa, 
-         avg_household_income = median_household_income, 
          perc_below_poverty = percent_of_family_households_living_below_the_poverty_line, 
-         rank_avg_income) %>%
+         rank_poverty) %>%
   filter(associated_nsa %like% "%broadway east%")
+
+# Number of CSAs
+csa_tree_temp_demographics %>%
+  summarise(count=n())
+
 
 ```
 
-### Fact: Poorer neighborhoods have less tree cover, with some exceptions
 
-"In Baltimore, as in several other cities, poorer neighborhoods tend to have less tree cover than wealthier areas."
+### Fact: Poorer neighborhoods have less tree cover, with some exceptions [cq]
 
-#### Explanation
+"In Baltimore, as in several other cities, poorer neighborhoods tend to have less tree cover than wealthier areas. Several poor areas have tree cover of less than 10 percent, while several wealthier areas have tree cover of more than 40 percent."
 
-A correlation matrix of poverty and canopy cover shows a negative correlation of -.34. In other words, places with a high poverty rate will have fewer trees, in general.
+#### Explanation [cq]
+There is a moderate, inverse relationship between tree canopy and a CSAs poverty rate (r = -.34).  There is a general trend of places with a high poverty rate having fewer trees, in general, but there are exceptions.
 
-There are some exceptions to this trend, such as Penn North/Reservoir Hill and Greater Rosemont, which both have relatively high rates of both poverty and tree canopy.
-
-#### Supporting Code
-
+#### Supporting code and output [cq]
 ```{r}
 
 # Correlation matrix between poverty and tree canopy
@@ -814,127 +682,25 @@ csa_tree_temp_demographics %>%
   as.matrix() %>%
   correlate() %>%
   mutate(variable=rowname) %>%
-  select(variable, everything(), -rowname)
+  select(variable, `avg_canopy_2015`) %>%
+  filter(variable != `avg_canopy_2015`)
 
-```
-```{r}
-
-# Poverty to canopy GRAPH
+# Examples of poor neighborhoods less than 10, examples of wealthier areas with tree cover more than 40
 csa_tree_temp_demographics %>%
-  # Start ggplot and set x and y for entire plot
-  ggplot(aes(
-    x = percent_of_family_households_living_below_the_poverty_line/100, 
-    y = `07_lid_mean`
-    )) +
-  # This section for the basic scatterplot
-  geom_point(aes(color = `07_lid_mean`),
-             size=4) +
-  # This section for circling all sample neighborhood points
-  geom_point(data = csa_tree_temp_demographics %>%
-               filter((csa2010 %in% target_csas) 
-                      # Patterson Park must be included seperately because of its unique label positioning
-                      | (csa2010 == "Patterson Park North & East") 
-                      ),
-             aes(color = `07_lid_mean`),
-             size=6, shape = 1) +
-  # This section shows the trend line
-  geom_smooth(se = FALSE, # Removes gray banding
-              method = glm, 
-              color = "black") +
-  # This section for labeling Canton, etc.
-  ggrepel::geom_label_repel(data = csa_tree_temp_demographics %>%
-                              filter(csa2010 %in% target_csas) %>%
-                              mutate(csa2010 = case_when(
-                                csa2010 == "Greenmount East" ~ "Greenmount East \n(includes part of Broadway East)", 
-                                csa2010 == "Clifton-Berea" ~ "Clifton-Berea \n(includes part of Broadway East)",
-                                T ~ csa2010)),
-            aes(label = csa2010),
-            min.segment.length = .1,
-            segment.alpha = .5,
-            alpha = .85,
-            nudge_x = .05,
-            nudge_y = .06) +
-  # This section for labeling Patterson Park (so it can be nudged)
-  ggrepel::geom_label_repel(data = csa_tree_temp_demographics %>%
-                              filter(csa2010 == "Patterson Park North & East") %>%
-                              mutate(csa2010 = case_when(
-                                csa2010 == "Patterson Park North & East" ~ "Patterson Park North & East \n(includes most of McElderry Park)",
-                                T ~ csa2010)),
-                            aes(label = csa2010),
-                            min.segment.length = .1,
-                            segment.alpha = .5,
-                            alpha = .85,
-                            nudge_x = -.06,
-                            nudge_y = .03) +
-  # Colors and label formatting follow
-  #coord_flip() +
-  scale_colour_gradient(low = "#E0FEA9", high = "#144A11") +
-  labs(title = "Poverty to Tree Canopy",
-       subtitle = "Percent of households living below the poverty line \ncompared to the percent of tree cover in the area",
-       x = "Percent of households living below the poverty line",
-       y = "Percent of land covered by trees") +
-  scale_x_continuous(label = scales::percent_format(accuracy = 1.0),
-                     breaks = seq(0, 1, .1)) + 
-  scale_y_continuous(label = scales::percent_format(accuracy = 1.0),
-                     breaks = seq(0, 1, .1)) + 
-  theme_bw() +
-  theme(legend.position = "none",
-        plot.title = element_text(size = 20),
-        plot.subtitle = element_text(size = 12))
-
-```
-
-```{r, columns.print=5}
-
-# Show exceptions to poverty/canopy correlation
-csa_tree_temp_demographics %>%
-  select(csa2010, 
-         perc_below_poverty = percent_of_family_households_living_below_the_poverty_line,
+   select(csa2010, perc_below_poverty = percent_of_family_households_living_below_the_poverty_line,
          avg_canopy_2015 = `15_lid_mean`) %>%
-  mutate(rank_perc_poverty = rank(-perc_below_poverty),
-         rank_perc_canopy = rank(-avg_canopy_2015)) %>%
-  arrange(rank_perc_canopy) %>%
-  filter((csa2010 %like% "%penn north%") | (csa2010 %like% "%rosemont%"))
+   arrange(desc(perc_below_poverty)) %>%
+   filter(str_detect(csa2010, "madison|clifton|southeastern|coldspring|guilford|cheswolde"))
 
 ```
 
+### Fact: Roland Park and Broadway East [cq]
+Most of Roland Park — today one of the wealthiest and whitest parts of Baltimore — was classified in the 1930s as “still desirable,” with some parts labeled “best” and others as “definitely declining. In the 1930s, Broadway East — today one of the poorest parts of Baltimore, with one of the highest percentages of African Americans — was labeled “definitely declining” and “hazardous.
 
-### Fact: Broadway East and Roland Park canopy correlates to historic redlining
+#### Explanation [cq]
+Roland Park is ranked 53 of 55 for percent of people living below the poverty line, and 3rd of 55 for percent of white residents. Broadway East -- split between Clifton-Berea and Greenmount East -- is ranked 10th/14th for poverty and 10th/9th for percent of black residents.
 
-"Most of Roland Park ... was classified as “still desirable,” with some parts labeled “best” and others as “definitely declining.""
-
-"Broadway East ... was labeled “definitely declining” and “hazardous.”"
-
-#### Explanation
-
-For this section, reporters looked at overlapping shapefiles in QGIS and made determinations visually. _[SEAN] may run computations later_.
-
-#### Supporting Code
-
-```{r}
-
-# Summaries of canopy-to-area percent for each redlining classification
-redlining_tree %>%
-  group_by(holc_grade, grade_descr) %>%
-  summarise(total_area_pixels = sum(`count_all_pix_15`),
-            total_canopy_pixels = sum(`sum_canopy_pix_15`)) %>%
-  mutate(avg_canopy_perc = round(100*(total_canopy_pixels/total_area_pixels), 2))
-```
-
-### Fact: Roland Park is one of Baltimore's wealthiest and whitest; Broadway East is one of the poorest and blackest
-
-"Most of Roland Park -- today one of the wealthiest and whitest parts of Baltimore..."
-
-"Broadway East -- today one of the poorest parts of Baltimore, with one of the highest percentages of African Americans..."
-
-#### Explanation
-
-Roland Park is ranked 53 of 55 for percent of people living below the poverty line, and 3rd of 55 for percent of white residents.
-
-Broadway East -- split between Clifton-Berea and Greenmount East -- is ranked 10th/14th for poverty and 10th/9th for percent of black residents.
-
-#### Supporting Code
-
+#### Supporting code and output [cq]
 ```{r}
 
 # Show poverty and race in Roland Park and Broadway East
@@ -954,173 +720,74 @@ csa_tree_temp_demographics %>%
   mutate(rank_poverty = rank(-perc_below_poverty),
          rank_black = rank(-perc_black),
          rank_white = rank(-perc_white)) %>%
-  filter(csa2010 %in% target_csas) %>%
+  filter(!is.na(associated_nsa)) %>%
   select(csa2010, associated_nsa, rank_poverty, rank_black, rank_white, everything()) %>%
   arrange(associated_nsa)
 
 ```
 
+### Fact: Broadway East and Roland Park canopy correlates to historic redlining [cq]
+“The areas with the least amount of tree cover today are in those redlined neighborhoods,” said Morgan Grove, a research forester with the U.S. Forest Service who has studied the issue, 11% on average. The neighborhoods once labeled “best” have the most, with 45% on average. 
 
-### Fact: Baltimore tree cover went from 27% in 2007 to 28% in 2015
+#### Explanation [cq]
+We computed the 2015 tree canopy percentage for HOLC graded areas, seen below.
 
-"Baltimore was at 28% in 2015, up from 27% in 2007."
+#### Supporting code and output [cq]
+```{r}
 
-#### Explanation
-
-This statistic is according to researchers with the U.S. Forest Service and the University of Vermont. Our analysis shows a smaller change.
-
-#### Supporting Code
-
-```{r eval=FALSE}
-
-# Calculate citywide canopy change
-citywide_lidar_data %>%
-  rename_all(tolower) %>%
-  mutate_if(is.character, tolower) %>%
-  select(county, `07_mean`, `15_mean`) %>%
-  mutate(real_change = round(`15_mean` - `07_mean`, 4),
-         perc_change = round((`15_mean` - `07_mean`)/`07_mean`, 4)
-         )
-
+# Summaries of canopy-to-area percent for each redlining classification
+redlining_tree %>%
+  group_by(holc_grade, grade_descr) %>%
+  summarise(total_area_pixels = sum(`count_all_pix_15`),
+            total_canopy_pixels = sum(`sum_canopy_pix_15`)) %>%
+  mutate(canopy_perc = round(100*(total_canopy_pixels/total_area_pixels), 2))
 ```
 
-### Fact: Hot East Baltimore NSAs are nowhere near 40% canopy
+### Fact: Hot East Baltimore NSAs are nowhere near 40% canopy [cq]
+Even with a flurry of planting in recent years, Broadway East and other hot East Baltimore neighborhoods are nowhere near that level [40%] and won’t get there anytime soon — if ever.
 
-"Even with a flurry of planting in recent years, Broadway East and other hot East Baltimore neighborhoods are nowhere near 40%..."
+#### Explanation [cq]
+Of East Baltimore neighborhoods of interest, only two are above 10% canopy cover.
 
-#### Explanation
-
-Of the NSAs of interest, only two are above 10% canopy cover.
-
-#### Supporting Code
-
+#### Supporting code and output [cq]
 ```{r, rows.print=15}
+
+key_nsas <- c("Berea", "Broadway East", "Oliver", "Middle East", 
+                 "Biddle Street","Milton-Montford", "Madison-Eastend", 
+                 "CARE", "McElderry Park", "Ellwood Park/Monument", 
+                 "Patterson Place", "Patterson Park Neighborhood", 
+                 "Baltimore Highlands", "Highlandtown", 
+                 "Upper Fells Point") %>%
+                lapply(tolower)
 
 # Calculate average canopy percent of area in NSAs of interest
 nsa_tree_temp %>%
-  select(nsa_name, mean_canopy_2015 = `15_lid_mean`) %>%
-  filter(nsa_name %in% target_nsas) %>%
+  select(nsa_name, mean_canopy_2015 = `15_lid_mean`, temp_mean_aft) %>%
+  filter(nsa_name %in% key_nsas) %>%
   mutate(avg_canopy_perc_2015 = round((mean_canopy_2015)*100, 2)) %>%
-  select(-mean_canopy_2015)
+  select(-mean_canopy_2015) %>%
+  arrange(desc(temp_mean_aft))
 
 ```
 
-### Fact: Canopy growth has been "measured"
-
-"...canopy growth has been relatively measured despite recent planting efforts."
-
-#### Explanation
-
-As shown above, the canopy has only increased by a small amount.
-
-#### Supporting Code
-
-```{r eval=FALSE}
-
-# Calculate citywide canopy change
-citywide_lidar_data %>%
-  rename_all(tolower) %>%
-  mutate_if(is.character, tolower) %>%
-  select(county, `07_mean`, `15_mean`) %>%
-  mutate(real_change = round(`15_mean` - `07_mean`, 4),
-         perc_change = round((`15_mean` - `07_mean`)/`07_mean`, 4)
-         )
-
-```
 
 
 ### Fact: 1/3 of Broadway East blocks lost canopy cover, but overall canopy increased by 1.6 points; Roland Park increased by 2.1 points
+
+///TAKE OUT FIRST LINE, CAN'T FACT CHECK
 
 "Between 2007 and 2015, about a third of blocks in Broadway East lost tree canopy cover, while about two-thirds gained. Overall, tree canopy in Broadway East grew 1.6 percentage points, from 9% to 10.6%, over those eight years."
 
 "Roland Park, already covered with trees, grew by 2.1 percentage points."
 
-#### Supporting Code
+#### Supporting code and output
 
 ```{r rows.print=19}
 
 # NSAs of interest in terms of average canopy and change as percentage point
 nsa_tree_temp %>%
   select(nsa_name, `07_lid_mean`, `15_lid_mean`, lid_change_percent_point) %>%
-  filter((nsa_name %in% target_nsas) | (nsa_name %in% counterpoint_nsas)) %>%
-  mutate(lid_change_percent_point = round(lid_change_percent_point*100, 2),
-         `07_lid_mean` = round(`07_lid_mean`*100, 2),
-         `15_lid_mean` = round(`15_lid_mean`*100, 2)) %>%
-  rename(avg_canopy_2007 = `07_lid_mean`,
-         avg_canopy_2015 = `15_lid_mean`,
-         change_perc_point = lid_change_percent_point
-         )
-
-```
-
-### Fact: Citywide canopy loss and gain
-
-"While some neighborhoods showed gains and others, losses, the net gain was about 1%."
-
-#### Explanation
-
-Using shapefiles, reporters calculated the percent of land area occupied by canopy that were tagged as canopy gained and canopy lost.
-
-#### Supporting Code
-
-```{r eval=FALSE}
-
-# Calculate gains and losses as percentages of the total area
-canopy_2007_2015_gains_losses %>%
-  # Clean
-  rename_all(tolower) %>%
-  mutate_if(is_character, tolower) %>%
-  # Categorize
-  group_by(class) %>%
-  summarise(totals = sum(shape_area)) %>%
-  spread(class, totals) %>%
-  rename(no_change = `no change`) %>%
-  # Calculate
-  mutate(old_07 = loss + no_change) %>%
-  mutate(gain_as_perc = (gain/old_07)*100,
-         loss_as_perc = (loss/old_07)*100,
-         difference = round(gain_as_perc - loss_as_perc, 2))
-
-```
-
-### Fact: 
-
-"Those gains and losses were not distributed equitably. About 40% of city neighborhoods had net losses. The rest had net gains..."
-
-```{r}
-
-# Count and percent of NSAs that gained and lost canopy
-as.data.frame(table(sign(nsa_tree_temp$lid_change_percent))) %>%
-  mutate(total = sum(Freq),
-         perc = round(100*(Freq/total), 2)) %>%
-  mutate(type = case_when(
-    Var1 == -1 ~ "losses",
-    Var1 == 1 ~ "gains",
-    T ~ NA_character_
-  )) %>%
-  select(
-    type,
-    number = Freq,
-    total, perc
-  )
-
-
-```
-
-### Fact: The hottest NSAs did not grow enough to correct canopy inequity
-
-"...none of Baltimore’s hottest neighborhoods saw enough growth to even approach correcting the [tree canopy] inequity."
-
-#### Supporting Code
-
-```{r rows.print=19}
-
-# NSAs of interest in terms of average canopy and change as percentage point
-# and ranked by temperature out of 278 NSAs
-nsa_tree_temp %>%
-  select(nsa_name, temp_mean_aft, `07_lid_mean`, `15_lid_mean`, lid_change_percent_point) %>%
-  mutate(rank_by_temp =rank(-temp_mean_aft)) %>%
-  filter((nsa_name %in% target_nsas) | (nsa_name %in% counterpoint_nsas)) %>%
+  # filter((nsa_name %in% target_nsas) | (nsa_name %in% counterpoint_nsas)) %>%
   mutate(lid_change_percent_point = round(lid_change_percent_point*100, 2),
          `07_lid_mean` = round(`07_lid_mean`*100, 2),
          `15_lid_mean` = round(`15_lid_mean`*100, 2)) %>%
@@ -1128,133 +795,76 @@ nsa_tree_temp %>%
          avg_canopy_2015 = `15_lid_mean`,
          change_perc_point = lid_change_percent_point
          ) %>%
-  select(nsa_name, temp_mean_aft, rank_by_temp, everything())
+  filter(nsa_name == "roland park" | nsa_name == "broadway east")
 
 ```
 
-### Fact: Broadway East has ~1,000 spaces to put a tree, but most require breaking concrete
+### Fact: Citywide canopy loss and gain [cq]
+Those gains and losses were not distributed equitably. About 40% of city neighborhoods had net losses. The rest had net gains, but the increases in Baltimore's hottest neighborhoods didn't come close to correcting the inequity.
 
-"The city has identified about a thousand spaces in Broadway East where new trees could go, but 96% are currently covered by sidewalk."
+#### Explanation [cq]
+Using shapefiles, reporters calculated the percent of land area occupied by canopy that were tagged as canopy gained and canopy lost.
 
-#### Supporting Code
+#### Supporting code and output [cq]
+```{r eval=FALSE}
 
-```{r, columns.print=7}
+# Calculate gains and losses
+nsa_tree_temp %>%
+  select(nsa_name,`07_lid_mean`, `15_lid_mean`, lid_change_percent_point) %>%
+  mutate(gain_loss_nc = case_when(lid_change_percent_point > 0 ~ "gain",
+                                  lid_change_percent_point < 0 ~ "loss",
+                                  lid_change_percent_point == 0 ~ "no change"
+                                  )) %>%
+  group_by(gain_loss_nc) %>%
+  summarise(count=n()) %>%
+  mutate(total_nhoods = sum(count),
+         pct_of_total = round((count/total_nhoods)*100, 2)
+         ) 
+  
+# Gains and losses in hottest nieghborhoods. 
+nsa_tree_temp %>%
+  select(nsa_name, temp_mean_aft, `15_lid_mean`, lid_change_percent_point) %>%
+  arrange(desc(temp_mean_aft))
 
-# Find percent of suitable spaces at each difficulty level for Broadway East
-street_trees_nsa_categorized %>%
-  # Count the spaces at each level
-  select(nbrdesc, difficulty_level_num, difficulty_level) %>%
-  filter((nbrdesc %like% "broadway%") & (difficulty_level != "has live tree")) %>%
-  group_by(nbrdesc, difficulty_level_num, difficulty_level) %>%
-  summarize(count_spaces = n()) %>%
-  ungroup() %>%
-  mutate(total_vacant_spaces = sum(count_spaces)) %>%
-  # Count the suitable spaces in Broadway East
-  left_join(
-    street_trees_nsa_categorized %>%
-      select(nbrdesc, difficulty_level_num, difficulty_level) %>%
-      filter((nbrdesc %like% "broadway%") & (difficulty_level != "has live tree") & (difficulty_level != "unsuitable")) %>%
-      group_by(nbrdesc, difficulty_level_num, difficulty_level) %>%
-      summarize(count_suitable = n()) %>%
-      ungroup() %>%
-      mutate(total_suitable = sum(count_suitable)) %>%
-      select(-count_suitable)
-  ) %>%
-  # Calculate the percent of suitable spaces at each difficulty
-  mutate(perc_at_difficulty = round(100*(count_spaces/total_suitable), 2))
+
 
 ```
 
-### Fact: There is a 35-foot Callery pear tree in front of a specific house on E. Lanvale St. in fair condition
-
-"...the 35-foot Callery pear tree in front of Mary Boyd’s rowhouse on East Lanvale Street in Broadway East..."
-
-"Her pear tree is in “fair” condition, according to the city."
-
-#### Explanation
-
-Every tree on the Broadway East stretch of E. Lanvale St. is listed below.
-
-#### Supporting Code
-
-```{r, rows.print = 25}
-
-street_trees_nsa_categorized %>%
-  filter(
-    ((nbrdesc %like% "broadway%") & (street %like% "%lanvale%")) &
-      (condition != "absent")
-    ) %>%
-  select(nbrdesc, address, street, genus_clean, common, dbh, tree_ht, condition, date_inspected = inspect_dt) %>%
-  arrange(street, address)
-
-```
-
-### Fact: A 35-foot tree is unusual in Broadway East and average for Roland Park
-
+### Fact: A 35-foot tree is unusual in Broadway East and average for Roland Park [cq]
 "This [35-foot Callery pear tree in front of Mary Boyd’s rowhouse on East Lanvale Street in Broadway East is] exemplary for Broadway East, average in Roland Park..."
 
-#### Explanation
+#### Explanation [cq]
+Roland Park has a high percentage of trees 35 feet tall and taller; Broadway East has a low percentage. The average height of trees in Roland Park is about 35 feet. In Broadway East, it's about 21 feet.
 
-Roland Park has a high percentage of trees 35 feet tall and taller; Broadway East has a low percentage. The average height of trees in Roland Park is about 31 feet. In Broadway East, it's about 6 feet.
-
-#### Supporting Code
-
+#### Supporting code and output [cq]
 ```{r}
 
-# See average height of trees in Broadway East and Roland Park
-# and counts/percentages of trees greater than 35 feet tall
-street_trees_nsa_categorized %>%
-  select(nbrdesc, tree_ht) %>%
-  group_by(nbrdesc) %>%
-  summarize(avg_ht = mean(tree_ht),
-            total_trees = n()) %>%
-  left_join(
-    street_trees_nsa_categorized %>%
+
+# Average tree height and 35-footers in Broadway East
+thirty_five_footers <- street_trees_nsa_categorized %>%
     select(nbrdesc, tree_ht) %>%
     group_by(nbrdesc) %>%
     filter(tree_ht >= 35) %>%
     summarize(count_35_or_taller = n())
-  ) %>%
-  mutate(perc_35_or_taller = round(100*(count_35_or_taller/total_trees), 2)) %>%
-  mutate(rank_avg_ht = rank(-avg_ht)) %>%
-  filter((nbrdesc %like% "roland%") | (nbrdesc %like% "broadway%")) %>%
-  arrange(desc(avg_ht))
 
-```
-
-### Fact: Number, condition and height of other trees on the E. Lanvale St. block
-
-"There are two other trees on her side of the block, a pair of 35-foot red maples. The city graded them in poor condition and has identified the trees -- and their thinning canopy -- for removal."
-
-#### Explanation
-
-According to [the data schema]("https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/documentation/street-tree-inventory-spec-sheet.pdf") provided by Baltimore City Recreation & Parks, page 11, a "tree removal" value in the "Maintenance Needs" field means: "Tree must be removed. The tree is either dead, or no remedial action can alleviate the poor condition of a tree."
-
-#### Supporting Code
-
-```{r}
-
-# All trees along the Broadway East stretch of E. Lanvale St.
 street_trees_nsa_categorized %>%
-  filter(
-    ((nbrdesc %like% "broadway%") & (street %like% "%lanvale%")) &
-      (condition != "absent")
-    ) %>%
-  select(nbrdesc, address, street, genus_clean, common, dbh, tree_ht, condition, mt, date_inspected = inspect_dt) %>%
-  arrange(common, address)
+    filter(nbrdesc %like% "broadway east|roland park", has_live_tree == "TRUE") %>% 
+    group_by(nbrdesc) %>% 
+    summarize(avg_ht = mean(tree_ht),
+            total_trees = n()) %>%
+    left_join(thirty_five_footers) %>%
+    mutate(perc_35_or_taller = round(100*(count_35_or_taller/total_trees), 2)) %>%
+    select(nbrdesc, avg_ht, count_35_or_taller, perc_35_or_taller)
 
 ```
 
-### Fact: Trees in Broadway East are less healthy than those in Roland Park and similar NSAs
-
+### Fact: Trees in Broadway East are less healthy than those in Roland Park and similar NSAs [cq]
 "Unfortunately, the larger street trees in this neighborhood are simply less healthy than they are in cooler neighborhoods to the north. Less than half of trees with a trunk larger than 6 inches in diameter were labeled “good” by the city’s most recent street tree census, compared to about 75% in Roland Park."
 
-#### Explanation
-
+#### Explanation [cq]
 When looking at larger trees, Roland Park is ranked 28th in for percent in good condition. Broadway East, by contrast, is ranked 227th of 277 NSAs.
 
-#### Supporting Code
-
+#### Supporting code and output [cq]
 ```{r, rows.print = 19}
 
 # Find counts of each tree condition in NSAs of interest, and calculate the percentage that are in good condition
@@ -1277,38 +887,29 @@ street_trees_nsa_categorized %>%
   # Rank by percent
   mutate(rank_by_perc_good = rank(-perc_good)) %>%
   # Filter for NSAs of interest
-  filter((nbrdesc %in% target_nsas) | (nbrdesc %in% counterpoint_nsas))
+  # filter((nbrdesc %in% target_nsas) | (nbrdesc %in% counterpoint_nsas))
+  filter(nbrdesc == "roland park" | nbrdesc == "broadway east")
 
 ```
 
-### Fact: The BPD has requested at least around 100 trees be trimmed to clear CCTV views
-
-"Since early 2018, trees were removed or trimmed back nearly 100 times across the city at the request of the police department, records show, including one a few blocks south of Broadway East."
-
-#### Explanation
-
-At least `# r nrow(cctv_cameras_street_trees)` trees have been marked for trimming or removal since early 2018.
-
-#### Code
-
-```{r eval=FALSE, rows.print = 15}
-
-# nrow(cctv_cameras_street_trees)
-
-```
-
-### Fact: The poorest CSAs have higher crime rates
-
+### Fact: The poorest CSAs have higher crime rates [cq]
 "In Baltimore’s poorest neighborhoods, which generally have higher crime rates..."
 
-#### Supporting Code
+#### Explanation [cq]
+There is a moderate positive correlation between violent crime rates and poverty rates in Baltimore community statistical areas (r = .42)
 
+#### Supporting code and output [cq]
 ```{r, rows.print = 25}
 
-# Show CSAs arranged by percent_of_family_households_living_below_the_poverty_line to compare to rates of violent crime
+# Build correlation matrix between poverty and tree canopy
 csa_tree_temp_demographics %>%
-  select(csa2010, perc_below_poverty = percent_of_family_households_living_below_the_poverty_line, violent_crime_rate_per_1_000_residents) %>%
-  arrange(desc(perc_below_poverty))
+  select(perc_below_poverty = percent_of_family_households_living_below_the_poverty_line, violent_crime_rate_per_1_000_residents) %>%
+  as.matrix() %>%
+  correlate() %>%
+  mutate(variable=rowname) %>%
+  select(variable, perc_below_poverty) %>%
+  filter(variable == "violent_crime_rate_per_1_000_residents")
+
 
 ```
 
@@ -1318,50 +919,36 @@ csa_tree_temp_demographics %>%
 
 #### Explanation
 
-[INCOMPLETE] [SEAN]
 
-#### Supporting Code
 
-```{r}
-
-# Code here
-
-```
-
-## For NPR
-
-### Fact: Franklin Square tree canopy in recent years (for NPR)
-
-Audio Script: "The neighborhood where Shakira Franklin [Franklin Square] lives has increased its tree canopy over time."
-Web Story: "The neighborhood where Shakira Franklin lives has increased its tree canopy in recent years."
-#### Explanation
-
-In 2007, 14.2 percent of the neighborhood was covered by tree canopy in the summer.  By 2015, that had increased to 16.1 percent, a 1.9 percentage point increase. 
-
-#### Supporting Code
+#### Supporting code and output
 
 ```{r}
 
-nsa_tree_temp %>%
-  select(nsa_name, `avg_canopy_%_07` = `07_lid_mean`, `avg_canopy_15` = `15_lid_mean`, `%_point_change` = lid_change_percent_point) %>%
-  filter(nsa_name == "franklin square")
+csa_tree_temp_demographics %>%
+  select(csa2010, matches("vacant_and_abandoned")) %>%
+  filter(str_detect(csa2010,"clifton-berea|greenmount"))
+
+# Build correlation matrix between poverty and tree canopy
+csa_tree_temp_demographics %>%
+  select(perc_below_poverty = percent_of_family_households_living_below_the_poverty_line,
+         avg_canopy_2015 = `15_lid_mean`) %>%
+  as.matrix() %>%
+  correlate() %>%
+  mutate(variable=rowname) %>%
+  select(variable, perc_below_poverty) %>%
+  filter(variable == "avg_canopy_2015")
+
+# Rank of tree cover and poverty rate for Clifton-Berea and Greenmount East (which holds most of Broadway East)
+csa_tree_temp_demographics %>%
+  mutate(poverty_rank = rank(-percent_of_family_households_living_below_the_poverty_line),
+         canopy_rank = rank(-`15_lid_mean`)) %>%
+  filter(str_detect(csa2010,"clifton-berea|greenmount")) %>%
+  select(matches("percent_of_family_households_living_below_the_poverty_line|csa2010|rank"))
+
+# Total CSAs
+csa_tree_temp_demographics %>%
+  summarise(count=n())  
 
 ```
 
-### Fact: Franklin Square tree canopy level (for NPR)
-
-Web story and Audio Script But by 2015, it [Franklin Square] was still among the city's lowest. 
-
-#### Explanation
-
-In 2015, two-thirds of Baltimore's 278 neighborhoods had more tree canopy than Franklin Square's 16 percent coverage. 
-
-```{r}
-
-nsa_tree_temp %>%
-  select(nsa_name, `avg_canopy_15` = `15_lid_mean`) %>%
-  arrange(nsa_name) %>%
-  mutate(rank = dense_rank(desc(`avg_canopy_15`)), pct_nhoods_w_more_tree_canopy = (rank/max(rank))) %>%
-  filter(nsa_name == "franklin square")
-
-```
