@@ -272,7 +272,7 @@ EMS_all %>%
 
 **Web Story:** "But calls increased for chronic conditions too: EMS calls for chronic obstructive pulmonary disorder (COPD) increased by nearly 70 percent. Calls for respiratory distress increased by 20 percent. Calls for cardiac arrest rose by 80 percent and those for high blood pressure more than doubled. Other conditions also spiked: Psychiatric disorders, substance abuse and dehydration, among others."
 
-**Web Story:** "And living day after day in an environment that's literally hotter isn't just uncomfortable, it can have dire and sometimes deadly health consequences – a fact we found reflected in Baltimore's soaring rates of emergency calls and hospital admissions when the heat index spiked to dangerous levels." /// THE LAST CLAUSE OF THIS SENTENCE HAS AN ISSUE.  "soaring rates of emergency calls" is supported by my analysis.  I don't have the data to add "hospital admissions" to this.  Unless you're getting the soaring rates of hospital admissions from another source, I'd suggest pulling "and hospital admissions" from this.
+**Web Story:** " And living day after day in an environment that's literally hotter isn't just uncomfortable, it can have dire and sometimes deadly health consequences – a fact we found reflected in Baltimore's soaring rates of emergency calls when the heat index spiked to dangerous levels." 
 
 #### Explanation [cq]
 By aligning emergency medical calls in Baltimore in summer 2018 for select conditions that are affected by heat with the heat index in Baltimore at the time of call, we were able to compare how rates differed when the heat index was below 80 degrees and above 103, the level the NWS defines as "dangerous". The second column reflects the increase in calls when the temperature rose.

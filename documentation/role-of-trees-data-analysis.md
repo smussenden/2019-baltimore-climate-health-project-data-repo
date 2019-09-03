@@ -1333,7 +1333,7 @@ csa_tree_temp_demographics %>%
 #### Explanation
 
 This statistic is according to researchers with the U.S. Forest Service
-and the University of Vermont. Our analysis shows a smaller change.
+and the University of Vermont Spatial Analysis Lab. Our analysis shows a smaller change.
 
 #### Supporting Code
 

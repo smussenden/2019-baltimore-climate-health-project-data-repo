@@ -257,7 +257,7 @@ rm(list=setdiff(ls(), c("all_temp_block", "all_temp_zcta", "all_temp_nsa", "all_
 
 ## Load and Clean Tree Canopy LIDAR Data
 
-The U.S. Forest Service and the University of Vermont Spatial Analysis Lab created detailed maps of Baltimore's tree canopy in 2007 and 2015 using LIDAR and aerial imagery data. (Citation: O'Neil-Dunne J. 2017. GIS Shapefile, Tree Canopy Change 2007 - 2015 - Baltimore City. Environmental Data Initiative. https://doi.org/10.6073/pasta/79c1d2079271546e61823a98df2d2039)
+The U.S. Forest Service and the University of Vermont Spatial Analysis Lab Spatial Analysis Lab created detailed maps of Baltimore's tree canopy in 2007 and 2015 using LIDAR and aerial imagery data. (Citation: O'Neil-Dunne J. 2017. GIS Shapefile, Tree Canopy Change 2007 - 2015 - Baltimore City. Environmental Data Initiative. https://doi.org/10.6073/pasta/79c1d2079271546e61823a98df2d2039)
 
 The original shapefile data was presented in terms of "no change," "gain," and "loss" categories. To perform the following analysis, reporters restructured the data within QGIS to represent 2007 and 2015 canopy coverage and [calculated zonal statistics](https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/documentation/qgis-directions/qgis-how-tos.md#d) (mean and median) at each year. They then exported the data from QGIS into CSVs, loaded them into R and joined them into master tables for further processing and analysis.
 

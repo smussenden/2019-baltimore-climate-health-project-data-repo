@@ -1249,7 +1249,7 @@ blocks_tree_temp_demographics %>%
 
 ### Fact: East Baltimore Tree Cover
 
-"And in 2015, many East Baltimore neighborhoods had a tree canopy of about 10%, according to a Howard Center analysis of tree canopy data gathered by researchers at the U.S. Forest Service and the University of Vermont." THIS COULD BE CHANGED IF NOT CHANGED IN AP
+"And in 2015, many East Baltimore neighborhoods had a tree canopy of about 10%, according to a Howard Center analysis of tree canopy data gathered by researchers at the U.S. Forest Service and the University of Vermont Spatial Analysis Lab." THIS COULD BE CHANGED IF NOT CHANGED IN AP
 
 #### Explanation
 

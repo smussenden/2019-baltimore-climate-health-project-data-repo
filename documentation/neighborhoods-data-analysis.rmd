@@ -276,7 +276,7 @@ dmh %>%
 ```
 
 ### Fact: Average annual temperature increase in U.S., Baltimore [cq]
-"Average annual temperatures in Baltimore have gone up more than 3 degrees F over the last century, nearly twice as much as the rest of the country."
+"Average annual temperatures in Baltimore have gone up more than 3 degrees over the last century, nearly twice as much as the rest of the country."
 
 #### Explanation [cq]
 To compute this average annual change over the last century, we pulled historical average annual temperatures between 1895 and 2018 and annual departure from the mean temperature for Baltimore and the U.S. from the National Climactic Data Center and used linear regression to examine the trend and produce a line of best fit through plotted points.  We took the slope of the line of best fit and multiplied it by the number of years to arrive at the temperature increase for Baltimore (3.4 degrees F), the U.S. (1.9 degrees F) and the difference between the two.  Baltimore increased by 3.4 degrees F, 80 percent (nearly twice as much) as the U.S. (1.9 percent).  A note: we got the idea to use this method from the excellent Washington Post interactive ["2°C: BEYOND THE LIMIT"](https://www.washingtonpost.com/graphics/2019/national/climate-environment/climate-change-america/), which arrived at the same figures as we did for Baltimore and the U.S.
@@ -436,9 +436,7 @@ nsa_tree_temp %>%
 ```
 
 ### Fact: Heat and chronic illness
-"Residents in these neighborhoods have higher rates of chronic illnesses affected by heat, including asthma and COPD."
-///Should we change this to "residents in hotter areas"
-///This uses Median. If median 
+"Residents in the hottest areas have higher rates of chronic illnesses affected by heat, including asthma and COPD."
 
 #### Explanation 
 Using condition prevalance rates from inpatient hospital admissions and emergency room visits, which are only available by ZIP code, and the median afternoon temperature of Baltimore ZIP codes, as calculated in the urban heat island data. The correlation coefficient for people diagnosed with asthma during hospital visits (r=.55) and emergency room visits (r=.49), and people diagnosed with COPD during hospital visits (r=.67) and emergency room visits (r=.57), indicating strong to moderate positive relationship between heat and asthma and copd rates.  This is not causal.  In hotter areas, rates of asthma and copd are higher, and vice versa. 
@@ -496,8 +494,7 @@ EMS_all %>%
 ```
 
 ### Fact: Hot neighborhoods have lower incomes
-"Households in the city’s hottest areas have lower incomes, which means the residents don’t have the resources to move out."
-//WE SHOULD CHANGE THIS TO POORER
+"The city’s hottest areas are poorer, which means the residents don’t have the resources to move out."
 
 #### Explanation
 In Baltimore's "community statistical areas", we examined the relationship between heat (mean afternoon temperature in our urban heat island data) and poverty.  Where an r of 1 would indicate a perfect positive linear relationship and an r of -1 would indicate a perfect negative linear relationship and 0 indicating no relationship. There were moderate correlations with poverty (r =.4).
@@ -679,6 +676,11 @@ The average temperature between July 16 and July 22 was 94.2 degrees, hotter tha
 #### Supporting code and output
 ```{r}
 
+dmh %>%
+  filter(year == 2019) %>%
+  filter(date >= "2019-06-21",
+         date <= "2019-09-21") 
+
 # compute means for the summer
 summer_means <- dmh %>%
   filter(year == 2019) %>%
@@ -725,8 +727,6 @@ dmh %>%
 ``` 
 
 ### Fact: Heat index in the bedroom
-"The highest average hourly heat index reading in the bedroom was 113 degrees; it averaged 98 degrees during the seven-day period."
-NEEDS TO BE REWRITTEN AS
 "The heat index reached 113 degrees at 8 p.m. on July 19; it averaged 98 degrees during the seven-day period."
 
 #### Explanation
@@ -858,28 +858,6 @@ stephanie_day_hourly_averages %>%
 
 ```
 
-### Fact: Pingley's house at 7 p.m. Friday, July 19
-"At 7 p.m. Friday, the heat index in Baltimore hit 103 degrees. Inside the bedroom Stephanie Pingley’s niece shares with one of Pingley’s three sons, it was 9 degrees hotter, with a heat index of 116 degrees. All of her boys have asthma."
-GAH: THIS SHOULD SAY. NEEDS FIXING ON WEB AND IN AP VERSION
-"At 7 p.m. Friday, the heat index in Baltimore hit 103 degrees. Inside the bedroom Stephanie Pingley’s niece shares with one of Pingley’s three sons, it was 13 degrees hotter, with a heat index of 116 degrees. All of her boys have asthma."
-
-#### Explanation
-At 7 p.m. Friday, the heat index in Baltimore was 103.  The heat index in the bedroom was 116, 13 degrees hotter.
-
-#### Supporting code and output
-```{r}
-
-stephanie_day_hourly_averages %>%
-  mutate(date = date(date_hour)) %>%
-  mutate(hour = hour(date_hour)) %>%
-  filter(date == "2019-07-19") %>%
-  filter(hour == 19) %>%
-  select(date_hour, mean_indoor_heat_index, mean_outdoor_heat_index, indoor_heat_index_difference)
-
-
-
-```
-
 ### Fact: Heat index Michael Thomas and Alberta Wilkerson [cq]
 "By Saturday, the heat index inside the second-floor apartment of Michael Thomas and Alberta Wilkerson hit 112 degrees. A fan pushed hot air around. Thomas, 61, has emphysema. Wilkerson, 49, has had a heart attack."
 
@@ -930,8 +908,7 @@ blocks_tree_temp_demographics %>%
 
 ### Fact: East Baltimore Tree Cover
 
-"And in 2015, many East Baltimore neighborhoods had a tree canopy of about 10%, according to a Howard Center analysis of tree canopy data gathered by researchers at the U.S. Forest Service and the University of Vermont."
-THIS COULD BE CHANGED IF NOT CHANGED IN AP
+"And in 2015, many East Baltimore neighborhoods had a tree canopy of about 10%, according to a Howard Center analysis of tree canopy data gathered by researchers at the U.S. Forest Service and the University of Vermont Spatial Analysis Lab."
 
 #### Explanation 
 The code below shows the percent of tree canopy cover in more than a dozen east Baltimore neighborhoods in 2015. The range is from 4 to 14.
