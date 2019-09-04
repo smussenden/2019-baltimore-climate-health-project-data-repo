@@ -1,5 +1,5 @@
 ---
-title: "Analysis for NPR: As Rising Heat Bakes U.S. Cities, The Poor Often Feel It Most | How High Heat Can Impact Mental Health"
+title: "Analysis for NPR stories: As Rising Heat Bakes U.S. Cities, The Poor Often Feel It Most | How High Heat Can Impact Mental Health"
 author: "Roxanne Ready, Theresa Diffendal, Jane Gerard, Jake Gluck and Sean Mussenden | Howard Center for Investigative Journalism"
 date: "9/3/2019"
 output: 
@@ -16,8 +16,8 @@ output:
 
 ```{r include=FALSE}
 # Save this file and run the following line from the Console to output both HTML and .md formats:
-# rmarkdown::render('documentation/NPR-Analysis.Rmd', output_format = 'all')
-# To spellcheck: spell_check_files('documentation/NPR-Analysis.Rmd')
+# rmarkdown::render('documentation/NPR/NPR-Analysis.Rmd', output_format = 'all')
+# To spellcheck: spell_check_files('documentation/NPR/NPR-Analysis.Rmd')
 ```
 
 
@@ -84,7 +84,7 @@ options(scipen = 999)
 #########################
 
 #### Common path to output data folder ####
-path_to_data <- "../data/output-data/"
+path_to_data <- "../../data/output-data/"
 
 ###################
 #### Load Data ####
@@ -153,8 +153,8 @@ nsa_tree_temp %>%
 
 ### Fact: Franklin Square poverty [cq]
 
-* * **Audio Story:** "It's also in one of the city's poorer areas."
-* * **Web Story:** "It's also in one of the city's poorest communities, with more than one third of residents living in poverty."
+* **Audio Story:** "It's also in one of the city's poorer areas."
+* **Web Story:** "It's also in one of the city's poorest communities, with more than one third of residents living in poverty."
 
 #### Explanation [cq]
 Franklin Square is entirely contained by a "community statistical area" known as "Southwest Baltimore". The poverty rate here is 36 percent, or more than one-third. There are 55 CSAs in Baltimore.  Southwest Baltimore has the 51st highest poverty rate, making it poorer than more than 90 percent of CSAs.

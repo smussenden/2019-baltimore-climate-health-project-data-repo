@@ -1,5 +1,5 @@
 ---
-title: "Health Story Data Analysis"
+title: "Analysis for story and graphics: For people with chronic health conditions, heat and humidity are more than a summer nuisance"
 author: "Sean Mussenden, Roxanne Ready, Theresa Diffendal, Jake Gluck and Jane Gerard | Howard Center for Investigative Journalism"
 date: "8/6/2019"
 output: 
@@ -16,7 +16,8 @@ output:
 
 ```{r include=FALSE}
 # Save this file and run the following line from the Console to output both HTML and .md formats:
-# rmarkdown::render('documentation/health-data-analysis.Rmd', output_format = 'all')
+# rmarkdown::render('documentation/Heat-Health/Heat-Health-Analysis.Rmd', output_format = 'all')
+# To spellcheck: spell_check_files('documentation/Heat-Health/Heat-Health-Analysis.Rmd')
 ```
 
 
@@ -73,6 +74,7 @@ library(colorspace) # For improved color palettes
 library(ggplot2) # For graphing
 library(ggrepel) # For graph labeling
 library(lubridate) # for dates
+library(spelling)
 require(scales) # For percent labeling on distribution tables
 
 # Turn off scientific notation in RStudio (prevents coersion to character type)
@@ -88,7 +90,7 @@ options(scipen = 999)
 #########################
 
 #### Common path to output data folder ####
-path_to_data <- "../data/output-data/"
+path_to_data <- "../../data/output-data/"
 
 ###################
 #### Load Data ####
@@ -292,7 +294,7 @@ michael_day_minute_averages %>%
 ### Fact: EMS calls for certain conditions spike when it gets very hot [cq]
 "That helps explain why, during the summer in Baltimore, emergency medical calls for dehydration, respiratory distress, kidney disease, diabetes complications, heart attacks and heart failure spiked when the heat index rose above 103 degrees, according to a Howard Center data analysis."
 
-### Explanation [cq]
+#### Explanation [cq]
 Using emergency medical call records from Baltimore City, we examined calls during Summer 2018.  They were aligned to heat index data captured at the Inner Harbor at the time of each call and adjusted for the urban heat island using the ZIP Code of each call location.  The statistics in the table below represent the number of hours that passed between calls for select conditions when the temperature was in a given heat index bucket. 
 
 For example, in Summer 2018, when the heat index was under 80 degrees, there was a medical call for dehydration every 41 hours.  When the heat index hit 103 degrees, the rate of calls increased dramatically -- to one every 2.2 hours. The table below shows the difference in calls per hour at different temperature groupings. 
@@ -366,7 +368,7 @@ The first (left) map shows afternoon temperature variations by ZIP code in Augus
 #### Explanation [cq]
 We examined rates of chronic conditions among low-income people in different parts of Baltimore by examining in-patient hospital admissions by people on Medicaid in Baltimore, and discovered that low-income people in different parts of the city had different diagnosis rates for chronic conditions affected by heat -- asthma, COPD, heart disease, kidney disease and diabetes. And, we found, those differences varied in line with temperature differences in the area in which they lived.
 
-There were moderate to strong positive relationships (kidney disease, r = .6; copd, r=.75; asthma, r=.51; heart_disease, r=.71; diabetes, r=.5) between a ZIP code's prevalance rate for chronic medical conditions as diagnosed in inpatient hospital visits and a ZIP code's median afternoon temperature as measured by urban heat island researchers in August 2018.  That is to say: the higher the neighborhood temperature, the higher the disease rate amongst the poorest inhabitants, and vice versa. This is not a causal relationship we are describing.  
+There were moderate to strong positive relationships (kidney disease, r = .6; copd, r=.75; asthma, r=.51; heart_disease, r=.71; diabetes, r=.5) between a ZIP code's prevelence rate for chronic medical conditions as diagnosed in inpatient hospital visits and a ZIP code's median afternoon temperature as measured by urban heat island researchers in August 2018.  That is to say: the higher the neighborhood temperature, the higher the disease rate among the poorest inhabitants, and vice versa. This is not a causal relationship we are describing.  
 
 We've also output the table for the graphic here.
 
@@ -389,9 +391,9 @@ ip_full_zip_medicaid_disease_heat  %>%
 "Asthma rates in low-income areas like McElderry Park and Broadway East are higher than in more affluent areas."
 
 #### Explanation [cq]
-There is a high degree of correlation between a geographic population's asthma prevalance rate in Baltimore, and that populations level of affluence.  Using detailed records of hospital admissions and emergency room visits, we determined the percentage of patients from each ZIP Code who had an asthma diagnosis, and compared it to that ZIP Code's poverty rate and median household income from U.S. Census data.  There was a strong positive relationship (r = .73) between a ZIP code's emergency room asthma rate and the percentage of people below the poverty line; the higher the asthma rate, the higher the poverty rate, and vice versa.  There was a strong negative relationship (r = -.71) between a ZIP code's asthma rate and the median household income; the lower the median household income, the higher the asthma rate, and vice versa. This is not a causal relationship we are describing here.  It's just that, in Baltimore, rich neighborhoods tend to have lower prevalance of asthma, compared with poorer ones.  
+There is a high degree of correlation between a geographic population's asthma prevelence rate in Baltimore, and that populations level of affluence.  Using detailed records of hospital admissions and emergency room visits, we determined the percentage of patients from each ZIP Code who had an asthma diagnosis, and compared it to that ZIP Code's poverty rate and median household income from U.S. Census data.  There was a strong positive relationship (r = .73) between a ZIP code's emergency room asthma rate and the percentage of people below the poverty line; the higher the asthma rate, the higher the poverty rate, and vice versa.  There was a strong negative relationship (r = -.71) between a ZIP code's asthma rate and the median household income; the lower the median household income, the higher the asthma rate, and vice versa. This is not a causal relationship we are describing here.  It's just that, in Baltimore, rich neighborhoods tend to have lower prevelence of asthma, compared with poorer ones.  
 
-McElderry Park is mostly contained in 21205 and Broadway East is mostly in 21213.  21205 had the third highest asthma rate (12.6 percent) in the city and the second highest poverty rate (37.13), 21213 had the second highest asthma rate (13.2 percent) and the sixth-highest poverty rate (28.2 percent).  ZIP Code 21209, in a much wealthier part of town, had the city's lowest poverty rate (7.6 percent) and the city's second lowest asthma prevalance (4.8 percent).
+McElderry Park is mostly contained in 21205 and Broadway East is mostly in 21213.  21205 had the third highest asthma rate (12.6 percent) in the city and the second highest poverty rate (37.13), 21213 had the second highest asthma rate (13.2 percent) and the sixth-highest poverty rate (28.2 percent).  ZIP Code 21209, in a much wealthier part of town, had the city's lowest poverty rate (7.6 percent) and the city's second lowest asthma prevelence (4.8 percent).
 
 #### Supporting code and output  [cq]
 ```{r}
@@ -441,7 +443,7 @@ stephanie_day_minute_averages %>%
 ### Fact: EMS calls for psychiatric/drug disorders [cq]
 "In Baltimore, the rate of emergency medical calls for psychiatric disorders and drug and alcohol overdoses increased dramatically when the heat index hit 103 degrees, the Howard Center data analysis found."
 
-### Explanation [cq]
+#### Explanation [cq]
 Using emergency medical call records from Baltimore City, we examined calls during Summer 2018.  They were aligned to heat index data captured at the Inner Harbor and adjusted for the urban heat island using the ZIP Code of each call location.  The statistics in the table below represent the number of hours that passed between calls for select conditions when the temperature was in a given heat index bucket. 
 
 For example, in Summer 2018, when the heat index was under 80 degrees, there was a medical call for a behavioral and psychiatric disorder every 1.77 hours (1 hour, 46 minutes). When the heat index hit 103 degrees, the rate of calls increased dramatically -- to one call every 1.29 hours (1 hour, 17 minutes). The increase for drug and alcohol (ETOH) related calls was even sharper in extreme heat, as the table below shows.  For example, drug overdoses happened at a rate of one call every 2.24 hours when it was under 80, but increased to about one call per hour over 103. 

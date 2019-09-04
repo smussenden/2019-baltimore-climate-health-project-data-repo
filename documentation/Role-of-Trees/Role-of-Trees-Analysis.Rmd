@@ -1,7 +1,7 @@
 ---
-title: "Role of Trees Analysis"
+title: "Analysis for story and graphics: The Role of Trees: No trees, no shade, no relief as climate heats up"
 author: "Roxanne Ready, Sean Mussenden | Howard Center for Investigative Journalism"
-date: "8/6/2019"
+date: "9/3/2019"
 output: 
   html_document:
     toc: true
@@ -16,7 +16,8 @@ output:
 
 ```{r include=FALSE}
 # Save this file and run the following line from the Console to output both HTML and .md formats:
-# rmarkdown::render('documentation/role-of-trees-data-analysis.Rmd', output_format = 'all')
+# rmarkdown::render('documentation/Role-of-Trees/Role-of-Trees-Analysis.Rmd', output_format = 'all')
+# spell_check_files('documentation/Role-of-Trees/Role-of-Trees-Analysis.Rmd')
 ```
 
 
@@ -24,11 +25,10 @@ output:
 knitr::opts_chunk$set(echo = TRUE, message=FALSE, paged.print=TRUE)
 ```
 ## Introduction
-
 This R markdown document describes a portion of the data analysis for a reporting project examining the effects of climate-change driven temperature increases on the health of people who live in cities.  The project was done in partnership with the [University of Maryland Philip Merrill College of Journalism](
 ), [Capital News Service](https://cnsmaryland.org/), [the Howard Center for Investigative Journalism](https://merrill.umd.edu/about-merrill/signature-programs/the-howard-center-for-investigative-journalism/), [NPR](https://www.npr.org/), [Wide Angle Youth Media](https://www.wideanglemedia.org/) and [WMAR](https://www.wmar2news.com/). It also moved on the Associated Press wire. 
 
-For each sentence in the stories "[As Rising Heat Bakes U.S. Cities, The Poor Often Feel It Most](https://www.npr.org/templates/story/story.php?storyId=754044732&live=1)" and "[How High Heat Can Impact Mental Health](https://www.npr.org/templates/story/story.php?storyId=757034136&live=1)" that are based on Howard Center data analysis, this document provides the original fact, the code and code output that support that fact, and an explanation where necessary. 
+For each sentence in the story [The Role of Trees: No trees, no shade, no relief as climate heats up](https://cnsmaryland.org/interactives/summer-2019/code-red/role-of-trees.html) that is based on Howard Center data analysis, this document provides the original fact, the code and code output that support that fact, and an explanation where necessary. 
 
 Here are links to other stories in the series: 
 
@@ -52,7 +52,7 @@ Here are links to other stories in the series:
 
 **Associated Press**
 
-* Links TK
+* [Investigation: Urban poor hit hardest as the planet heats up](https://www.apnews.com/52ffefa9ecf144d1b9aec367cc52ea74
 
 ## Setup and Links
 
@@ -76,6 +76,7 @@ library(colorspace) # For improved color palettes
 library(ggplot2) # For graphing
 library(ggrepel) # For graph labeling
 require(scales) # For percent labeling on distribution tables
+library(spelling)
 
 # Turn off scientific notation in RStudio (prevents coersion to character type)
 options(scipen = 999)
@@ -89,7 +90,7 @@ options(scipen = 999)
 #########################
 
 # Common path to data
-path_to_data <- "../data/output-data/"
+path_to_data <- "../../data/output-data/"
 
 # NSAs of interest
 target_nsas <- c("Berea", "Broadway East", "Oliver", "Middle East", 
