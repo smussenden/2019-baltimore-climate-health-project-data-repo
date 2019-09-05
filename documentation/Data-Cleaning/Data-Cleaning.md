@@ -1,63 +1,131 @@
----
-title: "Data Cleaning for Code Red: Baltimore's Climate Divide"
-author: "Roxanne Ready, Theresa Diffendal, Jake Gluck, Jane Gerard and Sean Mussenden| Howard Center for Investigative Journalism and Capital News Service"
-date: "9/3/2019"
-output: 
-  md_document:
-    variant: markdown_github
-    toc: true
-    toc_depth: 3
-  html_document:
-    toc: true
-    toc_depth: 3
-    toc_float: true
----
+-   [Introduction](#introduction)
+    -   [Definitions](#definitions)
+-   [Setup](#setup)
+-   [Load and clean urban heat island temperature
+    data](#load-and-clean-urban-heat-island-temperature-data)
+    -   [Define functions](#define-functions)
+    -   [Execute load-in and cleaning](#execute-load-in-and-cleaning)
+-   [Load and Clean Tree Canopy LIDAR
+    Data](#load-and-clean-tree-canopy-lidar-data)
+    -   [Execute load-in and cleaning](#execute-load-in-and-cleaning-1)
+-   [Load and Clean Demographic Data](#load-and-clean-demographic-data)
+    -   [Execute load-in and cleaning](#execute-load-in-and-cleaning-2)
+-   [Combine Data for Each Geographic
+    Area](#combine-data-for-each-geographic-area)
+-   [Load and Clean Individual Tree
+    Data](#load-and-clean-individual-tree-data)
+    -   [Define functions and store universal
+        variables](#define-functions-and-store-universal-variables)
+    -   [Execute load-in and cleaning](#execute-load-in-and-cleaning-3)
+    -   [Create building block tables](#create-building-block-tables)
+    -   [Join all into master summary
+        table](#join-all-into-master-summary-table)
+-   [Load and Clean Redlining Data](#load-and-clean-redlining-data)
+    -   [Execute load in and cleaning](#execute-load-in-and-cleaning-4)
+-   [Load and Clean Hourly Temperature Data at BWI and Inner Harbor
+    (DMH)](#load-and-clean-hourly-temperature-data-at-bwi-and-inner-harbor-dmh)
+    -   [Execute load-in and cleaning](#execute-load-in-and-cleaning-5)
+-   [Load and Clean EMS Data](#load-and-clean-ems-data)
+    -   [Execute load-in and cleaning](#execute-load-in-and-cleaning-6)
+-   [Load and Clean Hospital Admissions
+    Data](#load-and-clean-hospital-admissions-data)
+    -   [Define functions and store universal
+        variables](#define-functions-and-store-universal-variables-1)
+    -   [Execute Load in and Cleaning](#execute-load-in-and-cleaning-7)
+-   [Load and clean sensor data](#load-and-clean-sensor-data)
+    -   [Store universal variables](#store-universal-variables)
+    -   [Execute load-in and cleaning](#execute-load-in-and-cleaning-8)
+-   [Load and Clean Historical Baltimore and U.S. Weather
+    Data](#load-and-clean-historical-baltimore-and-u.s.-weather-data)
+    -   [Execute load-in and cleaning](#execute-load-in-and-cleaning-9)
+-   [Hot days increase data](#hot-days-increase-data)
+-   [Output All Cleaned Data to CSV
+    Files](#output-all-cleaned-data-to-csv-files)
 
-```{r include=FALSE}
-# Save this file and run the following line from the console to output both HTML and .md formats:
-# rmarkdown::render('documentation/Data-Cleaning/Data-Cleaning.Rmd', output_format = 'all')
-# spell_check_files("documentation/Data-Cleaning/Data-Cleaning.Rmd")
-```
+Introduction
+------------
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, message=FALSE)
-```
+This R markdown document describes the methodology and results of the
+data cleaning portion of the data analysis conducted in support of a
+reporting project examining the impact of climate change on the health
+of people in Baltimore’s hottest neighborhoods.
 
-## Introduction
-
-This R markdown document describes the methodology and results of the data cleaning portion of the data analysis conducted in support of a reporting project examining the impact of climate change on the health of people in Baltimore's hottest neighborhoods.
-
-xxx
-The analysis that uses the cleaned data output by this document is located in the [Role of Trees Data Analysis](https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/documentation/code-red-data-analysis.md). [ADD OTHER TWO STORIES]
+xxx The analysis that uses the cleaned data output by this document is
+located in the [Role of Trees Data
+Analysis](https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/documentation/code-red-data-analysis.md).
+\[ADD OTHER TWO STORIES\]
 
 ### Definitions
 
-**Geographic Units**: Several geographic units are used throughout the analysis. The geographic units are: 
+**Geographic Units**: Several geographic units are used throughout the
+analysis. The geographic units are:
 
-* **U.S. Census block**: The smallest geographic area tracked by the U.S. Census bureau. Shapefiles downloaded from [Census.gov](https://www2.census.gov/geo/tiger/TIGER2018/TABBLOCK/).
-* **ZCTAs - ZIP Code Tabulation Areas**: A U.S. Census proxy for postal ZIP Code units. Shapefiles downloaded from [Census.gov](https://www2.census.gov/geo/tiger/TIGER2018/ZCTA5/).
-* **NSAs - Neighborhood Statistical Areas**: Areas created by Baltimore City to represent Baltimore neighborhoods, comprised of custom groupings of U.S. Census blocks. This grouping is considered by Baltimore City and this analysis as the best representation of true Baltimore neighborhoods. Shapefiles provided by the [Baltimore City Department of Planning](https://planning.baltimorecity.gov/maps-data/GIS).
-* **CSAs - Community Statistical Areas**: Groupings of neighborhoods, created and used by the Baltimore Neighborhood Indicators Alliance (BNIA). In some cases, there is one neighborhood per CSA; in others, it's multiple. Recent demographic data is only available by CSA. Shapefiles downloaded from the [Baltimore Neighborhood Indicators Alliance Vital Signs project](https://data-bniajfi.opendata.arcgis.com/datasets/794586676bcc4f5fb629c08c51474cf6_0).
-* **Redlined geographic units**: Between 1935 and 1940, local real estate lenders, developers and real estate appraisers assigned grades to residential neighborhoods based on the perceived risk for banks to grant loans. This process was based in part on the race of residents and is known today as "redlining." The ["Mapping Inequality"](https://dsl.richmond.edu/panorama/redlining/#loc=5/39.1/-94.58&text=intro) project, conducted by [teams at four different universities](https://dsl.richmond.edu/panorama/redlining/#loc=12/39.293/-76.679&text=about), generated interactive maps of cities across the U.S., including Baltimore, and made their [shapefiles available by city](https://dsl.richmond.edu/panorama/redlining/#loc=11/39.3/-76.673&text=downloads).
+-   **U.S. Census block**: The smallest geographic area tracked by the
+    U.S. Census bureau. Shapefiles downloaded from
+    [Census.gov](https://www2.census.gov/geo/tiger/TIGER2018/TABBLOCK/).
+-   **ZCTAs - ZIP Code Tabulation Areas**: A U.S. Census proxy for
+    postal ZIP Code units. Shapefiles downloaded from
+    [Census.gov](https://www2.census.gov/geo/tiger/TIGER2018/ZCTA5/).
+-   **NSAs - Neighborhood Statistical Areas**: Areas created by
+    Baltimore City to represent Baltimore neighborhoods, comprised of
+    custom groupings of U.S. Census blocks. This grouping is considered
+    by Baltimore City and this analysis as the best representation of
+    true Baltimore neighborhoods. Shapefiles provided by the [Baltimore
+    City Department of
+    Planning](https://planning.baltimorecity.gov/maps-data/GIS).
+-   **CSAs - Community Statistical Areas**: Groupings of neighborhoods,
+    created and used by the Baltimore Neighborhood Indicators Alliance
+    (BNIA). In some cases, there is one neighborhood per CSA; in others,
+    it’s multiple. Recent demographic data is only available by CSA.
+    Shapefiles downloaded from the [Baltimore Neighborhood Indicators
+    Alliance Vital Signs
+    project](https://data-bniajfi.opendata.arcgis.com/datasets/794586676bcc4f5fb629c08c51474cf6_0).
+-   **Redlined geographic units**: Between 1935 and 1940, local real
+    estate lenders, developers and real estate appraisers assigned
+    grades to residential neighborhoods based on the perceived risk for
+    banks to grant loans. This process was based in part on the race of
+    residents and is known today as “redlining.” The [“Mapping
+    Inequality”](https://dsl.richmond.edu/panorama/redlining/#loc=5/39.1/-94.58&text=intro)
+    project, conducted by [teams at four different
+    universities](https://dsl.richmond.edu/panorama/redlining/#loc=12/39.293/-76.679&text=about),
+    generated interactive maps of cities across the U.S., including
+    Baltimore, and made their [shapefiles available by
+    city](https://dsl.richmond.edu/panorama/redlining/#loc=11/39.3/-76.673&text=downloads).
 
-**A Note About ZCTAs**: 
-    * There are some differences in the exact boundaries between ZCTA shapefiles pulled from Census.gov when pulled county-by-county and for MD as a whole. All ZCTA groups are from the state-level ZCTA files.
-    * The Mid-Atlantic Terminal at Dundalk (sometimes included as part of the 21222 ZCTA) is not included.
-    * All calculations for included ZCTAs are done over the entire ZCTA, even when the ZCTA expands past the city boundary, with one exception. 21226 is cut off at the city boundary due to limitations the in treecover and heat maps. In addition, a small peninsula in that same ZCTA was removed for ease in computing.
-    * 4 ZCTAs ('21208', '21228', '21234', '21236') encroach slightly into Baltimore City, but were not included due to limitations in treecover and heat maps. 
-    * 3 included ZCTAs ('21227', '21222', '21237') only encroach slightly into Baltimore City but were included because the treecover and heat maps encompass them.
-    * An insignificant portion of the north end of 21237 is not included on the treecover map and is therefore missing from calculations made for that ZCTA.
-    * ZCTA lists for reference:
-      * Complete list of Baltimore ZCTAs: '21201', '21202', '21205', '21206', '21207', '21208', '21209', '21210', '21211', '21212', '21213', '21214', '21215', '21216', '21217', '21218', '21222', '21223', '21224', '21225', '21226', '21227', '21228', '21229', '21230', '21231', '21234', '21236', '21237', '21239', '21251'
-      * ZCTAs removed from list (for untrimmed): '21208', '21228', '21234', '21236'
-      * Complete list of ZCTAs used (for untrimmed): '21201', '21202', '21205', '21206', '21207', '21209', '21210', '21211', '21212', '21213', '21214', '21215', '21216', '21217', '21218', '21222', '21223', '21224', '21225', '21226', '21227', '21229', '21230', '21231', '21237', '21239', '21251'
-      
-![Removed ZCTAs](https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/documentation/zcta_trim_map.png?raw=true "Removed ZCTAs")
+**A Note About ZCTAs**: \* There are some differences in the exact
+boundaries between ZCTA shapefiles pulled from Census.gov when pulled
+county-by-county and for MD as a whole. All ZCTA groups are from the
+state-level ZCTA files. \* The Mid-Atlantic Terminal at Dundalk
+(sometimes included as part of the 21222 ZCTA) is not included. \* All
+calculations for included ZCTAs are done over the entire ZCTA, even when
+the ZCTA expands past the city boundary, with one exception. 21226 is
+cut off at the city boundary due to limitations the in treecover and
+heat maps. In addition, a small peninsula in that same ZCTA was removed
+for ease in computing. \* 4 ZCTAs (‘21208’, ‘21228’, ‘21234’, ‘21236’)
+encroach slightly into Baltimore City, but were not included due to
+limitations in treecover and heat maps. \* 3 included ZCTAs (‘21227’,
+‘21222’, ‘21237’) only encroach slightly into Baltimore City but were
+included because the treecover and heat maps encompass them. \* An
+insignificant portion of the north end of 21237 is not included on the
+treecover map and is therefore missing from calculations made for that
+ZCTA. \* ZCTA lists for reference: \* Complete list of Baltimore ZCTAs:
+‘21201’, ‘21202’, ‘21205’, ‘21206’, ‘21207’, ‘21208’, ‘21209’, ‘21210’,
+‘21211’, ‘21212’, ‘21213’, ‘21214’, ‘21215’, ‘21216’, ‘21217’, ‘21218’,
+‘21222’, ‘21223’, ‘21224’, ‘21225’, ‘21226’, ‘21227’, ‘21228’, ‘21229’,
+‘21230’, ‘21231’, ‘21234’, ‘21236’, ‘21237’, ‘21239’, ‘21251’ \* ZCTAs
+removed from list (for untrimmed): ‘21208’, ‘21228’, ‘21234’, ‘21236’ \*
+Complete list of ZCTAs used (for untrimmed): ‘21201’, ‘21202’, ‘21205’,
+‘21206’, ‘21207’, ‘21209’, ‘21210’, ‘21211’, ‘21212’, ‘21213’, ‘21214’,
+‘21215’, ‘21216’, ‘21217’, ‘21218’, ‘21222’, ‘21223’, ‘21224’, ‘21225’,
+‘21226’, ‘21227’, ‘21229’, ‘21230’, ‘21231’, ‘21237’, ‘21239’, ‘21251’
 
+![Removed
+ZCTAs](https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/documentation/zcta_trim_map.png?raw=true "Removed ZCTAs")
 
-## Setup
+Setup
+-----
 
-```{r}
+``` r
 #######################
 #### Load Packages ####
 #######################
@@ -75,31 +143,41 @@ options(scipen = 999)
 
 # Define path to root of data input folder
 path_to_data <- "../../data/input-data/"
-
 ```
 
-## Load and clean urban heat island temperature data
+Load and clean urban heat island temperature data
+-------------------------------------------------
 
-Researchers at Portland State University in Oregon and the Science Museum of Virginia provided temperature data from its Urban Heat Island Temperature study, which captured micro-level temperature variations for all of Baltimore City on August 29, 2018.
+Researchers at Portland State University in Oregon and the Science
+Museum of Virginia provided temperature data from its Urban Heat Island
+Temperature study, which captured micro-level temperature variations for
+all of Baltimore City on August 29, 2018.
 
-* The data can be downloaded [here](https://osf.io/e63x9/).
-* Full methodology paper [here](https://osf.io/ur7my/).
+-   The data can be downloaded [here](https://osf.io/e63x9/).
+-   Full methodology paper [here](https://osf.io/ur7my/).
 
-Temperature data was compiled in three batches for morning, afternoon and evening, in a raster image with one temperature value (in degrees celsius) per pixel.
+Temperature data was compiled in three batches for morning, afternoon
+and evening, in a raster image with one temperature value (in degrees
+celsius) per pixel.
 
-For each time period, reporters used the open-source mapping program [QGIS](https://qgis.org/en/site/) to calculate zonal statistics (mean, median, min and max) for the temperature in several geographic units. 
+For each time period, reporters used the open-source mapping program
+[QGIS](https://qgis.org/en/site/) to calculate zonal statistics (mean,
+median, min and max) for the temperature in several geographic units.
 
-After calculating the zonal statistics, reporters exported the files from QGIS as CSV files, loaded them into R and joined them into master tables for further processing and analysis.
+After calculating the zonal statistics, reporters exported the files
+from QGIS as CSV files, loaded them into R and joined them into master
+tables for further processing and analysis.
 
-### Define functions 
-```{r}
+### Define functions
+
+``` r
 # Convert celsius values to fahrenheit (could later replace with weathermetrics, which produces same values in multiple tests weathermetrics::celsius.to.fahrenheit())
 c_to_f_convert <- function(x) (x * (9/5) + 32)
-
 ```
 
 ### Execute load-in and cleaning
-```{r}
+
+``` r
 #######################
 ###### Afternoon ######
 #######################
@@ -256,19 +334,28 @@ all_temp_zcta <- temp_am_zcta %>%
 
 #### Remove unneeded files ####
 rm(list=setdiff(ls(), c("all_temp_block", "all_temp_zcta", "all_temp_nsa", "all_temp_csa", "path_to_data")))
-
 ```
 
-## Load and Clean Tree Canopy LIDAR Data
+Load and Clean Tree Canopy LIDAR Data
+-------------------------------------
 
-The U.S. Forest Service and the University of Vermont Spatial Analysis Lab Spatial Analysis Lab created detailed maps of Baltimore's tree canopy in 2007 and 2015 using LIDAR and aerial imagery data. (Citation: O'Neil-Dunne J. 2017. GIS Shapefile, Tree Canopy Change 2007 - 2015 - Baltimore City. Environmental Data Initiative. https://doi.org/10.6073/pasta/79c1d2079271546e61823a98df2d2039)
+The U.S. Forest Service and the University of Vermont Spatial Analysis
+Lab Spatial Analysis Lab created detailed maps of Baltimore’s tree
+canopy in 2007 and 2015 using LIDAR and aerial imagery data. (Citation:
+O’Neil-Dunne J. 2017. GIS Shapefile, Tree Canopy Change 2007 - 2015 -
+Baltimore City. Environmental Data Initiative.
+<a href="https://doi.org/10.6073/pasta/79c1d2079271546e61823a98df2d2039" class="uri">https://doi.org/10.6073/pasta/79c1d2079271546e61823a98df2d2039</a>)
 
-The original shapefile data was presented in terms of "no change," "gain," and "loss" categories. To perform the following analysis, we restructured the data within QGIS to represent 2007 and 2015 canopy coverage and calculated zonal statistics (mean and median) at each year. They then exported the data from QGIS into CSVs, loaded them into R and joined them into master tables for further processing and analysis.
+The original shapefile data was presented in terms of “no change,”
+“gain,” and “loss” categories. To perform the following analysis, we
+restructured the data within QGIS to represent 2007 and 2015 canopy
+coverage and calculated zonal statistics (mean and median) at each year.
+They then exported the data from QGIS into CSVs, loaded them into R and
+joined them into master tables for further processing and analysis.
 
 ### Execute load-in and cleaning
 
-```{r}
-
+``` r
 # Define specific folder in input data
 folder <- "tree-canopy/"
 
@@ -350,21 +437,34 @@ tree_nsa_lidar_2007_2015 <- tree_nsa_lidar_2007 %>%
   mutate("objectid" = as.character(objectid)) 
 ```
 
-```{r}
+``` r
 #### Remove unneeded files ####
 rm(list=setdiff(ls(), c(
   "tree_block_lidar_2007_2015", "tree_nsa_lidar_2007_2015", "tree_csa_lidar_2007_2015", 
   "all_temp_block", "all_temp_zcta", "all_temp_nsa", "all_temp_csa", "path_to_data")))
-
 ```
 
-## Load and Clean Demographic Data
+Load and Clean Demographic Data
+-------------------------------
 
-The only recent demographic data available for neighborhood proxy areas is from the [Baltimore Neighborhood Indicators Alliance](https://bniajfi.org/vital_signs/data_downloads/), a **CSA-level** analysis from 2017. The U.S. federal government has not collected demographic information at many micro-geographic levels with reasonable margins of error since the 2010 Census, which this analysis determined is generally too old to be useful. The exception to this is the annual [American Community Survey](https://www.census.gov/acs/www/data/data-tables-and-tools/data-profiles/2017/), which we used at a **ZCTA-level** geographic grouping. Additionally, this analysis used the 2010 population numbers at the **block** level to filter out low-population blocks. This analysis did not use demographic information at the **NSA** level, because the data did not exist in a readily available format with reasonable error margins.
+The only recent demographic data available for neighborhood proxy areas
+is from the [Baltimore Neighborhood Indicators
+Alliance](https://bniajfi.org/vital_signs/data_downloads/), a
+**CSA-level** analysis from 2017. The U.S. federal government has not
+collected demographic information at many micro-geographic levels with
+reasonable margins of error since the 2010 Census, which this analysis
+determined is generally too old to be useful. The exception to this is
+the annual [American Community
+Survey](https://www.census.gov/acs/www/data/data-tables-and-tools/data-profiles/2017/),
+which we used at a **ZCTA-level** geographic grouping. Additionally,
+this analysis used the 2010 population numbers at the **block** level to
+filter out low-population blocks. This analysis did not use demographic
+information at the **NSA** level, because the data did not exist in a
+readily available format with reasonable error margins.
 
 ### Execute load-in and cleaning
-```{r}
 
+``` r
 # Common file path to raw demographics data
 folder <- "demographics/"
 
@@ -392,11 +492,13 @@ demographics_zcta <- read_csv(paste0(path_to_data, folder, "by_zcta/acs_2017_bal
   filter(zcta != "CITYWIDE")
 ```
 
-## Combine Data for Each Geographic Area
+Combine Data for Each Geographic Area
+-------------------------------------
 
-Once the individual component data frames have been created and cleaned, they can be merged and saved for use in the analysis.
+Once the individual component data frames have been created and cleaned,
+they can be merged and saved for use in the analysis.
 
-```{r}
+``` r
 #### Blocks #### 
 # Demographics at this level only used for removing low population blocks
 blocks_tree_temp_population <- all_temp_block %>%
@@ -440,19 +542,23 @@ zcta_temp_demographics <- all_temp_zcta %>%
 
 #### Remove unneeded files ####
 rm(list=setdiff(ls(), c("blocks_tree_temp_population", "zcta_temp_demographics", "nsa_tree_temp", "csa_tree_temp_demographics", "path_to_data")))
-
 ```
 
-## Load and Clean Individual Tree Data
+Load and Clean Individual Tree Data
+-----------------------------------
 
-Baltimore's urban forestry division tracks each tree and potential tree site across the city and provided this analysis with a database of those records and [accompanying documentation](https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/documentation/street-tree-inventory-spec-sheet.pdf). 
+Baltimore’s urban forestry division tracks each tree and potential tree
+site across the city and provided this analysis with a database of those
+records and [accompanying
+documentation](https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/documentation/street-tree-inventory-spec-sheet.pdf).
 
-The raw data arrived as a .shp file, which reporters joined together with the various core geographies and exported as a CSV for processing in R. The analysis focused on NSA-level geographies.
+The raw data arrived as a .shp file, which reporters joined together
+with the various core geographies and exported as a CSV for processing
+in R. The analysis focused on NSA-level geographies.
 
 ### Define functions and store universal variables
 
-```{r}
-
+``` r
 # List of NSAs of interest for our analysis
 target_nsas <- c("Berea", "Broadway East", "Oliver", "Middle East", "Biddle Street","Milton-Montford", "Madison-Eastend", "CARE", "McElderry Park", "Ellwood Park/Monument", "Patterson Place", "Patterson Park Neighborhood", "Baltimore Highlands", "Highlandtown", "Upper Fells Point") %>%
   lapply(tolower)
@@ -463,12 +569,11 @@ counterpoint_nsas <- c("Butcher's Hill", "Canton", "Washington Hill") %>%
 
 # Common file path to raw demographics data
 folder <- "street-trees/csv/"
-
 ```
 
 ### Execute load-in and cleaning
-```{r}
 
+``` r
 ##########################
 #### Load in the data ####
 ##########################
@@ -580,12 +685,11 @@ street_trees_categorized <- street_trees %>%
     genus_clean == "persian parrotia" ~ "parrotia",
     TRUE ~ genus_clean
   ))
-
 ```
 
 ### Create building block tables
 
-```{r}
+``` r
 ######################################################
 ### Basic count tables, required for later queries ###
 ######################################################
@@ -658,8 +762,7 @@ tree_as_percent_of_spaces_by_nsa <- spaces_count_by_nsa_all %>%
   mutate(rank_perc_of_nontreed_are_suitable = rank(desc(perc_of_nontreed_are_suitable), na.last = "keep", ties.method = "first"))
 ```
 
-```{r}
-
+``` r
 ###################################
 ### Difficulty of planting ########
 ###################################
@@ -704,11 +807,9 @@ empty_spaces_by_diff_by_nsa <- empty_spaces_by_diff_by_nsa_count %>%
   left_join(empty_spaces_by_diff_by_nsa_perc) %>%
   # Rearange for readability
   select(1, 6:7, 2:5, 8:11)
-
 ```
 
-```{r}
-
+``` r
 ######################################
 ### Tree condition by nsa ############
 ######################################
@@ -785,13 +886,11 @@ tree_condition_by_nsa <- tree_condition_by_nsa %>%
   mutate(rank_avg_ht = rank(desc(avg_ht_controled), na.last = "keep", ties.method = "first")) %>%
   dplyr::arrange(nbrdesc, avg_diam_controled) %>%
   mutate(rank_avg_diam = rank(desc(avg_diam_controled), na.last = "keep", ties.method = "first"))
-
 ```
 
 ### Join all into master summary table
 
-```{r}
-
+``` r
 master_street_trees_by_nsa <- tree_as_percent_of_spaces_by_nsa %>%
   left_join(empty_spaces_by_diff_by_nsa) %>%
   left_join(tree_condition_by_nsa) %>%
@@ -811,14 +910,16 @@ master_street_trees_by_nsa <- tree_as_percent_of_spaces_by_nsa %>%
 rm(list=setdiff(ls(), c("blocks_tree_temp_population", "zcta_temp_demographics", "nsa_tree_temp", "csa_tree_temp_demographics", "street_trees_categorized", "redlining_tree", "master_street_trees_by_nsa", "path_to_data")))
 ```
 
-## Load and Clean Redlining Data
+Load and Clean Redlining Data
+-----------------------------
 
-This analysis used QGIS to compute tree canopy for geographies based on redlining shapefiles downloaded from the [Mapping Inequality project](https://dsl.richmond.edu/panorama/redlining/#loc=11/39.3/-76.673&text=downloads).
+This analysis used QGIS to compute tree canopy for geographies based on
+redlining shapefiles downloaded from the [Mapping Inequality
+project](https://dsl.richmond.edu/panorama/redlining/#loc=11/39.3/-76.673&text=downloads).
 
 ### Execute load in and cleaning
-```{r}
 
-
+``` r
 # Common file path to raw redlining data
 folder <- "redlining-data/"
 
@@ -836,16 +937,22 @@ redlining_tree <- read_csv(paste0(path_to_data, folder, "HOLC_Redlining_2015_tre
          count_all_pix_15 = `15_count`, 
          sum_canopy_pix_15 = `15_sum`, 
          mean_pix_15 = `15_mean`)
-
 ```
 
-## Load and Clean Hourly Temperature Data at BWI and Inner Harbor (DMH)
-We acquired historical temperature data for National Weather Service monitoring stations at both BWI airport (BWI) and the Inner Harbor monitoring station (DMH) and used it in various parts of our analysis.  We got this data from the excellent Iowa State University Iowa Environmental Mesonet, which contains information for global ASOS monitoring stations. We captured temperature, humidity and dew point data, which we used to calculate heat index. 
+Load and Clean Hourly Temperature Data at BWI and Inner Harbor (DMH)
+--------------------------------------------------------------------
+
+We acquired historical temperature data for National Weather Service
+monitoring stations at both BWI airport (BWI) and the Inner Harbor
+monitoring station (DMH) and used it in various parts of our analysis.
+We got this data from the excellent Iowa State University Iowa
+Environmental Mesonet, which contains information for global ASOS
+monitoring stations. We captured temperature, humidity and dew point
+data, which we used to calculate heat index.
 
 ### Execute load-in and cleaning
 
-```{r}
-
+``` r
 # Store folder path
 
 folder <- "baltimore-weather-stations/"
@@ -876,7 +983,19 @@ bwi <- bwi  %>%
             avg_hourly_heat_index_bwi = mean(heat_index)
   ) %>%
   distinct()
+```
 
+    ## Warning in dewpoint.to.humidity(t = t, dp = dp, temperature.metric =
+    ## temperature.metric): For some observations, dew point temperature was
+    ## higher than temperature. Since dew point temperature cannot be higher than
+    ## air temperature, relative humidty for these observations was set to 'NA'.
+
+    ## Warning in dewpoint.to.humidity(dp = dwpf, t = tmpf, temperature.metric
+    ## = "fahrenheit"): For some observations, dew point temperature was higher
+    ## than temperature. Since dew point temperature cannot be higher than air
+    ## temperature, relative humidty for these observations was set to 'NA'.
+
+``` r
 # Clean DMH data 
 dmh <- dmh  %>%
   select(-relh) %>%
@@ -899,8 +1018,19 @@ dmh <- dmh  %>%
             avg_hourly_heat_index_dmh = mean(heat_index)
   ) %>%
   distinct()
+```
 
+    ## Warning in dewpoint.to.humidity(t = t, dp = dp, temperature.metric =
+    ## temperature.metric): For some observations, dew point temperature was
+    ## higher than temperature. Since dew point temperature cannot be higher than
+    ## air temperature, relative humidty for these observations was set to 'NA'.
 
+    ## Warning in dewpoint.to.humidity(t = t, dp = dp, temperature.metric =
+    ## temperature.metric): For some observations, dew point temperature was
+    ## higher than temperature. Since dew point temperature cannot be higher than
+    ## air temperature, relative humidty for these observations was set to 'NA'.
+
+``` r
 # We have 75 years of dew point and temperature data for BWI, which allows us to calculate heat index
 # We have 20 years of dew point and temperature data for DMH (Inner Harbor), which allows us to calculate heat index. 
 # Dan Li, a climate researcher at Boston University who has studied variation in urban heat island temperatures between suburbs in different seasons and different hours of the day, said a pretty good way to calculate the difference in urban v suburban heat island, and create a longer estimated historical record of temperatures at DMH would be:
@@ -933,16 +1063,50 @@ estimated_historical_dmh <- bwi %>%
          projected_heat_index_dmh = heat.index(t=projected_temperature_dmh, dp=projected_dew_point_dmh, temperature.metric = "fahrenheit", round=0),
          projected_relative_humidity_dmh = dewpoint.to.humidity(dp = projected_dew_point_dmh, t = projected_temperature_dmh, temperature.metric = "fahrenheit")) %>%
          select(-matches("bwi"), -matches("avg"))
-
 ```
 
-## Load and Clean EMS Data
+    ## Warning in dewpoint.to.humidity(t = t, dp = dp, temperature.metric =
+    ## temperature.metric): For some observations, dew point temperature was
+    ## higher than temperature. Since dew point temperature cannot be higher than
+    ## air temperature, relative humidty for these observations was set to 'NA'.
 
-We obtained from Baltimore city EMS calls between 2014 and 2018.  Each call included information about conditions and ZIP code of each call. 
+    ## Warning in dewpoint.to.humidity(t = t, dp = dp, temperature.metric =
+    ## temperature.metric): For some observations, dew point temperature was
+    ## higher than temperature. Since dew point temperature cannot be higher than
+    ## air temperature, relative humidty for these observations was set to 'NA'.
+
+    ## Warning in dewpoint.to.humidity(t = t, dp = dp, temperature.metric =
+    ## temperature.metric): For some observations, dew point temperature was
+    ## higher than temperature. Since dew point temperature cannot be higher than
+    ## air temperature, relative humidty for these observations was set to 'NA'.
+
+    ## Warning in dewpoint.to.humidity(dp = projected_dew_point_dmh, t =
+    ## projected_temperature_dmh, : For some observations, dew point temperature
+    ## was higher than temperature. Since dew point temperature cannot be higher
+    ## than air temperature, relative humidty for these observations was set to
+    ## 'NA'.
+
+    ## Warning in dewpoint.to.humidity(dp = projected_dew_point_dmh, t =
+    ## projected_temperature_dmh, : For some observations, dew point temperature
+    ## was higher than temperature. Since dew point temperature cannot be higher
+    ## than air temperature, relative humidty for these observations was set to
+    ## 'NA'.
+
+    ## Warning in dewpoint.to.humidity(dp = projected_dew_point_dmh, t =
+    ## projected_temperature_dmh, : For some observations, dew point temperature
+    ## was higher than temperature. Since dew point temperature cannot be higher
+    ## than air temperature, relative humidty for these observations was set to
+    ## 'NA'.
+
+Load and Clean EMS Data
+-----------------------
+
+We obtained from Baltimore city EMS calls between 2014 and 2018. Each
+call included information about conditions and ZIP code of each call.
 
 ### Execute load-in and cleaning
-```{r}
 
+``` r
 # Folder path
 folder <- "baltimore-ems/"
 
@@ -956,7 +1120,111 @@ EMS_2018_partial <- read.csv(paste0(path_to_data, folder, "2018-1.1-11.30.csv"))
 # Bind together into one dataframe
 
 EMS_all <- bind_rows(EMS_2014, EMS_2015, EMS_2016, EMS_2017, EMS_2018_partial)
+```
 
+    ## Warning in bind_rows_(x, .id): Unequal factor levels: coercing to character
+
+    ## Warning in bind_rows_(x, .id): binding character and factor vector,
+    ## coercing into character vector
+
+    ## Warning in bind_rows_(x, .id): binding character and factor vector,
+    ## coercing into character vector
+
+    ## Warning in bind_rows_(x, .id): Unequal factor levels: coercing to character
+
+    ## Warning in bind_rows_(x, .id): binding character and factor vector,
+    ## coercing into character vector
+
+    ## Warning in bind_rows_(x, .id): binding character and factor vector,
+    ## coercing into character vector
+
+    ## Warning in bind_rows_(x, .id): Unequal factor levels: coercing to character
+
+    ## Warning in bind_rows_(x, .id): binding character and factor vector,
+    ## coercing into character vector
+
+    ## Warning in bind_rows_(x, .id): binding character and factor vector,
+    ## coercing into character vector
+
+    ## Warning in bind_rows_(x, .id): Unequal factor levels: coercing to character
+
+    ## Warning in bind_rows_(x, .id): binding character and factor vector,
+    ## coercing into character vector
+
+    ## Warning in bind_rows_(x, .id): binding character and factor vector,
+    ## coercing into character vector
+
+    ## Warning in bind_rows_(x, .id): Unequal factor levels: coercing to character
+
+    ## Warning in bind_rows_(x, .id): binding character and factor vector,
+    ## coercing into character vector
+
+    ## Warning in bind_rows_(x, .id): binding character and factor vector,
+    ## coercing into character vector
+
+    ## Warning in bind_rows_(x, .id): Unequal factor levels: coercing to character
+
+    ## Warning in bind_rows_(x, .id): binding character and factor vector,
+    ## coercing into character vector
+
+    ## Warning in bind_rows_(x, .id): binding character and factor vector,
+    ## coercing into character vector
+
+    ## Warning in bind_rows_(x, .id): binding character and factor vector,
+    ## coercing into character vector
+
+    ## Warning in bind_rows_(x, .id): binding character and factor vector,
+    ## coercing into character vector
+
+    ## Warning in bind_rows_(x, .id): binding character and factor vector,
+    ## coercing into character vector
+
+    ## Warning in bind_rows_(x, .id): binding character and factor vector,
+    ## coercing into character vector
+
+    ## Warning in bind_rows_(x, .id): binding character and factor vector,
+    ## coercing into character vector
+
+    ## Warning in bind_rows_(x, .id): binding character and factor vector,
+    ## coercing into character vector
+
+    ## Warning in bind_rows_(x, .id): binding character and factor vector,
+    ## coercing into character vector
+
+    ## Warning in bind_rows_(x, .id): binding character and factor vector,
+    ## coercing into character vector
+
+    ## Warning in bind_rows_(x, .id): binding character and factor vector,
+    ## coercing into character vector
+
+    ## Warning in bind_rows_(x, .id): binding character and factor vector,
+    ## coercing into character vector
+
+    ## Warning in bind_rows_(x, .id): binding character and factor vector,
+    ## coercing into character vector
+
+    ## Warning in bind_rows_(x, .id): binding character and factor vector,
+    ## coercing into character vector
+
+    ## Warning in bind_rows_(x, .id): binding character and factor vector,
+    ## coercing into character vector
+
+    ## Warning in bind_rows_(x, .id): binding character and factor vector,
+    ## coercing into character vector
+
+    ## Warning in bind_rows_(x, .id): binding character and factor vector,
+    ## coercing into character vector
+
+    ## Warning in bind_rows_(x, .id): binding character and factor vector,
+    ## coercing into character vector
+
+    ## Warning in bind_rows_(x, .id): binding character and factor vector,
+    ## coercing into character vector
+
+    ## Warning in bind_rows_(x, .id): binding character and factor vector,
+    ## coercing into character vector
+
+``` r
 # Remove all dataframes from our environment but EMS_all
 
 # rm(list=setdiff(ls(), "EMS_all"))
@@ -1073,7 +1341,14 @@ EMS_all <- EMS_all %>%
 # Now that we've adjusted temperature, calculate the adjusted heat index
 EMS_all <- EMS_all %>%
   mutate(adjusted_heat_index = heat.index(t=adjusted_temperature, dp=avg_hourly_dewpoint_dmh, temperature.metric = "fahrenheit", output.metric = "fahrenheit"))
+```
 
+    ## Warning in dewpoint.to.humidity(t = t, dp = dp, temperature.metric =
+    ## temperature.metric): For some observations, dew point temperature was
+    ## higher than temperature. Since dew point temperature cannot be higher than
+    ## air temperature, relative humidty for these observations was set to 'NA'.
+
+``` r
 ## Create Heat Index Buckets
 
 #In order to examine the impact of extreme temperatures on EMS calls, we need to assign each call's adjusted heat index value to one of four temperature buckets we've created to align with the National Weather Service's heat index safety threshold table. https://www.weather.gov/safety/heat-index. 
@@ -1118,15 +1393,20 @@ filter(`date` >= date("2018-06-21") & `date` <= ("2018-09-21"))
 
 dmh_ems <- dmh_ems %>%
 filter(`date` >= date("2018-06-21") & `date` <= ("2018-09-21"))
-
 ```
 
-## Load and Clean Hospital Admissions Data 
-From the Health Services Cost Review Commission in Maryland, we obtained detailed records of inpatient and outpatient hospital visits, with one record per visit, between 2013 and 2018.  The code for processing the data is included here, but we cannot store the original files that are processed by that code, per our MOU with the HSCRC.
+Load and Clean Hospital Admissions Data
+---------------------------------------
+
+From the Health Services Cost Review Commission in Maryland, we obtained
+detailed records of inpatient and outpatient hospital visits, with one
+record per visit, between 2013 and 2018. The code for processing the
+data is included here, but we cannot store the original files that are
+processed by that code, per our MOU with the HSCRC.
 
 ### Define functions and store universal variables
-```{r}
 
+``` r
 # Common file path to raw EMS data
 folder <- "hscrc-hospital-data/"
 
@@ -1170,13 +1450,11 @@ make_correlation_matrix <- function(dataframe) {
   assign(table_name, correlation_matrix, envir = parent.frame())
 
 }
-
-
 ```
 
 ### Execute Load in and Cleaning
 
-```{r}
+``` r
 # Load inpatient hospital admissions percentage by zipcode 
 ip_full_zip <- read_csv(paste0(path_to_data, folder, "ip/ip_full_zip.csv"))
 ip_full_zip <- ip_full_zip %>%
@@ -1208,17 +1486,19 @@ make_correlation_matrix(ip_full_zip)
 make_correlation_matrix(ip_full_zip_medicaid)
 make_correlation_matrix(op_er_full_zip)
 make_correlation_matrix(op_er_full_zip_medicaid)
-
 ```
 
-## Load and clean sensor data
+Load and clean sensor data
+--------------------------
 
-We built temperature and humidity sensors, using this [excellent "Harlem Heat" project guide](https://github.com/datanews/harlem-heat). We placed them in several homes in Baltimore in summer 2019, and joined them with outdoor temperature to examine how heat index varied indoors and out.
+We built temperature and humidity sensors, using this [excellent “Harlem
+Heat” project guide](https://github.com/datanews/harlem-heat). We placed
+them in several homes in Baltimore in summer 2019, and joined them with
+outdoor temperature to examine how heat index varied indoors and out.
 
 ### Store universal variables
 
-```{r}
-
+``` r
 # Common file path to raw EMS data
 folder <- "temperature-sensors/"
 
@@ -1285,12 +1565,11 @@ process_sensor_data <- function(person_location) {
       table_name <- paste0(deparse(substitute(person_location)), "_day_minute_averages")
       assign(table_name, temp_humidity_heat_index_day_minute, envir = parent.frame())
 }  
-
 ```
 
 ### Execute load-in and cleaning
-```{r}
 
+``` r
 #### Read in Data ####
 # Stephanie Pingley bedroom
 stephanie <- read_csv(paste0(path_to_data, folder, "stephanie/stephanie.TXT"), col_names = sensor_col_names)
@@ -1307,13 +1586,18 @@ process_sensor_data(tammy)
 process_sensor_data(audrey)
 ```
 
-## Load and Clean Historical Baltimore and U.S. Weather Data 
-To calculate how average annual temperatures in Baltimore changed compared to the U.S. over the last century, we pulled data from the NCDC on average annual temperatures for both geographies. https://www.ncdc.noaa.gov/cag/county/time-series 
-#https://www.ncdc.noaa.gov/cag/county/time-series 
+Load and Clean Historical Baltimore and U.S. Weather Data
+---------------------------------------------------------
+
+To calculate how average annual temperatures in Baltimore changed
+compared to the U.S. over the last century, we pulled data from the NCDC
+on average annual temperatures for both geographies.
+<a href="https://www.ncdc.noaa.gov/cag/county/time-series" class="uri">https://www.ncdc.noaa.gov/cag/county/time-series</a>
+\#<a href="https://www.ncdc.noaa.gov/cag/county/time-series" class="uri">https://www.ncdc.noaa.gov/cag/county/time-series</a>
 
 ### Execute load-in and cleaning
-```{r}
 
+``` r
 # Common file path to raw temperature data
 folder <- "1895-2019-average-temp/"
 
@@ -1332,30 +1616,35 @@ baltimore_change_temp <- baltimore_change_temp %>%
 us_change_temp <- us_change_temp %>%
   mutate(Date = (Date - 12)/100) %>%
   clean_names()
-
 ```
 
-## Hot days increase data
-To examine how climate change will drive up the number of extreme heat index days in the future, we used data from researchers at the Union of Concerned Scientists and the University of Idaho, described in the research paper: ["Increased frequency of and population exposure to extreme heat index days in the United States during the 21st century"](https://www.ucsusa.org/sites/default/files/attach/2019/07/killer-heat-environmental-research-communications-article.pdf). [The data we used is available here](https://www.ucsusa.org/global-warming/global-warming-impacts/killer-heat-in-united-states). 
+Hot days increase data
+----------------------
 
+To examine how climate change will drive up the number of extreme heat
+index days in the future, we used data from researchers at the Union of
+Concerned Scientists and the University of Idaho, described in the
+research paper: [“Increased frequency of and population exposure to
+extreme heat index days in the United States during the 21st
+century”](https://www.ucsusa.org/sites/default/files/attach/2019/07/killer-heat-environmental-research-communications-article.pdf).
+[The data we used is available
+here](https://www.ucsusa.org/global-warming/global-warming-impacts/killer-heat-in-united-states).
 
-```{r}
-
+``` r
 # Common file path to raw temperature data
 folder <- "heat-index-projections/"
 
 # Read in data
 heat_index_projections <- read_xlsx(paste0(path_to_data,folder, "killer-heat-data-by-city.xlsx"), sheet="cleaned_all_cities")
-
 ```
 
+Output All Cleaned Data to CSV Files
+------------------------------------
 
-## Output All Cleaned Data to CSV Files
+The following generated files are necessary for future portions of this
+analysis.
 
-The following generated files are necessary for future portions of this analysis.
-
-```{r}
-
+``` r
 ### Define root save path
 
 save_path <- "../../data/output-data/"
@@ -1450,5 +1739,4 @@ write_csv(op_er_full_zip_medicaid_disease_heat, paste0(save_path, folder, "op_er
 
 ### Clean up the workspace 
 rm(list=ls())
-
 ```
