@@ -1,5 +1,6 @@
 -   [Introduction](#introduction)
 -   [Setup and Links](#setup-and-links)
+    -   [Load packages](#load-packages)
     -   [Load variables and data](#load-variables-and-data)
 -   [Line-By-Line Fact-Check](#line-by-line-fact-check)
     -   [Fact: 11-Day Heat Wave \[cq\]](#fact-11-day-heat-wave-cq)
@@ -71,7 +72,7 @@ This R markdown document describes a portion of the data analysis for a
 reporting project examining the effects of climate-change driven
 temperature increases on the health of people who live in cities. The
 project was done in partnership with the [University of Maryland Philip
-Merrill College of Journalism](), [Capital News
+Merrill College of Journalism](https://merrill.umd.edu/), [Capital News
 Service](https://cnsmaryland.org/), [the Howard Center for Investigative
 Journalism](https://merrill.umd.edu/about-merrill/signature-programs/the-howard-center-for-investigative-journalism/),
 [NPR](https://www.npr.org/), [Wide Angle Youth
@@ -79,14 +80,12 @@ Media](https://www.wideanglemedia.org/) and
 [WMAR](https://www.wmar2news.com/). It also moved on the Associated
 Press wire.
 
-For each sentence in the stories “[As Rising Heat Bakes U.S. Cities, The
-Poor Often Feel It
-Most](https://www.npr.org/templates/story/story.php?storyId=754044732&live=1)”
-and “[How High Heat Can Impact Mental
-Health](https://www.npr.org/templates/story/story.php?storyId=757034136&live=1)”
-that are based on Howard Center data analysis, this document provides
-the original fact, the code and code output that support that fact, and
-an explanation where necessary.
+For each sentence in the story “[Heat & Inequality: In Baltimore, the
+burden of rising temperatures isn’t
+shared](https://cnsmaryland.org/interactives/summer-2019/code-red/neighborhood-heat-inequality.html)”
+based on Howard Center data analysis, this document provides the
+original fact, the code and code output that support that fact, and an
+explanation where necessary.
 
 Here are links to other stories in the series:
 
@@ -120,10 +119,6 @@ Here are links to other stories in the series:
     effects of climate
     crisis](https://www.wmar2news.com/news/region/baltimore-city/baltimore-neighborhood-identified-as-ground-zero-for-local-effects-of-climate-crisis)
 
-**Associated Press**
-
--   Links TK
-
 Setup and Links
 ---------------
 
@@ -141,7 +136,9 @@ Setup and Links
     methods, limitations and software tools used.
 -   NPR has made available a separate GitHub repo for nationwide
     analysis on urban heat islands available
-    [here](https://github.com/nprapps/heat-income). \#\#\# Load packages
+    [here](https://github.com/nprapps/heat-income).
+
+### Load packages
 
 ``` r
 #######################
@@ -152,7 +149,7 @@ Setup and Links
 library(tidyverse) # For general data science goodness
 library(corrr) # For correlation goodness
 library(lubridate) # For working with that datetime
-library(broom) # for converting lm output to dataframe
+library(broom) # For converting lm output to dataframe
 library(TTR) # For moving averages
 
 # Turn off scientific notation in RStudio (prevents coersion to character type)
@@ -173,7 +170,7 @@ path_to_data <- "../../data/output-data/"
 #### Load Data ####
 ###################
 
-## Indoor temperature and humidity sensor data
+### Indoor temperature and humidity sensor data
 
 # Michael and Alberta
 folder <- "temperature_sensors/michael/"
@@ -195,7 +192,7 @@ folder <- "temperature_sensors/tammy/"
 tammy_day_minute_averages <- read_csv(paste0(path_to_data, folder, "tammy_day_minute_averages.csv"))
 tammy_day_hourly_averages <- read_csv(paste0(path_to_data, folder, "tammy_day_hourly_averages.csv"))
 
-## Outdoor temperature data
+### Outdoor temperature data
 
 # Inner Harbor temperature data
 folder <- "baltimore_weather_stations/"
@@ -210,7 +207,7 @@ baltimore_change_temp <- read_csv(paste0(path_to_data, folder, "baltimore_change
 folder <- "heat_index_projections/"
 heat_index_projections <- read_csv(paste0(path_to_data, folder, "heat_index_projections.csv"))
 
-## Urban heat island, tree canopy, demographics data
+### Urban heat island, tree canopy, demographics data
 folder <- "tree_temp_demographics/"
 
 # Neighborhood geography
@@ -222,7 +219,7 @@ csa_tree_temp_demographics <- read_csv(paste0(path_to_data, folder, "csa_tree_te
 # Blocks geography
 blocks_tree_temp_demographics <- read_csv(paste0(path_to_data, folder, "blocks_tree_temp_demographics.csv"))
 
-## Hospital data
+### Hospital data
 folder <- "hospital_data/"
 
 # Inpatient admissions data
@@ -231,7 +228,7 @@ ip_full_zip_correlation_matrix <- read_csv(paste0(path_to_data, folder, "ip/ip_f
 # Emergency room admissions data
 op_er_full_zip_correlation_matrix <- read_csv(paste0(path_to_data, folder, "op_er/op_er_full_zip_correlation_matrix.csv"))
 
-## EMS Data
+### EMS Data
 folder <- "ems/"
 dmh_ems <- read_csv(paste0(path_to_data, folder, "dmh_ems.csv"))
 EMS_all <- read_csv(paste0(path_to_data, folder, "EMS_all.csv"))
@@ -248,7 +245,7 @@ were going outside.”
 
 #### Explanation \[cq\]
 
-Over an 11-day period in July 2019 – July 12 to July 22 – each day
+Over an 11-day period in July 2019 – July 12 through July 22 – each day
 during that stretch had a maximum temperature of at least 90 degrees F
 and maximum heat index values of at least 92 degrees F. This was
 measured at a National Weather Service monitoring station located in the
@@ -309,7 +306,7 @@ reading in that data set on July 20 was 99 degrees. But the NWS official
 daily summary for that monitoring station – which incorporates all
 readings taken, not just hourly snapshots – indicates it did hit 100
 degrees at some point on July 20. The data [can be viewed
-here](https://www.ncdc.noaa.gov/cdo-web/datasets/GHCND/stations/GHCND:USW00093784/detail)
+here](https://www.ncdc.noaa.gov/cdo-web/datasets/GHCND/stations/GHCND:USW00093784/detail).
 
 #### Supporting code and output \[cq\]
 
@@ -669,7 +666,7 @@ and emergency room visits, which are only available by ZIP code, and the
 median afternoon temperature of Baltimore ZIP codes, as calculated in
 the urban heat island data to examine relationships. The correlation
 coefficient for people diagnosed with asthma during hospital visits
-(r=.55) and emergency room visits (r=.49), and people diagnosed with
+(r=.56) and emergency room visits (r=.49), and people diagnosed with
 COPD during hospital visits (r=.67) and emergency room visits (r=.57),
 indicated a moderate to strong positive relationship between heat and
 asthma and copd rates. This is not causal. In hotter areas, rates of
@@ -724,7 +721,7 @@ cardiac arrest every 2.94 hours. When the heat index was under 80, the
 calls happened less frequently, every 5.3 hours. That meant there were
 80 percent more calls per day in very hot weather for cardiac arrest.
 There were 70 percent more calls for congestive heart failure. There
-were 343x more calls for heat exhaustion in hot weather and 17x more
+were 345x more calls for heat exhaustion in hot weather and 19x more
 calls for dehydration.
 
 #### Supporting code and output \[cq\]
@@ -842,9 +839,9 @@ unit in a first-floor window for fear of break-ins.”
 
 In Baltimore “community statistical areas”, there is a moderate positive
 correlation between an area’s violent crime rate and the area’s poverty
-rate, with a correlation coefficient (r) of .43, where -1 would
-reference a perfect positive correlation. Generally, the poorer the
-area, the more violent crime, and vice versa.
+rate, with a correlation coefficient (r) of .43, where 1 would reference
+a perfect positive correlation. Generally, the poorer the area, the more
+violent crime, and vice versa.
 
 #### Supporting code and output \[cq\]
 
@@ -1442,7 +1439,7 @@ neighborhood had tree canopy coverage of about 8% in 2015.”
 The block in the photo is on North Milton and East Monument at the edge
 of the McElderry Park neighborhood. The street shown is split between
 two U.S. Census blocks, with IDs of “245100702004002” and
-“245100702004002”. They had 7.6 percent and 8.6 percent tree canopy
+“245100702004002”. They had 7.6 percent and 8.7 percent tree canopy
 cover in 2015.
 
 #### Supporting code \[cq\]

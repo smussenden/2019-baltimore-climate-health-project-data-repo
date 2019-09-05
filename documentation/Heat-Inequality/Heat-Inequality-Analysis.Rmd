@@ -32,8 +32,8 @@ stories <- "story \"[Heat & Inequality: In Baltimore, the burden of rising tempe
 ```{r test-parent, child = here::here("documentation/common-header.Rmd")}
 ```
 
-
 ### Load packages
+
 ```{r}
 #######################
 #### Load Packages ####
@@ -52,6 +52,7 @@ options(scipen = 999)
 ```
 
 ### Load variables and data
+
 ```{r}
 
 #########################
@@ -65,7 +66,7 @@ path_to_data <- "../../data/output-data/"
 #### Load Data ####
 ###################
 
-## Indoor temperature and humidity sensor data
+### Indoor temperature and humidity sensor data
 
 # Michael and Alberta
 folder <- "temperature_sensors/michael/"
@@ -87,7 +88,7 @@ folder <- "temperature_sensors/tammy/"
 tammy_day_minute_averages <- read_csv(paste0(path_to_data, folder, "tammy_day_minute_averages.csv"))
 tammy_day_hourly_averages <- read_csv(paste0(path_to_data, folder, "tammy_day_hourly_averages.csv"))
 
-## Outdoor temperature data
+### Outdoor temperature data
 
 # Inner Harbor temperature data
 folder <- "baltimore_weather_stations/"
@@ -102,7 +103,7 @@ baltimore_change_temp <- read_csv(paste0(path_to_data, folder, "baltimore_change
 folder <- "heat_index_projections/"
 heat_index_projections <- read_csv(paste0(path_to_data, folder, "heat_index_projections.csv"))
 
-## Urban heat island, tree canopy, demographics data
+### Urban heat island, tree canopy, demographics data
 folder <- "tree_temp_demographics/"
 
 # Neighborhood geography
@@ -114,7 +115,7 @@ csa_tree_temp_demographics <- read_csv(paste0(path_to_data, folder, "csa_tree_te
 # Blocks geography
 blocks_tree_temp_demographics <- read_csv(paste0(path_to_data, folder, "blocks_tree_temp_demographics.csv"))
 
-## Hospital data
+### Hospital data
 folder <- "hospital_data/"
 
 # Inpatient admissions data
@@ -123,7 +124,7 @@ ip_full_zip_correlation_matrix <- read_csv(paste0(path_to_data, folder, "ip/ip_f
 # Emergency room admissions data
 op_er_full_zip_correlation_matrix <- read_csv(paste0(path_to_data, folder, "op_er/op_er_full_zip_correlation_matrix.csv"))
 
-## EMS Data
+### EMS Data
 folder <- "ems/"
 dmh_ems <- read_csv(paste0(path_to_data, folder, "dmh_ems.csv"))
 EMS_all <- read_csv(paste0(path_to_data, folder, "EMS_all.csv"))
@@ -136,7 +137,7 @@ EMS_all <- read_csv(paste0(path_to_data, folder, "EMS_all.csv"))
 "So as a dangerous 11-day heat wave tormented the city in July, the hottest month ever recorded on the planet, fewer and fewer residents were going outside."
 
 #### Explanation [cq]
-Over an 11-day period in July 2019 -- July 12 to July 22 -- each day during that stretch had a maximum temperature of at least 90 degrees F and maximum heat index values of at least 92 degrees F. This was measured at a National Weather Service monitoring station located in the Inner Harbor.
+Over an 11-day period in July 2019 -- July 12 through July 22 -- each day during that stretch had a maximum temperature of at least 90 degrees F and maximum heat index values of at least 92 degrees F. This was measured at a National Weather Service monitoring station located in the Inner Harbor.
 
 #### Supporting code and output [cq]
 ```{r rows.print=11}
@@ -157,13 +158,14 @@ Over an 11-day period in July 2019 -- July 12 to July 22 -- each day during that
   select(date, max_temp, max_heat_index)
 
 ```
+
 ### Fact: Temperature inside and outside Tammy Jackson's home [cq]
 “Can’t even put your head out the door,” said Tammy Jackson, 48, on a day when the temperature outside hit 100 degrees Fahrenheit and 92 degrees in her home. “This is too much. Oh Lord, this is too much.”
 
 #### Explanation [cq]
 Tammy Jackson, a resident of Baltimore's McElderry Park neighborhood, had a temperature and humidity sensor installed in her house by our reporters. In her home, the highest temperature reading on Saturday, July 20, the day referenced in the story, was 92 degrees (91.6 degrees F).
 
-For outdoor temperature, in most of our analysis, we used hourly snapshot readings taken at a National Weather Service monitoring station in the Inner Harbor. As the table below shows, the highest hourly reading in that data set on July 20 was 99 degrees. But the NWS official daily summary for that monitoring station -- which incorporates all readings taken, not just hourly snapshots -- indicates it did hit 100 degrees at some point on July 20. The data [can be viewed here](https://www.ncdc.noaa.gov/cdo-web/datasets/GHCND/stations/GHCND:USW00093784/detail)
+For outdoor temperature, in most of our analysis, we used hourly snapshot readings taken at a National Weather Service monitoring station in the Inner Harbor. As the table below shows, the highest hourly reading in that data set on July 20 was 99 degrees. But the NWS official daily summary for that monitoring station -- which incorporates all readings taken, not just hourly snapshots -- indicates it did hit 100 degrees at some point on July 20. The data [can be viewed here](https://www.ncdc.noaa.gov/cdo-web/datasets/GHCND/stations/GHCND:USW00093784/detail).
 
 #### Supporting code and output [cq]
 ```{r}
@@ -366,7 +368,7 @@ nsa_tree_temp %>%
 "Residents in the hottest areas have higher rates of chronic illnesses affected by heat, including asthma and COPD."
 
 #### Explanation [cq]
-We used condition prevalence rates from inpatient hospital admissions and emergency room visits, which are only available by ZIP code, and the median afternoon temperature of Baltimore ZIP codes, as calculated in the urban heat island data to examine relationships. The correlation coefficient for people diagnosed with asthma during hospital visits (r=.55) and emergency room visits (r=.49), and people diagnosed with COPD during hospital visits (r=.67) and emergency room visits (r=.57), indicated a moderate to strong positive relationship between heat and asthma and copd rates.  This is not causal.  In hotter areas, rates of asthma and copd are higher, and vice versa.
+We used condition prevalence rates from inpatient hospital admissions and emergency room visits, which are only available by ZIP code, and the median afternoon temperature of Baltimore ZIP codes, as calculated in the urban heat island data to examine relationships. The correlation coefficient for people diagnosed with asthma during hospital visits (r=.56) and emergency room visits (r=.49), and people diagnosed with COPD during hospital visits (r=.67) and emergency room visits (r=.57), indicated a moderate to strong positive relationship between heat and asthma and copd rates.  This is not causal.  In hotter areas, rates of asthma and copd are higher, and vice versa.
 
 #### Supporting code and output [cq]
 ```{r}
@@ -387,7 +389,7 @@ op_er_full_zip_correlation_matrix %>%
 #### Explanation [cq]
 By merging a dataset of EMS calls with a dataset of hourly Baltimore heat index values, we were able to determine the heat index at the time of each EMS call during summer 2018.  We looked at select conditions affected by heat, and compared how call rates changed when it was very hot -- over 103 heat index, a level defined by NWS as "dangerous -- and when the heat index was under 80. The second and third columns below reflect the number of hours that passed between calls (on average) when the heat index was below 80 degrees or above 103 degrees.  
 
-For example, when the heat index was above 103, there was a call for cardiac arrest every 2.94 hours.  When the heat index was under 80, the calls happened less frequently, every 5.3 hours. That meant there were 80 percent more calls per day in very hot weather for cardiac arrest.  There were 70 percent more calls for congestive heart failure.  There were 343x more calls for heat exhaustion in hot weather and 17x more calls for dehydration.
+For example, when the heat index was above 103, there was a call for cardiac arrest every 2.94 hours.  When the heat index was under 80, the calls happened less frequently, every 5.3 hours. That meant there were 80 percent more calls per day in very hot weather for cardiac arrest.  There were 70 percent more calls for congestive heart failure.  There were 345x more calls for heat exhaustion in hot weather and 19x more calls for dehydration.
 
 #### Supporting code and output [cq]
 ```{r}
@@ -469,7 +471,7 @@ In Baltimore "community statistical areas", there is a moderate negative correla
 "Crime rates are higher, so many people won’t put an air-conditioning unit in a first-floor window for fear of break-ins."
 
 #### Explanation [cq]
-In Baltimore "community statistical areas", there is a moderate positive correlation between an area's violent crime rate and the area's poverty rate, with a correlation coefficient (r) of .43, where -1 would reference a perfect positive correlation.  Generally, the poorer the area, the more violent crime, and vice versa.  
+In Baltimore "community statistical areas", there is a moderate positive correlation between an area's violent crime rate and the area's poverty rate, with a correlation coefficient (r) of .43, where 1 would reference a perfect positive correlation.  Generally, the poorer the area, the more violent crime, and vice versa.  
 
 #### Supporting code and output [cq]
 ```{r}
@@ -819,7 +821,7 @@ heat_index_projections %>%
 "Photo caption: This block at the edge of the city's McElderry Park neighborhood had tree canopy coverage of about 8% in 2015."
 
 #### Explanation [cq]
-The block in the photo is on North Milton and East Monument at the edge of the McElderry Park neighborhood. The street shown is split between two U.S. Census blocks, with IDs of "245100702004002" and "245100702004002". They had 7.6 percent and 8.6 percent tree canopy cover in 2015.
+The block in the photo is on North Milton and East Monument at the edge of the McElderry Park neighborhood. The street shown is split between two U.S. Census blocks, with IDs of "245100702004002" and "245100702004002". They had 7.6 percent and 8.7 percent tree canopy cover in 2015.
 
 #### Supporting code [cq]
 ```{r}
