@@ -1,21 +1,22 @@
 ---
-title: "Code Red Data Cleaning"
+title: "Data Cleaning for Code Red: Baltimore's Climate Divide"
 author: "Roxanne Ready, Theresa Diffendal, Jake Gluck, Jane Gerard and Sean Mussenden| Howard Center for Investigative Journalism and Capital News Service"
-date: "8/5/2019"
+date: "9/3/2019"
 output: 
   md_document:
     variant: markdown_github
     toc: true
-    toc_depth: 2
+    toc_depth: 3
   html_document:
     toc: true
-    toc_depth: 2
+    toc_depth: 3
     toc_float: true
 ---
 
 ```{r include=FALSE}
 # Save this file and run the following line from the console to output both HTML and .md formats:
-# rmarkdown::render('documentation/code-red-data-cleaning.Rmd', output_format = 'all')
+# rmarkdown::render('documentationData-Cleaning/Data-Cleaning', output_format = 'all')
+# spell_check_files("documentation/Data-Cleaning/Data-Cleaning.Rmd")
 ```
 
 ```{r setup, include=FALSE}
@@ -73,13 +74,15 @@ library(weathermetrics) # For calculating heat index
 library(readxl) # For reading in Excel files
 library(corrr) # For correlations
 
-# Turn off scientific notation in RStudio 
-# (prevents accidental coersion to character type on export)
+# Turn off scientific notation in RStudio (prevents accidental coersion to character type on export)
 options(scipen = 999)
+
+# Define path to root of data input folder
+path_to_data <- "../../data/input-data/"
 
 ```
 
-## Load and Clean Urban Heat Island Temperature Data
+## Load and clean urban heat island temperature data
 
 Researchers at Portland State University in Oregon and the Science Museum of Virginia provided temperature data from its Urban Heat Island Temperature study, which captured micro-level temperature variations for all of Baltimore City on August 29, 2018.
 
@@ -92,27 +95,24 @@ For each time period, reporters used the open-source mapping program [QGIS](http
 
 After caclulating the zonal statistis, reporters exported the files from QGIS as CSV files, loaded them into R and joined them into master tables for further processing and analysis.
 
-### Define functions and store universal variables
-
+### Define functions 
 ```{r}
-# Convert celcius values to fahrenheit
-### Replace this weathermetrics? 
+# Convert celcius values to fahrenheit (could later replace with weathermetrics, which produces same values in multiple tests weathermetrics::celsius.to.fahrenheit())
 c_to_f_convert <- function(x) (x * (9/5) + 32)
-
-# Common file path to raw temperature data
-path_to_data <- "../data/input-data/urban_heat_island_temperature/temperature_values/"
 
 ```
 
 ### Execute load-in and cleaning
-
 ```{r}
 #######################
 ###### Afternoon ######
 #######################
 
+# define specific folder in input data
+folder <- "urban_heat_island_temperature/afternoon/"
+
 # Afternoon temperatures by Block
-temp_aft_block <- read_csv(paste0(path_to_data, "afternoon/temp-by-block_af.csv")) %>%
+temp_aft_block <- read_csv(paste0(path_to_data, folder, "temp-by-block_af.csv")) %>%
   filter(COUNTYFP10 == "510") %>%
   rename(temp_mean_aft = temp_mean,
          temp_median_aft = temp_median,
@@ -121,7 +121,7 @@ temp_aft_block <- read_csv(paste0(path_to_data, "afternoon/temp-by-block_af.csv"
   mutate_at(vars(contains("temp")), c_to_f_convert)
 
 # Afternoon temperatures by ZCTA (ZIP Code Tabulation Area)
-temp_aft_zcta <- read_csv(paste0(path_to_data, "afternoon/temp-by-zcta-not-clipped-to-balt-city-border_af.csv")) %>%
+temp_aft_zcta <- read_csv(paste0(path_to_data, folder, "temp-by-zcta-not-clipped-to-balt-city-border_af.csv")) %>%
   rename(temp_mean_aft = t_af_mean,
          temp_median_aft = t_af_median,
          temp_min_aft = t_af_min,
@@ -129,7 +129,7 @@ temp_aft_zcta <- read_csv(paste0(path_to_data, "afternoon/temp-by-zcta-not-clipp
   mutate_at(vars(contains("temp")), c_to_f_convert)
 
 # Afternoon temperatures by Neighborhood Statistical Area (best representation of true city neighborhoods)
-temp_aft_nsa <- read_csv(paste0(path_to_data, "afternoon/temp-by-nsa_af.csv")) %>%
+temp_aft_nsa <- read_csv(paste0(path_to_data, folder, "temp-by-nsa_af.csv")) %>%
   rename(temp_mean_aft = temp_mean,
          temp_median_aft = temp_median,
          temp_min_aft = temp_min,
@@ -137,7 +137,7 @@ temp_aft_nsa <- read_csv(paste0(path_to_data, "afternoon/temp-by-nsa_af.csv")) %
   mutate_at(vars(contains("temp")), c_to_f_convert)
 
 # Afternoon temperatures by Community Statistical Area (small groups of city neighborhoods)
-temp_aft_csa <- read_csv(paste0(path_to_data, "afternoon/temp-by-csa_af.csv")) %>%
+temp_aft_csa <- read_csv(paste0(path_to_data, folder, "temp-by-csa_af.csv")) %>%
   mutate(temp_median = temp_media) %>%
   select(OBJECTID, CSA2010, temp_mean, temp_median, temp_min, temp_max) %>%
   rename(temp_mean_aft = temp_mean,
@@ -150,8 +150,12 @@ temp_aft_csa <- read_csv(paste0(path_to_data, "afternoon/temp-by-csa_af.csv")) %
 ###### Morning ########
 #######################
 
+# define specific folder in input data
+folder <- "urban_heat_island_temperature/morning/"
+
+
 # Morning temperatures by Block
-temp_am_block <- read_csv(paste0(path_to_data, "morning/temp-by-block_am.csv")) %>%
+temp_am_block <- read_csv(paste0(path_to_data, folder, "temp-by-block_am.csv")) %>%
   filter(COUNTYFP10 == "510") %>%
   rename(temp_mean_am = temp_mea_3,
          temp_median_am = temp_med_1,
@@ -160,7 +164,7 @@ temp_am_block <- read_csv(paste0(path_to_data, "morning/temp-by-block_am.csv")) 
   mutate_at(vars(contains("temp")), c_to_f_convert)
 
 # Morning temperatures by ZCTA (ZIP Code Tabulation Area)
-temp_am_zcta <- read_csv(paste0(path_to_data, "morning/temp-by-zcta-not-clipped-to-balt-city-border_am.csv")) %>%
+temp_am_zcta <- read_csv(paste0(path_to_data, folder, "temp-by-zcta-not-clipped-to-balt-city-border_am.csv")) %>%
   rename(temp_mean_am = t_am_mean,
          temp_median_am = t_am_median,
          temp_min_am = t_am_min,
@@ -168,7 +172,7 @@ temp_am_zcta <- read_csv(paste0(path_to_data, "morning/temp-by-zcta-not-clipped-
   mutate_at(vars(contains("temp")), c_to_f_convert)
 
 # Morning temperatures by Neighborhood Statistical Area (best representation of true city neighborhoods)
-temp_am_nsa <- read_csv(paste0(path_to_data, "morning/temp-by-nsa_am.csv")) %>%
+temp_am_nsa <- read_csv(paste0(path_to_data, folder, "temp-by-nsa_am.csv")) %>%
   rename(temp_mean_am = temp_mean,
          temp_median_am = temp_median,
          temp_min_am = temp_min,
@@ -176,7 +180,7 @@ temp_am_nsa <- read_csv(paste0(path_to_data, "morning/temp-by-nsa_am.csv")) %>%
   mutate_at(vars(contains("temp")), c_to_f_convert)
 
 # Morning temperatures by Community Statistical Area (small groups of city neighborhoods)
-temp_am_csa <- read_csv(paste0(path_to_data, "morning/temp-by-csa_am.csv")) %>%
+temp_am_csa <- read_csv(paste0(path_to_data, folder, "temp-by-csa_am.csv")) %>%
   mutate(temp_mean_am = temp_mea_2,
          temp_median_am = temp_med_2,
          temp_min_am = temp_min_2,
@@ -188,8 +192,12 @@ temp_am_csa <- read_csv(paste0(path_to_data, "morning/temp-by-csa_am.csv")) %>%
 ###### Evening ########
 #######################
 
+
+# define specific folder in input data
+folder <- "urban_heat_island_temperature/evening/"
+
 # Evening temperatures by Block
-temp_pm_block <- read_csv(paste0(path_to_data, "evening/temp-by-block_pm.csv")) %>%
+temp_pm_block <- read_csv(paste0(path_to_data, folder, "temp-by-block_pm.csv")) %>%
   filter(COUNTYFP10 == "510") %>%
   rename(temp_mean_pm = temp_mea_4,
          temp_median_pm = temp_med_2,
@@ -198,7 +206,7 @@ temp_pm_block <- read_csv(paste0(path_to_data, "evening/temp-by-block_pm.csv")) 
   mutate_at(vars(contains("temp")), c_to_f_convert)
 
 # Evening temperatures by ZCTA (ZIP Code Tabulation Area)
-temp_pm_zcta <- read_csv(paste0(path_to_data, "evening/temp-by-zcta-not-clipped-to-balt-city-border_pm.csv"))  %>%
+temp_pm_zcta <- read_csv(paste0(path_to_data, folder, "temp-by-zcta-not-clipped-to-balt-city-border_pm.csv"))  %>%
   rename(temp_mean_pm = t_pm_mean,
          temp_median_pm = t_pm_median,
          temp_min_pm = t_pm_min,
@@ -206,7 +214,7 @@ temp_pm_zcta <- read_csv(paste0(path_to_data, "evening/temp-by-zcta-not-clipped-
   mutate_at(vars(contains("temp")), c_to_f_convert)
 
 # Evening temperatures by Neighborhood Statistical Area (best representation of true city neighborhoods)
-temp_pm_nsa <- read_csv(paste0(path_to_data, "evening/temp-by-nsa_pm.csv")) %>%
+temp_pm_nsa <- read_csv(paste0(path_to_data, folder, "temp-by-nsa_pm.csv")) %>%
   rename(temp_mean_pm = temp_mean,
          temp_median_pm = temp_median,
          temp_min_pm = temp_min,
@@ -214,7 +222,7 @@ temp_pm_nsa <- read_csv(paste0(path_to_data, "evening/temp-by-nsa_pm.csv")) %>%
   mutate_at(vars(contains("temp")), c_to_f_convert)
 
 # Evening temperatures by Community Statistical Area (small groups of city neighborhoods)
-temp_pm_csa <- read_csv(paste0(path_to_data, "evening/temp-by-csa_pm.csv")) %>%
+temp_pm_csa <- read_csv(paste0(path_to_data, folder, "temp-by-csa_pm.csv")) %>%
   mutate(temp_mean_pm = temp_mea_1,
          temp_median_pm = temp_med_1,
          temp_min_pm = temp_min_1,
@@ -251,7 +259,7 @@ all_temp_zcta <- temp_am_zcta %>%
   rename_all(tolower) # Standardize variable naming capitalization
 
 #### Remove unneeded files ####
-rm(list=setdiff(ls(), c("all_temp_block", "all_temp_zcta", "all_temp_nsa", "all_temp_csa")))
+rm(list=setdiff(ls(), c("all_temp_block", "all_temp_zcta", "all_temp_nsa", "all_temp_csa", "path_to_data")))
 
 ```
 
@@ -259,28 +267,25 @@ rm(list=setdiff(ls(), c("all_temp_block", "all_temp_zcta", "all_temp_nsa", "all_
 
 The U.S. Forest Service and the University of Vermont Spatial Analysis Lab Spatial Analysis Lab created detailed maps of Baltimore's tree canopy in 2007 and 2015 using LIDAR and aerial imagery data. (Citation: O'Neil-Dunne J. 2017. GIS Shapefile, Tree Canopy Change 2007 - 2015 - Baltimore City. Environmental Data Initiative. https://doi.org/10.6073/pasta/79c1d2079271546e61823a98df2d2039)
 
-The original shapefile data was presented in terms of "no change," "gain," and "loss" categories. To perform the following analysis, reporters restructured the data within QGIS to represent 2007 and 2015 canopy coverage and [calculated zonal statistics](https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/documentation/qgis-directions/qgis-how-tos.md#d) (mean and median) at each year. They then exported the data from QGIS into CSVs, loaded them into R and joined them into master tables for further processing and analysis.
-
-### Define functions and store universal variables
-
-```{r}
-
-# Common file path to raw canopy data
-path_to_data <- "../data/input-data/tree-canopy/"
-
-```
+The original shapefile data was presented in terms of "no change," "gain," and "loss" categories. To perform the following analysis, we restructured the data within QGIS to represent 2007 and 2015 canopy coverage and calculated zonal statistics (mean and median) at each year. They then exported the data from QGIS into CSVs, loaded them into R and joined them into master tables for further processing and analysis.
 
 ### Execute load-in and cleaning
 
 ```{r}
 
-#### Block ####
+# Define specific folder in input data
+folder <- "tree-canopy/"
+
+#######################
+###### Blocks #########
+#######################
+
 # 2007
-tree_block_lidar_2007 <- read_csv(paste0(path_to_data, "by_block/btree_statistics_by_block_2007_lidar.csv")) %>%
+tree_block_lidar_2007 <- read_csv(paste0(path_to_data, folder, "by_block/btree_statistics_by_block_2007_lidar.csv")) %>%
   rename_all(tolower)
 
 # 2015
-tree_block_lidar_2015 <- read_csv(paste0(path_to_data, "by_block/btree_statistics_by_block_2015_lidar.csv")) %>%
+tree_block_lidar_2015 <- read_csv(paste0(path_to_data, folder, "by_block/btree_statistics_by_block_2015_lidar.csv")) %>%
   rename_all(tolower)
 
 # Join 2007 to 2015
@@ -297,16 +302,17 @@ tree_block_lidar_2007_2015 <- tree_block_lidar_2007 %>%
                  matches("countyfp10"), matches("blockce10")
   ),
   as.character)
-# How many times do blocks divide by zero to find the percent change? 793 compared to 12805 (12%)
 
 
-#### CSA ####
+#######################
+###### CSAs ###########
+#######################
 
 # 2007
-tree_csa_lidar_2007 <- read_csv(paste0(path_to_data, "by_community_statistical_area/btree_statistics_by_csa_2007_lidar.csv"))
+tree_csa_lidar_2007 <- read_csv(paste0(path_to_data, folder, "by_community_statistical_area/btree_statistics_by_csa_2007_lidar.csv"))
 
 # 2015
-tree_csa_lidar_2015 <- read_csv(paste0(path_to_data, "by_community_statistical_area/btree_statistics_by_csa_2015_lidar.csv"))
+tree_csa_lidar_2015 <- read_csv(paste0(path_to_data, folder, "by_community_statistical_area/btree_statistics_by_csa_2015_lidar.csv"))
 
 # Join 2007 to 2015
 tree_csa_lidar_2007_2015 <- tree_csa_lidar_2007 %>%
@@ -323,13 +329,15 @@ tree_csa_lidar_2007_2015 <- tree_csa_lidar_2007 %>%
   mutate("objectid" = as.character(objectid)) 
 
 
-#### NSA ####
+#######################
+###### NSAs  ##########
+#######################
 
 # 2007
-tree_nsa_lidar_2007 <- read_csv(paste0(path_to_data, "by_neighborhood_statistical_area/btree_statistics_by_nsa_2007_lidar.csv"))
+tree_nsa_lidar_2007 <- read_csv(paste0(path_to_data, folder, "by_neighborhood_statistical_area/btree_statistics_by_nsa_2007_lidar.csv"))
 
 # 2015
-tree_nsa_lidar_2015 <- read_csv(paste0(path_to_data, "by_neighborhood_statistical_area/btree_statistics_by_nsa_2015_lidar.csv"))
+tree_nsa_lidar_2015 <- read_csv(paste0(path_to_data, folder, "by_neighborhood_statistical_area/btree_statistics_by_nsa_2015_lidar.csv"))
 
 # Join 2007 to 2015
 tree_nsa_lidar_2007_2015 <- tree_nsa_lidar_2007 %>%
@@ -350,36 +358,30 @@ tree_nsa_lidar_2007_2015 <- tree_nsa_lidar_2007 %>%
 #### Remove unneeded files ####
 rm(list=setdiff(ls(), c(
   "tree_block_lidar_2007_2015", "tree_nsa_lidar_2007_2015", "tree_csa_lidar_2007_2015", 
-  "all_temp_block", "all_temp_zcta", "all_temp_nsa", "all_temp_csa")))
+  "all_temp_block", "all_temp_zcta", "all_temp_nsa", "all_temp_csa", "path_to_data")))
 
 ```
 
 ## Load and Clean Demographic Data
 
-The only recent demographic data available for neighborhood proxy areas is from the [Baltimore Neighborhood Indicators Alliance](https://bniajfi.org/vital_signs/data_downloads/), a **CSA-level** analysis from 2017. The U.S. federal government has not collected demographic information at many micro-geographic levels with reasonable margins of error since the 2010 Census, which this analysis determined is generally too old to be useful. The exception to this is the annual [American Community Survey](https://www.census.gov/acs/www/data/data-tables-and-tools/data-profiles/2017/), which uses a **ZCTA-level** geographic grouping. Additionally, this analysis used the 2010 population numbers at the **block** level to filter out low-population blocks. This analysis did not use demographic information at the **NSA** level.
+The only recent demographic data available for neighborhood proxy areas is from the [Baltimore Neighborhood Indicators Alliance](https://bniajfi.org/vital_signs/data_downloads/), a **CSA-level** analysis from 2017. The U.S. federal government has not collected demographic information at many micro-geographic levels with reasonable margins of error since the 2010 Census, which this analysis determined is generally too old to be useful. The exception to this is the annual [American Community Survey](https://www.census.gov/acs/www/data/data-tables-and-tools/data-profiles/2017/), which we used at a **ZCTA-level** geographic grouping. Additionally, this analysis used the 2010 population numbers at the **block** level to filter out low-population blocks. This analysis did not use demographic information at the **NSA** level, because the data did not exist in a readily available format with reasonable error margins.
 
-### Define functions and store universal variables
-
+### Execute load-in and cleaning
 ```{r}
 
 # Common file path to raw demographics data
-path_to_data <- "../data/input-data/demographics/"
+folder <- "demographics/"
 
-```
-
-### Execute load-in and cleaning
-
-```{r}
 #### Blocks #### 
 # Read in 2010 population data, SF1 U.S. Census data by block. Used only to filter out no population blocks before doing analysis. Otherwise, 2010 data is too old to use.
-demographics_block <- read_csv(paste0(path_to_data, "by_block/2010_SF1_Baltimore_City_Population_by_Block.csv")) %>%
+demographics_block <- read_csv(paste0(path_to_data, folder, "by_block/2010_SF1_Baltimore_City_Population_by_Block.csv")) %>%
   rename_all(tolower) %>%
   mutate("geoid10" = as.character(geoid10))
 
 #### CSA #### 
 # Data from BNIA, reading in 2017 values. https://bniajfi.org/vital_signs/data_downloads/.  
 # Clean column names and remove citywide values for Baltimore City so it joins correctly. 
-demographics_csa <- read_csv(paste0(path_to_data, "by_community_statistical_area/VS_Indicators_2017_Only_BNIA.csv")) %>%
+demographics_csa <- read_csv(paste0(path_to_data, folder, "by_community_statistical_area/VS_Indicators_2017_Only_BNIA.csv")) %>%
   clean_names() %>%
   rename_all(tolower) %>%
   filter(csa2010 != "Baltimore City")
@@ -389,7 +391,7 @@ demographics_csa <- read_csv(paste0(path_to_data, "by_community_statistical_area
 
 #### ZCTA #### 
 # From American Community Survey, 5 year averages 2017.
-demographics_zcta <- read_csv(paste0(path_to_data, "by_zcta/acs_2017_baltimore_zctas.csv")) %>%
+demographics_zcta <- read_csv(paste0(path_to_data, folder, "by_zcta/acs_2017_baltimore_zctas.csv")) %>%
   rename_all(tolower) %>%
   filter(zcta != "CITYWIDE")
 ```
@@ -441,7 +443,7 @@ zcta_temp_demographics <- all_temp_zcta %>%
 # Merge check: All tables have 55 records
 
 #### Remove unneeded files ####
-rm(list=setdiff(ls(), c("blocks_tree_temp_population", "zcta_temp_demographics", "nsa_tree_temp", "csa_tree_temp_demographics")))
+rm(list=setdiff(ls(), c("blocks_tree_temp_population", "zcta_temp_demographics", "nsa_tree_temp", "csa_tree_temp_demographics", "path_to_data")))
 
 ```
 
@@ -455,28 +457,27 @@ The raw data arrived as a .shp file, which reporters joined together with the va
 
 ```{r}
 
-# List of NSAs of interest
+# List of NSAs of interest for our analysis
 target_nsas <- c("Berea", "Broadway East", "Oliver", "Middle East", "Biddle Street","Milton-Montford", "Madison-Eastend", "CARE", "McElderry Park", "Ellwood Park/Monument", "Patterson Place", "Patterson Park Neighborhood", "Baltimore Highlands", "Highlandtown", "Upper Fells Point") %>%
   lapply(tolower)
 
-# List of nearby NSAs to use as counterpoints
+# List of nearby NSAs of interest for our analysis
 counterpoint_nsas <- c("Butcher's Hill", "Canton", "Washington Hill") %>%
   lapply(tolower)
 
 # Common file path to raw demographics data
-path_to_data <- "../data/input-data/street-trees/csv/"
+folder <- "street-trees/csv/"
 
 ```
 
 ### Execute load-in and cleaning
-
 ```{r}
 
 ##########################
 #### Load in the data ####
 ##########################
 
-street_trees <- read_csv(paste0(path_to_data, "by_nsa/street_trees_nsa_join_table.csv")) %>%
+street_trees <- read_csv(paste0(path_to_data, folder, "by_nsa/street_trees_nsa_join_table.csv")) %>%
   select(-COLOR_2, -LABEL) %>%
   rename_all(tolower) %>%
   mutate_all(tolower) %>%
@@ -811,27 +812,22 @@ master_street_trees_by_nsa <- tree_as_percent_of_spaces_by_nsa %>%
   ))
 
 #### Remove unneeded files ####
-rm(list=setdiff(ls(), c("blocks_tree_temp_population", "zcta_temp_demographics", "nsa_tree_temp", "csa_tree_temp_demographics", "street_trees_categorized", "redlining_tree", "master_street_trees_by_nsa")))
+rm(list=setdiff(ls(), c("blocks_tree_temp_population", "zcta_temp_demographics", "nsa_tree_temp", "csa_tree_temp_demographics", "street_trees_categorized", "redlining_tree", "master_street_trees_by_nsa", "path_to_data")))
 ```
 
 ## Load and Clean Redlining Data
 
 This analysis used QGIS to compute tree canopy for geographies based on redlining shapefiles downloaded from the [Mapping Inequality project](https://dsl.richmond.edu/panorama/redlining/#loc=11/39.3/-76.673&text=downloads).
 
-### Define Functions and store universal variables
-
+### Execute load in and cleaning
 ```{r}
+
 
 # Common file path to raw redlining data
-path_to_data <- "../data/input-data/redlining-data/"
+folder <- "redlining-data/"
 
-```
-
-### Execute load in and cleaning
-
-```{r}
-
-redlining_tree <- read_csv(paste0(path_to_data, "HOLC_Redlining_2015_tree_canopy.csv")) %>%
+# Load data
+redlining_tree <- read_csv(paste0(path_to_data, folder, "HOLC_Redlining_2015_tree_canopy.csv")) %>%
   select(-matches("name"), -matches("area_descr")) %>%
   mutate(grade_descr = case_when(
     holc_grade == "A" ~ "best",
@@ -848,29 +844,19 @@ redlining_tree <- read_csv(paste0(path_to_data, "HOLC_Redlining_2015_tree_canopy
 ```
 
 ## Load and Clean Hourly Temperature Data at BWI and Inner Harbor (DMH)
-
-Description here
-https://mesonet.agron.iastate.edu/request/download.phtml?network=MD_ASOS
-DMH - May 1, 1998 through current date (recently August 9). Set TZ to EST/EDT, Comma delimited no debug headers, no lat and long. Select air temp, dew point and relative humidity. Missing data use M. Save file to computer. 
-BWI - Same as above, 1945-01-01 through current date
-
-### Store universal variables
-
-```{r}
-
-# Common file path to raw EMS data
-path_to_data <- "../data/input-data/baltimore-weather-stations/"
-
-```
+We acquired historical temperature data for National Weather Service monitoring stations at both BWI airport (BWI) and the Inner Harbor monitoring station (DMH) and used it in various parts of our analysis.  We got this data from the excellent Iowa State University Iowa Environmental Mesonet, which contains information for global ASOS monitoring stations. We captured temperature, humidity and dew point data, which we used to calculate heat index. 
 
 ### Execute load-in and cleaning
 
 ```{r}
 
+# Store folder path
+
+folder <- "baltimore-weather-stations/"
+
 # Load BWI and DMH data 
-bwi <- read_csv(paste0(path_to_data, "BWI-1-1-45-current.txt"))
-# dmh <- read_csv(paste0(path_to_data, "DMH-5-1-98-current.txt"))
-dmh <- read_csv(paste0(path_to_data, "DMH-5-1-98-9-2-2019.txt"))
+bwi <- read_csv(paste0(path_to_data, folder, "BWI-1-1-45-current.txt"))
+dmh <- read_csv(paste0(path_to_data, folder, "DMH-5-1-98-9-2-2019.txt"))
 
 # Clean BWI data 
 bwi <- bwi  %>%
@@ -919,14 +905,11 @@ dmh <- dmh  %>%
   distinct()
 
 
-#######################################################################
-###### Adjust Inner Harbor Temperatures to Account for Heat Island ####
-#######################################################################
-
 # We have 75 years of dew point and temperature data for BWI, which allows us to calculate heat index
 # We have 20 years of dew point and temperature data for DMH (Inner Harbor), which allows us to calculate heat index. 
-# I talked with Dan Li, a climate researcher at Boston University who has studied variation in urban heat island temperatures between suburbs in different seasons and different hours of the day, who said a pretty good way to calculate the difference would be this:
-# 1. Join the 20 years of DMH data to the 20 years of BWI data.  Join on date and hour, so we end up with a data frame of values for both DMH and BWI for each date and hour in our data set.  Do an inner join, so that if for some reason DMH is missing an hour from its data set (or vice versa), it doesn't mess up our averages. Calculate new columns with difference in temperature, dew point, relative humidity and heat index between BWI and DMH.  Since in almost all cases BWI will be colder than DMH, make it so the difference is positive if DMH is greater than BWI.
+# Dan Li, a climate researcher at Boston University who has studied variation in urban heat island temperatures between suburbs in different seasons and different hours of the day, said a pretty good way to calculate the difference in urban v suburban heat island, and create a longer estimated historical record of temperatures at DMH would be:
+
+# Join the 20 years of DMH data to the 20 years of BWI data.  Join on date and hour, so we end up with a data frame of values for both DMH and BWI for each date and hour in our data set.  Do an inner join, so that if for some reason DMH is missing an hour from its data set (or vice versa), it doesn't mess up our averages. Calculate new columns with difference in temperature, dew point, relative humidity and heat index between BWI and DMH.  Since in almost all cases BWI will be colder than DMH, make it so the difference is positive if DMH is greater than BWI.
 
 dmh_bwi <- bwi %>%
   inner_join(dmh, by = c("date", "hour")) %>%
@@ -937,7 +920,7 @@ dmh_bwi <- bwi %>%
          relative_humidity_difference = avg_hourly_relative_humidity_dmh - avg_hourly_relative_humidity_bwi,
          heat_index_difference = avg_hourly_heat_index_dmh - avg_hourly_heat_index_bwi) 
 
-# 4. Group by month and hour and calculate the AVERAGE difference in temperature, dew point, relative humidity and heat index. 
+# Group by month and hour and calculate the AVERAGE difference in temperature, dew point, relative humidity and heat index. 
 dmh_bwi_monthly_by_hour <- dmh_bwi %>%
   group_by(month, hour) %>%
   summarize(avg_temperature_difference = mean(temperature_difference),
@@ -945,7 +928,7 @@ dmh_bwi_monthly_by_hour <- dmh_bwi %>%
          avg_relative_humidity_difference = mean(relative_humidity_difference),
          avg_heat_index_difference = mean(heat_index_difference))
   
-# 5. Go back to the original 75 years of BWI data (after it's been cleaned, not on raw import).  Write case when function adjusting the temperature and dew point values based on table created in step 4. Create two new columns to recalculate heat index and relative humidity (see cleaning function above, weathermetrics package has a nice way of doing this). Call them adjusted_heat_index, adjusted_relative_humidity 
+# Go back to the original 75 years of BWI data (after it's been cleaned, not on raw import).  Write case when function adjusting the temperature and dew point values based on table created in step 4. Create two new columns to recalculate heat index and relative humidity (see cleaning function above, weathermetrics package has a nice way of doing this). Call them adjusted_heat_index, adjusted_relative_humidity 
 
 estimated_historical_dmh <- bwi %>%
   inner_join(dmh_bwi_monthly_by_hour, by = c("month", "hour")) %>%
@@ -957,28 +940,22 @@ estimated_historical_dmh <- bwi %>%
 
 ```
 
-Description of Baltimore City EMS Data Here
+## Load and Clean EMS Data
 
-
-### Store universal variables
-
-```{r}
-
-# Common file path to raw EMS data
-path_to_data <- "../data/input-data/baltimore-ems/csv/"
-
-```
+We obtained from Baltimore city EMS calls between 2014 and 2018.  Each call included information about conditions and ZIP code of each call. 
 
 ### Execute load-in and cleaning
-
 ```{r}
 
+# Folder path
+folder <- "baltimore-ems/"
+
 # Load in five CSVs, one for each year
-EMS_2014 <- read.csv(paste0(path_to_data, "2014.csv"))
-EMS_2015 <- read.csv(paste0(path_to_data, "2015.csv"))
-EMS_2016 <- read.csv(paste0(path_to_data, "2016.csv"))
-EMS_2017 <- read.csv(paste0(path_to_data, "2017.csv"))
-EMS_2018_partial <- read.csv(paste0(path_to_data, "2018-1.1-11.30.csv"))
+EMS_2014 <- read.csv(paste0(path_to_data, folder, "2014.csv"))
+EMS_2015 <- read.csv(paste0(path_to_data, folder, "2015.csv"))
+EMS_2016 <- read.csv(paste0(path_to_data, folder, "2016.csv"))
+EMS_2017 <- read.csv(paste0(path_to_data, folder, "2017.csv"))
+EMS_2018_partial <- read.csv(paste0(path_to_data, folder, "2018-1.1-11.30.csv"))
 
 # Bind together into one dataframe
 
@@ -1149,13 +1126,13 @@ filter(`date` >= date("2018-06-21") & `date` <= ("2018-09-21"))
 ```
 
 ## Load and Clean Hospital Admissions Data 
+From the Health Services Cost Review Commission in Maryland, we obtained detailed records of inpatient and outpatient hospital visits, with one record per visit, between 2013 and 2018.  The code for processing the data is included here, but we cannot store the original files that are processed by that code, per our MOU with the HSCRC.
 
-DESCRIPTION GOES HERE
 ### Define functions and store universal variables
 ```{r}
 
 # Common file path to raw EMS data
-path_to_data <- "../data/input-data/hscrc-hospital-data/"
+folder <- "hscrc-hospital-data/"
 
 # Function to make correlation matrix
 make_correlation_matrix <- function(dataframe) {
@@ -1205,26 +1182,26 @@ make_correlation_matrix <- function(dataframe) {
 
 ```{r}
 # Load inpatient hospital admissions percentage by zipcode 
-ip_full_zip <- read_csv(paste0(path_to_data, "ip/ip_full_zip.csv"))
+ip_full_zip <- read_csv(paste0(path_to_data, folder, "ip/ip_full_zip.csv"))
 ip_full_zip <- ip_full_zip %>%
   filter(ZIPCODE != "CITYWIDE", ZIPCODE != "21251") %>%
   select(ZIPCODE, matches("asthma"), matches("kidney"), matches("diabetes"), matches("copd"), matches("heart"), matches("angina"), matches("artery"), -matches("count"), -matches("percap"), -matches("population") )
 
 # Load inpatient hospital admissions percentage by zipcode, broken down by medicaid status
-ip_full_zip_medicaid <- read_csv(paste0(path_to_data, "ip/ip_full_medicaid.csv"))
+ip_full_zip_medicaid <- read_csv(paste0(path_to_data, folder, "ip/ip_full_medicaid.csv"))
 ip_full_zip_medicaid <- ip_full_zip_medicaid %>%
   filter(ZIPCODE != "CITYWIDE", ZIPCODE != "21251") %>%
   select(ZIPCODE, matches("asthma"), matches("kidney"), matches("diabetes"), matches("copd"), matches("heart"), matches("angina"), matches("artery"), -matches("count"), -matches("percap"), -matches("population"), -matches("not"), -matches("commercial")) %>%
   select(ZIPCODE, matches("medicaid"))
 
 # Load ER hospital admissions percentage by zipcode 
-op_er_full_zip <- read_csv(paste0(path_to_data, "op_er/op_er_full_zip.csv"))
+op_er_full_zip <- read_csv(paste0(path_to_data, folder, "op_er/op_er_full_zip.csv"))
 op_er_full_zip <- op_er_full_zip %>%
   filter(ZIPCODE != "CITYWIDE", ZIPCODE != "21251") %>%
   select(ZIPCODE, matches("asthma"), matches("kidney"), matches("diabetes"), matches("copd"), matches("heart"), matches("angina"), matches("artery"), -matches("count"), -matches("percap"), -matches("population") )
 
 # Load ER hospital admissions percentage by zipcode, broken down by medicaid status
-op_er_full_zip_medicaid <- read_csv(paste0(path_to_data, "op_er/op_er_full_medicaid.csv"))
+op_er_full_zip_medicaid <- read_csv(paste0(path_to_data, folder, "op_er/op_er_full_medicaid.csv"))
 op_er_full_zip_medicaid <- op_er_full_zip_medicaid %>%
   filter(ZIPCODE != "CITYWIDE", ZIPCODE != "21251") %>%
   select(ZIPCODE, matches("asthma"), matches("kidney"), matches("diabetes"), matches("copd"), matches("heart"), matches("angina"), matches("artery"), -matches("count"), -matches("percap"), -matches("population"), -matches("not"), -matches("commercial")) %>%
@@ -1238,16 +1215,16 @@ make_correlation_matrix(op_er_full_zip_medicaid)
 
 ```
 
-## Load and Clean Sensor Data
+## Load and clean sensor data
 
-DESCRIPTION
+We built temperature and humidity sensors, using this [excellent "Harlem Heat" project guide](https://github.com/datanews/harlem-heat). We placed them in several homes in Baltimore in summer 2019, and joined them with outdoor temperature to examine how heat index varied indoors and out.
 
 ### Store universal variables
 
 ```{r}
 
 # Common file path to raw EMS data
-path_to_data <- "../data/input-data/temperature-sensors/"
+folder <- "temperature-sensors/"
 
 ### Define column headers for sensor readings data ###
 sensor_col_names <- c("sensor_id", "unix_time", "datetime", "temperature", "relative_humidity", "battery_life")
@@ -1320,13 +1297,13 @@ process_sensor_data <- function(person_location) {
 
 #### Read in Data ####
 # Stephanie Pingley bedroom
-stephanie <- read_csv(paste0(path_to_data,"stephanie/stephanie.TXT"), col_names = sensor_col_names)
+stephanie <- read_csv(paste0(path_to_data, folder, "stephanie/stephanie.TXT"), col_names = sensor_col_names)
 # Michael and Alberta 
-michael <- read_csv(paste0(path_to_data,"michael/michael.TXT"), col_names = sensor_col_names)
+michael <- read_csv(paste0(path_to_data, folder, "michael/michael.TXT"), col_names = sensor_col_names)
 # Tammy first floor
-tammy <- read_csv(paste0(path_to_data,"tammy/tammy-first-floor.TXT"), col_names = sensor_col_names)
+tammy <- read_csv(paste0(path_to_data, folder, "tammy/tammy-first-floor.TXT"), col_names = sensor_col_names)
 # Audrey unknown location
-audrey <- read_csv(paste0(path_to_data,"audrey/audrey.TXT"), col_names = sensor_col_names)
+audrey <- read_csv(paste0(path_to_data, folder, "audrey/audrey.TXT"), col_names = sensor_col_names)
 
 process_sensor_data(stephanie)
 process_sensor_data(michael)
@@ -1334,40 +1311,19 @@ process_sensor_data(tammy)
 process_sensor_data(audrey)
 ```
 
-## Load and Clean Police Tree Trimming Data
-
-The following data is a sample of tree trimming and removal requests the Baltimore Police Department made to the Baltimore City Recreation & Parks Urban Forestry Division going back to roughly January 2018. This is not a complete list of all requests.
-
-```{r}
-
-# Common file path to raw temperature data
-path_to_data <- "../data/input-data/street-trees/"
-
-```
-
-```{r}
-
-#### Load in CCTV and tree trimming data
-cctv_cameras_street_trees <- read_excel(paste0(path_to_data, "Violence_Reduction_Locations.xls")) %>%
-  mutate_all(tolower)
-
-```
-
-
 ## Load and Clean Historical Baltimore and U.S. Weather Data 
-NEED TO WRITE UP THING HERE
-Add in screenshots of what we're downloading, see desktop. and link to website
+To calculate how average annual tempertures in Baltimore changed compared to the U.S. over the last century, we pulled data from the NCDC on average annual temperatures for both geographies. 
 
 ```{r}
 
 # Common file path to raw temperature data
-path_to_data <- "../data/input-data/1895-2019-average-temp/"
+folder <- "1895-2019-average-temp/"
 
 # Read in temperature data files for US
-us_change_temp <- read_csv(paste0(path_to_data, "us-change-temp.csv"))
+us_change_temp <- read_csv(paste0(path_to_data, folder, "us-change-temp.csv"))
 
 # Read in temperature data files for Baltimore
-baltimore_change_temp <- read_csv(paste0(path_to_data, "baltimore-change-temp.csv")) 
+baltimore_change_temp <- read_csv(paste0(path_to_data, folder, "baltimore-change-temp.csv")) 
 
 # Clean date and select only needed columns for Baltimore
 baltimore_change_temp <- baltimore_change_temp %>%
@@ -1380,7 +1336,8 @@ us_change_temp <- us_change_temp %>%
   clean_names()
 
 ```
-### Hot days increase data
+## Hot days increase data
+
 
 ```{r}
 
@@ -1390,21 +1347,6 @@ path_to_data <- "../data/input-data/heat-index-projections/"
 heat_index_projections <- read_xlsx(paste0(path_to_data, "killer-heat-data-by-city.xlsx"), sheet="cleaned_all_cities")
 
 ```
-### Stuff I need to add in
-Theresa 1895 data and directions on how I pulled that down
-Data on heat index days jump
-hscrc data
-
-
-    3.3-6V Input
-    1-1.5mA measuring current
-    40-50 uA standby current
-    Humidity from 0-100% RH
-    -40 - 80 degrees C temperature range
-    +-2% RH accuracy
-    +-0.5 degrees C
-https://www.sparkfun.com/products/10167
-
 
 
 ## Output All Cleaned Data to CSV Files
