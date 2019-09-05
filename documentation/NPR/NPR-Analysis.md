@@ -33,7 +33,7 @@ This R markdown document describes a portion of the data analysis for a
 reporting project examining the effects of climate-change driven
 temperature increases on the health of people who live in cities. The
 project was done in partnership with the [University of Maryland Philip
-Merrill College of Journalism](), [Capital News
+Merrill College of Journalism](https://merrill.umd.edu/), [Capital News
 Service](https://cnsmaryland.org/), [the Howard Center for Investigative
 Journalism](https://merrill.umd.edu/about-merrill/signature-programs/the-howard-center-for-investigative-journalism/),
 [NPR](https://www.npr.org/), [Wide Angle Youth
@@ -46,9 +46,9 @@ Poor Often Feel It
 Most](https://www.npr.org/templates/story/story.php?storyId=754044732&live=1)”
 and “[How High Heat Can Impact Mental
 Health](https://www.npr.org/templates/story/story.php?storyId=757034136&live=1)”
-that are based on Howard Center data analysis, this document provides
-the original fact, the code and code output that support that fact, and
-an explanation where necessary.
+based on Howard Center data analysis, this document provides the
+original fact, the code and code output that support that fact, and an
+explanation where necessary.
 
 Here are links to other stories in the series:
 
@@ -253,11 +253,11 @@ csa_tree_temp_demographics %>%
 In Baltimore’s “community statistical areas”, we examined the
 relationship between heat (median afternoon temperature in our urban
 heat island data) and poverty. An r of 1 would indicate a perfect
-positive linear relationship and an r of -1 would indicate a perfect
-negative linear relationship and 0 indicating no relationship. There
-were moderate positive correlations between heat poverty (r =.38). In
-general, the hotter the neighborhood, the higher the poverty rate, and
-vice versa.
+positive linear relationship, an r of -1 would indicate a perfect
+negative linear relationship, and 0 would indicate no relationship.
+There were moderate positive correlations between heat poverty (r =.38).
+In general, the hotter the neighborhood, the higher the poverty rate,
+and vice versa.
 
 #### Supporting code and output \[cq\]
 
@@ -384,8 +384,8 @@ EMS_all %>%
 ### Fact: EMS calls for chronic conditions \[cq\]
 
 -   **Audio Story:** “But calls also increased for chronic conditions,
-    including several cardiovascular and respiratory conditions.” \*
-    **Web Story:** “But calls increased for chronic conditions too: EMS
+    including several cardiovascular and respiratory conditions.”
+-   **Web Story:** “But calls increased for chronic conditions too: EMS
     calls for chronic obstructive pulmonary disorder (COPD) increased by
     nearly 70 percent. Calls for respiratory distress increased by 20
     percent. Calls for cardiac arrest rose by 80 percent and those for
@@ -404,7 +404,7 @@ By merging a dataset of EMS calls with a dataset of hourly Baltimore
 heat index values, we were able to determine the heat index at the time
 of each EMS call during summer 2018. We looked at select conditions
 affected by heat, and compared how call rates changed when it was very
-hot – over 103 heat index, a level defined by NWS as "dangerous – and
+hot – over 103 heat index, a level defined by NWS as “dangerous” – and
 when the heat index was under 80. The third and fourth columns below
 reflect the number of hours that passed between calls (on average) when
 the heat index was below 80 degrees or above 103 degrees. The table
@@ -598,7 +598,7 @@ By merging a dataset of EMS calls with a dataset of hourly Baltimore
 heat index values, we were able to determine the heat index at the time
 of each EMS call during summer 2018. We looked at select conditions
 affected by heat, and compared how call rates changed when it was very
-hot – over 103 heat index, a level defined by NWS as "dangerous – and
+hot – over 103 heat index, a level defined by NWS as “dangerous” – and
 when the heat index was under 80. The third and fourth columns below
 reflect the number of hours that passed between calls (on average) when
 the heat index was below 80 degrees or above 103 degrees. The table
@@ -668,7 +668,7 @@ By merging a dataset of EMS calls with a dataset of hourly Baltimore
 heat index values, we were able to determine the heat index at the time
 of each EMS call during summer 2018. We looked at select conditions
 affected by heat, and compared how call rates changed when it was very
-hot – over 103 heat index, a level defined by NWS as "dangerous – and
+hot – over 103 heat index, a level defined by NWS as “dangerous” – and
 when the heat index was under 80. The third and fourth columns below
 reflect the number of hours that passed between calls (on average) when
 the heat index was below 80 degrees or above 103 degrees. The table
@@ -678,7 +678,7 @@ temperature groupings.
 In Summer 2018, when the heat index was under 80 degrees, there was a
 medical call for substance abuse every 2.96 hours (nearly 3 hours). When
 the heat index hit 103 degrees, the rate of calls increased dramatically
-– to one call every 1.35 hours. That’s an increase in the rate of about
+– to one call every 1.36 hours. That’s an increase in the rate of about
 an hour and a half, or an increase of 118 percent. A 100 percent
 increase is a doubling, so it’s fair to say more than doubled.
 

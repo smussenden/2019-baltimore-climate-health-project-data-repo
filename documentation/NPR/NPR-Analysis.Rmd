@@ -25,40 +25,12 @@ output:
 knitr::opts_chunk$set(echo = TRUE, message=FALSE, paged.print=TRUE)
 ```
 
-## Introduction
+```{r include=FALSE}
+stories <- "stories \"[As Rising Heat Bakes U.S. Cities, The Poor Often Feel It Most](https://www.npr.org/templates/story/story.php?storyId=754044732&live=1)\" and \"[How High Heat Can Impact Mental Health](https://www.npr.org/templates/story/story.php?storyId=757034136&live=1)\" "
+```
 
-This R markdown document describes a portion of the data analysis for a reporting project examining the effects of climate-change driven temperature increases on the health of people who live in cities.  The project was done in partnership with the [University of Maryland Philip Merrill College of Journalism](
-), [Capital News Service](https://cnsmaryland.org/), [the Howard Center for Investigative Journalism](https://merrill.umd.edu/about-merrill/signature-programs/the-howard-center-for-investigative-journalism/), [NPR](https://www.npr.org/), [Wide Angle Youth Media](https://www.wideanglemedia.org/) and [WMAR](https://www.wmar2news.com/). It also moved on the Associated Press wire. 
-
-For each sentence in the stories "[As Rising Heat Bakes U.S. Cities, The Poor Often Feel It Most](https://www.npr.org/templates/story/story.php?storyId=754044732&live=1)" and "[How High Heat Can Impact Mental Health](https://www.npr.org/templates/story/story.php?storyId=757034136&live=1)" that are based on Howard Center data analysis, this document provides the original fact, the code and code output that support that fact, and an explanation where necessary. 
-
-Here are links to other stories in the series: 
-
-**CNSMaryland**
-
-* [Code Red: Baltimore's Climate Divide](https://cnsmaryland.org/interactives/summer-2019/code-red/introduction.html)
-* [Heat & Inequality: In Baltimore, the burden of rising temperatures isn’t shared](https://cnsmaryland.org/interactives/summer-2019/code-red/neighborhood-heat-inequality.html) 
-* [Heat & Health: For people with chronic health conditions, heat and humidity are more than a summer nuisance](https://cnsmaryland.org/interactives/summer-2019/code-red/heat-health.html)
-* [The Role of Trees: No trees, no shade, no relief as climate heats up](https://cnsmaryland.org/interactives/summer-2019/code-red/role-of-trees.html)
-* [Seeking Solutions: Are government leaders and residents ready to act?](https://cnsmaryland.org/interactives/summer-2019/code-red/city-climate-future.html)
-* [Behind The Scenes: A look at how and why we reported the series](https://cnsmaryland.org/interactives/summer-2019/code-red/behind-scenes.html)
-
-**NPR**
-
-* [As Rising Heat Bakes U.S. Cities, The Poor Often Feel It Most](https://www.npr.org/2019/09/03/754044732/as-rising-heat-bakes-u-s-cities-the-poor-often-feel-it-most)
-* [How High Heat Can Impact Mental Health](https://www.npr.org/templates/story/story.php?storyId=757034136&live=1)
-
-**WMAR**
-
-* [Baltimore neighborhood identified as 'ground zero' for local effects of climate crisis](https://www.wmar2news.com/news/region/baltimore-city/baltimore-neighborhood-identified-as-ground-zero-for-local-effects-of-climate-crisis)
-
-## Setup and Links
-
-* The entire repo for this analysis, including the data needed to reproduce it, is available through the [Howard Center's GitHub](https://github.com/Howard-Center-Investigations/Code-Red-Baltimore-Climate-Divide).
-* The R markdown file for this specific analysis is available [here](https://github.com/Howard-Center-Investigations/Code-Red-Baltimore-Climate-Divide/documentation/NPR/NPR-Analysis.Rmd).
-* An HTML output of the R markdown file for this analysis is available [here](https://howard-center-investigations.github.io/NPR-Analysis.html).
-* The R markdown file used to clean the data used in the analysis is available [here](https://github.com/Howard-Center-Investigations/Code-Red-Baltimore-Climate-Divide/documentation/Data-Cleaning/Data-Cleaning.Rmd).  It contains more detail about data sources, cleaning and analysis methods, limitations and software tools used. 
-* NPR has made available a separate GitHub repo for nationwide analysis on urban heat islands available [here](https://github.com/nprapps/heat-income). 
+```{r test-parent, child = here::here("documentation/common-header.Rmd")}
+```
 
 ### Load packages
 ```{r}
@@ -172,7 +144,7 @@ csa_tree_temp_demographics %>%
 * **Web Story:** "Across Baltimore, the hottest areas tend to be the poorest and that pattern is not unusual."
 
 #### Explanation [cq]
-In Baltimore's "community statistical areas", we examined the relationship between heat (median afternoon temperature in our urban heat island data) and poverty.  An r of 1 would indicate a perfect positive linear relationship and an r of -1 would indicate a perfect negative linear relationship and 0 indicating no relationship. There were moderate positive correlations between heat poverty (r =.38). In general, the hotter the neighborhood, the higher the poverty rate, and vice versa.
+In Baltimore's "community statistical areas", we examined the relationship between heat (median afternoon temperature in our urban heat island data) and poverty.  An r of 1 would indicate a perfect positive linear relationship, an r of -1 would indicate a perfect negative linear relationship, and 0 would indicate no relationship. There were moderate positive correlations between heat poverty (r =.38). In general, the hotter the neighborhood, the higher the poverty rate, and vice versa.
 
 #### Supporting code and output [cq]
 ```{r}
@@ -251,11 +223,12 @@ EMS_all %>%
 
 ### Fact: EMS calls for chronic conditions [cq]
 
-* **Audio Story:** "But calls also increased for chronic conditions, including several cardiovascular and respiratory conditions." * **Web Story:** "But calls increased for chronic conditions too: EMS calls for chronic obstructive pulmonary disorder (COPD) increased by nearly 70 percent. Calls for respiratory distress increased by 20 percent. Calls for cardiac arrest rose by 80 percent and those for high blood pressure more than doubled. Other conditions also spiked: Psychiatric disorders, substance abuse and dehydration, among others."
+* **Audio Story:** "But calls also increased for chronic conditions, including several cardiovascular and respiratory conditions." 
+* **Web Story:** "But calls increased for chronic conditions too: EMS calls for chronic obstructive pulmonary disorder (COPD) increased by nearly 70 percent. Calls for respiratory distress increased by 20 percent. Calls for cardiac arrest rose by 80 percent and those for high blood pressure more than doubled. Other conditions also spiked: Psychiatric disorders, substance abuse and dehydration, among others."
 * **Web Story:** "And living day after day in an environment that's literally hotter isn't just uncomfortable, it can have dire and sometimes deadly health consequences – a fact we found reflected in Baltimore's soaring rates of emergency calls when the heat index spiked to dangerous levels." 
 
 #### Explanation [cq]
-By merging a dataset of EMS calls with a dataset of hourly Baltimore heat index values, we were able to determine the heat index at the time of each EMS call during summer 2018.  We looked at select conditions affected by heat, and compared how call rates changed when it was very hot -- over 103 heat index, a level defined by NWS as "dangerous -- and when the heat index was under 80. The third and fourth columns below reflect the number of hours that passed between calls (on average) when the heat index was below 80 degrees or above 103 degrees. The table below reflects the percentage difference (second column) in call rates between the two temperature groupings.
+By merging a dataset of EMS calls with a dataset of hourly Baltimore heat index values, we were able to determine the heat index at the time of each EMS call during summer 2018.  We looked at select conditions affected by heat, and compared how call rates changed when it was very hot -- over 103 heat index, a level defined by NWS as "dangerous" -- and when the heat index was under 80. The third and fourth columns below reflect the number of hours that passed between calls (on average) when the heat index was below 80 degrees or above 103 degrees. The table below reflects the percentage difference (second column) in call rates between the two temperature groupings.
 
 #### Supporting code and output [cq]
 ```{r}
@@ -349,7 +322,7 @@ nsa_tree_temp %>%
 * **Web story**: An analysis by the University of Maryland's Howard Center for Investigative Journalism found emergency response calls relating to psychiatric conditions increased nearly 40% in Baltimore in the summer of 2018, when the heat index spiked above 103. 
 
 #### Explanation [cq]
-By merging a dataset of EMS calls with a dataset of hourly Baltimore heat index values, we were able to determine the heat index at the time of each EMS call during summer 2018.  We looked at select conditions affected by heat, and compared how call rates changed when it was very hot -- over 103 heat index, a level defined by NWS as "dangerous -- and when the heat index was under 80. The third and fourth columns below reflect the number of hours that passed between calls (on average) when the heat index was below 80 degrees or above 103 degrees. The table below reflects the percentage difference (second column) in call rates between the two temperature groupings.
+By merging a dataset of EMS calls with a dataset of hourly Baltimore heat index values, we were able to determine the heat index at the time of each EMS call during summer 2018.  We looked at select conditions affected by heat, and compared how call rates changed when it was very hot -- over 103 heat index, a level defined by NWS as "dangerous" -- and when the heat index was under 80. The third and fourth columns below reflect the number of hours that passed between calls (on average) when the heat index was below 80 degrees or above 103 degrees. The table below reflects the percentage difference (second column) in call rates between the two temperature groupings.
 
 In Summer 2018, when the heat index was under 80 degrees, there was a medical call for a behavioral and psychiatric disorder every 1.77 hours (1 hour, 46 minutes). When the heat index hit 103 degrees, the rate of calls increased dramatically -- to one call every 1.29 hours (1 hour, 17 minutes). That's an increase in the rate of 29 minutes, or an increase of 37 percent.
 
@@ -393,9 +366,9 @@ EMS_all %>%
 * **Web story:** "Often, mental health patients are struggling with more than a mental illness. Studies have linked heat and increased drug overdoses, as well as heightened effects of alcohol poisoning - and the Howard Center found calls relating to substance abuse more than doubled during dangerous heat in the summer of 2018."
 
 #### Explanation [cq]
-By merging a dataset of EMS calls with a dataset of hourly Baltimore heat index values, we were able to determine the heat index at the time of each EMS call during summer 2018.  We looked at select conditions affected by heat, and compared how call rates changed when it was very hot -- over 103 heat index, a level defined by NWS as "dangerous -- and when the heat index was under 80. The third and fourth columns below reflect the number of hours that passed between calls (on average) when the heat index was below 80 degrees or above 103 degrees. The table below reflects the percentage difference in call rates between the two temperature groupings.
+By merging a dataset of EMS calls with a dataset of hourly Baltimore heat index values, we were able to determine the heat index at the time of each EMS call during summer 2018.  We looked at select conditions affected by heat, and compared how call rates changed when it was very hot -- over 103 heat index, a level defined by NWS as "dangerous" -- and when the heat index was under 80. The third and fourth columns below reflect the number of hours that passed between calls (on average) when the heat index was below 80 degrees or above 103 degrees. The table below reflects the percentage difference in call rates between the two temperature groupings.
 
-In Summer 2018, when the heat index was under 80 degrees, there was a medical call for substance abuse every 2.96 hours (nearly 3 hours). When the heat index hit 103 degrees, the rate of calls increased dramatically -- to one call every 1.35 hours.  That's an increase in the rate of about an hour and a half, or an increase of 118 percent.  A 100 percent increase is a doubling, so it's fair to say more than doubled. 
+In Summer 2018, when the heat index was under 80 degrees, there was a medical call for substance abuse every 2.96 hours (nearly 3 hours). When the heat index hit 103 degrees, the rate of calls increased dramatically -- to one call every 1.36 hours.  That's an increase in the rate of about an hour and a half, or an increase of 118 percent.  A 100 percent increase is a doubling, so it's fair to say more than doubled. 
 
 #### Supporting code and output [cq]
 ``` {r}
