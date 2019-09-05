@@ -35,7 +35,7 @@ This R markdown document describes a portion of the data analysis for a
 reporting project examining the effects of climate-change driven
 temperature increases on the health of people who live in cities. The
 project was done in partnership with the [University of Maryland Philip
-Merrill College of Journalism](), [Capital News
+Merrill College of Journalism](https://merrill.umd.edu/), [Capital News
 Service](https://cnsmaryland.org/), [the Howard Center for Investigative
 Journalism](https://merrill.umd.edu/about-merrill/signature-programs/the-howard-center-for-investigative-journalism/),
 [NPR](https://www.npr.org/), [Wide Angle Youth
@@ -46,7 +46,7 @@ Press wire.
 For each sentence in the story “[Heat & Health: For people with chronic
 health conditions, heat and humidity are more than a summer
 nuisance](https://cnsmaryland.org/interactives/summer-2019/code-red/heat-health.html)”
-that is based on Howard Center data analysis, this document provides the
+based on Howard Center data analysis, this document provides the
 original fact, the code and code output that support that fact, and an
 explanation where necessary.
 
@@ -89,9 +89,9 @@ Setup and Links
     reproduce it, is available through the [Howard Center’s
     GitHub](https://github.com/Howard-Center-Investigations/Code-Red-Baltimore-Climate-Divide).
 -   The R markdown file for this specific analysis is available
-    [here](https://github.com/Howard-Center-Investigations/Code-Red-Baltimore-Climate-Divide/documentation/Heat-Health/Heat-Health-Analysis.Rmd).
+    [here](https://github.com/Howard-Center-Investigations/Code-Red-Baltimore-Climate-Divide/documentation/NPR/NPR-Analysis.Rmd).
 -   An HTML output of the R markdown file for this analysis is available
-    [here](https://howard-center-investigations.github.io/Heat-Health-Analysis.html).
+    [here](https://howard-center-investigations.github.io/NPR-Analysis.html).
 -   The R markdown file used to clean the data used in the analysis is
     available
     [here](https://github.com/Howard-Center-Investigations/Code-Red-Baltimore-Climate-Divide/documentation/Data-Cleaning/Data-Cleaning.Rmd).
@@ -114,8 +114,8 @@ library(corrr) # For correlation matrices
 library(colorspace) # For improved color palettes
 library(ggplot2) # For graphing
 library(ggrepel) # For graph labeling
-library(lubridate) # for dates
-library(spelling)
+library(lubridate) # For dates
+library(spelling) # Spellchecker
 require(scales) # For percent labeling on distribution tables
 
 # Turn off scientific notation in RStudio (prevents coersion to character type)
@@ -224,7 +224,6 @@ write_matrix_csv <- function(dataframe) {
 } 
 
 # Function to make a nice little correlation matrix heatmap for each graphic
-
 make_correlation_matrix_graphic <- function(dataframe, grouping = "GROUPING") {
   
   # Store name of dataframe for use in title
@@ -249,16 +248,10 @@ make_correlation_matrix_graphic <- function(dataframe, grouping = "GROUPING") {
   
 }  
 
+# Quick select function
 select_x <- function(df){
   return(df %>%
-           select_if(is.numeric) 
-           # select(-matches("objectid"), 
-           #        -matches("csa2010"), 
-           #        -matches("id"), 
-           #        -matches("09"), 
-           #        -matches("1718"), 
-           #        -matches("change_percent")
-           #        )
+           select_if(is.numeric)
          )
 }
 ```
@@ -278,7 +271,8 @@ water, trying to keep their minds off the heat.”
 A reporter spent time with Michael Thomas and Alberta Wilkerson in the
 afternoon of July 20, 2019, and observed this scene. On July 20, 2019,
 the average temperature between 4 and 5 p.m. in their home was 96.0
-degrees, with a heat index of 109.2.
+degrees, with a heat index of 109.2, according to sensors placed in the
+home.
 
 #### Supporting code and output \[cq\]
 
@@ -311,11 +305,11 @@ dangerous levels.”
 
 July 12-22 had maximum temperatures at the NWS’s Inner Harbor weather
 station of at least 90 degrees F and max heat indexes of at least 92 F,
-using hourly snapshot data. The table below shows on only one day was
-there an hourly average of 100 degrees, July 21. Using a different
+found using hourly snapshot data. The table below shows on only one day
+was there an hourly average of 100 degrees, July 21. Using a different
 dataset from the NCDC, the official maximum for each day, which is
-calculated using minute-by-minute readings, shows it 100 on July 20 and
-101 on July 21.
+calculated using minute-by-minute readings, shows it as 100 on July 20
+and 101 on July 21.
 
 #### Supporting code and output \[cq\]
 
@@ -403,7 +397,7 @@ analysis.”
 Using emergency medical call records from Baltimore City, we examined
 calls during Summer 2018. They were aligned to heat index data captured
 at the Inner Harbor at the time of each call and adjusted for the urban
-heat island using the ZIP Code of each call location. The statistics in
+heat island using the ZIP code of each call location. The statistics in
 the table below represent the number of hours that passed between calls
 for select conditions when the temperature was in a given heat index
 bucket.
@@ -594,10 +588,10 @@ are higher than in more affluent areas.”
 There is a high degree of correlation between a geographic population’s
 asthma prevelence rate in Baltimore, and that populations level of
 affluence. Using detailed records of hospital admissions and emergency
-room visits, we determined the percentage of patients from each ZIP Code
-who had an asthma diagnosis, and compared it to that ZIP Code’s poverty
+room visits, we determined the percentage of patients from each ZIP code
+who had an asthma diagnosis, and compared it to that ZIP code’s poverty
 rate and median household income from U.S. Census data. There was a
-strong positive relationship (r = .73) between a ZIP code’s emergency
+strong positive relationship (r = .74) between a ZIP code’s emergency
 room asthma rate and the percentage of people below the poverty line;
 the higher the asthma rate, the higher the poverty rate, and vice versa.
 There was a strong negative relationship (r = -.71) between a ZIP code’s
@@ -611,8 +605,8 @@ McElderry Park is mostly contained in 21205 and Broadway East is mostly
 in 21213. 21205 had the third highest asthma rate (12.6 percent) in the
 city and the second highest poverty rate (37.13), 21213 had the second
 highest asthma rate (13.2 percent) and the sixth-highest poverty rate
-(28.2 percent). ZIP Code 21209, in a much wealthier part of town, had
-the city’s lowest poverty rate (7.6 percent) and the city’s second
+(28.2 percent). ZIP code 21209, in a much wealthier part of town, had
+the city’s lowest poverty rate (7.7 percent) and the city’s second
 lowest asthma prevelence (4.8 percent).
 
 #### Supporting code and output \[cq\]
@@ -631,7 +625,7 @@ lowest asthma prevelence (4.8 percent).
 ``` r
   op_er_full_zip_disease_heat %>%
     select(ZIPCODE, asthma_prev, median_household_income_d, `poverty_%`) %>%
-    arrange(desc(`asthma_prev`))
+    arrange(desc(asthma_prev))
 ```
 
     ## # A tibble: 26 x 4

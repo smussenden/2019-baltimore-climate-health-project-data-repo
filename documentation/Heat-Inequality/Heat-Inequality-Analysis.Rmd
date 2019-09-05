@@ -25,44 +25,14 @@ output:
 knitr::opts_chunk$set(echo = TRUE, message=FALSE, paged.print=TRUE)
 ```
 
-## Introduction
+```{r include=FALSE}
+stories <- "story \"[Heat & Inequality: In Baltimore, the burden of rising temperatures isn’t shared](https://cnsmaryland.org/interactives/summer-2019/code-red/neighborhood-heat-inequality.html)\"  "
+```
 
-This R markdown document describes a portion of the data analysis for a reporting project examining the effects of climate-change driven temperature increases on the health of people who live in cities.  The project was done in partnership with the [University of Maryland Philip Merrill College of Journalism](
-), [Capital News Service](https://cnsmaryland.org/), [the Howard Center for Investigative Journalism](https://merrill.umd.edu/about-merrill/signature-programs/the-howard-center-for-investigative-journalism/), [NPR](https://www.npr.org/), [Wide Angle Youth Media](https://www.wideanglemedia.org/) and [WMAR](https://www.wmar2news.com/). It also moved on the Associated Press wire. 
+```{r test-parent, child = here::here("documentation/common-header.Rmd")}
+```
 
-For each sentence in the story [Heat & Inequality: In Baltimore, the burden of rising temperatures isn’t shared](https://cnsmaryland.org/interactives/summer-2019/code-red/neighborhood-heat-inequality.html) that is based on Howard Center data analysis, this document provides the original fact, the code and code output that support that fact, and an explanation where necessary. 
 
-Here are links to other stories in the series: 
-
-**CNSMaryland**
-
-* [Code Red: Baltimore's Climate Divide](https://cnsmaryland.org/interactives/summer-2019/code-red/introduction.html)
-* [Heat & Inequality: In Baltimore, the burden of rising temperatures isn’t shared](https://cnsmaryland.org/interactives/summer-2019/code-red/neighborhood-heat-inequality.html) 
-* [Heat & Health: For people with chronic health conditions, heat and humidity are more than a summer nuisance](https://cnsmaryland.org/interactives/summer-2019/code-red/heat-health.html)
-* [The Role of Trees: No trees, no shade, no relief as climate heats up](https://cnsmaryland.org/interactives/summer-2019/code-red/role-of-trees.html)
-* [Seeking Solutions: Are government leaders and residents ready to act?](https://cnsmaryland.org/interactives/summer-2019/code-red/city-climate-future.html)
-* [Behind The Scenes: A look at how and why we reported the series](https://cnsmaryland.org/interactives/summer-2019/code-red/behind-scenes.html)
-
-**NPR**
-
-* [As Rising Heat Bakes U.S. Cities, The Poor Often Feel It Most](https://www.npr.org/2019/09/03/754044732/as-rising-heat-bakes-u-s-cities-the-poor-often-feel-it-most)
-* [How High Heat Can Impact Mental Health](https://www.npr.org/templates/story/story.php?storyId=757034136&live=1)
-
-**WMAR**
-
-* [Baltimore neighborhood identified as 'ground zero' for local effects of climate crisis](https://www.wmar2news.com/news/region/baltimore-city/baltimore-neighborhood-identified-as-ground-zero-for-local-effects-of-climate-crisis)
-
-**Associated Press**
-
-* Links TK
-
-## Setup and Links
-
-* The entire repo for this analysis, including the data needed to reproduce it, is available through the [Howard Center's GitHub](https://github.com/Howard-Center-Investigations/Code-Red-Baltimore-Climate-Divide).
-* The R markdown file for this specific analysis is available [here](https://github.com/Howard-Center-Investigations/Code-Red-Baltimore-Climate-Divide/documentation/NPR/NPR-Analysis.Rmd).
-* An HTML output of the R markdown file for this analysis is available [here](https://howard-center-investigations.github.io/NPR-Analysis.html).
-* The R markdown file used to clean the data used in the analysis is available [here](https://github.com/Howard-Center-Investigations/Code-Red-Baltimore-Climate-Divide/documentation/Data-Cleaning/Data-Cleaning.Rmd).  It contains more detail about data sources, cleaning and analysis methods, limitations and software tools used. 
-* NPR has made available a separate GitHub repo for nationwide analysis on urban heat islands available [here](https://github.com/nprapps/heat-income). 
 ### Load packages
 ```{r}
 #######################
@@ -73,7 +43,7 @@ Here are links to other stories in the series:
 library(tidyverse) # For general data science goodness
 library(corrr) # For correlation goodness
 library(lubridate) # For working with that datetime
-library(broom) # for converting lm output to dataframe
+library(broom) # For converting lm output to dataframe
 library(TTR) # For moving averages
 
 # Turn off scientific notation in RStudio (prevents coersion to character type)
