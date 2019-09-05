@@ -4,7 +4,7 @@ This R markdown document describes a portion of the data analysis for a reportin
 
 For each sentence in the `r stories` based on Howard Center data analysis, this document provides the original fact, the code and code output that support that fact, and an explanation where necessary. 
 
-Here are links to other stories in the series: 
+Here are links to stories in the series published by participating organizations: 
 
 **CNSMaryland**
 
@@ -18,18 +18,39 @@ Here are links to other stories in the series:
 **NPR**
 
 * [As Rising Heat Bakes U.S. Cities, The Poor Often Feel It Most](https://www.npr.org/2019/09/03/754044732/as-rising-heat-bakes-u-s-cities-the-poor-often-feel-it-most)
+* [Trees Are Key To Fighting Urban Heat — But Cities Keep Losing Them](https://www.npr.org/2019/09/04/755349748/trees-are-key-to-fighting-urban-heat-but-cities-keep-losing-them)
 * [How High Heat Can Impact Mental Health](https://www.npr.org/templates/story/story.php?storyId=757034136&live=1)
 
 **WMAR**
 
 * [Baltimore neighborhood identified as 'ground zero' for local effects of climate crisis](https://www.wmar2news.com/news/region/baltimore-city/baltimore-neighborhood-identified-as-ground-zero-for-local-effects-of-climate-crisis)
 
-## Setup and Links
+**Associated Press**
 
-* The entire repo for this analysis, including the data needed to reproduce it, is available through the [Howard Center's GitHub](https://github.com/Howard-Center-Investigations/Code-Red-Baltimore-Climate-Divide).
-* The R markdown file for this specific analysis is available [here](https://github.com/Howard-Center-Investigations/Code-Red-Baltimore-Climate-Divide/documentation/NPR/NPR-Analysis.Rmd).
-* An HTML output of the R markdown file for this analysis is available [here](https://howard-center-investigations.github.io/NPR-Analysis.html).
-* The R markdown file used to clean the data used in the analysis is available [here](https://github.com/Howard-Center-Investigations/Code-Red-Baltimore-Climate-Divide/documentation/Data-Cleaning/Data-Cleaning.Rmd).  It contains more detail about data sources, cleaning and analysis methods, limitations and software tools used. 
+* [Investigation: Urban poor hit hardest as the planet heats up](https://www.apnews.com/52ffefa9ecf144d1b9aec367cc52ea74)
+* [As temperatures rise, overdoses and hospital visits increase](https://www.apnews.com/4d83616b5ecd46d5896d274a37b39de9)
+* [No trees, no shade, no relief in cities as climate heats up](https://www.apnews.com/bebe7895ce374f6f9070fe69ab557c4f)
+ 
+## Links to Data, Cleaning and Analysis Scripts, RMarkdown HTML Pages
+
+* The entire codebase for this analysis, including R markdown cleaning and analysis scripts -- and the raw and cleaned data needed to reproduce the cleaning and analysis, is available through the [Howard Center's GitHub](https://github.com/Howard-Center-Investigations/Code-Red-Baltimore-Climate-Divide).
+  * [Repo Readme](https://github.com/Howard-Center-Investigations/Code-Red-Baltimore-Climate-Divide/README.md)
+  * Data
+    * [Data cleaning script](https://github.com/Howard-Center-Investigations/Code-Red-Baltimore-Climate-Divide/documentation/Data-Cleaning/Data-Cleaning.Rmd)
+    * [Raw data folder](https://github.com/Howard-Center-Investigations/Code-Red-Baltimore-Climate-Divide/data/input-data)
+    * [Cleaned data folder](https://github.com/Howard-Center-Investigations/Code-Red-Baltimore-Climate-Divide/data/putput-data)
+  * Analysis
+    * [Analysis for NPR](https://github.com/Howard-Center-Investigations/Code-Red-Baltimore-Climate-Divide/documentation/NPR/NPR-Analysis.Rmd)
+    * [Heat and inequality story analysis](https://github.com/Howard-Center-Investigations/Code-Red-Baltimore-Climate-Divide/documentation/Heat-Inequality/Heat-Inequality-Analysis.Rmd)
+    * [Heat and health story analysis](https://github.com/Howard-Center-Investigations/Code-Red-Baltimore-Climate-Divide/documentation/Heat-Health/Heat-Health-Analysis.Rmd)
+    * [Role of trees story analysis](https://github.com/Howard-Center-Investigations/Code-Red-Baltimore-Climate-Divide/documentation/Role-of-Trees/Role-of-Trees-Analysis.Rmd)
+* A site with HTML versions of the R markdown files, for fact-checking the completed the analysis. 
+  * [Landing page](https://howard-center-investigations.github.io/code-red-baltimore-climate-divide/index.html)
+  * [Data cleaning script](https://howard-center-investigations.github.io/code-red-baltimore-climate-divide/Data-Cleaning.html)
+  * [Analysis for NPR](https://howard-center-investigations.github.io/code-red-baltimore-climate-divide/NPR-Analysis.html)
+  * [Heat and inequality story analysis](https://howard-center-investigations.github.io/code-red-baltimore-climate-divide/Heat-Inequality-Analysis.html)
+  * [Heat and health story analysis](https://howard-center-investigations.github.io/code-red-baltimore-climate-divide/Heat-Health-Analysis.html)
+  * [Role of trees story analysis](https://howard-center-investigations.github.io/code-red-baltimore-climate-divide/Role-of-Trees-Analysis.html)
 * NPR has made available a separate GitHub repo for nationwide analysis on urban heat islands available [here](https://github.com/nprapps/heat-income). 
 
 

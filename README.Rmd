@@ -1,0 +1,35 @@
+---
+title: "Data analysis for 'Code Red: Baltimore's Climate Divide'"
+author: "Roxanne Ready, Theresa Diffendal, Jane Gerard, Jake Gluck and Sean Mussenden | Howard Center for Investigative Journalism"
+date: "9/3/2019"
+output:
+  html_document:
+    toc: true
+    toc_depth: 3
+    toc_float: true
+    df_print: paged
+  md_document:
+    variant: markdown_github
+    toc: true
+    toc_depth: 3
+---
+
+```{r include=FALSE}
+# Save this file and run the following line from the Console to output both HTML and .md formats:
+# rmarkdown::render('README.Rmd', output_format = 'all')
+# spell_check_files("README.Rmd")
+```
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message=FALSE, paged.print=TRUE)
+```
+
+```{r include=FALSE}
+# Variable to load into "common header" call below
+stories <- "published stories"
+```
+
+```{r test-parent, child = here::here("documentation/common-header.Rmd")}
+# This calls in the "common-header.Rmd" file, which includes info about the story package.
+# must install package 'here' for this to work
+```
