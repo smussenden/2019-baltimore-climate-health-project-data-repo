@@ -2,6 +2,8 @@
 -   [Setup and Links](#setup-and-links)
     -   [Load packages](#load-packages)
     -   [Load data](#load-data)
+-   [Line-by-Line Fact Check \[Role of
+    Trees\]](#line-by-line-fact-check-role-of-trees)
     -   [Fact: A certain block in Broadway East is one of the city’s
         hottest
         \[cq\]](#fact-a-certain-block-in-broadway-east-is-one-of-the-citys-hottest-cq)
@@ -64,7 +66,7 @@ This R markdown document describes a portion of the data analysis for a
 reporting project examining the effects of climate-change driven
 temperature increases on the health of people who live in cities. The
 project was done in partnership with the [University of Maryland Philip
-Merrill College of Journalism](), [Capital News
+Merrill College of Journalism](https://merrill.umd.edu/), [Capital News
 Service](https://cnsmaryland.org/), [the Howard Center for Investigative
 Journalism](https://merrill.umd.edu/about-merrill/signature-programs/the-howard-center-for-investigative-journalism/),
 [NPR](https://www.npr.org/), [Wide Angle Youth
@@ -72,10 +74,10 @@ Media](https://www.wideanglemedia.org/) and
 [WMAR](https://www.wmar2news.com/). It also moved on the Associated
 Press wire.
 
-For each sentence in the story [The Role of Trees: No trees, no shade,
+For each sentence in the story “[The Role of Trees: No trees, no shade,
 no relief as climate heats
-up](https://cnsmaryland.org/interactives/summer-2019/code-red/role-of-trees.html)
-that is based on Howard Center data analysis, this document provides the
+up](https://cnsmaryland.org/interactives/summer-2019/code-red/role-of-trees.html)”
+based on Howard Center data analysis, this document provides the
 original fact, the code and code output that support that fact, and an
 explanation where necessary.
 
@@ -129,6 +131,9 @@ Setup and Links
 -   NPR has made available a separate GitHub repo for nationwide
     analysis on urban heat islands available
     [here](https://github.com/nprapps/heat-income).
+
+Note that in some cases, to protect the privacy of nearby residents, we
+did not include addresses of particular street trees in this memo.
 
 ### Load packages
 
@@ -192,6 +197,9 @@ street_trees_nsa_categorized <- read_csv(paste0(path_to_data, "street_trees/stre
 street_trees_nsa_summarized <- read_csv(paste0(path_to_data, "street_trees/street_trees_nsa_summarized.csv"))
 ```
 
+Line-by-Line Fact Check \[Role of Trees\]
+-----------------------------------------
+
 ### Fact: A certain block in Broadway East is one of the city’s hottest \[cq\]
 
 “He needs a lot of water too, working in the summer heat here at the
@@ -209,8 +217,8 @@ the 236 hottest block in the city, out of 13,598 blocks. To get data on
 poverty within a reasonable margin of error, we have to go to a larger
 level of geography. This block is located inside the Clifton-Berea
 “community statistical area.” In this CSA – one of 55 in the city – 28
-percent of households are below the poverty line – the 10th highest
-poverty rate in the city.
+percent of households are below the poverty line, which is the 10th
+highest poverty rate in the city.
 
 #### Supporting code and output \[cq\]
 
@@ -339,8 +347,7 @@ The head and subhead are based on the analysis in the previous heading.
 
 ``` r
 # Select CSAs to label
-target_csas <- c("Greater Roland Park/Poplar Hill", "Canton", "Patterson Park North & East", "Greenmount East", "Clifton-Berea") %>%
-  lapply(tolower)
+target_csas <- c("greenmount east", "clifton-berea", "greater roland park/poplar hill")
 
 # Poverty to canopy GRAPH
 csa_tree_temp_demographics %>%
@@ -354,10 +361,7 @@ csa_tree_temp_demographics %>%
              size=4) +
   # This section for circling all sample neighborhood points
   geom_point(data = csa_tree_temp_demographics %>%
-               filter((csa2010 %in% target_csas) 
-                      # Patterson Park must be included seperately because of its unique label positioning
-                      | (csa2010 == "Patterson Park North & East") 
-                      ),
+               filter(csa2010 %in% target_csas),
              aes(color = `15_lid_mean`),
              size=6, shape = 1) +
   # This section shows the trend line
@@ -366,7 +370,7 @@ csa_tree_temp_demographics %>%
               color = "black") +
   # This section for labeling Canton, etc.
   ggrepel::geom_label_repel(data = csa_tree_temp_demographics %>%
-                              filter(csa2010 %in% c("greenmount east", "clifton-berea", "greater roland park/poplar hill")) %>%
+                              filter(csa2010 %in% target_csas) %>%
                               mutate(csa2010 = case_when(
                                 csa2010 == "greenmount east" ~ "Greenmount East \n(includes part of Broadway East)", 
                                 csa2010 == "clifton-berea" ~ "Clifton-Berea \n(includes part of Broadway East)",
@@ -379,18 +383,6 @@ csa_tree_temp_demographics %>%
             alpha = .85,
             nudge_x = .05,
             nudge_y = .06) +
-  # This section for labeling Patterson Park (so it can be nudged)
-  ggrepel::geom_label_repel(data = csa_tree_temp_demographics %>%
-                              filter(csa2010 == "Patterson Park North & East") %>%
-                              mutate(csa2010 = case_when(
-                                csa2010 == "Patterson Park North & East" ~ "Patterson Park North & East \n(includes most of McElderry Park)",
-                                T ~ csa2010)),
-                            aes(label = csa2010),
-                            min.segment.length = .1,
-                            segment.alpha = .5,
-                            alpha = .85,
-                            nudge_x = -.06,
-                            nudge_y = .03) +
   # Colors and label formatting follow
   #coord_flip() +
   scale_colour_gradient(low = "#E0FEA9", high = "#144A11") +
@@ -411,12 +403,7 @@ csa_tree_temp_demographics %>%
         )
 ```
 
-![](Role-of-Trees-Analysis_files/figure-markdown_github/unnamed-chunk-6-1.png)
-
-``` r
-# Line of code to output file to put on webserver
-# ggsave("poverty-to-mean-tree-cover.png", plot = last_plot(), width = 8, height=8)
-```
+![](Role-of-Trees-Analysis_files/figure-markdown_github/unnamed-chunk-7-1.png)
 
 ### Fact: Heat and tree canopy relationship \[cq\]
 
@@ -485,19 +472,19 @@ dmh %>%
 
 ### Fact: Street trees & plots on North Milton Ave. \[cq\]
 
-A 35-foot linden tree in the middle of the block once provided extensive
-cover from the sun, but it died within the last few years. Its branches,
-completely denuded of leaves, created useless spindles of shadow on the
-baking concrete sidewalk below. Across the street, another linden, a
-25-footer, also appeared dead, the handful of remaining brown leaves
-providing little relief.
+"A 35-foot linden tree in the middle of the block once provided
+extensive cover from the sun, but it died within the last few years. Its
+branches, completely denuded of leaves, created useless spindles of
+shadow on the baking concrete sidewalk below. Across the street, another
+linden, a 25-footer, also appeared dead, the handful of remaining brown
+leaves providing little relief.
 
-Couther and his three-person crew initially parked their truck at the
+“Couther and his three-person crew initially parked their truck at the
 other end of the street, under a 35-foot linden — alive, but only in
 “fair” condition, as scored by the city — with a broad leaf canopy. It
 was the only tree on the sidewalk to provide any meaningful temperature
 reduction, but the crew quickly abandoned its cover to continue
-watering.
+watering."
 
 #### Explanation \[cq\]
 
@@ -1009,12 +996,12 @@ csa_tree_temp_demographics %>%
 
 ### Fact: Roland Park and Broadway East \[cq\]
 
-Most of Roland Park — today one of the wealthiest and whitest parts of
+“Most of Roland Park — today one of the wealthiest and whitest parts of
 Baltimore — was classified in the 1930s as “still desirable,” with some
 parts labeled “best” and others as “definitely declining. In the 1930s,
 Broadway East — today one of the poorest parts of Baltimore, with one of
 the highest percentages of African Americans — was labeled “definitely
-declining” and “hazardous.
+declining” and “hazardous.”"
 
 #### Explanation \[cq\]
 
@@ -1061,10 +1048,10 @@ csa_tree_temp_demographics %>%
 
 ### Fact: Broadway East and Roland Park canopy correlates to historic redlining \[cq\]
 
-“The areas with the least amount of tree cover today are in those
+““The areas with the least amount of tree cover today are in those
 redlined neighborhoods,” said Morgan Grove, a research forester with the
 U.S. Forest Service who has studied the issue, 11% on average. The
-neighborhoods once labeled “best” have the most, with 45% on average.
+neighborhoods once labeled “best” have the most, with 45% on average."
 
 #### Explanation \[cq\]
 
@@ -1093,14 +1080,14 @@ redlining_tree %>%
 
 ### Fact: Hot East Baltimore NSAs are nowhere near 40% canopy \[cq\]
 
-Even with a flurry of planting in recent years, Broadway East and other
+“Even with a flurry of planting in recent years, Broadway East and other
 hot East Baltimore neighborhoods are nowhere near that level \[40%\] and
-won’t get there anytime soon — if ever.
+won’t get there anytime soon — if ever.”
 
 #### Explanation \[cq\]
 
-Of East Baltimore neighborhoods of interest, only two are above 10%
-canopy cover.
+Of East Baltimore neighborhoods included in our analysis, none were over
+15 percent.
 
 #### Supporting code and output \[cq\]
 
@@ -1216,7 +1203,7 @@ average in Roland Park…”
 
 Roland Park has a high percentage of trees 35 feet tall and taller;
 Broadway East has a low percentage. The average height of trees in
-Roland Park is about 35 feet. In Broadway East, it’s about 21 feet.
+Roland Park is about 35 feet. In Broadway East, it’s about 22 feet.
 
 #### Supporting code and output \[cq\]
 
@@ -1299,7 +1286,7 @@ rates…”
 #### Explanation \[cq\]
 
 There is a moderate positive correlation between violent crime rates and
-poverty rates in Baltimore community statistical areas (r = .42)
+poverty rates in Baltimore community statistical areas (r = .43)
 
 #### Supporting code and output \[cq\]
 
@@ -1385,3 +1372,5 @@ csa_tree_temp_demographics %>%
     ##   count
     ##   <int>
     ## 1    55
+
+-30-
