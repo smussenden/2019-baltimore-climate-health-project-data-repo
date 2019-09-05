@@ -1,6 +1,6 @@
 ---
 title: "Analysis for story and graphics: The Role of Trees: No trees, no shade, no relief as climate heats up"
-author: "Roxanne Ready, Sean Mussenden | Howard Center for Investigative Journalism"
+author: "Roxanne Ready, Theresa Diffendal, Jane Gerard, Jake Gluck and Sean Mussenden | Howard Center for Investigative Journalism"
 date: "9/3/2019"
 output: 
   html_document:
@@ -50,9 +50,6 @@ Here are links to other stories in the series:
 
 * [Baltimore neighborhood identified as 'ground zero' for local effects of climate crisis](https://www.wmar2news.com/news/region/baltimore-city/baltimore-neighborhood-identified-as-ground-zero-for-local-effects-of-climate-crisis)
 
-**Associated Press**
-
-* [Investigation: Urban poor hit hardest as the planet heats up](https://www.apnews.com/52ffefa9ecf144d1b9aec367cc52ea74
 
 ## Setup and Links
 
@@ -69,137 +66,37 @@ Here are links to other stories in the series:
 #### Load Packages ####
 #######################
 
-library(tidyverse)
+library(tidyverse) # For general data science goodness
 library(DescTools) # For %like% operator
-library(corrr) # For correlation matrices
-library(colorspace) # For improved color palettes
-library(ggplot2) # For graphing
-library(ggrepel) # For graph labeling
-require(scales) # For percent labeling on distribution tables
-library(spelling)
+library(corrr) # For correlation goodness
+library(spelling) # For spell check
 
 # Turn off scientific notation in RStudio (prevents coersion to character type)
 options(scipen = 999)
 ```
 
-### Store variables
+### Load data
 
-```{r}
+```{r, warning=FALSE}
+
 #########################
 #### Store Variables ####
 #########################
 
-# Common path to data
+# Common path to output data folder
 path_to_data <- "../../data/output-data/"
 
-# NSAs of interest
-target_nsas <- c("Berea", "Broadway East", "Oliver", "Middle East", 
-                 "Biddle Street","Milton-Montford", "Madison-Eastend", 
-                 "CARE", "McElderry Park", "Ellwood Park/Monument", 
-                 "Patterson Place", "Patterson Park Neighborhood", 
-                 "Baltimore Highlands", "Highlandtown", 
-                 "Upper Fells Point") %>%
-                lapply(tolower)
-
-# Counterpoint NSAs of interest
-counterpoint_nsas <- c("Butcher's Hill", "Canton", "Washington Hill", "Roland Park") %>%
-  lapply(tolower)
-
-# CSAs of interest
-target_csas <- c("Greater Roland Park/Poplar Hill", "Canton", "Patterson Park North & East", "Greenmount East", "Clifton-Berea") %>%
-  lapply(tolower)
-
-# Colorblind-friendly palette
-cbPalette <- c("#999999", # Dark Gray
-               "#E69F00", # Mustard Yellow
-               "#56B4E9", # Sky Blue
-               "#009E73", # Strong Green
-               "#F0E442", # Lemon Yellow
-               "#0072B2", # Denim Blue
-               "#D55E00", # Rust Orange
-               "#CC79A7") # Lavender
-```
-
-### Load data
-
-```{r, warning=FALSE}
 ###################
 #### Load Data ####
 ###################
 
-blocks_tree_temp_demographics <- 
-  read_csv(paste0(path_to_data, "tree_temp_demographics/blocks_tree_temp_demographics.csv")) %>%
-  mutate_at(vars(matches("geoid10")), as.character) # Recast non-calculable variables as characters
-
-csa_tree_temp_demographics <- 
-  read_csv(paste0(path_to_data, "tree_temp_demographics/csa_tree_temp_demographics.csv"))
-
-nsa_tree_temp <- 
-  read_csv(paste0(path_to_data, "tree_temp_demographics/nsa_tree_temp.csv"))
-
-zcta_tree_temp_demographics <- 
-  read_csv(paste0(path_to_data, "tree_temp_demographics/zcta_temp_demographics.csv")) %>%
-  mutate_at(vars(matches("zcta")), as.character) # Recast non-calculable variables as characters
-
-redlining_tree <- read_csv(paste0(path_to_data, "redlining_trees/redlining_tree.csv"))
-
-street_trees_nsa_categorized <- 
-  read_csv(paste0(path_to_data, "street_trees/street_trees_nsa_categorized.csv"))
-
-street_trees_nsa_summarized <- 
-  read_csv(paste0(path_to_data, "street_trees/street_trees_nsa_summarized.csv"))
-
-#citywide_lidar_data <- read_csv(paste0(path_to_data, "citywide_2007_2015_lidar.csv"))
-
-#canopy_2007_2015_gains_losses <- read_csv(paste0(path_to_data, "canopy_2007_2015_gains_losses.csv"))
-
-#cctv_cameras_street_trees <- read_csv(paste0(path_to_data, "cctv_cameras_street_trees.csv"))
-
-
-
-
-###################
-#### Load Data ####
-###################
-
-### Indoor temperature and humidity sensor data
-
-# Michael and Alberta
-folder <- "temperature_sensors/michael/"
-michael_day_hourly_averages <- read_csv(paste0(path_to_data, folder, "michael_day_hourly_averages.csv"))
-michael_day_minute_averages <- read_csv(paste0(path_to_data, folder, "michael_day_minute_averages.csv"))
-
-# Stephanie and family
-folder <- "temperature_sensors/stephanie/"
-stephanie_day_minute_averages <- read_csv(paste0(path_to_data, folder, "stephanie_day_minute_averages.csv"))
-stephanie_day_hourly_averages <- read_csv(paste0(path_to_data, folder, "stephanie_day_hourly_averages.csv"))
-
-# Audrey
-folder <- "temperature_sensors/audrey/"
-audrey_day_minute_averages <- read_csv(paste0(path_to_data, folder, "audrey_day_minute_averages.csv"))
-audrey_day_hourly_averages <- read_csv(paste0(path_to_data, folder, "audrey_day_hourly_averages.csv"))
-
-# Tammy
-folder <- "temperature_sensors/tammy/"
-tammy_day_minute_averages <- read_csv(paste0(path_to_data, folder, "tammy_day_minute_averages.csv"))
-tammy_day_hourly_averages <- read_csv(paste0(path_to_data, folder, "tammy_day_hourly_averages.csv"))
-
-### Outdoor temperature data 
+## Outdoor temperature data
 
 # Inner Harbor temperature data
 folder <- "baltimore_weather_stations/"
 dmh <- read_csv(paste0(path_to_data, folder, "dmh.csv"))
 
-# Historical temperature data, Baltimore and U.S. 
-folder <- "1895-2019-average-temperature/"
-us_change_temp <- read_csv(paste0(path_to_data, folder, "us_change_temp.csv"))
-baltimore_change_temp <- read_csv(paste0(path_to_data, folder, "baltimore_change_temp.csv"))
-
-# Heat index projections
-folder <- "heat_index_projections/"
-heat_index_projections <- read_csv(paste0(path_to_data, folder, "heat_index_projections.csv"))
-
-### Urban heat island, tree canopy, demographics data
+## Urban heat island, tree canopy, demographics data
 folder <- "tree_temp_demographics/"
 
 # Neighborhood geography
@@ -211,35 +108,25 @@ csa_tree_temp_demographics <- read_csv(paste0(path_to_data, folder, "csa_tree_te
 # Blocks geography
 blocks_tree_temp_demographics <- read_csv(paste0(path_to_data, folder, "blocks_tree_temp_demographics.csv"))
 
-### Hospital Data
-folder <- "hospital_data/"
+## Redlining tree canopy calculations
+folder <- "redlining_trees/"
+redlining_tree <- read_csv(paste0(path_to_data, folder, "redlining_tree.csv"))
 
-# Inpatient admissions data
-ip_full_zip_correlation_matrix <- read_csv(paste0(path_to_data, folder, "ip/ip_full_zip_correlation_matrix.csv"))
-ip_full_zip_disease_heat <- read_csv(paste0(path_to_data, folder, "ip/ip_full_zip_disease_heat.csv"))
-ip_full_zip_medicaid_correlation_matrix <- read_csv(paste0(path_to_data, folder, "ip/ip_full_zip_medicaid_correlation_matrix.csv"))
-ip_full_zip_medicaid_disease_heat <- read_csv(paste0(path_to_data, folder, "ip/ip_full_zip_medicaid_disease_heat.csv"))
+## Street trees
+folder <- "street_trees/"
 
+# Street trees categorized by neighborhood
+street_trees_nsa_categorized <- read_csv(paste0(path_to_data, "street_trees/street_trees_nsa_categorized.csv"))
 
-# Emergency room admissions data
-op_er_full_zip_correlation_matrix <- read_csv(paste0(path_to_data, folder, "op_er/op_er_full_zip_correlation_matrix.csv"))
-op_er_full_zip_disease_heat <- read_csv(paste0(path_to_data, folder, "op_er/op_er_full_zip_disease_heat.csv"))
-op_er_full_zip_medicaid_matrix <- read_csv(paste0(path_to_data, folder, "op_er/op_er_full_zip_medicaid_correlation_matrix.csv"))
-op_er_full_zip_medicaid_disease_heat <- read_csv(paste0(path_to_data, folder, "op_er/op_er_full_zip_medicaid_disease_heat.csv"))
-
-### EMS Data
-folder <- "ems/"
-dmh_ems <- read_csv(paste0(path_to_data, folder, "dmh_ems.csv")) 
-EMS_all <- read_csv(paste0(path_to_data, folder, "EMS_all.csv")) 
-
-
+# Street trees summarized by neighborhood
+street_trees_nsa_summarized <- read_csv(paste0(path_to_data, "street_trees/street_trees_nsa_summarized.csv"))
 
 ```
 
 ### Fact: A certain block in Broadway East is one of the city's hottest [cq]
 "He needs a lot of water too, working in the summer heat here at the edge of the Broadway East neighborhood, on one of the city’s hottest — and poorest — blocks."
 
-#### Explanation [ca]
+#### Explanation [cq]
 The scene described in the story took place on a block in Broadway East on North Milton Ave between Oliver Street and East Federal Street, which is in U.S. census "block" with the ID 245100803011000.  With a mean afternoon temperature of 98.3 degrees in an August 2018 urban heat island study showing block-by-block variations in temperatures, this was the 236 hottest block in the city, out of 13,598 blocks. To get data on poverty within a reasonable margin of error, we have to go to a larger level of geography.  This block is located inside the Clifton-Berea "community statistical area." In this CSA -- one of 55 in the city -- 28 percent of households are below the poverty line -- the 10th highest poverty rate in the city.
 
 #### Supporting code and output [cq]
@@ -300,9 +187,19 @@ csa_tree_temp_demographics %>%
 
 ```
 
-#### Poverty to canopy graf
+### Fact: Poverty to canopy graphic [cq]
 
+The graphic generated below appears in the story, with the following headline and subhead: "In Baltimore, poorer areas have less tree canopy. Areas with more people living below the poverty line generally have less tree cover."
+
+#### Explanation [cq]
+The head and subhead are based on the analysis in the previous heading. 
+
+#### Supporting code and output [cq]
 ```{r}
+
+# Select CSAs to label
+target_csas <- c("Greater Roland Park/Poplar Hill", "Canton", "Patterson Park North & East", "Greenmount East", "Clifton-Berea") %>%
+  lapply(tolower)
 
 # Poverty to canopy GRAPH
 csa_tree_temp_demographics %>%
@@ -372,7 +269,8 @@ csa_tree_temp_demographics %>%
         axis.text=element_text(size=16)
         )
 
-ggsave("poverty-to-mean-tree-cover.png", plot = last_plot(), width = 8, height=8)
+# Line of code to output file to put on webserver
+# ggsave("poverty-to-mean-tree-cover.png", plot = last_plot(), width = 8, height=8)
 
 ```
 
@@ -395,15 +293,6 @@ nsa_tree_temp %>%
   arrange(desc(temp_mean_aft))
 
 ```
-
-
-#### ADD THIS
-U.S. cities are losing 29 million trees every year - and many cities are struggling to reverse their dwindling canopies, according to an investigation by NPR and the University of Maryland's Howard Center for Investigative Journalism. Between 2009 and 2014, 44 states lost tree cover in urban areas, according to the U.S. Forest Service, though Baltimore bucked the trend with a small increase between 2007 and 2015.
-
-
-
-He was taking a brief break to chat while tucked into a sliver of slowly disappearing shadow from one of several vacant houses on North Milton Avenue. By 1 p.m., when the heat index registered 89 degrees and the sun loomed almost directly overhead, working in the shade was no longer an option.
-
 
 ### Fact: Heat index at 1 p.m. July 10 [cq]
 "By 1 p.m., when the heat index registered 89 degrees and the sun loomed almost directly overhead, working in the shade was no longer an option."
@@ -454,8 +343,7 @@ street_trees_nsa_categorized %>%
 ```
 
 ### Fact: Northern CSAs are both wealthier and cooler [cq]
-
-"In the wealthier, more temperate neighborhoods north of Broadway East — like Roland Park, its stately tree-lined streets a 20-minute drive away — a 35-foot street tree like this would be of roughly average height, with plenty of company. "Here in Broadway East, in an area of Baltimore that has suffered from decades of disinvestment, this lonely linden stands out as one of the neighborhood’s largest sidewalk trees." 
+"In the wealthier, more temperate neighborhoods north of Broadway East — like Roland Park, its stately tree-lined streets a 20-minute drive away — a 35-foot street tree like this would be of roughly average height, with plenty of company. Here in Broadway East, in an area of Baltimore that has suffered from decades of disinvestment, this lonely linden stands out as one of the neighborhood’s largest sidewalk trees." 
 
 #### Explanation [cq]
 Roland Park is cooler than 263 of Baltimore's 278 neighborhoods, as judged in the Baltimore urban heat island study using afternoon temperatures in August 2018. It has more tree canopy than all but 9 of Baltimore's 278 neighborhoods. In Roland Park, the average street tree is 34.7 feet tall, with half of street trees taller than 35 feet, a total of 1449 trees.  In Broadway East, the average street tree is 22 feet, with only 80 trees (21 percent), 35 feet or taller.
@@ -509,7 +397,7 @@ csa_tree_temp_demographics %>%
   select(matches("percent_of_family_households_living_below_the_poverty_line|csa2010|rank")) %>%
   select(csa2010, rank_avg_income, rank_perc_poverty)
 
-# Neighborhood count
+# CSA count
 csa_tree_temp_demographics %>%
   summarise(count=n())
 
@@ -660,6 +548,7 @@ nsa_tree_temp %>%
 
 ### Fact: Broadway East poverty [cq]
 "Broadway East, with approximately 1 in 4 families below the poverty line, is also among the poorest neighborhoods." 
+
 #### Explanation [cq]
 The two CSAs containing most of Broadway East are Greenmount East (24 percent poverty) and Clifton-Berea (27.6 percent poverty). They rank 10th and 14th out of 55 CSAs for highest poverty rate.  
 
@@ -933,16 +822,14 @@ csa_tree_temp_demographics %>%
 
 ```
 
-### Fact: ~1/3 of Broadway East homes are vacant
+### Fact: ~1/3 of Broadway East homes are vacant [cq]
 
 "In Broadway East, nearly a third of homes are vacant..."
 
-#### Explanation
+#### Explanation [cq]
+In the two community statistical areas that contain most of Broadway East, Clifton-Berea and Greenmount East, the vacancy rate is 27 percent and 32 percent, or nearly a third.   
 
-
-
-#### Supporting code and output
-
+#### Supporting code and output [cq]
 ```{r}
 
 csa_tree_temp_demographics %>%
