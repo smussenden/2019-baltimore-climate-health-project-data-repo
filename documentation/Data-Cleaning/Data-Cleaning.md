@@ -38,7 +38,7 @@
 -   [Load and Clean Historical Baltimore and U.S. Weather
     Data](#load-and-clean-historical-baltimore-and-u.s.-weather-data)
     -   [Execute load-in and cleaning](#execute-load-in-and-cleaning-9)
--   [Hot days increase data](#hot-days-increase-data)
+-   [Increase in Hot Days Data](#increase-in-hot-days-data)
 -   [Output All Cleaned Data to CSV
     Files](#output-all-cleaned-data-to-csv-files)
 
@@ -52,8 +52,8 @@ of people in Baltimore’s hottest neighborhoods.
 
 xxx The analysis that uses the cleaned data output by this document is
 located in the [Role of Trees Data
-Analysis](https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/documentation/code-red-data-analysis.md).
-\[ADD OTHER TWO STORIES\]
+Analysis](../Role-of-Trees/Role-of-Trees-Analysis.md). \[ADD OTHER TWO
+STORIES\]
 
 ### Definitions
 
@@ -92,35 +92,43 @@ analysis. The geographic units are:
     Baltimore, and made their [shapefiles available by
     city](https://dsl.richmond.edu/panorama/redlining/#loc=11/39.3/-76.673&text=downloads).
 
-**A Note About ZCTAs**: \* There are some differences in the exact
-boundaries between ZCTA shapefiles pulled from Census.gov when pulled
-county-by-county and for MD as a whole. All ZCTA groups are from the
-state-level ZCTA files. \* The Mid-Atlantic Terminal at Dundalk
-(sometimes included as part of the 21222 ZCTA) is not included. \* All
-calculations for included ZCTAs are done over the entire ZCTA, even when
-the ZCTA expands past the city boundary, with one exception. 21226 is
-cut off at the city boundary due to limitations the in treecover and
-heat maps. In addition, a small peninsula in that same ZCTA was removed
-for ease in computing. \* 4 ZCTAs (‘21208’, ‘21228’, ‘21234’, ‘21236’)
-encroach slightly into Baltimore City, but were not included due to
-limitations in treecover and heat maps. \* 3 included ZCTAs (‘21227’,
-‘21222’, ‘21237’) only encroach slightly into Baltimore City but were
-included because the treecover and heat maps encompass them. \* An
-insignificant portion of the north end of 21237 is not included on the
-treecover map and is therefore missing from calculations made for that
-ZCTA. \* ZCTA lists for reference: \* Complete list of Baltimore ZCTAs:
-‘21201’, ‘21202’, ‘21205’, ‘21206’, ‘21207’, ‘21208’, ‘21209’, ‘21210’,
-‘21211’, ‘21212’, ‘21213’, ‘21214’, ‘21215’, ‘21216’, ‘21217’, ‘21218’,
-‘21222’, ‘21223’, ‘21224’, ‘21225’, ‘21226’, ‘21227’, ‘21228’, ‘21229’,
-‘21230’, ‘21231’, ‘21234’, ‘21236’, ‘21237’, ‘21239’, ‘21251’ \* ZCTAs
-removed from list (for untrimmed): ‘21208’, ‘21228’, ‘21234’, ‘21236’ \*
-Complete list of ZCTAs used (for untrimmed): ‘21201’, ‘21202’, ‘21205’,
-‘21206’, ‘21207’, ‘21209’, ‘21210’, ‘21211’, ‘21212’, ‘21213’, ‘21214’,
-‘21215’, ‘21216’, ‘21217’, ‘21218’, ‘21222’, ‘21223’, ‘21224’, ‘21225’,
-‘21226’, ‘21227’, ‘21229’, ‘21230’, ‘21231’, ‘21237’, ‘21239’, ‘21251’
+**A Note About ZCTAs**:
 
-![Removed
-ZCTAs](https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/documentation/zcta_trim_map.png?raw=true "Removed ZCTAs")
+-   There are some slight differences in the exact boundaries between
+    ZCTA shapefiles pulled from Census.gov when pulled county-by-county
+    and for MD as a whole. All ZCTA groups are from the state-level ZCTA
+    files.
+-   The Mid-Atlantic Terminal at Dundalk (sometimes included as part of
+    the 21222 ZCTA) is not included.
+-   All calculations for included ZCTAs are done over the entire ZCTA,
+    even when the ZCTA expands past the city boundary, with one
+    exception. 21226 is cut off at the city boundary due to limitations
+    the in treecover and heat maps. In addition, a small peninsula in
+    that same ZCTA was removed for ease in computing.
+-   4 ZCTAs (‘21208’, ‘21228’, ‘21234’, ‘21236’) encroach slightly into
+    Baltimore City, but were not included due to limitations in
+    treecover and heat maps.
+-   3 included ZCTAs (‘21227’, ‘21222’, ‘21237’) only encroach slightly
+    into Baltimore City but were included because the treecover and heat
+    maps encompass them.
+-   An insignificant portion of the north end of 21237 is not included
+    on the treecover map and is therefore missing from calculations made
+    for that ZCTA.
+-   ZCTA lists for reference:
+    -   Complete list of Baltimore ZCTAs: ‘21201’, ‘21202’, ‘21205’,
+        ‘21206’, ‘21207’, ‘21208’, ‘21209’, ‘21210’, ‘21211’, ‘21212’,
+        ‘21213’, ‘21214’, ‘21215’, ‘21216’, ‘21217’, ‘21218’, ‘21222’,
+        ‘21223’, ‘21224’, ‘21225’, ‘21226’, ‘21227’, ‘21228’, ‘21229’,
+        ‘21230’, ‘21231’, ‘21234’, ‘21236’, ‘21237’, ‘21239’, ‘21251’
+    -   ZCTAs removed from list (for untrimmed): ‘21208’, ‘21228’,
+        ‘21234’, ‘21236’
+    -   Complete list of ZCTAs used (for untrimmed): ‘21201’, ‘21202’,
+        ‘21205’, ‘21206’, ‘21207’, ‘21209’, ‘21210’, ‘21211’, ‘21212’,
+        ‘21213’, ‘21214’, ‘21215’, ‘21216’, ‘21217’, ‘21218’, ‘21222’,
+        ‘21223’, ‘21224’, ‘21225’, ‘21226’, ‘21227’, ‘21229’, ‘21230’,
+        ‘21231’, ‘21237’, ‘21239’, ‘21251’
+
+![Removed ZCTAs](zcta_trim_map.png "Removed ZCTAs")
 
 Setup
 -----
@@ -129,6 +137,7 @@ Setup
 #######################
 #### Load Packages ####
 #######################
+
 #rm(list=ls())
 library(lubridate) # For working with dates
 library(tidyverse) # For data science goodness
@@ -136,9 +145,9 @@ library(janitor) # For cleaning names
 library(weathermetrics) # For calculating heat index
 library(readxl) # For reading in Excel files
 library(corrr) # For correlations
-library(spelling)
+library(spelling) # For spellchecking
 
-# Turn off scientific notation in RStudio (prevents accidental coersion to character type on export)
+# Turn off scientific notation in RStudio (prevents accidental coersion to character type)
 options(scipen = 999)
 
 # Define path to root of data input folder
@@ -149,9 +158,9 @@ Load and clean urban heat island temperature data
 -------------------------------------------------
 
 Researchers at Portland State University in Oregon and the Science
-Museum of Virginia provided temperature data from its Urban Heat Island
-Temperature study, which captured micro-level temperature variations for
-all of Baltimore City on August 29, 2018.
+Museum of Virginia provided temperature data from their Urban Heat
+Island Temperature study, which captured micro-level temperature
+variations for all of Baltimore City on August 29, 2018.
 
 -   The data can be downloaded [here](https://osf.io/e63x9/).
 -   Full methodology paper [here](https://osf.io/ur7my/).
@@ -227,7 +236,6 @@ temp_aft_csa <- read_csv(paste0(path_to_data, folder, "temp-by-csa_af.csv")) %>%
 # define specific folder in input data
 folder <- "urban_heat_island_temperature/morning/"
 
-
 # Morning temperatures by Block
 temp_am_block <- read_csv(paste0(path_to_data, folder, "temp-by-block_am.csv")) %>%
   filter(COUNTYFP10 == "510") %>%
@@ -265,7 +273,6 @@ temp_am_csa <- read_csv(paste0(path_to_data, folder, "temp-by-csa_am.csv")) %>%
 #######################
 ###### Evening ########
 #######################
-
 
 # define specific folder in input data
 folder <- "urban_heat_island_temperature/evening/"
@@ -341,10 +348,10 @@ Load and Clean Tree Canopy LIDAR Data
 
 The U.S. Forest Service and the University of Vermont Spatial Analysis
 Lab Spatial Analysis Lab created detailed maps of Baltimore’s tree
-canopy in 2007 and 2015 using LIDAR and aerial imagery data. (Citation:
+canopy in 2007 and 2015 using LIDAR and aerial imagery data (Citation:
 O’Neil-Dunne J. 2017. GIS Shapefile, Tree Canopy Change 2007 - 2015 -
 Baltimore City. Environmental Data Initiative.
-<a href="https://doi.org/10.6073/pasta/79c1d2079271546e61823a98df2d2039" class="uri">https://doi.org/10.6073/pasta/79c1d2079271546e61823a98df2d2039</a>)
+<a href="https://doi.org/10.6073/pasta/79c1d2079271546e61823a98df2d2039" class="uri">https://doi.org/10.6073/pasta/79c1d2079271546e61823a98df2d2039</a>).
 
 The original shapefile data was presented in terms of “no change,”
 “gain,” and “loss” categories. To perform the following analysis, we
@@ -386,7 +393,6 @@ tree_block_lidar_2007_2015 <- tree_block_lidar_2007 %>%
   ),
   as.character)
 
-
 #######################
 ###### CSAs ###########
 #######################
@@ -410,7 +416,6 @@ tree_csa_lidar_2007_2015 <- tree_csa_lidar_2007 %>%
          "15_lid_mean" = "15_mean") %>%
   # Recast non-calculable variables as characters
   mutate("objectid" = as.character(objectid)) 
-
 
 #######################
 ###### NSAs  ##########
@@ -438,7 +443,7 @@ tree_nsa_lidar_2007_2015 <- tree_nsa_lidar_2007 %>%
 ```
 
 ``` r
-#### Remove unneeded files ####
+# Remove unneeded files
 rm(list=setdiff(ls(), c(
   "tree_block_lidar_2007_2015", "tree_nsa_lidar_2007_2015", "tree_csa_lidar_2007_2015", 
   "all_temp_block", "all_temp_zcta", "all_temp_nsa", "all_temp_csa", "path_to_data")))
@@ -458,9 +463,9 @@ the annual [American Community
 Survey](https://www.census.gov/acs/www/data/data-tables-and-tools/data-profiles/2017/),
 which we used at a **ZCTA-level** geographic grouping. Additionally,
 this analysis used the 2010 population numbers at the **block** level to
-filter out low-population blocks. This analysis did not use demographic
-information at the **NSA** level, because the data did not exist in a
-readily available format with reasonable error margins.
+filter out low-population blocks. This portion of the analysis did not
+use demographic information at the **NSA** level, because the data did
+not exist in a readily available format with reasonable error margins.
 
 ### Execute load-in and cleaning
 
@@ -550,7 +555,7 @@ Load and Clean Individual Tree Data
 Baltimore’s urban forestry division tracks each tree and potential tree
 site across the city and provided this analysis with a database of those
 records and [accompanying
-documentation](https://github.com/smussenden/2019-baltimore-climate-health-project-data-repo/blob/master/documentation/street-tree-inventory-spec-sheet.pdf).
+documentation](street-tree-inventory-spec-sheet.pdf).
 
 The raw data arrived as a .shp file, which reporters joined together
 with the various core geographies and exported as a CSV for processing
@@ -945,10 +950,12 @@ Load and Clean Hourly Temperature Data at BWI and Inner Harbor (DMH)
 We acquired historical temperature data for National Weather Service
 monitoring stations at both BWI airport (BWI) and the Inner Harbor
 monitoring station (DMH) and used it in various parts of our analysis.
-We got this data from the excellent Iowa State University Iowa
-Environmental Mesonet, which contains information for global ASOS
-monitoring stations. We captured temperature, humidity and dew point
-data, which we used to calculate heat index.
+We got this data from the [Iowa State University Iowa Environmental
+Mesonet](https://mesonet.agron.iastate.edu/), which contains information
+for [global ASOS monitoring
+stations](https://mesonet.agron.iastate.edu/request/download.phtml). We
+captured temperature, humidity and dew point data, which we used to
+calculate heat index.
 
 ### Execute load-in and cleaning
 
@@ -983,19 +990,7 @@ bwi <- bwi  %>%
             avg_hourly_heat_index_bwi = mean(heat_index)
   ) %>%
   distinct()
-```
 
-    ## Warning in dewpoint.to.humidity(t = t, dp = dp, temperature.metric =
-    ## temperature.metric): For some observations, dew point temperature was
-    ## higher than temperature. Since dew point temperature cannot be higher than
-    ## air temperature, relative humidty for these observations was set to 'NA'.
-
-    ## Warning in dewpoint.to.humidity(dp = dwpf, t = tmpf, temperature.metric
-    ## = "fahrenheit"): For some observations, dew point temperature was higher
-    ## than temperature. Since dew point temperature cannot be higher than air
-    ## temperature, relative humidty for these observations was set to 'NA'.
-
-``` r
 # Clean DMH data 
 dmh <- dmh  %>%
   select(-relh) %>%
@@ -1018,19 +1013,8 @@ dmh <- dmh  %>%
             avg_hourly_heat_index_dmh = mean(heat_index)
   ) %>%
   distinct()
-```
 
-    ## Warning in dewpoint.to.humidity(t = t, dp = dp, temperature.metric =
-    ## temperature.metric): For some observations, dew point temperature was
-    ## higher than temperature. Since dew point temperature cannot be higher than
-    ## air temperature, relative humidty for these observations was set to 'NA'.
 
-    ## Warning in dewpoint.to.humidity(t = t, dp = dp, temperature.metric =
-    ## temperature.metric): For some observations, dew point temperature was
-    ## higher than temperature. Since dew point temperature cannot be higher than
-    ## air temperature, relative humidty for these observations was set to 'NA'.
-
-``` r
 # We have 75 years of dew point and temperature data for BWI, which allows us to calculate heat index
 # We have 20 years of dew point and temperature data for DMH (Inner Harbor), which allows us to calculate heat index. 
 # Dan Li, a climate researcher at Boston University who has studied variation in urban heat island temperatures between suburbs in different seasons and different hours of the day, said a pretty good way to calculate the difference in urban v suburban heat island, and create a longer estimated historical record of temperatures at DMH would be:
@@ -1065,43 +1049,10 @@ estimated_historical_dmh <- bwi %>%
          select(-matches("bwi"), -matches("avg"))
 ```
 
-    ## Warning in dewpoint.to.humidity(t = t, dp = dp, temperature.metric =
-    ## temperature.metric): For some observations, dew point temperature was
-    ## higher than temperature. Since dew point temperature cannot be higher than
-    ## air temperature, relative humidty for these observations was set to 'NA'.
-
-    ## Warning in dewpoint.to.humidity(t = t, dp = dp, temperature.metric =
-    ## temperature.metric): For some observations, dew point temperature was
-    ## higher than temperature. Since dew point temperature cannot be higher than
-    ## air temperature, relative humidty for these observations was set to 'NA'.
-
-    ## Warning in dewpoint.to.humidity(t = t, dp = dp, temperature.metric =
-    ## temperature.metric): For some observations, dew point temperature was
-    ## higher than temperature. Since dew point temperature cannot be higher than
-    ## air temperature, relative humidty for these observations was set to 'NA'.
-
-    ## Warning in dewpoint.to.humidity(dp = projected_dew_point_dmh, t =
-    ## projected_temperature_dmh, : For some observations, dew point temperature
-    ## was higher than temperature. Since dew point temperature cannot be higher
-    ## than air temperature, relative humidty for these observations was set to
-    ## 'NA'.
-
-    ## Warning in dewpoint.to.humidity(dp = projected_dew_point_dmh, t =
-    ## projected_temperature_dmh, : For some observations, dew point temperature
-    ## was higher than temperature. Since dew point temperature cannot be higher
-    ## than air temperature, relative humidty for these observations was set to
-    ## 'NA'.
-
-    ## Warning in dewpoint.to.humidity(dp = projected_dew_point_dmh, t =
-    ## projected_temperature_dmh, : For some observations, dew point temperature
-    ## was higher than temperature. Since dew point temperature cannot be higher
-    ## than air temperature, relative humidty for these observations was set to
-    ## 'NA'.
-
 Load and Clean EMS Data
 -----------------------
 
-We obtained from Baltimore city EMS calls between 2014 and 2018. Each
+We obtained from Baltimore City EMS calls between 2014 and 2018. Each
 call included information about conditions and ZIP code of each call.
 
 ### Execute load-in and cleaning
@@ -1120,111 +1071,7 @@ EMS_2018_partial <- read.csv(paste0(path_to_data, folder, "2018-1.1-11.30.csv"))
 # Bind together into one dataframe
 
 EMS_all <- bind_rows(EMS_2014, EMS_2015, EMS_2016, EMS_2017, EMS_2018_partial)
-```
 
-    ## Warning in bind_rows_(x, .id): Unequal factor levels: coercing to character
-
-    ## Warning in bind_rows_(x, .id): binding character and factor vector,
-    ## coercing into character vector
-
-    ## Warning in bind_rows_(x, .id): binding character and factor vector,
-    ## coercing into character vector
-
-    ## Warning in bind_rows_(x, .id): Unequal factor levels: coercing to character
-
-    ## Warning in bind_rows_(x, .id): binding character and factor vector,
-    ## coercing into character vector
-
-    ## Warning in bind_rows_(x, .id): binding character and factor vector,
-    ## coercing into character vector
-
-    ## Warning in bind_rows_(x, .id): Unequal factor levels: coercing to character
-
-    ## Warning in bind_rows_(x, .id): binding character and factor vector,
-    ## coercing into character vector
-
-    ## Warning in bind_rows_(x, .id): binding character and factor vector,
-    ## coercing into character vector
-
-    ## Warning in bind_rows_(x, .id): Unequal factor levels: coercing to character
-
-    ## Warning in bind_rows_(x, .id): binding character and factor vector,
-    ## coercing into character vector
-
-    ## Warning in bind_rows_(x, .id): binding character and factor vector,
-    ## coercing into character vector
-
-    ## Warning in bind_rows_(x, .id): Unequal factor levels: coercing to character
-
-    ## Warning in bind_rows_(x, .id): binding character and factor vector,
-    ## coercing into character vector
-
-    ## Warning in bind_rows_(x, .id): binding character and factor vector,
-    ## coercing into character vector
-
-    ## Warning in bind_rows_(x, .id): Unequal factor levels: coercing to character
-
-    ## Warning in bind_rows_(x, .id): binding character and factor vector,
-    ## coercing into character vector
-
-    ## Warning in bind_rows_(x, .id): binding character and factor vector,
-    ## coercing into character vector
-
-    ## Warning in bind_rows_(x, .id): binding character and factor vector,
-    ## coercing into character vector
-
-    ## Warning in bind_rows_(x, .id): binding character and factor vector,
-    ## coercing into character vector
-
-    ## Warning in bind_rows_(x, .id): binding character and factor vector,
-    ## coercing into character vector
-
-    ## Warning in bind_rows_(x, .id): binding character and factor vector,
-    ## coercing into character vector
-
-    ## Warning in bind_rows_(x, .id): binding character and factor vector,
-    ## coercing into character vector
-
-    ## Warning in bind_rows_(x, .id): binding character and factor vector,
-    ## coercing into character vector
-
-    ## Warning in bind_rows_(x, .id): binding character and factor vector,
-    ## coercing into character vector
-
-    ## Warning in bind_rows_(x, .id): binding character and factor vector,
-    ## coercing into character vector
-
-    ## Warning in bind_rows_(x, .id): binding character and factor vector,
-    ## coercing into character vector
-
-    ## Warning in bind_rows_(x, .id): binding character and factor vector,
-    ## coercing into character vector
-
-    ## Warning in bind_rows_(x, .id): binding character and factor vector,
-    ## coercing into character vector
-
-    ## Warning in bind_rows_(x, .id): binding character and factor vector,
-    ## coercing into character vector
-
-    ## Warning in bind_rows_(x, .id): binding character and factor vector,
-    ## coercing into character vector
-
-    ## Warning in bind_rows_(x, .id): binding character and factor vector,
-    ## coercing into character vector
-
-    ## Warning in bind_rows_(x, .id): binding character and factor vector,
-    ## coercing into character vector
-
-    ## Warning in bind_rows_(x, .id): binding character and factor vector,
-    ## coercing into character vector
-
-    ## Warning in bind_rows_(x, .id): binding character and factor vector,
-    ## coercing into character vector
-
-    ## Warning in bind_rows_(x, .id): binding character and factor vector,
-    ## coercing into character vector
-
-``` r
 # Remove all dataframes from our environment but EMS_all
 
 # rm(list=setdiff(ls(), "EMS_all"))
@@ -1341,14 +1188,7 @@ EMS_all <- EMS_all %>%
 # Now that we've adjusted temperature, calculate the adjusted heat index
 EMS_all <- EMS_all %>%
   mutate(adjusted_heat_index = heat.index(t=adjusted_temperature, dp=avg_hourly_dewpoint_dmh, temperature.metric = "fahrenheit", output.metric = "fahrenheit"))
-```
 
-    ## Warning in dewpoint.to.humidity(t = t, dp = dp, temperature.metric =
-    ## temperature.metric): For some observations, dew point temperature was
-    ## higher than temperature. Since dew point temperature cannot be higher than
-    ## air temperature, relative humidty for these observations was set to 'NA'.
-
-``` r
 ## Create Heat Index Buckets
 
 #In order to examine the impact of extreme temperatures on EMS calls, we need to assign each call's adjusted heat index value to one of four temperature buckets we've created to align with the National Weather Service's heat index safety threshold table. https://www.weather.gov/safety/heat-index. 
@@ -1398,11 +1238,13 @@ filter(`date` >= date("2018-06-21") & `date` <= ("2018-09-21"))
 Load and Clean Hospital Admissions Data
 ---------------------------------------
 
-From the Health Services Cost Review Commission in Maryland, we obtained
+From the [Health Services Cost Review Commission in
+Maryland](https://hscrc.state.md.us/pages/default.aspx), we obtained
 detailed records of inpatient and outpatient hospital visits, with one
 record per visit, between 2013 and 2018. The code for processing the
 data is included here, but we cannot store the original files that are
-processed by that code, per our MOU with the HSCRC.
+processed by that code, per our memorandum of understanding with the
+HSCRC.
 
 ### Define functions and store universal variables
 
@@ -1444,7 +1286,6 @@ make_correlation_matrix <- function(dataframe) {
     select(matches("rowname|_%$|_f$|_d$|_a$|^temp_|_mean$")) %>%
     filter(complete.cases(.))
     
-
   # Add merged temperature + condition dataframe to environment
   table_name <- paste0(deparse(substitute(dataframe)), "_correlation_matrix")
   assign(table_name, correlation_matrix, envir = parent.frame())
@@ -1491,9 +1332,11 @@ make_correlation_matrix(op_er_full_zip_medicaid)
 Load and clean sensor data
 --------------------------
 
-We built temperature and humidity sensors, using this [excellent “Harlem
-Heat” project guide](https://github.com/datanews/harlem-heat). We placed
-them in several homes in Baltimore in summer 2019, and joined them with
+We built temperature and humidity sensors, using this [“Harlem Heat”
+project guide](https://github.com/datanews/harlem-heat) created by WNYC
+public radio for their [Harlem Heat
+Project](https://www.wnyc.org/series/harlem-heat-project). We placed
+them in several homes in Baltimore in summer 2019 and joined them with
 outdoor temperature to examine how heat index varied indoors and out.
 
 ### Store universal variables
@@ -1590,10 +1433,11 @@ Load and Clean Historical Baltimore and U.S. Weather Data
 ---------------------------------------------------------
 
 To calculate how average annual temperatures in Baltimore changed
-compared to the U.S. over the last century, we pulled data from the NCDC
-on average annual temperatures for both geographies.
-<a href="https://www.ncdc.noaa.gov/cag/county/time-series" class="uri">https://www.ncdc.noaa.gov/cag/county/time-series</a>
-\#<a href="https://www.ncdc.noaa.gov/cag/county/time-series" class="uri">https://www.ncdc.noaa.gov/cag/county/time-series</a>
+compared to the U.S. over the last century, we pulled data from NOAA’s
+National Climatic [Data Center](https://www.ncdc.noaa.gov/data-access)
+on [average annual
+temperatures](https://www.ncdc.noaa.gov/cag/county/time-series) for both
+geographies.
 
 ### Execute load-in and cleaning
 
@@ -1618,8 +1462,8 @@ us_change_temp <- us_change_temp %>%
   clean_names()
 ```
 
-Hot days increase data
-----------------------
+Increase in Hot Days Data
+-------------------------
 
 To examine how climate change will drive up the number of extreme heat
 index days in the future, we used data from researchers at the Union of
