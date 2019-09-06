@@ -26,10 +26,13 @@ knitr::opts_chunk$set(echo = TRUE, message=FALSE, paged.print=TRUE)
 ```
 
 ```{r include=FALSE}
+# Variable to load into "common header" call below
 stories <- "stories \"[As Rising Heat Bakes U.S. Cities, The Poor Often Feel It Most](https://www.npr.org/templates/story/story.php?storyId=754044732&live=1)\" and \"[How High Heat Can Impact Mental Health](https://www.npr.org/templates/story/story.php?storyId=757034136&live=1)\" "
 ```
 
 ```{r test-parent, child = here::here("documentation/common-header.Rmd")}
+# This calls in the "common-header.Rmd" file, which includes info about the story package.
+# must install package 'here' for this to work
 ```
 
 ### Load packages

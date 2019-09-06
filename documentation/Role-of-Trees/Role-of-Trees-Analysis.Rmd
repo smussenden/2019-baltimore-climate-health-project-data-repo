@@ -26,10 +26,13 @@ knitr::opts_chunk$set(echo = TRUE, message=FALSE, paged.print=TRUE)
 ```
 
 ```{r include=FALSE}
+# Variable to load into "common header" call below
 stories <- "story \"[The Role of Trees: No trees, no shade, no relief as climate heats up](https://cnsmaryland.org/interactives/summer-2019/code-red/role-of-trees.html)\" "
 ```
 
 ```{r test-parent, child = here::here("documentation/common-header.Rmd")}
+# This calls in the "common-header.Rmd" file, which includes info about the story package.
+# must install package 'here' for this to work
 ```
 
 Note that in some cases, to protect the privacy of nearby residents, we did not include addresses of particular street trees in this memo.
